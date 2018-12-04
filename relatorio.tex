@@ -1,0 +1,186 @@
+\documentclass[12pt]{article}
+\usepackage[portuguese]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage[top=3cm, bottom=2cm, left=3cm, right=2cm]{geometry}
+\usepackage{tikz}
+\usepackage{indentfirst}
+\usepackage{textcomp}
+\usepackage[font={small,it}]{caption}
+\title{Relatorio IC}
+
+% packages added by Marcelo
+%
+\usepackage{lscape}    % for landscape pages
+\usepackage{hyperref}  % to allow hyperlinks
+\usepackage{booktabs}  % nicer table borders
+\usepackage{subfigure} % add subfigures
+
+% My default commands
+\newcommand{\foreignword}[1]{\textit{#1}}
+\newcommand{\toolname}[1]{\textit{#1}}
+%\newcommand{\fieldR}{\mathbb{R}}
+\newcommand{\powerset}{\mathcal{P}}
+%\newcommand{\probability}{\mathbb{P}}
+%\newcommand{\expectation}{\mathbb{E}}
+\newcommand{\algname}[1]{\texttt{#1}}
+\newcommand{\langname}[1]{\texttt{#1}}
+%\newcommand{\varname}[1]{\texttt{#1}}
+%\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+%\newcommand{\ceil}[1]{\lceil #1 \rceil}
+%\newcommand{\mathsc}[1]{{\normalfont\textsc{#1}}}
+\newcommand{\forest}{\mathcal{F}}
+\newcommand{\pfsnode}[1]{\mathbf #1}
+\newcommand{\species}[1]{\textit{#1}}
+\newcommand{\gender}[1]{\textit{#1}}
+
+\graphicspath{{./img/}} 
+
+\setstretch{1.5}
+
+\begin{document}
+
+% FAPESP demands the usage of double spacing
+%
+\doublespacing
+
+\begin{titlepage}
+    \vfill 
+    \begin{center}
+        {\Large Relatório Científico Parcial -- Mestrado\\
+         \bigskip
+         Processo FAPESP 17/20575-9
+        }
+        
+        \bigskip
+        \bigskip
+    
+        {\LARGE Identificação de vias de sinalização celular baseada em repositórios de cinética de reações bioquímicas}
+
+        \bigskip
+        \bigskip
+        {\Large {\bf Beneficiário:} \href{mailto:gustavo.estrela.matos@usp.br}{Gustavo Estrela de Matos}\\ 
+        
+        {\bf Responsável:} \href{mailto:marcelo.reis@butantan.gov.br}{Marcelo da Silva Reis}\\
+
+        \bigskip
+        \bigskip
+        \bigskip
+        \bigskip
+        \bigskip
+        \bigskip
+        \bigskip
+Relatório referente aos trabalhos desenvolvidos entre 1 de janeiro e 10 de dezembro de 2018
+
+        \bigskip
+        \bigskip
+        \bigskip
+        \bigskip
+        \bigskip
+        \bigskip
+        \bigskip
+
+Laboratório Especial de Toxinologia Aplicada, Instituto Butantan\\
+        \bigskip
+        São Paulo, \today\\
+        }
+
+        \bigskip
+        \bigskip
+
+       
+
+\end{center}
+\end{titlepage}
+
+
+\tableofcontents
+
+\pagebreak
+
+
+
+\section{Resumo do Projeto Proposto} \label{sec:resumo} % até 2 páginas
+
+\section{Introdução}
+% Uma introdução enxuta do projeto, com outline e objetivos.
+
+\section{Atividades Realizadas}
+
+\subsection{Disciplinas cursadas}
+% Mencionar as três matérias feitas
+% 1 Tópicos em análise de algoritmos
+%   - complementar a análise de algoritmo
+% 2 Probabilidade e Inferência Estatística I
+% 3 Laboratório de Programação Extrema
+% 4 Como ouvinte, aulas de Introdução à Transdução de Sinais 
+%   Celulares (Instituto de Química - Universidade de São Paulo)
+% 5 Mencionar a matéria do Ronaldo (?)
+
+\subsection{Estudo de literatura em seleção de modelos}
+% Achamos melhor começar o projeto resolvendo o desafio de definir uma 
+% função de custo apropriada, que leve em consideração a penalização
+% por overfitting... Decidimos iniciar pela metodologia menos 
+% tradicional, pois imaginamos que a popularidade do AIC implicaria em
+% uma utilização mais fácil desse método. Além disso, o conhecimento
+% adquirido.
+
+% OBS: o AIC parece ser fácil, apenas definir uma função de 
+% verossimilhança e pronto. BIBm é baseado em fator de bayes de 
+% verossimilhança marginal, bem mais complexo; precisa de calculo
+% de verossimilhança e também de gerar amostra de parametros a 
+% posteriori de acordo com os dados observados.
+
+
+\subsection{Estudos de estimadores de verossimilhança marginal de um 
+modelo}
+% Falar sobre power-posteriors e sobre como gerar uma amostra de
+% theta | D, t.
+
+
+\subsection{Implementação local do BIBm}
+% Em python
+% Técnicas já convencionais para desenvolvimento de software como 
+% controle de versionamento. Outras técnicas de desenvolvimento ágil 
+% foram utilizadas, como TDD, kanban, testes automatizados e 
+% integração contínua.
+
+\subsection{Experimentos com o SigNetMS}
+% reação enzimática simples
+% modelos Girolmi (bioinformatics)
+% modelos Kolch (?)
+
+
+\section{Ativides futuras}
+% 1. Finalização de experimentos e testes do SigNetMS
+% 2. EQM
+% 3. Estruturação do bancos de dados
+% 4. População do BD com dados reais das linhagens
+%   - Y1
+%   - HEK293
+%   - HaCat
+%   - E6E7-keratinocytes
+%   - Erwing Sarcoma
+%   - Neuroblastoma
+%   - PC12
+%   - PC12
+
+
+\subsection{Participação em conferências}
+
+\pagebreak
+\begin{thebibliography}{9} \label{sec:referencias}
+
+\addcontentsline{toc}{section}{Referências}
+
+\bibitem{msreis thesis}
+Reis, Marcelo S. ``Minimization of decomposable in U-shaped curves functions defined on poset chains–algorithms and applications." PhD thesis, Institute of Mathematics and Statistics, University of São Paulo, Brazil, (2012).
+\end{thebibliography}
+\end{document}
+
+
