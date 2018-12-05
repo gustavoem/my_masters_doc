@@ -12,7 +12,7 @@
 \usepackage{indentfirst}
 \usepackage{textcomp}
 \usepackage[font={small,it}]{caption}
-\title{Relatorio IC}
+\title{Relatorio Parcial Mestrado}
 
 % packages added by Marcelo
 %
@@ -106,9 +106,103 @@ Laboratório Especial de Toxinologia Aplicada, Instituto Butantan\\
 
 
 \section{Resumo do Projeto Proposto} \label{sec:resumo} % até 2 páginas
+A construção de modelos funcionais é uma técnica comum para se 
+estudar vias de sinalização celular e, quando a via estudada é pouco
+conhecida, é possível que os modelos já propostos sejam incompletos, 
+tornando necessário a sua modificação.
+Lulu Wu apresentou em 2015, em sua dissertação de mestrado, um método 
+para  modificar sistematicamente modelos funcionais, adicionando a estes
+interações extraídas de repositórios como KEGG. Entretanto, esta 
+metodologia apresentou limitações: a primeira é a incompletude do banco 
+de dados de interações criado, que extraia informações apenas do 
+repositório KEGG; a segunda, a falta de informações sobre constantes 
+de velocidade de interações, que podem ser extraídas de repositórios 
+como BioNumbers; a terceira, a dinâmica do algoritmo de busca, 
+incremental, que pode não achar o mínimo global; e a última, a 
+penalização na complexidade dos modelos, que era feita de maneira 
+aleatória. Propomos neste trabalho enfrentar as limitações encontradas
+pela metodologia de Lulu, criando um banco de dados de interações mais
+completo e também novas funções de custo que sejam capazes de 
+penalizar modelos mais complexos (como critério de informação Akaike e 
+{\em Bayesian inference-based modeling}); esta penalização deve induzir,
+em cadeias do  espaço de busca, curvas em u no custo dos modelos, 
+portanto também propomos a criação de novos algoritmos de busca que 
+explorem essa característica da função de custo. Por fim, esperamos 
+testar nossa metodologia na identificação de vias de sinalização celular 
+da linhagem tumoral murina Y1.
 
 \section{Introdução}
 % Uma introdução enxuta do projeto, com outline e objetivos.
+Vias de sinalização celular podem ser simuladas por modelos dinâmicos
+computacionais e, mais especificamente, modelos que descrevem a 
+concentração de espécies químicas ao longo do tempo são chamados de 
+modelos funcionais. Neste projeto, trabalhamos com modelos funcionais
+que descrevem as mudanças de concentrações de espécies químicas através
+de equações diferenciais ordinárias (EDOs). Estes modelos, quando não 
+sofrem de sobreajuste (\foreignword{overfitting}), se tornam 
+interessantes quando são capazes de reproduzir dados observados em 
+experimentos biológicos, pois dão a estes modelos a qualidade preditiva.
+
+% Agora falamos do problema de identificação de via de sinalização
+% celular.
+% Quebramos o problema em duas partes:
+% 1. Determinar a topologia da via de sinalização
+% 2. Determinar constantes de velocidades de interações
+% Propomos solucionar os dois problemas retirando dados de bancos de 
+% dados de biologia. Mais especificamente, em uma de nossas metodologias 
+% propostas tratamos constantes de velocidade como parâmetros aleatórios 
+% do sistema, o que dignifica nossa abordagem como Bayesiana.
+
+% Depois falamos que por muitas vezes um mapa estático pode não ter uma
+% topologia compatível com o experimento biológico em questão (pode ser
+% que falte ou sobre interações). Por isso, torna-se necessário 
+% modificar de maneira sistemática. Propomos então neste projeto 
+% transformar o problema de identificação de vias de sinalização celular
+% em um problema de otimização.
+
+O problema de criar modelos funcionais capazes de explicar resultados
+de experimentos biológicos com o mínimo de sobreajuste é chamado de 
+{\em problema de identificação de vias de sinalização celular}. Podemos 
+separar este problema em duas etapas principais. A primeira diz respeito
+a escolha da topologia da via de sinalização, o que é equivalente a 
+escolher quais interações químicas são relevantes para o experimento em
+questão. A segunda etapa consiste em escolher valores para os parâmetros
+do sistema de EDOs do modelo funcional; estes valores são constantes de 
+velocidade de interações e/ou concentrações iniciais de espécies 
+químicas.
+
+Em casos em que o experimento biológico ou a via de sinalização são 
+muito estudadas, é possível que ambas as etapas descritas anteriormente
+possam ser resolvidas com pesquisas na literatura. Em casos que isto não
+é possível, torna-se uma solução recorrer a bancos de dados de biologia.
+Para a primeira etapa, podemos consultar bancos como o 
+\href{http://www.genome.jp/kegg/}{Kyoto Encyclopedia of Genes and Genomes (KEGG)}
+~\cite{Kanehisa2000kegg}, que contém mapas estáticos; e para a segunda,
+podemos consultar bancos como o 
+\href{https://www.ebi.ac.uk/biomodels-main/}{BioModels}~\cite{le2006biomodels}
+.
+
+Entretanto, os mapas estáticos disponíveis nestes bancos podem ainda ser
+incompletos ou muito grandes para o experimento biológico em questão. 
+Desta maneira, torna-se importante criar uma maneira sistemática de se
+modificar modelos funcionais a fim de faze-los explicar o experimento 
+biológico sem sobreajuste. Propomos fazer estas modificações tratando
+o problema de identificação de vias de sinalização como um problema de
+otimização combinatória, considerando como espaço de busca possíveis 
+topologias para o modelo funcional e usando como função de custo alguma
+métrica que represente a qualidade deste modelo ao reproduzir o 
+experimento biológico de interesse.
+
+Considere $S$ um conjunto de interações químicas. O conjunto de todas
+as possíveis escolhas de interações relevantes em $S$ corresponde ao
+conjunto potência de $S$, $\powerset(S)$, que é o espaço de busca do
+problema de otimização que estamos interessados. Se chamamos a nossa 
+métrica de qualidade de modelo funcional de $c$, transformamos nosso 
+problema em uma instância do problema de seleção de características. 
+Assim, após definida a função de custo $c$ e devidamente coletado e 
+armazenado o conjunto $S$, propomos resolver instâncias do problema de 
+identificação de vias de sinalização celular no arcabouço 
+{\em featsel} ~\cite{Reis2017featsel}. 
 
 \section{Atividades Realizadas}
 
@@ -168,19 +262,25 @@ modelo}
 %   - Erwing Sarcoma
 %   - Neuroblastoma
 %   - PC12
-%   - PC12
+%   - ToyModels
+% 5. Wrapper do SigNetMS ao featsel
+% 6. Testes com toy models
+% 7. Aplicação da metodologia em linhagens celulares
+% 8. Análise  dos resultados
+% 9. Elaboração da dissertação
+% 10. Defesa
 
+\subsection{Outras atividades acadêmicas}
+% Santiago (outorgado pela FAPESP)
+% Apresentar resultados em conferência internacional (ICSB)
+% Apresentar resultados em outra conferencia nacional (X-meeting e RCA)
 
 \subsection{Participação em conferências}
 
-\pagebreak
-\begin{thebibliography}{9} \label{sec:referencias}
 
 \addcontentsline{toc}{section}{Referências}
-
-\bibitem{msreis thesis}
-Reis, Marcelo S. ``Minimization of decomposable in U-shaped curves functions defined on poset chains–algorithms and applications." PhD thesis, Institute of Mathematics and Statistics, University of São Paulo, Brazil, (2012).
-\end{thebibliography}
+\bibliographystyle{unsrt} 
+\bibliography{bib-relatorio}
 \end{document}
 
 
