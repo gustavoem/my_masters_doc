@@ -27,7 +27,7 @@
 %\newcommand{\fieldR}{\mathbb{R}}
 \newcommand{\powerset}{\mathcal{P}}
 %\newcommand{\probability}{\mathbb{P}}
-%\newcommand{\expectation}{\mathbb{E}}
+\newcommand{\expectation}{\mathbb{E}}
 \newcommand{\algname}[1]{\texttt{#1}}
 \newcommand{\langname}[1]{\texttt{#1}}
 %\newcommand{\varname}[1]{\texttt{#1}}
@@ -300,8 +300,8 @@ de $p (D | M)$.
 Por ser uma abordagem Bayesiana, esta metodologia considera que o vetor
 de parâmetros de um modelo $M$ é um vetor aleatório $\theta_M$, de um
 espaço paramétrico $\Theta_M$. Portanto, podemos escrever
-\begin{equation}
-    p (D | M) = \int_{\Theta_M} p (D | M, \theta_M) d\theta_M
+\begin{equation}\label{marginilize_likelihood}
+    p (D | M) = \int_{\Theta_M} p (D | M, \theta_M) p (\theta_M | M) d\theta_M
 \end{equation}
 Ou seja, a métrica $p (D|M)$ é obtida ao marginalizar a verossimilhança
 $p (D | M, \theta_M)$. Entretanto, como estamos trabalhando com sistemas
@@ -309,15 +309,58 @@ de EDOs, a verossimilhança muitas vezes não pode ser determinada
 analiticamente, assim como a integral que resulta na verossimilhança
 marginal $p (D | M)$. Para enfrentar este problema, a metodologia 
 aplicada pelo BIBm usa como estratégia funções intermediárias entre a 
-priori, $p (\theta_M)$, e a posteriori, $p (D | \theta_M)$, para obter 
-um estimador de $P (D|M)$.
+priori, $p (\theta_M | M)$, e a posteriori, $p (D | \theta_M, M)$, para 
+obter um estimador de $p (D|M)$.
 
 \subsection{Estudos de estimadores de verossimilhança marginal de um 
 modelo}
 % Falar sobre power-posteriors e sobre como gerar uma amostra de
 % theta | D, t.
+Para entender como estimar a posteriori marginal $p (D | M)$, 
+precisamos estudar os trabalhos de Friel e Pettitt~\cite{Friel2008}, que
+utilizaram técnicas de integração de termodinâmica para calcular a 
+integral~\ref{marginilize_likelihood}, introduzindo um parâmetro de 
+temperatura $t$ que permite definir funções de probabilidade chamadas 
+potência de posteriori, que são funções intermediárias entre a priori
+e a posteriori.
 
+Note que os cálculos que faremos nesta seção são para um modelo $M$, 
+portanto trabalharemos com probabilidades condicionadas ao modelo. Assim 
+como Friel e Pettit (2008), vamos simplificar a notação desta seção ao 
+remover das fórmulas o modelo $M$ a qual estão condicionadas as 
+probabilidades.
 
+Define-se assim a função de probabilidade potência de posteriori:
+\begin{equation}
+    p_t (\theta | D) = \frac{p (D | \theta) ^ t p (\theta)}{z(D | t)}
+\end{equation}
+Com $z(D | t) = \int_{\Theta} p(D | \theta) ^ t p(\theta)d\theta$.
+Observe que $p_0 (\theta | D) = p(\theta)$ é exatamente a distribuição 
+a priori dos parâmetros, enquanto $p_1 (\theta | D) = p(\theta | D)$ é
+exatamente a distribuição a posteriori dos parâmetros, portanto, as 
+distribuições potência de posteriori são capazes de traçar um ``caminho''
+entre a priori e a posteriori quando se varia o parâmetro $t$ de 0 a 1.
+
+Agora considere $\frac{d}{dt} \log\{p (D|\theta)\}$. É possível mostrar
+que 
+\begin{equation}
+\frac{d}{dt}\log \{p (D | \theta)\} = 
+\int_{\Theta}\frac{p(D|\theta)^tp(\theta)}{z(D|t)}\log\{p(D|\theta)\}d\theta
+=\expectation_{\theta | D, t}[\log\{p (D|\theta)\}]
+\end{equation}
+Além disso, é fácil ver que $z(D| t = 0) = 1$ e $z (D| t = 1) = 
+p(D)$, a verossimilhança marginal que queremos estimar (lembre-se que 
+estamos omitindo o condicionamento em $M$, o que significa que $p(D)$ é, 
+na verdade, $p (D | M)$). Com estas informações, podemos escrever a 
+identidade:
+
+\begin{equation}\label{powerposteriors:mainequation}
+    \int_0^1\expectation_{\theta | D, t}[\log\{p(D | \theta)\}] = 
+        \log\{p(D | t = 1)\} - \log\{p (D | t = 0)\} = \log \{p (D)\} 
+\end{equation}
+
+A equação~\ref{powerposteriors:mainequation} nos permite estimar $p (D)$
+sem precisar calcular explicitamente a integral~\ref{marginilize_likelihood}.
 
 \subsection{Implementação local do BIBm}
 % Em python
