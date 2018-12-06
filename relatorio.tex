@@ -344,7 +344,7 @@ entre a priori e a posteriori quando se varia o parâmetro $t$ de 0 a 1.
 Agora considere $\frac{d}{dt} \log\{p (D|\theta)\}$. É possível mostrar
 que 
 \begin{equation}
-\frac{d}{dt}\log \{p (D | \theta)\} = 
+\frac{d}{dt}\log \{z (D | \theta)\} = 
 \int_{\Theta}\frac{p(D|\theta)^tp(\theta)}{z(D|t)}\log\{p(D|\theta)\}d\theta
 =\expectation_{\theta | D, t}[\log\{p (D|\theta)\}]
 \end{equation}
@@ -356,11 +356,30 @@ identidade:
 
 \begin{equation}\label{powerposteriors:mainequation}
     \int_0^1\expectation_{\theta | D, t}[\log\{p(D | \theta)\}] = 
-        \log\{p(D | t = 1)\} - \log\{p (D | t = 0)\} = \log \{p (D)\} 
+        \log\{z(D | t = 1)\} - \log\{z (D | t = 0)\} = \log \{p (D)\} 
 \end{equation}
 
-A equação~\ref{powerposteriors:mainequation} nos permite estimar $p (D)$
-sem precisar calcular explicitamente a integral~\ref{marginilize_likelihood}.
+A equação~\ref{powerposteriors:mainequation} nos permite estimar 
+$\log {p (D)}$ sem calcular explicitamente a 
+integral~\ref{marginilize_likelihood}. Utilizaremos o mesmo estimador 
+usado por Xu~\cite{Xu2010}. Primeiro, dividimos o intervalo $[0, 1]$ em 
+$N - 1$ pontos $r_1, ..., r_{N - 1}$ a fim de criar $N$ intervalos
+$T_1, ..., T_N$ tais que $T_i = r_i - r_{i - 1}$, com $r_0 = 0$ e 
+$r_n = 1$. Depois, para cada intervalo $T_i$, escolhe-se uniformemente
+neste intervalo $N_i$ pontos $t^i_{1}, ..., t^i_{N_i}$. Finalmente, para 
+cada uma das temperaturas $t^i_j$, amostra-se $\theta^i_j \sim \theta | D, t^i_j$.
+Assim, o estimador é dado por:
+\begin{equation}\label{estimador:marginallikelihood}
+    \hat{L} = \sum_{i = 1}^N \frac{|T_i|}{N_i} \sum_{j = 1}^{N_i} \log {p (D | \theta^i_j)}
+\end{equation}
+
+Para obter esta amostras de $\theta | D, t^i_j$, Friel e Pettit utilizam 
+um algoritmo chamado de {\em populational Markov chain Monte Carlo (MCMC)} 
+(o chamaremos de MCMC populacional). Este algoritmo é similar ao
+algoritmo de Metropolis-Hastings~\cite{BayesianDataAnalysis} e é capaz
+de gerar simultaneamente amostras para todos valores de $t^i_j$. O valor
+de $p (D | \theta)$, como veremos na próxima seção, pode ser facilmente
+calculado quando definimos uma função de verossimilhança conveniente.
 
 \subsection{Implementação local do BIBm}
 % Em python
@@ -368,6 +387,32 @@ sem precisar calcular explicitamente a integral~\ref{marginilize_likelihood}.
 % controle de versionamento. Outras técnicas de desenvolvimento ágil 
 % foram utilizadas, como TDD, kanban, testes automatizados e 
 % integração contínua.
+Implementamos a metodologia do BIBm em um software que chamamos de 
+SigNetMS ({\em Signaling Network Model Selection}). A linguagem 
+escolhida para codificar este programa foi Python, devido ao grande 
+número de bibliotecas e grande comunidade. O código é aberto sob a 
+licença de software {\em GNU General Public License} e pode ser acessado 
+em um \href{https://github.com/gustavoem/SigNetMS}{repositório público 
+do GitHub}.
+
+Este software recebe como entrada três arquivos diferentes: um arquivo 
+SBML com a topologia do modelo funcional e concentrações iniciais de 
+espécies químicas, determinando um modelo $M$; um arquivo XML que
+define a distribuição priori dos parâmetros do modelo $M$; e uma lista 
+de arquivos que determina as observações $D$ dos experimentos 
+biológicos. O arquivo de experimentos deve especificar qual é a medida 
+das observações, sendo esta uma função das concentrações das espécies 
+químicas. Como saída, o software entrega uma estimativa de $p (D | M)$,
+o que chamamos de verossimilhança marginal de $D$.
+
+\subsubsection{Escolha da função de verossimilhança}
+% Definir a função de verossimilhança
+% Atentar para o fato de usar o Numpy para resolver numericamente 
+% sistemas de EDOs
+
+\subsubsection{Primeira etapa da amostragem dos parâmetros}
+\subsubsection{Segunda etapa da amostragem dos parâmetros}
+\subsubsection{Terceira etapa da amostragem dos parâmetros}
 
 \subsection{Experimentos com o SigNetMS}
 % reação enzimática simples
