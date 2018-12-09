@@ -298,22 +298,22 @@ de $p (D | M)$.
 
 % O theta é uma variável aleatória e o valor p (D | M) 
 Por ser uma abordagem Bayesiana, esta metodologia considera que o vetor
-de parâmetros de um modelo $M$ é um vetor aleatório $\theta_M$, de um
-espaço paramétrico $\Theta_M$. Portanto, podemos escrever
+de parâmetros de um modelo $M$ é um vetor aleatório $\theta$, de um
+espaço paramétrico $\Theta$. Portanto, podemos escrever
 \begin{equation}\label{marginilize_likelihood}
-    p (D | M) = \int_{\Theta_M} p (D | M, \theta_M) p (\theta_M | M) d\theta_M
+    p (D | M) = \int_{\Theta} p (D | M, \theta) p (\theta | M) d\theta
 \end{equation}
 Ou seja, a métrica $p (D|M)$ é obtida ao marginalizar a verossimilhança
-$p (D | M, \theta_M)$. Entretanto, como estamos trabalhando com sistemas
+$p (D | M, \theta)$. Entretanto, como estamos trabalhando com sistemas
 de EDOs, a verossimilhança muitas vezes não pode ser determinada 
 analiticamente, assim como a integral que resulta na verossimilhança
 marginal $p (D | M)$. Para enfrentar este problema, a metodologia 
 aplicada pelo BIBm usa como estratégia funções intermediárias entre a 
-priori, $p (\theta_M | M)$, e a posteriori, $p (D | \theta_M, M)$, para 
+priori, $p (\theta | M)$, e a posteriori, $p (D | \theta, M)$, para 
 obter um estimador de $p (D|M)$.
 
 \subsection{Estudos de estimadores de verossimilhança marginal de um 
-modelo}
+modelo}\label{estudos_de_estimadores}
 % Falar sobre power-posteriors e sobre como gerar uma amostra de
 % theta | D, t.
 Para entender como estimar a posteriori marginal $p (D | M)$, 
@@ -369,8 +369,9 @@ $r_n = 1$. Depois, para cada intervalo $T_i$, escolhe-se uniformemente
 neste intervalo $N_i$ pontos $t^i_{1}, ..., t^i_{N_i}$. Finalmente, para 
 cada uma das temperaturas $t^i_j$, amostra-se $\theta^i_j \sim \theta | D, t^i_j$.
 Assim, o estimador é dado por:
-\begin{equation}\label{estimador:marginallikelihood}
-    \hat{L} = \sum_{i = 1}^N \frac{|T_i|}{N_i} \sum_{j = 1}^{N_i} \log {p (D | \theta^i_j)}
+\begin{equation}\label{marginallikelihood_estimator}
+    \hat{L} = \sum_{i = 1}^N \frac{|T_i|}{N_i} \sum_{j = 1}^{N_i} 
+        \log {p (D | \theta^i_j, t^i_j)}
 \end{equation}
 
 Para obter esta amostras de $\theta | D, t^i_j$, Friel e Pettit utilizam 
@@ -396,31 +397,187 @@ em um \href{https://github.com/gustavoem/SigNetMS}{repositório público
 do GitHub}.
 
 Este software recebe como entrada três arquivos diferentes: um arquivo 
-SBML com a topologia do modelo funcional e concentrações iniciais de 
-espécies químicas, determinando um modelo $M$; um arquivo XML que
-define a distribuição priori dos parâmetros do modelo $M$; e uma lista 
-de arquivos que determina as observações $D$ dos experimentos 
-biológicos. O arquivo de experimentos deve especificar qual é a medida 
-das observações, sendo esta uma função das concentrações das espécies 
-químicas. Como saída, o software entrega uma estimativa de $p (D | M)$,
-o que chamamos de verossimilhança marginal de $D$.
+SBML~\cite{hucka2003systems} com a topologia do modelo funcional e 
+concentrações iniciais de espécies químicas, determinando um modelo $M$; 
+um arquivo XML que define a distribuição priori dos parâmetros do modelo 
+$M$; e uma lista de arquivos que determina as observações $D$ dos 
+experimentos biológicos. O arquivo de experimentos deve especificar qual 
+é a medida das observações, sendo esta uma função das concentrações das 
+espécies químicas. Como saída, o software entrega uma estimativa de 
+$p (D | M)$, o que chamamos de verossimilhança marginal de $D$.
 
 \subsubsection{Escolha da função de verossimilhança}
 % Definir a função de verossimilhança
+% O sigma do erro vira um parâmetro do modelo também.
 % Atentar para o fato de usar o Numpy para resolver numericamente 
 % sistemas de EDOs
+Seguindo a metodologia proposta por Xu~\cite{Xu2010}, vamos considerar
+que os erros de aproximação ao solucionar numericamente um sistemas de
+EDOs são dominados por erros de observação experimental. Assim, dado que
+um modelo $M$ de fato reproduz o comportamento de uma via, o único 
+elemento de aleatoriedade presente nos dados experimentais é o erro de 
+observação. Podemos modelar este erro com uma distribuição Gaussiana,
+condicionalmente independente e identicamente distribuídas em cada uma 
+das observações, com média zero e variância definida pelo próprio 
+conjunto de parâmetros $\theta$; ou seja, para algum $k$, 
+$\theta_{k}$ contém a variância do erro de observação. 
 
-\subsubsection{Primeira etapa da amostragem dos parâmetros}
-\subsubsection{Segunda etapa da amostragem dos parâmetros}
-\subsubsection{Terceira etapa da amostragem dos parâmetros}
+
+Assim, seja $m$ a quantidade de observações feitas no experimento, 
+definimos a função de verossimilhança:
+\begin{equation}\label{likelihood}
+    p (D | \theta, M) = \prod_{i = 1}^m p_{\mathcal{N} (0, \theta_k)} (\phi (M, \theta)_i - D_i)
+\end{equation}
+onde $p_{\mathcal{N} (0, \theta_k)}$ é função densidade de probabilidade
+de uma normal com média zero e variância $\theta_k$ e $\phi (M, \theta)$
+são as observações que seriam medidas em um sistema gerado pelo modelo 
+$M$ com parâmetros $\theta$.
+
+\subsubsection{Amostragem dos parâmetros}
+Após implementadas as funcionalidades que permitem calcular a função
+de verossimilhança, ler e trabalhar com modelos SBML e distribuições de 
+probabilidade a priori, precisamos gerar amostras de $\theta | M, D, t$
+para calcular o estimador de verossimilhança 
+marginal~\ref{marginallikelihood_estimator}. A geração desta amostra é
+feita em três etapas com algoritmos que são variações do algoritmo 
+Metropolis-Hastings.
+
+O algoritmo de Metropolis-Hastings~\cite{BayesianDataAnalysis} é capaz 
+de gerar uma amostra de uma distribuição objetivo $p (x)$ a partir de 
+uma sequência de pontos gerados por uma cadeia de Markov. Abaixo 
+descrevemos seu funcionamento:
+\begin{enumerate}
+    \item Escolha $\theta^{(0)}$ tal que $p(\theta^{(0)} | D, M) > 0$ de 
+        uma distribuição $q_0(\theta)$, que pode ser, por exemplo, a
+        prior do parâmetro.
+    \item Para s = 1, 2, ...:
+        \subitem a) Escolha uma novo parâmetro $\theta^*$ de uma 
+        distribuição de pulo (ou distribuição de proposta) 
+        $q (\theta | \theta^{s - 1})$.
+        \subitem b) Calcule a razão $r$:
+        \begin{equation}
+            r = \frac{p(\theta^*| D, M) q(\theta^{(s - 1)} | \theta^*)}
+                     {p(\theta^{(s - 1)} | D, M) q(\theta^* | \theta^{(s - 1)})}
+        \end{equation}
+        \subitem c) Defina $\theta^{(s)} = 
+            \begin{cases}
+                \theta^* \text{ com probabilidade min (1, r)}\\
+                \theta^{(s - 1)} \text{ caso contrário}
+            \end{cases}$
+\end{enumerate}
+
+Note que apesar da probabilidade $p (\theta | D, M)$ ser difícil de ser 
+calculada, podemos calcular $\frac{p(\theta'| D, M)}{p(\theta | D, M)}$ 
+como
+\begin{equation}
+    \frac{p(\theta' | D, M)}{p(\theta | D, M)} =
+    \frac{\frac{p(D | \theta', M)p(\theta' | M)}{p(D | M)}}
+         {\frac{p(D | \theta, M)p(\theta | M)}{p(D | M)}}
+    = \frac{p(D | \theta', M)p(\theta'| M)}
+    {p (D | \theta, M)p (\theta | M)}
+\end{equation}
+Onde $p (D | \theta, M)$ é a verossimilhança e $p(\theta | M)$ é 
+probabilidade a priori do parâmetro $\theta$.
+
+Na primeira etapa da geração da amostra, propomos novos valores para as 
+componentes do parâmetro de maneira independente. A distribuição de pulo
+$q_1 (\theta^* | \theta)$ usada é normal em escala logarítmica, com média 
+igual ao valor atual do parâmetro e com matriz de covariância diagonal 
+(pois as novas componentes do parâmetro são propostas independentemente) 
+e adaptativa. A variância de cada componente da distribuição de pulo 
+deve aumentar ou diminuir dependendo da razão entre propostas aceitas e 
+propostas feitas a cada 1000 iterações do algoritmo; se a razão de 
+aceite é maior do que $0.4$, então aumentamos a variância do pulo, por 
+outro lado, se a razão é menor do que $0.25$, então diminuímos a 
+variância do pulo. Então, para um parâmetro proposto $\theta^*$, no 
+tempo $s$, a probabilidade de ser aceito é:
+\begin{equation}\label{accepting_ratio_first_step}
+    r = \frac{p (D | \theta^*, M)}{p (D | \theta^{(s - 1)})}
+        \frac{p (\theta^* | M)}{p(\theta^{(s - 1)} | M)}
+        \frac{q_1 (\theta^{(s - 1)} | \theta^*)}{q_1 (\theta^* | \theta^{(s - 1)})}
+\end{equation}
+
+Na segunda etapa, utilizamos a segunda metade dos parâmetros $\theta^*$ 
+aceitos na primeira etapa para produzir uma estimativa da matriz de 
+covariância dos parâmetros. Assim, conduzimos uma nova rodada de 
+Metropolis-Hastings, agora normal em escala logarítmica e multivariada.
+A média da nova distribuição de pulo $q_2 (\theta^* | \theta)$ é o vetor 
+$\theta$, e a matriz de covariância da distribuição normal associada a
+distribuição do pulo é a matriz que estimamos. Dizemos que $X$ tem 
+distribuição normal associada a $Y$, que tem distribuição normal em 
+escala logarítmica, se $Y = e ^ X$. A estimativa da matriz de 
+covariância usada para a distribuição do pulo é atualizada sempre que um
+novo pulo é aceito, portanto as propostas feitas nesta etapa são também
+de distribuições adaptativas, diferente da terceira e última etapa. A
+probabilidade de aceite de uma proposta nesta etapa é idêntica a 
+primeira etapa, exceto pela distribuição de pulos.
+
+A terceira etapa é na qual aplicamos o MCMC populacional. Este se inicia 
+com a escolha de um conjunto de temperaturas como descrito na 
+seção~\ref{estudos_de_estimadores}. Então, para cada temperatura $t_i$ 
+definiremos um parâmetro $\theta_i$, que será igual ao último parâmetro
+aceito na etapa anterior. A partir disso, dois tipos de propostas serão 
+feitas em cada interação: propostas locais, e propostas globais. As 
+propostas locais modificam o parâmetro de uma temperatura, enquanto as 
+propostas globais invertem os parâmetros de duas temperaturas 
+diferentes. Em cada iteração da etapa 3, os parâmetros de todas as 
+temperaturas receberão propostas, e apenas uma proposta global será 
+feita.
+
+A distribuição de uma proposta local para temperatura $t_i$,
+$q_{3, t_i} (\theta^* | \theta)$, é  como na segunda etapa, normal em 
+escala logarítmica com média igual ao parâmetro atual. A matriz de 
+covariância da distribuição normal associada a distribuição de pulo é 
+igual a última matriz de covariância estimada na etapa anterior, ou 
+seja, a terceira etapa não tem distribuição de pulo adaptativa. A 
+probabilidade de aceitar um pulo $\theta^*$ em uma temperatura $t_i$ é:
+\begin{equation}\label{accepting_ratio_third_step}
+    r = \bigg[\frac{p (D | \theta^*, M)}{p (D | \theta^{(s - 1)})}\bigg]^{t_i}
+        \frac{p (\theta^* | M)}{p(\theta^{(s - 1)} | M)}
+        \frac{q_{3, t_i} (\theta^{(s - 1)} | \theta^*)}{q_{3, t_i} (\theta^* | \theta^{(s - 1)})}
+\end{equation}
+
+As propostas globais são feitas da seguinte maneira. Suponha que as
+temperaturas estão ordenadas em $t_1, t_2, ..., t_k$. Primeiro, 
+escolhe-se algum índice $i$ uniformemente entre $1$ e $k$. Em seguida,
+como feito por Friel~\cite{Friel2008}, escolhe-se $j$ de maneira que 
+$q_3 (j | i) \propto e^{\frac{1}{2}|j - i|}$ (dizemos que $j$ tem 
+distribuição Laplaciana discreta). Então, invertemos os 
+parâmetros de temperatura $t_i$ e $t_j$ com probabilidade:
+\begin{equation}
+    r = \bigg[\frac{p (D | \theta_j, M)}{p (D | \theta_i, M)}\bigg]^{t_i}
+        \bigg[\frac{p (D | \theta_i, M)}{p (D | \theta_j, M)}\bigg]^{t_j}
+        \frac{q_3 (i | j)}{q_3 (j | i)}
+\end{equation}
+Ao fim da última iteração da terceira etapa, utilizaremos o conjunto de 
+parâmetros $\theta_{t_1}, ..., \theta_{t_k}$ para calcular o estimador
+de $p (D | M)$ como indicado na 
+fórmula~\ref{marginallikelihood_estimator}
 
 \subsection{Experimentos com o SigNetMS}
 % reação enzimática simples
 % modelos Girolmi (bioinformatics)
-% modelos Kolch (?)
 
 
 \section{Ativides futuras}
+Assim que terminamos de escrever este relatório, pretendemos dar 
+sequência aos experimentos com estimação de verossimilhança marginal 
+para garantir que possuímos uma métrica que pode ser utilizada para a
+seleção de modelo. Isso nos permitirá, em pouco tempo, construir 
+exemplos pequenos em que a nossa metodologia pode ser testada; assim,
+pretendemos fazer o exame de qualificação deste projeto junto ao 
+Departamento de Ciência da Computação do Instituto de Matemática e 
+Estatística da Universidade de São Paulo.
+
+Em seguida, pretendemos iniciar a estruturação do banco de dados que 
+será utilizado como base para modificação dos modelos funcionais. Após
+a estruturação, devemos popular o banco com dados reais de diversas 
+linhagens de células humanas como HEK293, HaCat, E6E7-Keratinocytes,
+Erwing Sarcoma, Nerublastoma, PC12; também células Y1 de camundongos; e
+células teóricas simples que serão usadas para testes.
+
+
+
 % 1. Finalização de experimentos e testes do SigNetMS
 % 2. EQM
 % 3. Estruturação do bancos de dados
