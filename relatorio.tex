@@ -11,7 +11,9 @@
 \usepackage{tikz}
 \usepackage{indentfirst}
 \usepackage{textcomp}
+\usepackage{float}
 \usepackage[font={small,it}]{caption}
+\usepackage{mhchem}
 \title{Relatorio Parcial Mestrado}
 
 % packages added by Marcelo
@@ -174,7 +176,8 @@ químicas.
 Em casos em que o experimento biológico ou a via de sinalização são 
 muito estudadas, é possível que ambas as etapas descritas anteriormente
 possam ser resolvidas com pesquisas na literatura. Em casos que isto não
-é possível, torna-se uma solução recorrer a bancos de dados de biologia.
+é possível, torna-se uma solução recorrer a bancos de dados de biologia,
+para guiar a escolha de interações e constantes do modelo funcional.
 Para a primeira etapa, podemos consultar bancos como o 
 \href{http://www.genome.jp/kegg/}{Kyoto Encyclopedia of Genes and Genomes (KEGG)}
 ~\cite{Kanehisa2000kegg}, que contém mapas estáticos; e para a segunda,
@@ -189,9 +192,10 @@ modificar modelos funcionais a fim de faze-los explicar o experimento
 biológico sem sobreajuste. Propomos fazer estas modificações tratando
 o problema de identificação de vias de sinalização como um problema de
 otimização combinatória, considerando como espaço de busca possíveis 
-topologias para o modelo funcional e usando como função de custo alguma
-métrica que represente a qualidade deste modelo ao reproduzir o 
-experimento biológico de interesse.
+topologias para o modelo funcional, de acordo com interações retiradas 
+de repositórios de biologia e armazenadas em um banco de dados local,
+e usando como função de custo alguma métrica que represente a qualidade 
+deste modelo ao reproduzir o experimento biológico de interesse.
 
 Considere $S$ um conjunto de interações químicas. O conjunto de todas
 as possíveis escolhas de interações relevantes em $S$ corresponde ao
@@ -202,14 +206,56 @@ problema em uma instância do problema de seleção de características.
 Assim, após definida a função de custo $c$ e devidamente coletado e 
 armazenado o conjunto $S$, propomos resolver instâncias do problema de 
 identificação de vias de sinalização celular no arcabouço 
-{\em featsel} ~\cite{Reis2017featsel}. 
+{\em featsel} ~\cite{Reis2017featsel}. A 
+figura~\ref{fig:problem_lattice} mostra um exemplo de problema de 
+seleção de modelos e o espaço de busca do respectivo problema de seleção
+de características equivalente.
 
-%TODO: adicionar imagem do Kolch de escolha de modelo e ao lado um 
-% reticulado booleano equivalente.
+\begin{figure}[H]
+  \centering 
+  \begin{tabular}{c c}
+    \subfigure[] {\scalebox{0.3}{
+     \includegraphics[clip=true]{model_hypothesis.png}}
+     \label{fig:model_hypothesis} }
+     &
+    \subfigure[] {\scalebox{.8}{
+    \includegraphics[clip=true]{models_lattice.pdf}}
+    \label{fig:hypothesis_lattice} }
+  \end{tabular}
+    \caption{Exemplo de problema de identificação de via de sinalização
+    e o espaço de busca que o representa. Na 
+    figura~\ref{fig:model_hypothesis} temos um exemplo de problema de 
+    seleção de modelos com 4 modelos; a hipótese 1 pode ser considerada
+    como um modelo base pois todos os outros modelos contém as suas 
+    interações; a hipótese 2 é igual a hipótese 1 adicionando a ativação
+    de ERK por Rap1; a hipótese 3 é igual a hipótese 1 adicionando a 
+    desensibilização de EGFR; por fim, a hipótese 4 é igual a hipótese 1
+    com ativação de ERK por Rap1 e com desensibilização de EGFR. A 
+    figura~\ref{fig:hypothesis_lattice} mostra o espaço de busca da 
+    instância de seleção de características que pode ser criada para
+    resolver o problema original de seleão de modelos. A 
+    figura~\ref{fig:model_hypothesis} foi retirada de~\cite{Xu2010}}
+  \label{fig:problem_lattice} 
+\end{figure}
 
 \section{Atividades Realizadas}
+Nesta seção descrevemos as atividades desenvolvidas durante o período
+de início da bolsa até o dia de entrega deste relatório. Na 
+seção~\ref{disciplinas} apresentamos as disciplinas cursadas pelo 
+beneficiário. Na seção~\ref{model_sel} apresentamos a métrica utilizada
+para avaliação de modelos funcionais, $p (D | M)$, que decidimos 
+utilizar, e também explicamos a complexidade em seu cálculo analítico. 
+Na seção~\ref{estudos_de_estimadores} apresentamos uma técnica 
+desenvolvida por Friel e Pettit~\cite{Friel2008} que permite estimar 
+esta probabilidade que usamos como métrica com  conceitos de 
+termodinâmica. Na seção~\ref{bibm_implementation} descrevemos a 
+implementação do SigNetMS, um software que é capaz de calcular de 
+estimar a probabilidade $p (D | M)$ utilizando a técnica de 
+termodinâmica e algoritmos de geração de amostras com cadeias de Markov.
+Por fim, apresentamos resultados de experimentos feitos com o SigNetMS
+na seção~\ref{experimentos}.
 
-\subsection{Disciplinas cursadas}
+\subsection{Disciplinas cursadas}\label{disciplinas}
 % Mencionar as três matérias feitas
 % 1 Tópicos em análise de algoritmos
 %   - complementar a análise de algoritmo
@@ -254,7 +300,7 @@ de Química da Universidade de São Paulo. Frequentando esta disciplina,
 o beneficiário pode se familiarizar com os processos bioquímicos 
 envolvidos em uma via de sinalização celular.
 
-\subsection{Estudo de literatura em seleção de modelos}
+\subsection{Estudo de literatura em seleção de modelos}\label{model_sel}
 % Achamos melhor começar o projeto resolvendo o desafio de definir uma 
 % função de custo apropriada, que leve em consideração a penalização
 % por overfitting... Decidimos iniciar pela metodologia menos 
@@ -305,12 +351,11 @@ espaço paramétrico $\Theta$. Portanto, podemos escrever
 \end{equation}
 Ou seja, a métrica $p (D|M)$ é obtida ao marginalizar a verossimilhança
 $p (D | M, \theta)$. Entretanto, como estamos trabalhando com sistemas
-de EDOs, a verossimilhança muitas vezes não pode ser determinada 
-analiticamente, assim como a integral que resulta na verossimilhança
-marginal $p (D | M)$. Para enfrentar este problema, a metodologia 
-aplicada pelo BIBm usa como estratégia funções intermediárias entre a 
-priori, $p (\theta | M)$, e a posteriori, $p (D | \theta, M)$, para 
-obter um estimador de $p (D|M)$.
+de EDOs, a integral que resulta na verossimilhança marginal $p (D | M)$
+muitas vezes não pode ser calculada analiticamente. Para enfrentar este 
+problema, a metodologia aplicada pelo BIBm usa como estratégia funções 
+intermediárias entre a priori, $p (\theta | M)$, e a posteriori, 
+$p (D | \theta, M)$, para obter um estimador de $p (D|M)$.
 
 \subsection{Estudos de estimadores de verossimilhança marginal de um 
 modelo}\label{estudos_de_estimadores}
@@ -341,7 +386,7 @@ exatamente a distribuição a posteriori dos parâmetros, portanto, as
 distribuições potência de posteriori são capazes de traçar um ``caminho''
 entre a priori e a posteriori quando se varia o parâmetro $t$ de 0 a 1.
 
-Agora considere $\frac{d}{dt} \log\{p (D|\theta)\}$. É possível mostrar
+Agora considere $\frac{d}{dt} \log\{z (D|\theta)\}$. É possível mostrar
 que 
 \begin{equation}
 \frac{d}{dt}\log \{z (D | \theta)\} = 
@@ -361,14 +406,14 @@ identidade:
 
 A equação~\ref{powerposteriors:mainequation} nos permite estimar 
 $\log {p (D)}$ sem calcular explicitamente a 
-integral~\ref{marginilize_likelihood}. Utilizaremos o mesmo estimador 
-usado por Xu~\cite{Xu2010}. Primeiro, dividimos o intervalo $[0, 1]$ em 
-$N - 1$ pontos $r_1, ..., r_{N - 1}$ a fim de criar $N$ intervalos
-$T_1, ..., T_N$ tais que $T_i = r_i - r_{i - 1}$, com $r_0 = 0$ e 
-$r_n = 1$. Depois, para cada intervalo $T_i$, escolhe-se uniformemente
-neste intervalo $N_i$ pontos $t^i_{1}, ..., t^i_{N_i}$. Finalmente, para 
-cada uma das temperaturas $t^i_j$, amostra-se $\theta^i_j \sim \theta | D, t^i_j$.
-Assim, o estimador é dado por:
+integral~\ref{marginilize_likelihood}. Para isso, utilizaremos o mesmo 
+estimador usado por Xu~\cite{Xu2010}. Primeiro, dividimos o intervalo 
+$[0, 1]$ em $N - 1$ pontos $r_1, ..., r_{N - 1}$ a fim de criar $N$ 
+intervalos $T_1, ..., T_N$ tais que $T_i = r_i - r_{i - 1}$, com 
+$r_0 = 0$ e $r_n = 1$. Depois, para cada intervalo $T_i$, escolhe-se 
+uniformemente neste intervalo $N_i$ pontos $t^i_{1}, ..., t^i_{N_i}$. 
+Finalmente, para cada uma das temperaturas $t^i_j$, amostra-se 
+$\theta^i_j \sim \theta | D, t^i_j$. Assim, o estimador é dado por:
 \begin{equation}\label{marginallikelihood_estimator}
     \hat{L} = \sum_{i = 1}^N \frac{|T_i|}{N_i} \sum_{j = 1}^{N_i} 
         \log {p (D | \theta^i_j, t^i_j)}
@@ -382,7 +427,7 @@ de gerar simultaneamente amostras para todos valores de $t^i_j$. O valor
 de $p (D | \theta)$, como veremos na próxima seção, pode ser facilmente
 calculado quando definimos uma função de verossimilhança conveniente.
 
-\subsection{Implementação local do BIBm}
+\subsection{Implementação local do BIBm}\label{bibm_implementation}
 % Em python
 % Técnicas já convencionais para desenvolvimento de software como 
 % controle de versionamento. Outras técnicas de desenvolvimento ágil 
@@ -443,9 +488,9 @@ feita em três etapas com algoritmos que são variações do algoritmo
 Metropolis-Hastings.
 
 O algoritmo de Metropolis-Hastings~\cite{BayesianDataAnalysis} é capaz 
-de gerar uma amostra de uma distribuição objetivo $p (x)$ a partir de 
-uma sequência de pontos gerados por uma cadeia de Markov. Abaixo 
-descrevemos seu funcionamento:
+de gerar uma amostra de uma distribuição objetivo $p (\theta | D)$ a 
+partir de uma sequência de pontos gerados por uma cadeia de Markov. 
+Abaixo descrevemos seu funcionamento:
 \begin{enumerate}
     \item Escolha $\theta^{(0)}$ tal que $p(\theta^{(0)} | D, M) > 0$ de 
         uma distribuição $q_0(\theta)$, que pode ser, por exemplo, a
@@ -532,7 +577,7 @@ igual a última matriz de covariância estimada na etapa anterior, ou
 seja, a terceira etapa não tem distribuição de pulo adaptativa. A 
 probabilidade de aceitar um pulo $\theta^*$ em uma temperatura $t_i$ é:
 \begin{equation}\label{accepting_ratio_third_step}
-    r = \bigg[\frac{p (D | \theta^*, M)}{p (D | \theta^{(s - 1)})}\bigg]^{t_i}
+    r = \bigg[\frac{p (D | \theta^*, M)}{p (D | \theta^{(s - 1)}, M)}\bigg]^{t_i}
         \frac{p (\theta^* | M)}{p(\theta^{(s - 1)} | M)}
         \frac{q_{3, t_i} (\theta^{(s - 1)} | \theta^*)}{q_{3, t_i} (\theta^* | \theta^{(s - 1)})}
 \end{equation}
@@ -554,13 +599,30 @@ parâmetros $\theta_{t_1}, ..., \theta_{t_k}$ para calcular o estimador
 de $p (D | M)$ como indicado na 
 fórmula~\ref{marginallikelihood_estimator}
 
-\subsection{Experimentos com o SigNetMS}
+\subsection{Experimentos com o SigNetMS}\label{experimentos}
+Realizamos dois experimentos para testar o SigNetMS. Primeiro, testamos
+este software com uma reação enzimática simples. Depois, utilizamos como
+testes uma instância de seleção de modelos com resultado conhecido.
+
+Nos experimentos com a reação enzimática simples, nosso objetivo era
+verificar se os algoritmos de Metropolis-Hastings implementados de fato
+amostravam a distribuição esperada. Para isto, desenhamos um modelo 
+funcional que modela uma reação enzimática simples:
+\begin{center}
+\ce{
+    E + S <=>[\ce{k_1}][\ce{d_1}] ES ->[\ce{kcat}] E + P
+}
+\end{center}
+Depois disso, escolhemos os valores $k_1 = 0.06$, $d_1 = 0.1$ e 
+$kcat = 0.2$ para simular o comportamento deste sistema e gerar 
+observações das concentrações de E nos tempos $t = 0s, 33s, 66s, 100s$.
+
 % reação enzimática simples
 % modelos Girolmi (bioinformatics)
 
 
-\section{Ativides futuras}
-Assim que terminamos de escrever este relatório, pretendemos dar 
+\section{Atividades futuras}
+Nos próximos dias após a submissão deste relatório, pretendemos dar 
 sequência aos experimentos com estimação de verossimilhança marginal 
 para garantir que possuímos uma métrica que pode ser utilizada para a
 seleção de modelo. Isso nos permitirá, em pouco tempo, construir 
@@ -570,8 +632,9 @@ Departamento de Ciência da Computação do Instituto de Matemática e
 Estatística da Universidade de São Paulo. Além disso, em um curto prazo,
 pretendemos implementar também uma função de custo baseada no critério
 de informação AIC; acreditamos que esta tarefa será mais simples do que
-previmos na proposta de trabalho, pois ela é consideravelmente mais 
-simples do que o critério utilizado na metodologia BIBm.
+previmos na proposta de trabalho, pois esta função de custo é 
+consideravelmente mais simples do que o critério utilizado na 
+metodologia BIBm.
 
 Como próximo passo, pretendemos iniciar a estruturação do banco de dados 
 que será utilizado como base para modificação dos modelos funcionais. 

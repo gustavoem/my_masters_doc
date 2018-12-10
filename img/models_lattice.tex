@@ -1,0 +1,54 @@
+\documentclass[]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{fullpage}
+\usepackage[upright]{fourier}
+\usepackage{tkz-graph}
+\usepackage{color}
+\usetikzlibrary{arrows}
+
+\usepackage[paperheight=2.3in,paperwidth=4.0in,margin=0in]{geometry}
+
+\begin{document}
+\begin{tikzpicture}
+  \SetVertexNormal[Shape     = rectangle,
+                   FillColor = white,
+                  LineWidth  = 1pt]
+  \SetUpEdge[lw         = 1pt,
+             color      = black,
+             labelcolor = white,
+             labeltext  = red,
+             labelstyle = {sloped,draw,text=blue}]
+
+%part 00
+\SetVertexNormal[Shape = rectangle, FillColor  = white]
+\Vertex[x=0, y=0, LabelOut=true, Ldist=5pt]{}
+\Vertex[x=0, y=0, L=modelo base ($00$)]{$00$}
+
+%part 01
+\SetVertexNormal[Shape = rectangle, FillColor  = white]
+\Vertex[x=-2.5, y=2.5, LabelOut=true, Ldist=5pt]{}
+\Vertex[x=-2.5, y=2.5, L=ativação por Rap1 ($01$)]{$01$}
+
+%part 10
+\SetVertexNormal[Shape = rectangle, FillColor  = white]
+\Vertex[x=2.5, y=2.5, LabelOut=true, Ldist=5pt]{}
+\Vertex[x=2.5, y=2.5, L=desensibilização de EGFR  ($10$)]{$10$}
+
+% part 11
+\SetVertexNormal[Shape = rectangle, FillColor  = white]
+\Vertex[x=0, y=5, LabelOut=true, Ldist=5pt]{}
+\Vertex[x=0, y=5, L= ativação por Rap1 e desensibilização de EGFR ($11$)]{$11$}
+
+\tikzset{EdgeStyle/.style={-}}
+
+% part 00
+\SetUpEdge[lw = 1pt, color= black]
+\Edges($00$, $01$) 
+\Edges($00$, $10$) 
+\Edges($01$, $11$) 
+\Edges($10$, $11$) 
+
+\end{tikzpicture}
+\end{document}
