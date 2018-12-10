@@ -604,6 +604,7 @@ Realizamos dois experimentos para testar o SigNetMS. Primeiro, testamos
 este software com uma reação enzimática simples. Depois, utilizamos como
 testes uma instância de seleção de modelos com resultado conhecido.
 
+\subsubsection{Verificação de geração de amostras da posteriori}
 Nos experimentos com a reação enzimática simples, nosso objetivo era
 verificar se os algoritmos de Metropolis-Hastings implementados de fato
 amostravam a distribuição esperada. Para isto, desenhamos um modelo 
@@ -620,11 +621,14 @@ observações das concentrações de E nos tempos $t = 0s, 20s, 40s, 60s,
 80s$ e $100s$. Adicionamos a estas observações um erro Gaussiano de 
 média zero e variância $0,1$. Repetimos este procedimento por 4 vezes, 
 gerando ao todo 24 observações de E. Em seguida, rodamos o SigNetMS
-com esta instância e ao final da primeira e segunda etapa geramos um 
-gráfico com a posteriori estimada de cada parâmetro, apresentado na
-figura~\ref{fig:posteriori_parameters}. Com esses resultados, 
-confirmamos que a nossa implementação de algoritmos para geração de 
-amostra de fato convergiam para a distribuição de {\em target}.
+com os experimentos gerados, com o mesmo modelo funcional e assumindo
+que a distribuição a priori de $k_1$ é uma Gamma (2.0, 0.1), e que a de 
+$d_1$ e $kcat$ são Gamma (2.0, 0.2). Então, ao final da primeira e 
+segunda etapa geramos um gráfico com a posteriori estimada de cada 
+parâmetro, apresentado na figura~\ref{fig:posteriori_parameters}. Com 
+esses resultados, confirmamos que a nossa implementação de algoritmos 
+para geração de amostra de fato convergiam para a distribuição de {\em 
+target}.
 
 \begin{figure}[!ht]
   \centering 
@@ -662,10 +666,63 @@ amostra de fato convergiam para a distribuição de {\em target}.
   \label{fig:posteriori_parameters} 
 \end{figure}
 
+\subsubsection{Seleção de modelos em uma instância conhecida}
+Neste experimento, nos propomos a reproduzir os resultados encontrados 
+por Vyshemirsky e Girolami em~\cite{Vyshemirsky2008}. Neste 
+experimento, observações de um modelo funcional são geradas de maneira
+similar ao que fizemos no experimento anterior. Além deste modelo, são
+criados outros três modelos e então se calcula $p (D | M)$ para cada um
+deles.
 
-% reação enzimática simples
-% modelos Girolmi (bioinformatics)
+\begin{figure}[ht]
+    \begin{center}
+    \includegraphics[width=0.65\linewidth]{Vyshemirsky_models.png}
+    \caption{Um conjunto de quatro modelos funcionais. Extraído de
+        Vyshemirsky e Girolmi~\cite{Vyshemirsky}. Os modelos 1, 2, 3 e
+        4 são representados respectivamente pelas letras a, b, c, d.}
+    \label{fig:vyshemirsky_models}
+    \end{center}
 
+\end{figure}
+
+A figura~\ref{fig:vyshemirsky_models} apresenta os modelos que serão
+avaliados neste experimento. O modelo 1 é utilizado para a geração dos
+dados; o modelo 2 é uma versão simplificada do modelo 1; o modelo 3 é
+um modelo significantemente diferente dos outros; e, por fim, o modelo 4
+é uma versão complexa do modelo 1. 
+
+Os resultados obtidos Vyshemirsky e Girolami são apresentados na 
+tabela~\ref{tab:vyshemirsky} e indicam que a ordem, por qualidade de 
+modelos, é modelo 1 $\prec$ modelo 4 $\prec$ modelo 2 $\prec$ modelo 3. 
+Entretanto, como também apresentado na mesma tabela, os resultados que 
+obtivemos com SigNetMS implicam na ordenação de qualidade modelo 1 
+$\prec$ modelo 4 $\prec$ modelo 3 $\prec$ modelo 2. Acreditamos que esta 
+diferença pode ter ocorrido porque na metodologia apresentada por 
+Vyshemirsky, a amostragem de $\theta | D, t$ é feita diretamente com o 
+algoritmo MCMC populacional, diferente da metodologia empregada pelo 
+BIBm e implementada no SigNetMS, que precisa de duas etapas de 
+Metropolis-Hastings adaptativas anteriores ao MCMC populacional. Além
+disso, ainda estamos repetindo este experimento variando parâmetros dos
+algoritmos de Metropolis-Hastings e também removendo as primeiras 
+etapas da amostragem, o que pode deixar nossos resultados similares ao
+de Vyshemirsky ou indicar erros em nossa implementação.
+
+\begin{table}[ht!]
+    \caption{Estitiva de $\log p(D | M)$ obtida para o experimento desta
+    seção.}
+    \label{tab:vyshemirsky}
+    \begin{center}
+    \smallskip
+    \begin{tabular} {c | c c c c}
+        \toprule
+        Metodologia & Modelo 1 & Modelo 2 & Modelo 3 & Modelo 4\\
+        \hline
+        Vyshemirsky e Girolami & 45,8 & 29,2 & -1.1 & 34,8 \\
+        SigNetMS &               71,1 & -8,0 &  0.29 & 4.99 \\
+        \bottomrule
+    \end{tabular}
+    \end{center}
+\end{table}
 
 \section{Atividades futuras}
 Nos próximos dias após a submissão deste relatório, pretendemos dar 
