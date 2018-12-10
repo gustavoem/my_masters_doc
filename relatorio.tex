@@ -613,9 +613,55 @@ funcional que modela uma reação enzimática simples:
     E + S <=>[\ce{k_1}][\ce{d_1}] ES ->[\ce{kcat}] E + P
 }
 \end{center}
-Depois disso, escolhemos os valores $k_1 = 0.06$, $d_1 = 0.1$ e 
-$kcat = 0.2$ para simular o comportamento deste sistema e gerar 
-observações das concentrações de E nos tempos $t = 0s, 33s, 66s, 100s$.
+Depois disso, escolhemos os valores de parâmetros $k_1 = 0.06$, 
+$d_1 = 0.1$, $kcat = 0.2$ e concentrações iniciais E $= 10$, S $= 100$, 
+ES $= 0$ e P $= 0$ para simular o comportamento deste sistema e gerar 
+observações das concentrações de E nos tempos $t = 0s, 20s, 40s, 60s, 
+80s$ e $100s$. Adicionamos a estas observações um erro Gaussiano de 
+média zero e variância $0,1$. Repetimos este procedimento por 4 vezes, 
+gerando ao todo 24 observações de E. Em seguida, rodamos o SigNetMS
+com esta instância e ao final da primeira e segunda etapa geramos um 
+gráfico com a posteriori estimada de cada parâmetro, apresentado na
+figura~\ref{fig:posteriori_parameters}. Com esses resultados, 
+confirmamos que a nossa implementação de algoritmos para geração de 
+amostra de fato convergiam para a distribuição de {\em target}.
+
+\begin{figure}[!ht]
+  \centering 
+  \begin{tabular}{c c}
+    \subfigure[] {\scalebox{0.4}{
+     \includegraphics[clip=true]{posterior_after_first_phase_k1.png}}
+     \label{fig:posterior_k1_1} }
+    & 
+    \subfigure[] {\scalebox{.4}{
+    \includegraphics[clip=true]{posterior_after_second_phase_k1.png}}
+    \label{fig:posterior_k1_2} }
+    \\
+    \subfigure[] {\scalebox{0.4}{
+     \includegraphics[clip=true]{posterior_after_first_phase_d1.png}}
+     \label{fig:posterior_d1_1} }
+    & 
+    \subfigure[] {\scalebox{.4}{
+    \includegraphics[clip=true]{posterior_after_second_phase_d1.png}}
+    \label{fig:posterior_d1_2} }
+    \\
+    \subfigure[] {\scalebox{0.4}{
+     \includegraphics[clip=true]{posterior_after_first_phase_kcat.png}}
+     \label{fig:posterior_kcat_1} }
+    & 
+    \subfigure[] {\scalebox{.4}{
+    \includegraphics[clip=true]{posterior_after_second_phase_kcat.png}}
+    \label{fig:posterior_kcat_2} }
+    \\
+  \end{tabular}
+    \caption{Posteriori estimada de parâmetros após primeira etapa (à 
+    esquerda) e segunda etapa (à direita) da geração de amostra da 
+    posteriori. Podemos observar nesta figura que a amostra dos 
+    parâmetros de fato convergiu para os valores próximos aos que 
+    utilizamos para a geraçãoo das observações.}
+  \label{fig:posteriori_parameters} 
+\end{figure}
+
 
 % reação enzimática simples
 % modelos Girolmi (bioinformatics)
