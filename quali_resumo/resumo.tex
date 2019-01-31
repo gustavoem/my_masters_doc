@@ -1,0 +1,100 @@
+\documentclass[12pt]{article}
+\usepackage[portuguese]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage[top=3cm, bottom=2cm, left=3cm, right=2cm]{geometry}
+\usepackage{tikz}
+\usepackage{textcomp}
+\usepackage{float}
+\usepackage[font={small,it}]{caption}
+\usepackage{mhchem}
+\title{Resumo de Projeto de Mestrado}
+
+% packages added by Marcelo
+\usepackage{lscape}    % for landscape pages
+\usepackage{hyperref}  % to allow hyperlinks
+\usepackage{booktabs}  % nicer table borders
+\usepackage{subfigure} % add subfigures
+
+% My default commands
+\newcommand{\foreignword}[1]{\textit{#1}}
+\newcommand{\toolname}[1]{\textit{#1}}
+%\newcommand{\fieldR}{\mathbb{R}}
+\newcommand{\powerset}{\mathcal{P}}
+%\newcommand{\probability}{\mathbb{P}}
+\newcommand{\expectation}{\mathbb{E}}
+\newcommand{\algname}[1]{\texttt{#1}}
+\newcommand{\langname}[1]{\texttt{#1}}
+%\newcommand{\varname}[1]{\texttt{#1}}
+%\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+%\newcommand{\ceil}[1]{\lceil #1 \rceil}
+%\newcommand{\mathsc}[1]{{\normalfont\textsc{#1}}}
+\newcommand{\forest}{\mathcal{F}}
+\newcommand{\pfsnode}[1]{\mathbf #1}
+\newcommand{\species}[1]{\textit{#1}}
+\newcommand{\gender}[1]{\textit{#1}}
+
+\graphicspath{{./img/}} 
+
+\setstretch{1.5}
+
+\begin{document}
+
+% Double spacing
+\doublespacing
+\begin{flushleft}
+{\LARGE Identificação de vias de sinalização celular baseada em repositórios de cinética de reações bioquímicas}
+
+\bigskip
+{\large {\bf Beneficiário:} \href{mailto:gustavo.estrela.matos@usp.br}{Gustavo Estrela de Matos}\\ 
+        {\bf Responsável:} \href{mailto:marcelo.reis@butantan.gov.br}{Marcelo da Silva Reis}}\\
+\end{flushleft}
+
+% Rascunho desse documento
+% Resumo entregue a FAPESP
+% Resumo expandido
+% 1. Vias de sinalização celular;
+% 2. Modelos funcionais e identificação de vias de sinalização celular;
+% 3. Como construir modelos funcionais; 
+% 4. Neste sentido, apresentar o trabalho de Lulu Wu;
+% 5. Entretanto, em seu trabalho...
+% 6. Como propomos enfrentar as limitações do trabalho de Lulu Wu
+%    - Extrair informações de mais repositórios
+%    - Melhorar a busca pelo melhor modelo
+%    - Construir uma métrica melhor de avaliação de modelos, que 
+%      possua uma melhor penalização de overfitting.
+% 7. Testaremos a metodologia com celulas...
+
+
+\section*{Resumo do Projeto Proposto}
+A construção de modelos funcionais é uma técnica comum para se 
+estudar vias de sinalização celular e, quando a via estudada é pouco
+conhecida, é possível que os modelos já propostos sejam incompletos, 
+tornando necessário a sua modificação.
+Lulu Wu apresentou em 2015, em sua dissertação de mestrado, um método 
+para  modificar sistematicamente modelos funcionais, adicionando a estes
+interações extraídas de repositórios como KEGG. Entretanto, esta 
+metodologia apresentou limitações: a primeira é a incompletude do banco 
+de dados de interações criado, que extraia informações apenas do 
+repositório KEGG; a segunda, a falta de informações sobre constantes 
+de velocidade de interações, que podem ser extraídas de repositórios 
+como BioNumbers; a terceira, a dinâmica do algoritmo de busca, 
+incremental, que pode não achar o mínimo global; e a última, a 
+penalização na complexidade dos modelos, que era feita de maneira 
+aleatória. Propomos neste trabalho enfrentar as limitações encontradas
+pela metodologia de Lulu, criando um banco de dados de interações mais
+completo e também novas funções de custo que sejam capazes de 
+penalizar modelos mais complexos (como critério de informação Akaike e 
+{\em Bayesian inference-based modeling}); esta penalização deve induzir,
+em cadeias do  espaço de busca, curvas em u no custo dos modelos, 
+portanto também propomos a criação de novos algoritmos de busca que 
+explorem essa característica da função de custo. Por fim, esperamos 
+testar nossa metodologia na identificação de vias de sinalização celular 
+da linhagem tumoral murina Y1.
+
+\end{document}
