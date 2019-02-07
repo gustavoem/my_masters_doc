@@ -1,0 +1,165 @@
+\documentclass[12pt, twoside]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, top=30mm, left=20mm, bottom=20mm,
+    right=20mm]{geometry}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{fancyhdr}
+\fancyhead[LO,RE]{\itshape \nouppercase Chapter \arabic{chapter}}
+\usepackage{amssymb}
+\usepackage{csquotes}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{faktor}
+\usepackage[backend=bibtex, 
+            maxbibnames=10,
+            style=alphabetic]{biblatex}
+\usepackage{hyperref}
+\usepackage{subfigure}
+\usepackage[font={small,it}]{caption}
+\usepackage{algpseudocode}
+\usepackage[plain]{algorithm}
+\usepackage[shortlabels]{enumitem}
+\usepackage{booktabs}
+
+\pagestyle{fancy}
+
+% Images path
+\graphicspath{ {img/} }
+
+% ABNT foreign words should be in italic
+\newcommand{\foreignword}[1]{\textit{#1}}
+\newcommand{\toolname}[1]{\textit{#1}}
+\newcommand{\fieldR}{\mathbb{R}}
+\newcommand{\powerset}{\mathcal{P}}
+\newcommand{\probability}{\mathbb{P}}
+\newcommand{\expectation}{\mathbb{E}}
+\newcommand{\algname}[1]{\texttt{#1}}
+\newcommand{\langname}[1]{\texttt{#1}}
+\newcommand{\varname}[1]{\texttt{#1}}
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+\newcommand{\ceil}[1]{\lceil #1 \rceil}
+\newcommand{\mathsc}[1]{{\normalfont\textsc{#1}}}
+\newcommand{\forest}{\mathcal{F}}
+\newcommand{\pfsnode}[1]{\mathbf #1}
+\newcommand{\species}[1]{\textit{#1}}
+\newcommand{\gender}[1]{\textit{#1}}
+
+% remove returns of the same line in pseudocodes
+\algrenewcommand\Return{\State \algorithmicreturn{} } 
+
+\DeclareMathOperator*{\argmin}{argmin} 
+
+\addbibresource{references.bib}
+
+\newtheorem{mydefinition}{Definition}
+\numberwithin{mydefinition}{section}
+\newtheorem{mytheorem}{Theorem}
+\numberwithin{mytheorem}{section}
+\newtheorem{mylemma}{Lemma}
+\numberwithin{mylemma}{section}
+\newtheorem{corollary}{Corollary}
+\numberwithin{corollary}{section}
+
+
+\begin{document}
+\pagenumbering{roman}
+\thispagestyle{empty}
+\begin{center}
+{\Large
+{\bf Identification of cell signaling pathways based on biochemical 
+    reaction kinetics repositories}\\
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+    {\bf \href{mailto:gustavo.estrela.matos@gmail.com}{Gustavo Estrela de Matos}}\\
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\textsc{
+    Dissertation presented\\[-0.25cm] 
+    to\\[-0.25cm]
+    Institute of Mathematics and Statistics\\[-0.25cm]
+    of the\\[-0.25cm]
+    University of São Paulo\\[-0.25cm]
+    For\\[-0.25cm]
+    The Degree Of Master Of Science\\
+    }
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+Field of knowledge: Computer Science\\
+\bigskip
+Advisor: Dr. Marcelo da Silva Reis\\
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+Center of Toxins, Immune-Response and Cell Signaling (CeTICS)\\
+\bigskip
+Special Laboratory of Cell Cycle, Butantan Institute\\
+\bigskip
+\bigskip
+{\normalsize During the development of this work the author received 
+    financial support of FAPESP.}\\
+\bigskip
+\bigskip
+\bigskip
+São Paulo, \today
+}
+\end{center}
+\newpage
+
+\chapter*{Resumo}
+O problema U-curve é uma formulação de um problema de otimização que 
+pode ser utilizado na etapa de seleção de características em Aprendizado
+de Máquina, com aplicações em desenho de modelos computacionais de 
+sistemas biológicos. Não obstante, soluções propostas até o presente 
+momento para atacar esse problema têm limitações do ponto de vista de 
+consumo de tempo computacional e/ou de memória, o que implica na 
+necessidade do desenvolvimento de novos algoritmos. Nesse sentido, em 
+2012 foi proposto o algoritmo Poset-Forest-Search (PFS), que organiza o
+espaço de busca em florestas de posets. Esse algoritmo foi implementado 
+e testado, com resultados promissores; todavia, novos melhoramentos são
+necessários para que o PFS se torne uma alternativa competitiva para 
+resolver o problema U-curve. Neste projeto propomos a construção de uma 
+versão paralelizada e escalável do algoritmo PFS, utilizando diagramas 
+de decisão binária reduzidos e ordenados. Além disso, propomos a criação
+de um novo algoritmo para o problema U-curve que se baseia na estratégia
+de divisão e conquista para particionar o espaço e achar a solução do
+problema de forma paralela. Os algoritmos desenvolvidos foram 
+implementados e testados em instâncias artificiais e também em 
+conjuntos de dados próprios para experimentos comparativos entre 
+diferentes algoritmos de seleção de características.
+
+\tableofcontents
+
+\clearpage
+\pagenumbering{arabic} 
+
+\nocite{*}
+\chapter{Introdução}
+\label{chap:intro}
+\input{chapters/introduction}
+
+\chapter{Conceitos Fundamentais}
+\label{chap:fundamental_concepts}
+\input{chapters/fundamental_concepts}
+
+\chapter{Conclusão}
+\label{chap:conclusion}
+\input{chapters/conclusion}
+
+\newpage
+\printbibliography
+
+\end{document}
+
