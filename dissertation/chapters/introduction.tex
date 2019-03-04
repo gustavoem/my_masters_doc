@@ -1,1 +1,65 @@
+% Outline of this section
+% First we should start with a two-page description of the project with:
+% - What are cell signaling pathways
+% - What types of computational models we have for these pathways and 
+% which one do we use
+% - What can we do with those networks and how hard is it to get one to 
+% work
+% - What are the basic tasks to build a pathway
+% - What has Lulu done and what are the limitations of her work
+% - How do we intend to surmount those limitations
+
+
+% Subsection Then we should state the main objectives/challenges of our 
+% work
+% Subsection Then we should give a short description of the work 
+
+
+% What are cell signaling pathways and how is it important to study them
+% - control how cell behaves in different types of environments
+% - cancer cells have bad behaviour
+% - that's one reason to study signaling networks
+Cell Signaling pathways are cascades of chemical interactions that 
+allow the communication between the cell environment and the 
+cell itself. These pathways also are able to regulate many cell 
+functions, including DNA replication, cell division and cell death. We
+can observe the functioning of signaling pathways as a mechanism that 
+can conform the cell behaviour with signals that come from the 
+environment conditions in which the cell is placed. The studies of cell 
+signaling pathways can lead to determining how cells can respond to 
+different stimulus; for instance, with the studies of signaling pathways
+activated by a chemical species, one could determine how an unhealthy 
+cell would respond to a drug containing this species.
+
+% There are computational models for signaling networks
+% - Michaelis Menten equations for chemical interactions
+% - With a system of ODES we can then simulate the cell behaviour
+% - However, the huge number of interactions happening in the cell makes
+%   it impossible to consider everything.
+% - Therefore we must know 
+It's possible to construct mathematical models to represent a set of
+chemical reactions and consequently a signaling network. One approach on 
+the modeling of those interactions is based on the law of mass action. 
+This law proposes that the rate of a chemical reaction is proportional 
+to the product of reactants concentrations, i.e we can calculate the 
+concentration change rate of a species in an interaction by calculating 
+the product of reactants concentrations up to a multiplying constant. 
+If we consider the set of interactions of a signaling pathway, we can
+then come up with a system of ordinary differential equations (ODEs) 
+that can model the dynamics of the concentration of each chemical 
+species from the pathway. Generally, these systems are complex and 
+cumbersome, if not impossible, to be solved analytically, therefore we 
+resort on computational models that apply numerical methods to 
+approximate solutions of these systems.
+
+
+% How do we create these computational models and what should they do?
+%
+
+
+% We can model finding reactions and constants from the literature
+% However, we might have missed some interactions or even added irrelevant ones
+% To solve this, Lulu did...
+% Her work however had a few limitations
+% To surmount these limitations
 

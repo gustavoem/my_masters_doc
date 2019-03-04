@@ -118,43 +118,47 @@ São Paulo, \today
 \end{center}
 \newpage
 
-\chapter*{Resumo}
-O problema U-curve é uma formulação de um problema de otimização que 
-pode ser utilizado na etapa de seleção de características em Aprendizado
-de Máquina, com aplicações em desenho de modelos computacionais de 
-sistemas biológicos. Não obstante, soluções propostas até o presente 
-momento para atacar esse problema têm limitações do ponto de vista de 
-consumo de tempo computacional e/ou de memória, o que implica na 
-necessidade do desenvolvimento de novos algoritmos. Nesse sentido, em 
-2012 foi proposto o algoritmo Poset-Forest-Search (PFS), que organiza o
-espaço de busca em florestas de posets. Esse algoritmo foi implementado 
-e testado, com resultados promissores; todavia, novos melhoramentos são
-necessários para que o PFS se torne uma alternativa competitiva para 
-resolver o problema U-curve. Neste projeto propomos a construção de uma 
-versão paralelizada e escalável do algoritmo PFS, utilizando diagramas 
-de decisão binária reduzidos e ordenados. Além disso, propomos a criação
-de um novo algoritmo para o problema U-curve que se baseia na estratégia
-de divisão e conquista para particionar o espaço e achar a solução do
-problema de forma paralela. Os algoritmos desenvolvidos foram 
-implementados e testados em instâncias artificiais e também em 
-conjuntos de dados próprios para experimentos comparativos entre 
-diferentes algoritmos de seleção de características.
-
+\chapter*{Abstract}
+Cell signaling pathways are composed of a set of biochemical reactions 
+that are associated with signal transmission within the cell and its 
+surroundings. Traditionally, these pathways are identified through 
+statistical analyses on results from biological assays, in which 
+involved chemical species are quantified. However, once generally it is 
+measured only a few time points for a fraction of the chemical species, 
+to effectively tackle this problem it is required to design and simulate 
+functional dynamic models. Recently, it was introduced a method to 
+design functional models, which is based on systematic modifications of 
+an initial model through the inclusion of biochemical reactions, which 
+in turn were obtained from the interactome repository KEGG. 
+Nevertheless, this method presents some shortcomings that impair the 
+estimated model; among them are the incompleteness of the information 
+extracted from KEGG, the absence of rate constants, the usage of 
+sub-optimal search algorithms and an unsatisfactory overfitting 
+penalization. In this project, we propose a new methodology for 
+identification of cell signaling pathways, which will make use of a 
+myriad of public interactome and biochemical reaction kinetics 
+repositories to deal with the incompleteness of a priori information. 
+Moreover, we will use optimal algorithms for model selection, as well as 
+more effective cost functions for overfitting penalization. The new 
+methodology will be tested on artificial instances and also on cell 
+signaling pathways identification in our case study, the Y1 mouse 
+adrenocortical tumor cell line. (AU)
+ 
 \tableofcontents
 
 \clearpage
 \pagenumbering{arabic} 
 
 \nocite{*}
-\chapter{Introdução}
+\chapter{Introduction}
 \label{chap:intro}
 \input{chapters/introduction}
 
-\chapter{Conceitos Fundamentais}
+\chapter{Fundamental Concepts}
 \label{chap:fundamental_concepts}
 \input{chapters/fundamental_concepts}
 
-\chapter{Conclusão}
+\chapter{Conclusion}
 \label{chap:conclusion}
 \input{chapters/conclusion}
 
