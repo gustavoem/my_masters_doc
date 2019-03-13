@@ -59,19 +59,36 @@ approximate solutions of these systems.
 In this work, we are interested in computational models that can 
 reproduce the behavior of signaling networks, comparing experimental 
 measures---generally based on Western blot data---to simulated results.
-To create these computational models, two main tasks need to be 
-accomplished.
+The figure~\ref{fig:signal_pathway_example} shows a set of interactions
+as well as parameters of a model of a signaling network. To create these 
+computational models, two main tasks need to be accomplished.
+
+\begin{figure}[!ht]
+\centering 
+    \includegraphics[width=\textwidth, viewport=40 500 460 660, clip]{introduction/signal_pathway_example_full_page.pdf}
+\caption{The above diagram show a hypothesis for a signaling pathway 
+    that flows through Raf-MEK-ERK cascade. Names in bold represent 
+    chemical species. Names in italic represent parameters of the 
+    ordinary differential equation of each interaction.Horizontal arrows
+    represent phosphorylation when directed from left to right or 
+    dephosphorilation when directed in the opposite direction. Other 
+    arrows represent positive feedback if they are directed downwards or 
+    negative feedback otherwise. Image copied from Marcelo S. Reis et.
+    al (2017)~\cite{Reis2017}.}
+\label{fig:signal_pathway_example}
+\end{figure}
+
 
 The first task one must complete to create a model is to determine a set 
-of interactions to consider in the ODE system. Looking for pathway maps
+of interactions to consider in the ODE system. Searching for pathway maps
 on the Kyoto Encyclopedia of Genes and Genomes 
 (KEGG)~\cite{Kanehisa2000kegg} is a good start. The KEGG PATHWAY 
 Database provides manually drawn diagrams that represent signaling 
 networks created with experimental evidences. However, it's possible 
-that there's no pathway on KEGG that is able to correctly represent the biological 
-experiment of interest; for those situations, it's necessary to modify
-the pathway by adding or even removing interactions. One might reason 
-that we should use as many interactions as we can to get a better 
+that there's no pathway on KEGG that is able to correctly represent the 
+biological experiment of interest; for those situations, it's necessary 
+to modify the pathway by adding or even removing interactions. One might 
+reason that we should use as many interactions as we can to get a better 
 simulation, however, this usually implies in poor or computationally 
 infeasible models because of two reasons: first, complex models will 
 require more time in the numerical solution computation, which may be 
@@ -81,13 +98,14 @@ considering many interactions, we are also placing many parameters
 finding appropriate values for them becomes harder as we increase the 
 number of parameters.
 
+
 The second task to create a model is to find values for all the system
 parameters. There are two approaches for this task, you can either 
 fetch values for these constants from the literature or you can find 
 values that makes the model output approximate the experimental 
 observations. For the first approach, repositories such as 
-BioModels~\cite{biomodelos} can be used; for the second approach, 
-statistical and optimization methods could be used. For optimization, it 
+BioModels~\cite{le2006biomodels} can be used; for the second approach, 
+statistical and optimization methods can be used. For optimization, it 
 is necessary to define a metric that can evaluate how close the 
 parameters brings the model output to the experimental observation so
 that you can search for the optimal parameter in the parameter space. 
@@ -97,19 +115,6 @@ model, with a set of parameter values, to reproduce the experimental
 observation.
 
 
-\begin{figure}[!ht]
-\centering 
-    \includegraphics[clip=true, trim={1.8cm 17.8cm 1.8cm 2.2cm}]{introduction/signal_pathway_example.pdf}
-\caption{The above diagram show a hypothesis for a signaling pathway 
-    that flows through Raf\--MEK-ERK cascade. Names in bold represent 
-    chemical species. Horizontal arrows represent phosphorilation when 
-    directed from left to right or dephosphorilation when directed in 
-    the opposite direction. Other arrows represent positive feedback if 
-    they are directed downwards or negative feedback otherwise. Names
-    in italic represent parameters of the ordinary differential equation
-    of each interaction.}
-\label{fig:signal_pathway_example}
-\end{figure}
 
 
 
