@@ -1,3 +1,6 @@
+%begin-include
+% TODO: remove all contractions and spelling errors
+
 % Outline of this section
 % First we should start with a two-page description of the project with:
 % - What are cell signaling pathways
@@ -17,23 +20,23 @@
 
 % What are cell signaling pathways and how is it important to study them
 % - control how cell behaves in different types of environments
-% - cancer cells have bad behaviour
+% - cancer cells have bad behavior
 % - that's one reason to study signaling networks
 Cell Signaling pathways are cascades of chemical interactions that 
 allow the communication between the cell environment and the 
-cell itself. These pathways also are able to regulate many cell 
+cell itself. These pathways are also able to regulate many cell 
 functions, including DNA replication, cell division and cell death. We
 can observe the functioning of signaling pathways as a mechanism that 
-can conform the cell behaviour with signals that come from the 
+can conform the cell behavior with signals that come from the 
 environment conditions in which the cell is placed. The studies of cell 
 signaling pathways can lead to determining how cells can respond to 
-different stimulus; for instance, with the studies of signaling pathways
+different stimuli; for instance, with the studies of signaling pathways
 activated by a chemical species, one could determine how an unhealthy 
 cell would respond to a drug containing this species.
 
 % There are computational models for signaling networks
 % - Michaelis Menten equations for chemical interactions
-% - With a system of ODES we can then simulate the cell behaviour
+% - With a system of ODES we can then simulate the cell behavior
 % - However, the huge number of interactions happening in the cell makes
 %   it impossible to consider everything.
 % - Therefore we must know 
@@ -43,7 +46,7 @@ the modeling of those interactions is based on the law of mass action.
 This law proposes that the rate of a chemical reaction is proportional 
 to the product of reactants concentrations, i.e we can calculate the 
 concentration change rate of a species in an interaction by calculating 
-the product of reactants concentrations up to a multiplying constant. 
+the product of reactants concentrations, up to a multiplying constant. 
 If we consider the set of interactions of a signaling pathway, we can
 then come up with a system of ordinary differential equations (ODEs) 
 that can model the dynamics of the concentration of each chemical 
@@ -52,14 +55,68 @@ cumbersome, if not impossible, to be solved analytically, therefore we
 resort on computational models that apply numerical methods to 
 approximate solutions of these systems.
 
-
 % How do we create these computational models and what should they do?
-%
+In this work, we are interested in computational models that can 
+reproduce the behavior of signaling networks, comparing experimental 
+measures---generally based on Western blot data---to simulated results.
+To create these computational models, two main tasks need to be 
+accomplished.
+
+The first task one must complete to create a model is to determine a set 
+of interactions to consider in the ODE system. Looking for pathway maps
+on the Kyoto Encyclopedia of Genes and Genomes 
+(KEGG)~\cite{Kanehisa2000kegg} is a good start. The KEGG PATHWAY 
+Database provides manually drawn diagrams that represent signaling 
+networks created with experimental evidences. However, it's possible 
+that there's no pathway on KEGG that is able to correctly represent the biological 
+experiment of interest; for those situations, it's necessary to modify
+the pathway by adding or even removing interactions. One might reason 
+that we should use as many interactions as we can to get a better 
+simulation, however, this usually implies in poor or computationally 
+infeasible models because of two reasons: first, complex models will 
+require more time in the numerical solution computation, which may be 
+infeasible due to limited computational resources; and second, when 
+considering many interactions, we are also placing many parameters 
+(multiplying constants of the differential equations) on the model, and 
+finding appropriate values for them becomes harder as we increase the 
+number of parameters.
+
+The second task to create a model is to find values for all the system
+parameters. There are two approaches for this task, you can either 
+fetch values for these constants from the literature or you can find 
+values that makes the model output approximate the experimental 
+observations. For the first approach, repositories such as 
+BioModels~\cite{biomodelos} can be used; for the second approach, 
+statistical and optimization methods could be used. For optimization, it 
+is necessary to define a metric that can evaluate how close the 
+parameters brings the model output to the experimental observation so
+that you can search for the optimal parameter in the parameter space. 
+Statistical inference, in the other hand, usually tries to maximize some 
+likelihood function, which is defined to represent the probability of a 
+model, with a set of parameter values, to reproduce the experimental 
+observation.
 
 
-% We can model finding reactions and constants from the literature
+\begin{figure}[!ht]
+\centering 
+    \includegraphics[clip=true, trim={1.8cm 17.8cm 1.8cm 2.2cm}]{introduction/signal_pathway_example.pdf}
+\caption{The above diagram show a hypothesis for a signaling pathway 
+    that flows through Raf\--MEK-ERK cascade. Names in bold represent 
+    chemical species. Horizontal arrows represent phosphorilation when 
+    directed from left to right or dephosphorilation when directed in 
+    the opposite direction. Other arrows represent positive feedback if 
+    they are directed downwards or negative feedback otherwise. Names
+    in italic represent parameters of the ordinary differential equation
+    of each interaction.}
+\label{fig:signal_pathway_example}
+\end{figure}
+
+
+
 % However, we might have missed some interactions or even added irrelevant ones
 % To solve this, Lulu did...
 % Her work however had a few limitations
 % To surmount these limitations
-
+% - gather information from many data sources
+% - create new search algorithms
+% - use Bayesian approach 
