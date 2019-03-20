@@ -78,7 +78,6 @@ computational models, two main tasks need to be accomplished.
 \label{fig:signal_pathway_example}
 \end{figure}
 
-
 The first task one must complete to create a model is to determine a set 
 of interactions to consider in the ODE system. Searching for pathway maps
 on the Kyoto Encyclopedia of Genes and Genomes 
@@ -98,7 +97,6 @@ considering many interactions, we are also placing many parameters
 finding appropriate values for them becomes harder as we increase the 
 number of parameters.
 
-
 The second task to create a model is to find values for all the system
 parameters. There are two approaches for this task, you can either 
 fetch values for these constants from the literature or you can find 
@@ -114,13 +112,27 @@ likelihood function, which is defined to represent the probability of a
 model, with a set of parameter values, to reproduce the experimental 
 observation.
 
-
-
-
-
 % However, we might have missed some interactions or even added irrelevant ones
-% To solve this, Lulu did...
-% Her work however had a few limitations
+After completing both tasks, however, as we mentioned before, we might 
+still not have found a model that fairly approximates the biological 
+experiment of interest. That could indicate that the set of chemical 
+interactions chosen for the model is incomplete or has interactions that
+are not relevant for the biological experiment. Therefore, it is 
+desirable to construct a systematic method of modifying the set of 
+chemical reactions in order to find the optimal set.
+
+% With the title "." Lulu Wu presented in her masters dissertation a
+% methodology to systematically modify a computational model for a 
+% signaling network. Lulu created a database of chemical interactions
+% joining information from many statical maps from KEGG; a subset of 
+% those interactions were then added to the initial model in order to 
+% better simulate the signaling pathway of interest. The choice of this
+% subset is actually a combinatorial optimization problem. The cost 
+% function %TODO: finish describing the optimization problem
+
+% Her work however had a few flaws...
+
+
 % To surmount these limitations
 % - gather information from many data sources
 % - create new search algorithms
