@@ -121,18 +121,38 @@ are not relevant for the biological experiment. Therefore, it is
 desirable to construct a systematic method of modifying the set of 
 chemical reactions in order to find the optimal set.
 
-% With the title "." Lulu Wu presented in her masters dissertation a
-% methodology to systematically modify a computational model for a 
-% signaling network. Lulu created a database of chemical interactions
-% joining information from many statical maps from KEGG; a subset of 
-% those interactions were then added to the initial model in order to 
-% better simulate the signaling pathway of interest. The choice of this
-% subset is actually a combinatorial optimization problem. The cost 
-% function %TODO: finish describing the optimization problem
+% Lulu solved it as a combinatorial problem
+With the title ``A method to modify molecular signaling networks through
+examination of interactome databases"~\cite{Wu15} Lulu Wu presented in 
+her masters dissertation a methodology to systematically modify 
+computational models of signaling networks to better simulate biological 
+experiments. Lulu created a database of chemical interactions by joining 
+information from many static maps from KEGG; a subset of those interactions are 
+then added to the initial model in order to better simulate the 
+signaling pathway of interest. The choice of this subset is actually a 
+combinatorial optimization problem in which the search space is the 
+set of all possible subsets of interactions to be added. The cost 
+function of this problem, however, is not as simple to define as the 
+search space. Note that the search space itself does not define models, 
+but only the topology, i.e. the set of interactions; therefore, to 
+consider the second task of creating computational models for signaling
+networks, the cost function must take into account the set of values for 
+the model parameters. As an example, we could define the cost as the 
+minimum distance between model and experimental measures considering all
+possibilities of parameter values; although, unfortunately, finding the
+minimizing parameter values is a hard problem.
+
+The solution presented by Lulu Wu implements a heuristic version of this 
+cost function, since finding the set of parameter values that makes the 
+model the closest to the data is hard. This heuristics relies on a 
+Simulated Annealing procedure to find a good, but not optimal, set of
+parameter values. The algorithm used to traverse the search space is 
+also a heuristic, since the number of possible solutions grows 
+exponentially on the number of interactions from the database.
+% We have to talk about the heuristic cost function and the heuristic
+% search algorithm.
 
 % Her work however had a few flaws...
-
-
 % To surmount these limitations
 % - gather information from many data sources
 % - create new search algorithms
