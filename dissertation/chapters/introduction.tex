@@ -40,7 +40,7 @@ cell would respond to a drug containing this species.
 % - However, the huge number of interactions happening in the cell makes
 %   it impossible to consider everything.
 % - Therefore we must know 
-It's possible to construct mathematical models to represent a set of
+It is possible to construct mathematical models to represent a set of
 chemical reactions and consequently a signaling network. One approach on 
 the modeling of those interactions is based on the law of mass action. 
 This law proposes that the rate of a chemical reaction is proportional 
@@ -83,9 +83,9 @@ of interactions to consider in the ODE system. Searching for pathway maps
 on the Kyoto Encyclopedia of Genes and Genomes 
 (KEGG)~\cite{Kanehisa2000kegg} is a good start. The KEGG PATHWAY 
 Database provides manually drawn diagrams that represent signaling 
-networks created with experimental evidences. However, it's possible 
-that there's no pathway on KEGG that is able to correctly represent the 
-biological experiment of interest; for those situations, it's necessary 
+networks created with experimental evidences. However, it is possible 
+that there is no pathway on KEGG that is able to correctly represent the 
+biological experiment of interest; for those situations, it is necessary 
 to modify the pathway by adding or even removing interactions. One might 
 reason that we should use as many interactions as we can to get a better 
 simulation, however, this usually implies in poor or computationally 
@@ -130,8 +130,8 @@ experiments. Starting with a model that does not approximate well the
 biological data, this methodology proposes to add a set of interactions
 to the model topology in order to better simulate the signaling pathway 
 of interest. This set of interactions is a subset of interactions from a 
-database created by Lulu Wu, joining information
-from many static maps available on KEGG. The choice of this subset can 
+database created by Lulu Wu, joining information from many static maps 
+of signaling networks available on KEGG. The choice of this subset can 
 be modeled as a combinatorial optimization problem in which the search 
 space is the set of all possible subsets of interactions to be added.
 The cost function of this problem, however, is not as simple to define 
@@ -161,10 +161,63 @@ adding to the current solution the respective interaction; then, after
 evaluating the cost function for each model, the algorithm moves to the 
 best candidate.
 
-%The work of Lulu Wu was succesful on 
+% 1. incompleteness of database (we can use more than KEGG)
+% 2. no information about reactions constants
+% 3. the algorithm can only add interactions but not remove
+% 4. cost function apply penalization randomly and arbitrarily
+The results presented on Lulu Wu's dissertation show that the method is 
+useful when there are only a few differences between the starting model
+and a model that closely approximates the biological experiment. This
+limitation could be explained by the intrinsic difficulty of the 
+problem, which demands fitting complex models with few experimental 
+data; however we would like to highlight three aspects of the work that 
+contributes to its limitations. The first aspect is that the constructed 
+database could be more nearly complete, adding information from other 
+interactome databases, such as STRING~\cite{Szklarczyk2010}, and also by 
+adding information about model parameters, i.e. chemical reaction 
+constants, that are available in other databases, e.g. the 
+SABIO-RK~\cite{Wittig2011} database. Second, the search algorithm used
+to modify the models can only add interactions, therefore, if the 
+algorithm starts with (or add along the search) a spurious interaction 
+on the topology, then the algorithm will not be able to ``regret" that 
+interaction even though there might be solutions without it with better
+fit. Third, the cost function does not include a proper penalization of
+complex models; the used penalization is based on a execution time limit
+on the simulated annealing procedure, implying on a random 
+penalization for more complex models that take more time in each 
+iteration. Without a proper penalization, the algorithm is doomed to 
+select overly complex models that, even with a good fit to the 
+experimental data, are not likely to reproduce the same experiment
+conduced with any kind of perturbation to the biological environment or 
+to the data collected.
 
-% Her work however had a few flaws...
 % To surmount these limitations
 % - gather information from many data sources
 % - create new search algorithms
 % - use Bayesian approach 
+We propose then on this project to create a new method for modifying 
+models of signaling networks, based on the work of Lulu Wu, and 
+including possible solutions to the three aspects mentioned on the last 
+paragraph. To the first aspect, we propose to create a database that 
+includes interactions informations gathered from KEGG and STRING, and 
+also that includes reaction constants values, which can be fetched from
+SABIO-RK, Brenda~\cite{Schomburg2004} or BioNumbers~\cite{Milo2009}. To
+the second aspect, we propose to create new search algorithms that are
+more general than SFS, and to test and compare these new algorithms we
+intend to use the featsel framework~\cite{REIS2017193}. For the last 
+aspect, about the cost function, we intend to use a Bayesian approach to
+rank models based on the likelihood of them to reproduce the observed 
+data; if we say $M$ is a model with parameter space $\Theta$ and $D$ is 
+a set of observations, then we would like to estimate 
+\begin{equation*}
+p (D|M) = \int_{\theta \in \Theta} p (D | \theta, M)p(\theta | M)d\theta, 
+\end{equation*}
+where $p (D|\theta, M)$ is the likelihood of model $M$, with parameters
+$\theta$, to reproduce the experimental data; $p(\theta|M)$ is the
+prior probability of $\theta$; and finally, $p (D|M)$ is the probability 
+of the data being generated by model $M$. This cost function has as an 
+advantage the fact that models are not ranked using a single value for 
+parameters, instead, the cost considers all possibilities of parameters, 
+integrating over the parameter space. Another advantage of this cost 
+function is that, since it is based on likelihoods of the model to 
+reproduce data, overly complex models are automatically penalized.
