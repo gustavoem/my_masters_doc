@@ -79,8 +79,8 @@ computational models, two main tasks need to be accomplished.
 \end{figure}
 
 The first task one must complete to create a model is to determine a set 
-of interactions to consider in the ODE system. Searching for pathway maps
-on the Kyoto Encyclopedia of Genes and Genomes 
+of interactions to consider in the ODE system. Searching for pathway 
+maps on the Kyoto Encyclopedia of Genes and Genomes 
 (KEGG)~\cite{Kanehisa2000kegg} is a good start. The KEGG PATHWAY 
 Database provides manually drawn diagrams that represent signaling 
 networks created with experimental evidences. However, it is possible 
@@ -119,7 +119,8 @@ experiment of interest. That could indicate that the set of chemical
 interactions chosen for the model is incomplete or has interactions that
 are not relevant for the biological experiment. Therefore, it is 
 desirable to construct a systematic method of modifying the set of 
-chemical reactions in order to find the optimal set.
+chemical reactions of the model in order to find a good set to represent 
+the signaling network.
 
 % Lulu solved it as a combinatorial problem
 With the title ``A method to modify molecular signaling networks through
@@ -146,15 +147,16 @@ possibilities of parameter values; however, unfortunately, finding the
 minimizing parameter values is a hard problem.
 
 Since this is a hard problem, the method presented by Lulu Wu 
-implements a heuristic version of this cost function. This heuristics 
-is based on a Simulated Annealing procedure that searches for a set of 
-parameter values trying to minimize (as much as possible) the distance 
-between model and experimental measures; the best found distance is then
-considered as the cost of the model. The size of the search space of the 
-associated feature selection problem is exactly the number of all 
-possible model topologies, and this number grows exponentially on the 
-number of interactions from the database; therefore, the algorithm used 
-to traverse the search is also a heuristic, and it is based on the 
+implements a heuristic version of this cost function, moreover, the 
+algorithm used to traverse the search space is also a heuristics. The 
+cost function heuristics is based on a Simulated Annealing procedure 
+that searches for a set of parameter values trying to minimize (as much 
+as possible) the distance between model and experimental measures. The 
+best found distance is then considered as the cost of the model. The 
+size of the search space is exactly the number of all possible subsets
+of interactions to be added, and this number grows exponentially on the 
+number of interactions from the database. That explains why Lulu Wu used
+a heuristic to traverse the search space. This heuristic is based on the 
 greedy algorithm called Sequential Forward Selection 
 (SFS)~\cite{Whitney1971}. The heuristic implemented by Lulu Wu selects a
 fixed number of interactions from the database and then creates 
@@ -181,13 +183,13 @@ SABIO-RK~\cite{Wittig2011} database. Second, the search algorithm used
 to modify the models can only add interactions, therefore, if the 
 algorithm starts with (or add along the search) a spurious interaction 
 on the topology, then the algorithm will not be able to ``regret" that 
-interaction even though there might be solutions without it with better
-fit. Third, the cost function does not include a proper penalization of
-complex models; the used penalization is based on a execution time limit
-on the simulated annealing procedure, implying on a random 
-penalization for more complex models, which typically demand more 
-execution time. Without a proper penalization, the algorithm is doomed to 
-select overly complex models that, even with a good fit to the 
+interaction even though there might be similar solutions without it with 
+better fit. Third, the cost function does not include a proper 
+penalization of complex models; the used penalization is based on a 
+execution time limit on the simulated annealing procedure, implying on a 
+random penalization for more complex models, which typically demand more 
+execution time. Without a proper penalization, the algorithm is doomed 
+to select overly complex models that, even with a good fit to the 
 experimental data, are not likely to reproduce the same experiment
 conduced with any kind of perturbation to the biological environment or 
 to the data collected.
@@ -196,7 +198,7 @@ to the data collected.
 % - gather information from many data sources
 % - create new search algorithms
 % - use Bayesian approach 
-We propose then on this project to create a new method for modifying 
+We propose on this project to create a new method for modifying 
 models of signaling networks, based on the work of Lulu Wu, and 
 including possible solutions to the three aspects mentioned on the last 
 paragraph. To the first aspect, we propose to create a database that 
@@ -228,3 +230,50 @@ The method developed on this work for model selection will then be
 applied in biological models, mainly related to tumor cells, that are
 relevant for Center of Toxins, Immune-response and Cell Signaling 
 (CeTICS).
+
+
+\section{Objectives}
+In this work we propose to create a software that applies a method, 
+based on the work o Lulu Wu, that is able to select a model to
+reproduce some biological experiment. This method should be able to 
+consult a vast database of interactions and modify a starting model by
+removing or adding those interactions in order to construct a model that
+approximates more closely the biological experiment. The construction of
+this database and how the method consults it is also part of this work. 
+We also propose to validate the methodology with real cell data. To 
+achieve these goals, we should complete the following tasks:
+\begin{enumerate}
+    \item{{\bf Define a cost function for models}. We propose to use a 
+        Bayesian approach to implement an algorithm that allows us to 
+        estimate the value of $p (D|M)$, which should be used as the 
+        ``score'' of the model. To complete this activity we will use as 
+        reference the Bayesian inference-based modeling method 
+        (BIBm)~\cite{Xura20} and also the software 
+        ABC-SysBio~\cite{Liepe2014}.}
+    \item{{\bf Build a database of interactions}. This database should 
+        include interactions gathered from KEGG and STRING, and 
+        reaction rate constants of interactions, which are available on 
+        other databases such as SABIO-RK, BioModels and BioNumbers.}
+    \item{{\bf Formulate the systematic modifications on the models as a 
+        feature selection search space}. Given the initial model, we 
+        should be able to identify this model as a node of the search 
+        space, and we also should be able perform valid jumps from one 
+        node to another, in other words, we should be able to perform 
+        valid modifications to the model.}
+    \item{{\bf Define search algorithms on the feature selection 
+        problem}. Given that we successfully structured the 
+        modifications of the model as a Boolean lattice, we should 
+        define algorithms to determine how to traverse this space in 
+        order to find a model with the least possible cost in a 
+        reasonable amount of execution time.}
+    \item{{\bf Test feature selection algorithms}. Using artificial and
+        then real data, we should test if the methodology can select a 
+        model that is able to reproduce the behaviour measured
+        on the signaling network.}
+    \item{{\bf Apply the methodology on a real case}. Finally, with a
+        tested implementation of the methodology, we should help 
+        researchers from CeTICS to identify cell signaling networks of
+        cells that are relevant to their research.}
+\end{enumerate}
+
+\section{Organization}
