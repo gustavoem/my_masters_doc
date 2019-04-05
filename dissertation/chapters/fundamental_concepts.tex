@@ -7,7 +7,7 @@
 % - The signals perceived by a cell can come from cells that very close
 % (including itself), as in synapses or it can travel long distances in 
 % the organism, as in hormones.
-% - When a signal reaches a cell, it can either activate a recepter in
+% - When a signal reaches a cell, it can either activate a receptor in
 % the cell membrane or diffuse into the cell.
 % - Once this happen, the signal or the activated receptor can trigger
 % a sequence of chemical interaction, altering the conformation and 
@@ -32,18 +32,18 @@ it can travel long distances in the organism, as in hormones. When a
 signal reaches a cell, it can either penetrate the cell or bind to some 
 specific receptor in the membrane. Once either of those events happen, 
 the signal or the receptor can trigger a sequence of chemical 
-interactions that can include the change of conformation of proteins, 
-activation or inactivation of proteins, and change the concentration of
+interactions that can include change of conformation of proteins, 
+activation or inactivation of proteins, and change of concentration of
 chemical species in the cell. Ultimately, this chain of chemical 
 reactions caused by the signal can alter the behaviour of the cell, what 
 is called signal transduction.
 
 Since signaling pathways participate in many of the cell functions, and 
-might even be related to diseases, it is important to study those 
-structures, in order to get a better understanding of the cell 
-mechanisms and diseases. One approach on the study of the cell signaling
-pathways is to measure the concentration change of proteins that 
-participate on the pathway of interest.
+are also related to diseases, it is important to study those structures
+in order to get a better understanding of the cell mechanisms and 
+diseases. One approach on the study of the cell signaling pathways is to 
+measure the concentration change of proteins that participate on the 
+pathway of interest.
 
 % - Western blot is a technique that can indicate the amount of a 
 % specific protein that is in a mixture of proteins
@@ -58,25 +58,47 @@ participate on the pathway of interest.
 % good candidate as a measure of the system.
 \section{Measurements of Proteins in Cell Signaling Pathways}
 Western blot is a laboratory technique that can indicate the amount of a
-specific protein that is present in a mixture of proteins. This 
-technique show the presence of a protein in a mixture by ``blotting'' 
-the membrane where the molecules of interest are located. We can 
-superficially summarize the procedure in the following steps: first a 
-mixture with a group of cells of interest must be created; second, 
-proteins from the mixture should be fixed on the blotting membrane; 
-third, an antibody should bind to the target protein molecules; and 
-finally, a method for colorizing the antibody should be applied. An 
-image of the resulting membrane can then be analyzed with computer
-programs to quantify the relative concentration of the protein of 
-interest.
+specific protein that is present in a mixture. This technique show the 
+presence of a protein in a mixture by ``blotting'' a membrane where the 
+molecules of interest are located. We can superficially summarize the 
+procedure in the following steps: first a mixture containing a sample of 
+cells of interest must be created; second, proteins from the mixture 
+should be fixed on the blotting membrane; third, an antibody should bind 
+to the target protein molecules; and finally, a method for highlighting 
+the bound antibody should be applied. An image of the resulting membrane 
+can then be analyzed with computer programs to quantify the relative 
+concentration of the protein of interest.
 
-Repeating this procedure in different times define time-course 
-observations of the protein in the biological experiment. With these
-observations in hand, a researcher might be able to construct a 
-measurement that can summarize the experiment; for instance, in a 
-signaling network where a protein is closely related to the behaviour of
-interest on the cell, this protein concentration is a good candidate for
-a measurement that nearly explains the experiment.
+By repeating this procedure in different times it is possible to create 
+time-course observations of proteins throughout the biological 
+experiment. With this tool, a researcher can choose a set of relevant 
+proteins from a signaling network and gain knowledge about the dynamics 
+of such chemical species during the experiment. For instance, in a 
+signaling network experiment in which it is desired to understand how
+the change of concentrations of a species at the beginning of the 
+pathway changes the concentration of some species at the end of the 
+cascade, then measurements of both are relevant to understand the 
+biological experiment. Figure~\ref{fig:western_blot_example} show an 
+example of time-course Western blot for an experiment where it is 
+desirable to understand how ERK is activated (phosphorylated) as a 
+function of levels of Ras-GTP. {\color{blue} TODO: what is ERK, what is
+Ras-GTP?}
+
+\begin{figure}[!ht]
+\centering
+    \includegraphics[width=\textwidth]{fundamental_concepts/western_blot.png}
+    \caption{Figure {\bf a} shows time-course measurements of ERK and 
+    phosphorylated ERK. {\color{blue}HPRT is a TODO: what is it? Finish this caption!} }
+    \label{fig:western_blot_example}
+\end{figure}
+
+These measurements alone do not always provide means for researchers to 
+understand a cell signaling pathway experiment. However, if we create a 
+computational models for this signaling networks that is able to 
+reproduce experimental data, then it is possible to use this model as a 
+summary of the signaling network, which can provide to researchers 
+evidences of the biological phenomena.
+
 
 \section{Dynamic Modeling of Cell Signaling Pathways}
 \section{Identification of Cell Signaling Pathways}
