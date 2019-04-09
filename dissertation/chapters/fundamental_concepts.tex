@@ -67,7 +67,9 @@ should be fixed on the blotting membrane; third, an antibody should bind
 to the target protein molecules; and finally, a method for highlighting 
 the bound antibody should be applied. An image of the resulting membrane 
 can then be analyzed with computer programs to quantify the relative 
-concentration of the protein of interest.
+concentration (with respect to some other protein, usually a control 
+protein that has fairly the same concentration during the whole 
+experiment) of the protein of interest.
 
 By repeating this procedure in different times it is possible to create 
 time-course observations of proteins throughout the biological 
@@ -78,17 +80,24 @@ signaling network experiment in which it is desired to understand how
 the change of concentrations of a species at the beginning of the 
 pathway changes the concentration of some species at the end of the 
 cascade, then measurements of both are relevant to understand the 
-biological experiment. Figure~\ref{fig:western_blot_example} show an 
+biological experiment. Figure~\ref{fig:western_blot_example} presents an 
 example of time-course Western blot for an experiment where it is 
-desirable to understand how ERK is activated (phosphorylated) as a 
-function of levels of Ras-GTP. {\color{blue} TODO: what is ERK, what is
-Ras-GTP?}
+desirable to understand how extracellular signal-regulated kinase (ERK)
+is activated (phosphorylated) as a function of levels of Rat sarcoma
+bound to guanosine triphosphate (Ras-GTP).
 
 \begin{figure}[!ht]
 \centering
     \includegraphics[width=\textwidth]{fundamental_concepts/western_blot.png}
-    \caption{Figure {\bf a} shows time-course measurements of ERK and 
-    phosphorylated ERK. {\color{blue}HPRT is a TODO: what is it? Finish this caption!} }
+    \caption{Figure {\bf a} shows time-course measurements of ERK, 
+    phosphorylated ERK and hypoxanthine-guanine 
+    phosphoribosyltransferase (HPRT). HPRT is a ``loading'' protein, 
+    that means that its concentration is fairly the same through the 
+    experiment, and therefore it is used as a normalizing factor to 
+    total ERK concentration. Figure  {\bf b} shows values of 
+    phosphorylated ERK that are obtained after processing figure 
+    {\bf a}. Original image of Marcelo S. Reis et al. 
+    (2017)~\cite{Reis2017}.}
     \label{fig:western_blot_example}
 \end{figure}
 
@@ -100,7 +109,146 @@ summary of the signaling network, which can provide to researchers
 evidences of the biological phenomena.
 
 
+% What do I need to talk about?
+% - We can model the concentration changes of chemical species as 
+% differential equations, using the mass-action kinetic laws
+% - The mass action kinetic law states that in an elementary reaction,
+% the rate of a chemical reaction is directly proportional to the 
+% product of the reactants concentrations.
+% - What is elementary?
+% 2.1 Elementary reactions rate equations
+% - Types of elementary: first order reaction and second order reaction
+% - How do we write up these two? 
+% - Chemical notation with constants
+% - From there we can write a system of differential equations to 
+% describe the signaling pathway.
+% - As an example, let's show the equations for a simple enzymatic 
+% equation.
+% 2.2 Simplifications of reactions
+% - More can be done. We can simplify some equations 
+% 2.1 Mass conservation simplification
+% 2.2
 \section{Dynamic Modeling of Cell Signaling Pathways}
+One approach onto modeling cell signaling pathways is to model the 
+dynamics of the concentrations of chemical species involved. This can be
+accomplished when using the law of mass action. This law states that, 
+in an elementary reaction, the speed (or rate) of a chemical reaction is 
+proportional to the product of the concentration of all reactants. An 
+elementary reaction is a reaction in which there is no participation or 
+need of an intermediate reaction to describe the first in a molecular 
+level. In practice, it is more common to see two types of elementary 
+reactions, they are first or second order reactions. 
+
+\subsection{Modeling Elementary Reaction Rates}
+A first order reaction is composed of one reactant only. Suppose A is 
+the only reactant and B is the only product of a reaction, then we can
+write this reaction as:
+\begin{equation*}
+\ce{
+    A -> B
+}
+\end{equation*}
+The reaction rate of this reaction, according to the law of mass 
+action, is 
+\begin{equation*}
+    k_1[\text{A}]
+\end{equation*}
+where $k_1$ is some constant and [A] is the concentration of A. 
+
+A second order reaction is composed of two reactants. Suppose C and D 
+are both and the only reactants and F is the product of a reaction, then
+we can write this reaction as:
+\begin{equation*}
+\ce{
+    C + D -> F
+}
+\end{equation*}
+The reaction rate of this reaction is:
+\begin{equation*}
+    k_2\text{[C][D]}
+\end{equation*}
+where $k_2$ is a constant and [C] and [D] are the concentrations of C 
+and D, respectively.
+
+Using these two laws to calculate the speed of reactions, we are able 
+to describe how the concentration of chemical species in a system change 
+though time using differential equations. To illustrate this and future 
+concepts of this section, we are going to consider a minimal system 
+composed of a simple enzymatic reaction:
+\begin{equation}
+\ce{
+    E + S <=>[\ce{$k$_f}][\ce{$k$_r}] ES ->[\ce{$k_{cat}$}] E + P
+}
+\label{eq:simple_enzymatic}
+\end{equation}
+where E is an enzyme, S is the substrate, ES is the enzyme-substrate
+complex, and P is a product
+
+Each arrow in equation~\ref{eq:simple_enzymatic} represents one 
+elementary reaction, and the names over or under arrows represent 
+reaction rate constants. All three reactions can be represented by the
+equations:
+
+%The first reaction has E and S as reactants and
+%ES as a product, and can be written as 
+\begin{equation}
+\ce{
+    E + S ->[\ce{$k_f$}] ES 
+}
+\label{eq:es_complex_fwd}
+\end{equation}
+%and has reaction rate of $k_f$[E][S]. Second, the reverse of the first 
+%reaction has ES as reactant and both E and S as product,
+\begin{equation}
+\ce{
+    ES ->[$k_r$] E + S
+}
+\label{eq:es_complex_rev}
+\end{equation}
+%and has reaction rate 
+\begin{equation}
+\ce{
+    ES ->[$k_{cat}$] E + P
+}
+\label{eq:es_pe}
+\end{equation}
+and they have, respectively, reaction rates of:
+\begin{equation*}
+\begin{aligned}
+    & k_f\text{[E][S]} \\
+    & k_r\text{[ES]} \\
+    & k_{cat}\text{[ES]}
+\end{aligned}
+\end{equation*}
+
+{\color{blue} TODO: Maybe I should stop this subsection here and start another
+where I explain what comes next as "Dynamic Modeling of a System of Reactions"}
+
+Now, to determine a model of the concentration dynamics of every 
+chemical species involved in reaction~\ref{eq:simple_enzymatic}, we will
+write a system of ordinary differential equations. To do so, for every 
+species we should calculate the rate of its change based on the rate of 
+each reaction that it participates. For instance, the enzyme E is a 
+reactant on reaction~\ref{eq:es_complex_fwd} and is also a product on 
+reactions~\ref{eq:es_complex_rev} and~\ref{eq:es_pe}, then we consider 
+that E changes its concentration over time ($t$) according to the 
+differential equation:
+\begin{equation}
+    \frac{d[\text{E}]}{dt} = -k_f\text{[E][S]} + (k_r + k_{cat}) \text{[ES]}
+\end{equation} 
+Repeating this procedure for every other species of the enzymatic 
+reaction induces the desired system of ordinary differential equations:
+\begin{equation}
+    \begin{aligned}
+        \frac{d[\text{E}]}{dt} = & -k_f\text{[E][S]} + (k_r + k_{cat}) \text{[ES]} \\
+        \frac{d[\text{S}]}{dt} = & -k_f\text{[E][S]} + k_r\text{[ES]} \\
+        \frac{d[\text{ES}]}{dt} = & k_f\text{[E][S]} - (k_r + k_{cat}) \text{[ES]} \\
+        \frac{d[\text{P}]}{dt} = &  k_{cat}\text{[ES]} \\
+    \end{aligned}
+\end{equation}
+
+\subsection{Simplifications of Dynamic Models}
+
 \section{Identification of Cell Signaling Pathways}
 \section{State of the Art in Model Selection}
 %\section{Bayesian Inference}
