@@ -191,27 +191,19 @@ equations:
 
 %The first reaction has E and S as reactants and
 %ES as a product, and can be written as 
-\begin{equation}
+\begin{subequations}
+\begin{align}
 \ce{
     E + S ->[\ce{$k_f$}] ES 
-}
-\label{eq:es_complex_fwd}
-\end{equation}
-%and has reaction rate of $k_f$[E][S]. Second, the reverse of the first 
-%reaction has ES as reactant and both E and S as product,
-\begin{equation}
+} \label{eq:es_complex_fwd} \\
 \ce{
     ES ->[$k_r$] E + S
-}
-\label{eq:es_complex_rev}
-\end{equation}
-%and has reaction rate 
-\begin{equation}
+} \label{eq:es_complex_rev} \\
 \ce{
     ES ->[$k_{cat}$] E + P
-}
-\label{eq:es_pe}
-\end{equation}
+} \label{eq:es_pe} 
+\end{align}
+\end{subequations}
 and they have, respectively, reaction rates of:
 \begin{equation*}
 \begin{aligned}
@@ -238,16 +230,70 @@ differential equation:
 \end{equation} 
 Repeating this procedure for every other species of the enzymatic 
 reaction induces the desired system of ordinary differential equations:
-\begin{equation}
-    \begin{aligned}
-        \frac{d[\text{E}]}{dt} = & -k_f\text{[E][S]} + (k_r + k_{cat}) \text{[ES]} \\
-        \frac{d[\text{S}]}{dt} = & -k_f\text{[E][S]} + k_r\text{[ES]} \\
-        \frac{d[\text{ES}]}{dt} = & k_f\text{[E][S]} - (k_r + k_{cat}) \text{[ES]} \\
-        \frac{d[\text{P}]}{dt} = &  k_{cat}\text{[ES]} \\
-    \end{aligned}
-\end{equation}
+\begin{subequations}
+    \label{eq:full_system}
+    \begin{align}
+        \frac{d[\text{E}]}{dt} & =  
+            -k_f\text{[E][S]} + (k_r + k_{cat}) \text{[ES]} 
+            \label{eq:dEdt} \\
+        \frac{d[\text{S}]}{dt}  & = 
+            -k_f\text{[E][S]} + k_r\text{[ES]} 
+            \label{eq:dSdt} \\
+        \frac{d[\text{ES}]}{dt} & =  
+            k_f\text{[E][S]} - (k_r + k_{cat}) \text{[ES]} 
+            \label{eq:dESdt} \\
+        \frac{d[\text{P}]}{dt} & = k_{cat}\text{[ES]} \label{eq:dPdt} 
+    \end{align}
+\end{subequations}
 
-\subsection{Simplifications of Dynamic Models}
+% Ok, what do I really want to talk about here: Michaelis Menten 
+% simplification of enzymtic reactions
+% - Before anything, we should use mass conservation to produce the 
+% d[ES]/dt equation.
+% - Then we should mention the steady-state proposal of Michaelis Menten
+%   -> should I use a picture? Maybe I can compare two initial states,
+%      one with [S] >> [E] and the other not.
+% - Mention that we can suppress a lot of parameters with this 
+%   simplification
+\subsection{Simplification of Dynamic Models}
+The system~\ref{eq:full_system} can be simplified if we
+apply some properties of enzymatic reactions together with some 
+algebraic simplifications.
+
+The first change we can apply to the system is based on the principle of 
+mass conservation. If we assume that there is no or very little 
+concentration of [ES] at the beginning of the experiment, and that the 
+reactions~\ref{eq:simple_enzymatic} are isolated, meaning that the 
+chemicals on these reactions are not involved in other reactions at the
+same time, then because of conservation of mass of E$_0$ (initial 
+concentration of the enzyme) we have that
+\begin{equation}
+    \text{[E$_0$]} = \text{[E] + [ES]}
+    \label{eq:E_conservation}
+\end{equation}
+and because of conservation of mass of S$_0$ (initial concentration of 
+the substrate) we have that
+\begin{equation}
+    \text{[S$_0$]} = \text{[S] + [ES] + [P]}
+    \label{eq:S_conservation}
+\end{equation}
+Applying enzyme mass conservation on~\ref{eq:dSdt} and substrate mass 
+conservation on~\ref{eq:dESdt} produces the equations:
+\begin{subequations}
+    \begin{align}
+    \frac{d[\text{S}]}{dt}  & = 
+            -k_f(\text{[E$_0$]} - \text{[ES]})\text{[S]} + k_r\text{[ES]} 
+            \label{eq:dSdt_2} \\
+    \frac{d[\text{ES}]}{dt} & =  
+            k_f(\text{[E$_0$]} - \text{[ES]})\text{[S]} - (k_r + k_{cat}) \text{[ES]} 
+            \label{eq:dESdt_2}
+    \end{align}
+\end{subequations}
+
+If we apply With these simplifications, it is now possible to calculate the ratio of
+change of every chemical species just by considering 
+
+
 
 \section{Identification of Cell Signaling Pathways}
 \section{State of the Art in Model Selection}
