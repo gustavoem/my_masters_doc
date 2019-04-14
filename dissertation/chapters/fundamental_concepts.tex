@@ -146,12 +146,12 @@ write this reaction as:
 \begin{equation*}
 \ce{
     A -> B
-}
+}.
 \end{equation*}
 The reaction rate of this reaction, according to the law of mass 
 action, is 
 \begin{equation*}
-    k_1[\text{A}]
+    k_1[\text{A}],
 \end{equation*}
 where $k_1$ is some constant and [A] is the concentration of A. 
 
@@ -161,11 +161,11 @@ we can write this reaction as:
 \begin{equation*}
 \ce{
     C + D -> F
-}
+}.
 \end{equation*}
 The reaction rate of this reaction is:
 \begin{equation*}
-    k_2\text{[C][D]}
+    k_2\text{[C][D]},
 \end{equation*}
 where $k_2$ is a constant and [C] and [D] are the concentrations of C 
 and D, respectively.
@@ -178,11 +178,11 @@ composed of a simple enzymatic reaction:
 \begin{equation}
 \ce{
     E + S <=>[\ce{$k$_f}][\ce{$k$_r}] ES ->[\ce{$k_{cat}$}] E + P
-}
+},
 \label{eq:simple_enzymatic}
 \end{equation}
-where E is an enzyme, S is the substrate, ES is the enzyme-substrate
-complex, and P is a product
+where E is an enzyme, S is a substrate, ES is the enzyme-substrate
+complex, and P is the product.
 
 Each arrow in equation~\ref{eq:simple_enzymatic} represents one 
 elementary reaction, and the names over or under arrows represent 
@@ -209,7 +209,7 @@ and they have, respectively, reaction rates of:
 \begin{aligned}
     & k_f\text{[E][S]} \\
     & k_r\text{[ES]} \\
-    & k_{cat}\text{[ES]}
+    & k_{cat}\text{[ES]}.
 \end{aligned}
 \end{equation*}
 
@@ -219,8 +219,8 @@ where I explain what comes next as "Dynamic Modeling of a System of Reactions"}
 Now, to determine a model of the concentration dynamics of every 
 chemical species involved in reaction~\ref{eq:simple_enzymatic}, we will
 write a system of ordinary differential equations. To do so, for every 
-species we should calculate the rate of its change based on the rate of 
-each reaction that it participates. For instance, the enzyme E is a 
+species we should calculate its concentration change rate based on the 
+rate of each reaction that it participates. For instance, the enzyme E is a 
 reactant on reaction~\ref{eq:es_complex_fwd} and is also a product on 
 reactions~\ref{eq:es_complex_rev} and~\ref{eq:es_pe}, then we consider 
 that E changes its concentration over time ($t$) according to the 
@@ -242,7 +242,7 @@ reaction induces the desired system of ordinary differential equations:
         \frac{d[\text{ES}]}{dt} & =  
             k_f\text{[E][S]} - (k_r + k_{cat}) \text{[ES]} 
             \label{eq:dESdt} \\
-        \frac{d[\text{P}]}{dt} & = k_{cat}\text{[ES]} \label{eq:dPdt} 
+        \frac{d[\text{P}]}{dt} & = k_{cat}\text{[ES]} \label{eq:dPdt}.
     \end{align}
 \end{subequations}
 
@@ -257,42 +257,101 @@ reaction induces the desired system of ordinary differential equations:
 %   simplification
 \subsection{Simplification of Dynamic Models}
 The system~\ref{eq:full_system} can be simplified if we
-apply some properties of enzymatic reactions together with some 
-algebraic simplifications.
+apply properties of enzymatic reactions together with algebraic 
+simplifications. We will show then how to derive the quasi-steady-state 
+Michaelis-Menten model for enzymatic reactions. With the correct 
+assumptions, this model is able to reproduce the behaviour of an 
+enzymatic reaction without considering the intermediate enzyme-substrate 
+complex.
 
-The first change we can apply to the system is based on the principle of 
-mass conservation. If we assume that there is no or very little 
-concentration of [ES] at the beginning of the experiment, and that the 
+A basic the principle we need to apply to our system in order to derive
+the Michaelis-Menten model is the principle of mass conservation. This 
+principle is valid if we assume that the 
 reactions~\ref{eq:simple_enzymatic} are isolated, meaning that the 
 chemicals on these reactions are not involved in other reactions at the
-same time, then because of conservation of mass of E$_0$ (initial 
-concentration of the enzyme) we have that
-\begin{equation}
-    \text{[E$_0$]} = \text{[E] + [ES]}
+same time. Applying this principle to the enzyme chemical, produces the
+following equation:
+\begin{equation*}
+    \text{[E$_0$]} = \text{[E] + [ES]}.
     \label{eq:E_conservation}
-\end{equation}
-and because of conservation of mass of S$_0$ (initial concentration of 
-the substrate) we have that
+\end{equation*}
+If we apply this equation to the derivative of the concentration of ES,
+we will get the following equation:
 \begin{equation}
-    \text{[S$_0$]} = \text{[S] + [ES] + [P]}
-    \label{eq:S_conservation}
+    \frac{d[\text{ES}]}{dt} =  
+        k_f(\text{[E$_0$]} - \text{[ES]})\text{[S]} 
+        - (k_r + k_{cat}) \text{[ES]}. 
+        \label{eq:dESdt_2}
 \end{equation}
-Applying enzyme mass conservation on~\ref{eq:dSdt} and substrate mass 
-conservation on~\ref{eq:dESdt} produces the equations:
-\begin{subequations}
-    \begin{align}
-    \frac{d[\text{S}]}{dt}  & = 
-            -k_f(\text{[E$_0$]} - \text{[ES]})\text{[S]} + k_r\text{[ES]} 
-            \label{eq:dSdt_2} \\
-    \frac{d[\text{ES}]}{dt} & =  
-            k_f(\text{[E$_0$]} - \text{[ES]})\text{[S]} - (k_r + k_{cat}) \text{[ES]} 
-            \label{eq:dESdt_2}
-    \end{align}
-\end{subequations}
 
-If we apply With these simplifications, it is now possible to calculate the ratio of
-change of every chemical species just by considering 
+One more assumption is necessary to derive the simplification. This 
+assumption states that the concentration of substrate-enzyme complex
+does not change over time, i.e. $\frac{d[\text{ES}]}{dt} = 0$, and it 
+was first proposed in 1925 by Briggs and Haldane~\cite{Briggs1925}. 
+Generally, this assumption is applicable whenever [S] $\gg$ [E]. 
+{\color{blue} TODO: and we can apply it on this work because...}
+Applying this assumption together with the mass conservation assumption 
+on the equation~\ref{eq:dESdt_2}, we get:
+\begin{equation*}  
+    \begin{aligned}
+        \text{[ES]} (k_r + k_{cat}) &= 
+            k_f(\text{[E$_0$]} - \text{[ES]})\text{[S]}, \\
+        \text{[ES]} &= \frac{\text{[E]}_0\text{[S]}}{K_m + \text{[S]}} 
+    \end{aligned}
+\end{equation*}
+in which $K_m = \frac{k_{cat} + k_r}{k_f}$ is known as Michaelis 
+constant. Considering this, we can rewrite the rate of [P] as:
+\begin{equation*}
+    \frac{d\text{[P]}}{dt} = k_{cat}\frac{\text{[E]}_0\text{[S]}}
+        {K_m + \text{[S]}}
+\end{equation*}
+And finally, if we apply mass conservation to the substrate, we will get
+the following equation:
+\begin{equation*}
+    \text{[S$_0$]} = \text{[S] + [ES] + [P]},
+\end{equation*}
+the, we can differentiate this equation on $t$ and use the 
+quasi-steady-state assumption ($\frac{d\text{[ES]}}{dt} = 0$) to obtain:
+\begin{equation*}
+    \frac{d\text{[S]}}{dt} = - \frac{d\text{[P]}}{dt}
+\end{equation*}
 
+Therefore, using the Michaelis-Menten model, we are able to simplify the
+system~\ref{eq:full_system} that had four equations and three 
+parameters to a new model that has only two equation and two parameters 
+($k_{cat}$ and $K_m$). Figure~\ref{fig:michaelis_menten} shows a 
+comparison between the complete and Michaelis-Menten models of enzymatic
+reactions.
+
+\begin{figure}[H]
+  \centering 
+  \begin{tabular}{c c}
+    \subfigure[] {\scalebox{1}{
+    \includegraphics[trim={0 0 0 1.4cm}, clip=true, width=.45\textwidth]{fundamental_concepts/simplifications/full_system.png}}
+     \label{fig:enzymatic_full}}
+     &
+    \subfigure[] {\scalebox{1}{
+    \includegraphics[trim={0 0 0 1.4cm}, clip=true, width=.45\textwidth]{fundamental_concepts/simplifications/mm_system.png}}
+    \label{fig:enzymatic_mm}}
+  \end{tabular}
+    \caption{An example of the dynamics produced by two models of 
+        enzymatic reactions. The figure~\ref{fig:enzymatic_full} 
+        presents the dynamics of the model~\ref{eq:full_system} and 
+        figure~\ref{fig:enzymatic_mm} presents the dynamics of the 
+        Michaelis-Menten simplification to the same model. For this 
+        simulations, it is necessary to define initial concentrations of
+        the chemical species involved, and it is used: 
+        10 molecules$/(\mu m)^3$ for the enzyme (E); 
+        100~molecules$/(\mu m)^3$ is used for the substrate (S); and 
+        0~molecules$/(\mu m)^3$ is used for the other species. In 
+        addiction to this, it is also necessary to define model 
+        parameter values, and it is used: 
+        0.06~$(\mu m)^3$(molecules$*s)^{-1}$ for $k_f$; 
+        0.1~$(s^{-1})$ for $k_r$; 0.2~($s^{-1}$) for $k_{cat}$; and,
+        following the Michalis-Menten model, 5 molecules$/(\mu m)^3$
+        is used for $K_m$.}
+  \label{fig:michaelis_menten} 
+\end{figure}
 
 
 \section{Identification of Cell Signaling Pathways}
