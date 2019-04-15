@@ -296,42 +296,46 @@ on the equation~\ref{eq:dESdt_2}, we get:
     \begin{aligned}
         \text{[ES]} (k_r + k_{cat}) &= 
             k_f(\text{[E$_0$]} - \text{[ES]})\text{[S]}, \\
-        \text{[ES]} &= \frac{\text{[E]}_0\text{[S]}}{K_m + \text{[S]}} 
+        \text{[ES]} &= \frac{\text{[E]}_0\text{[S]}}{K_m + \text{[S]}}, 
     \end{aligned}
 \end{equation*}
 in which $K_m = \frac{k_{cat} + k_r}{k_f}$ is known as Michaelis 
 constant. Considering this, we can rewrite the rate of [P] as:
-\begin{equation*}
+\begin{equation}
     \frac{d\text{[P]}}{dt} = k_{cat}\frac{\text{[E]}_0\text{[S]}}
-        {K_m + \text{[S]}}
-\end{equation*}
+        {K_m + \text{[S]}}.
+    \label{eq:dPdt_2}
+\end{equation}
 And finally, if we apply mass conservation to the substrate, we will get
 the following equation:
 \begin{equation*}
     \text{[S$_0$]} = \text{[S] + [ES] + [P]},
 \end{equation*}
-the, we can differentiate this equation on $t$ and use the 
+then, we can differentiate this equation on $t$ and use the 
 quasi-steady-state assumption ($\frac{d\text{[ES]}}{dt} = 0$) to obtain:
-\begin{equation*}
-    \frac{d\text{[S]}}{dt} = - \frac{d\text{[P]}}{dt}
-\end{equation*}
+\begin{equation}
+    \frac{d\text{[S]}}{dt} = - \frac{d\text{[P]}}{dt}.
+    \label{eq:dSdt_2}
+\end{equation}
 
-Therefore, using the Michaelis-Menten model, we are able to simplify the
-system~\ref{eq:full_system} that had four equations and three 
+Now, with equations~\ref{eq:dPdt_2}~and~\ref{eq:dSdt_2} we are able to
+reproduce the dynamics of the substrate and product of the enzymatic 
+reaction. Therefore, using the Michaelis-Menten model, we could simplify 
+the system~\ref{eq:full_system} that had four equations and three 
 parameters to a new model that has only two equation and two parameters 
 ($k_{cat}$ and $K_m$). Figure~\ref{fig:michaelis_menten} shows a 
-comparison between the complete and Michaelis-Menten models of enzymatic
+comparison between the complete and Michaelis-Menten models of enzymatic 
 reactions.
 
 \begin{figure}[H]
   \centering 
   \begin{tabular}{c c}
     \subfigure[] {\scalebox{1}{
-    \includegraphics[trim={0 0 0 1.4cm}, clip=true, width=.45\textwidth]{fundamental_concepts/simplifications/full_system.png}}
+    \includegraphics[trim={0 0 0 1.4cm}, clip=true, width=.45\textwidth]{fundamental_concepts/simplifications/full_system.pdf}}
      \label{fig:enzymatic_full}}
      &
     \subfigure[] {\scalebox{1}{
-    \includegraphics[trim={0 0 0 1.4cm}, clip=true, width=.45\textwidth]{fundamental_concepts/simplifications/mm_system.png}}
+    \includegraphics[trim={0 0 0 1.4cm}, clip=true, width=.45\textwidth]{fundamental_concepts/simplifications/mm_system.pdf}}
     \label{fig:enzymatic_mm}}
   \end{tabular}
     \caption{An example of the dynamics produced by two models of 
@@ -353,9 +357,96 @@ reactions.
   \label{fig:michaelis_menten} 
 \end{figure}
 
-
+% What to talk about:
+% 1. Define identification of cell signaling pathways
+%    -> Identification of signaling pathways is the problem of finding 
+%       the components of a signaling network and how they interact 
+%       in order to reproduce some behaviour of the cell that was
+%       previously measured experimentally. 
+%    -> The input of the problem should be then a description of the 
+%       biological experiment and the measurements made on this 
+%       experiment. As an output, we are expected to give a topology
+%       of the network of interactions that are actively controlling
+%       the cell behaviour observed on experiment measurements. More 
+%       than that, we are also supposed to determine the set of 
+%       parameter values that should be used on the models to reproduce
+%       measurements similar to the experiments (or a probability 
+%       distribution).
+%    -> Two main tasks onto creating the output: you have to find 
+%       a topology that is good with some parameter to reproduce the 
+%       experiment; note that these tasks are very strongly correlated
+%       and should be done together. 
+% 2. Explain the challenges of cell signaling pathways
+%    -> Firstly, simulating these problems is very time-consuming (even 
+%       tough there are many ode solvers out there)
+%    -> The number of possible interactions is very big. If we consider
+%       choosing from n interactions a subset of them that should be on 
+%       the topology, then there are 2^n options.
+%    -> Once you choose two candidates of topology, it is still hard to
+%       tell which one is better.
+% (?). Talk about the work of Marcelo. State that current solutions do
+%       not systematically search for the solution. 
+% 3. somehow link to the next section, about cost functions 
+%    -> Many of the state of the art approaches on identification of 
+%       cell signaling network are based on a Bayesian approach for 
+%       model ranking.
 \section{Identification of Cell Signaling Pathways}
-\section{State of the Art in Model Selection}
+Identification of signaling pathways is the problem of finding the 
+components of a signaling pathway and how they interact in order to
+reproduce a behaviour of the cell that has been previously measured 
+experimentally. The input of this problem is usually a description of 
+the biological experiment, containing previous information about the 
+signaling pathway, and a set of measurements, commonly Western blot 
+data. The output to this problem is then composed of a set of 
+interactions that are actively controlling the behaviour of interest of 
+the cell, and also the set of parameter values that should be used on 
+these interactions to create a model that approximates the experimental 
+observations; it is possible to output a single value for each 
+parameter, as it was presented in~\cite{Wu15}, or present information 
+about these values, using a posterior (to the experimental data) 
+distribution, as it was presented in~\cite{Liepe2014}~and~\cite{Xura20}.
+
+Two main tasks must be completed to produce this output. The first task
+is to find candidate topologies for the pathway model, i.e. different
+set of interactions that are relevant to the pathway of interest. The
+second task is to rank those models according to their ability to 
+simulate the pathway and approximate the experimental measurements.
+
+% To the second task, you can use combinatorics optimization to fit the
+% model to the data and calculate the distance of the measurements on 
+% the fitted model to the experimental data; then it is possible to rank
+% models according to this distance. Alternatively, it is 
+% possible to consider that the model parameters are random variables 
+% and calculate the marginal probability of the model to reproduce the 
+% observed data; then, it is possible to rank models according to this 
+% probability.
+
+The second task is also known as the model selection problem and even
+though it is a broad area, there are works on the literature that treats 
+specifically the problem in a biochemical context. As it is done in~\{LULU} 
+
+
+% However, to the first task, there are not many methods on the 
+% literature to solve this problem. Generally, this is solved using 
+% both interactome maps from KEGG and the prior knowledge of the 
+% researchers.
+
+
+% What are the best approaches on model selection recently
+% -> Most of them uses Bayesian ideas
+% -> good because they can provide statistical formality about the 
+%    selection.
+% -> Explain BIBm
+% -> Explain ABC-SysBio
+% -> Even though they provide ways of ranking models, they don't treat
+% the modeling of the network topology.
+% -> Bayesian approaches
+\section{State of the Art in Selection of Biochemical Models}
+
+
+
+
+
 %\section{Bayesian Inference}
 %\subsection{Girolami (bioinformatics)}
 %\subsection{Kolch}

@@ -97,19 +97,19 @@ finding appropriate values for them becomes harder as we increase the
 number of parameters.
 
 The second task to create a model is to find values for all the system
-parameters. There are two approaches for this task, you can either 
-fetch values for these constants from the literature or you can find 
+parameters. There are two approaches for this task, one can either 
+fetch values for these constants from the literature or one can find 
 values that makes the model output approximate the experimental 
 observations. For the first approach, repositories such as 
 BioModels~\cite{le2006biomodels} can be used; for the second approach, 
 statistical and optimization methods can be used. For optimization, it 
 is necessary to define a metric that can evaluate how close the 
 parameters brings the model output to the experimental observation so
-that you can search for the optimal parameter in the parameter space. 
-Statistical inference, in the other hand, usually tries to maximize some 
-likelihood function, which is defined to represent the probability of a 
-model, with a set of parameter values, to reproduce the experimental 
-observation.
+that it is possible to search for the optimal parameter in the parameter 
+space. Statistical inference, in the other hand, usually tries to 
+maximize some likelihood function, which is defined to represent the 
+probability of a model, with a set of parameter values, to reproduce the 
+experimental observation.
 
 % However, we might have missed some interactions or even added irrelevant ones
 After completing both tasks, however, as we mentioned before, we might 
