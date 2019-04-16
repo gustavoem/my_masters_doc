@@ -348,7 +348,7 @@ reactions.
         10 molecules$/(\mu m)^3$ for the enzyme (E); 
         100~molecules$/(\mu m)^3$ is used for the substrate (S); and 
         0~molecules$/(\mu m)^3$ is used for the other species. In 
-        addiction to this, it is also necessary to define model 
+        addition to this, it is also necessary to define model 
         parameter values, and it is used: 
         0.06~$(\mu m)^3$(molecules$*s)^{-1}$ for $k_f$; 
         0.1~$(s^{-1})$ for $k_r$; 0.2~($s^{-1}$) for $k_{cat}$; and,
@@ -402,7 +402,7 @@ interactions that are actively controlling the behaviour of interest of
 the cell, and also the set of parameter values that should be used on 
 these interactions to create a model that approximates the experimental 
 observations; it is possible to output a single value for each 
-parameter, as it was presented in~\cite{Wu15}, or present information 
+parameter, as it was presented in~\cite{Wu15}, or output information 
 about these values, using a posterior (to the experimental data) 
 distribution, as it was presented in~\cite{Liepe2014}~and~\cite{Xura20}.
 
@@ -423,19 +423,72 @@ simulate the pathway and approximate the experimental measurements.
 
 The second task is also known as the model selection problem and even
 though it is a broad area, there are works on the literature that treats 
-specifically the problem in a biochemical context. As it is done in~\{LULU} 
+specifically the problem in a biochemical context. Solutions to this 
+problem should be able to choose model candidates according to their 
+ability to reproduce observed data and penalize overly complex models 
+to avoid overfitting. 
 
+One approach on setting the score of a model is to search for the set of 
+parameter values that makes the model measurements the closest to the 
+experimental data and then define a distance between these two 
+measurements; then it is possible to use this distance plus a penalty 
+for complexity to create a ranking of the models. We can write this 
+scoring function as:
+\begin{equation*}
+    score_1 (M) = - min_{\{\theta \in \Theta' \subset \Theta\}}  
+        dist (\phi(M, \theta), D) + R (M),
+\end{equation*}
+where $M$ is the model, $\Theta$ is the parameter space, $\Theta'$ is 
+the subset of the parameter space where the search for the best 
+parameter values was conduced, $D$ is the experimental measurement,
+$\phi$ is a function that determines the simulated measurement on the 
+model, and $R$ is a regularization function that penalizes model 
+complexity. This approach was implemented on the work of Lulu 
+Wu~\cite{Wu15}, using a Simulated Annealing algorithm to search for 
+parameter values that minimizes the distance between simulation and 
+experiment; however, the methodology showed limitations when testing the 
+ability to reconstruct models from experiments, and this could be 
+related to the used penalization term. In fact, choosing a good 
+regularization function is crucial to the performance of the selected 
+model.
+
+Another approach is to consider the model parameters as random variables 
+and then marginalize the probability of the model and parameters to 
+reproduce the observed data, i.e. calculate the probability:
+\begin{equation*}
+    p (D | M) = \int_{\Theta} p (D | M, \theta) p (\theta | M) d\theta,
+\end{equation*}
+where $D$ is the observed data, $M$ is the model and $\Theta$ is the 
+parameter space. The function $p(\theta | M)$ is the prior probability 
+function of the parameter $\theta$ on model $M$ and the function 
+$p (D | M, \theta)$ is the likelihood of observing the data $D$ when
+simulating the model $M$ using parameters $\theta$. Sometimes, however,
+the likelihood function is unknown or computationally intractable; for
+these cases, it is possible to use an alternative Bayesian approach, 
+called Aproximate Bayesian Computation (ABC), to estimate the 
+probability $p (M | D)$ and use it as a ranking score~\cite{Toni2009}.
 
 % However, to the first task, there are not many methods on the 
 % literature to solve this problem. Generally, this is solved using 
 % both interactome maps from KEGG and the prior knowledge of the 
 % researchers.
+For the first task of identification of signaling pathways we described, 
+the creation of model candidates, there is not as many works on the 
+literature as there is for the second task. Generally, to do this,
+researchers must resort on their own knowledge on the biological 
+experiment and consult interactome maps available on repositories such 
+as KEGG and BioModels. That enlightens the importance to create a 
+methodology that systematically creates candidate models of signaling 
+networks, as we propose on this project.
+
 
 
 % What are the best approaches on model selection recently
 % -> Most of them uses Bayesian ideas
 % -> good because they can provide statistical formality about the 
 %    selection.
+% -> automatic penalization; allows researcher to introduce biological
+%    information through the priors.
 % -> Explain BIBm
 % -> Explain ABC-SysBio
 % -> Even though they provide ways of ranking models, they don't treat
