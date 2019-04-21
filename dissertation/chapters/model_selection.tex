@@ -1,0 +1,46 @@
+%begin-include
+{\color{blue} Simple description of the content of this chapter}.
+
+\section{Model ranking using Marginal Likelihood}
+% Simple explanation of this model ranking
+% Describe the likelihood function 
+% However, this is very hard to calculate
+% It is possible to apply an Importance Sampling Estimator {cite 
+% Newton and Raftery}. However, it was showed on {cite girolami again}
+% that these methods do not perform well.
+% Then it was proposed to use Thermodynamic Integration. Make it clear 
+% that this allows us to create some estimators.
+% Subsection - Thermodynamic Integration
+% -> explain how to derive it
+%   -> name what is the power posterior
+% -> include here: how to estimate it?
+% Subsection - Estimation of the Marginal Likelihood 
+% -> We need to find samples of the posteriors
+% -> Explain that we use the methodology of Xuan
+% -> We use three Metropolis-Hastings
+% -> A first burn-in step with jumps independent for each single 
+% parameter. Adaptive Metropolis Hastings
+% -> A second using a Variance-Covariance Matrix
+% -> A third using populational MCMC
+The marginal likelihood of an experiment being reproduced by a model, 
+$p (D | M)$, can be used as a model ranking metric as it determines 
+which model makes the experimental observations more likely to happen.
+We can write the marginal likelihood as:
+\begin{equation}
+    p (D | M) = \int_{\Theta} p (D | M, \theta) p (\theta | M)d\theta.
+\label{eq:marginal_likelihood}
+\end{equation}
+However, calculating this integral analitically is only possible in 
+very special cases and, usually, it would depend on knowing models for 
+the distributions assolicated to these probability functions, which is 
+generally not possible in our case.
+
+Even though this integral is very hard to be calculated, there are 
+methods that allow us to estimate its value. A straight forward method 
+for estimate this integral value is the Importance Sampling 
+Estimator~\cite{Newton1993}. This method uses the Monte Carlo integral 
+estimation method that estimates integrals of the form $\int g(\theta)p(\theta)d\theta$
+
+% ABC-SysBio
+
+% Experiments comparing both approaches

@@ -449,15 +449,17 @@ parameter values that minimizes the distance between simulation and
 experiment; however, the methodology showed limitations when testing the 
 ability to reconstruct models from experiments, and this could be 
 related to the used penalization term. In fact, choosing a good 
-regularization function is crucial to the performance of the selected 
-model.
+regularization function is crucial to the performance of this 
+methodology.
 
 Another approach is to consider the model parameters as random variables 
 and then marginalize the probability of the model and parameters to 
-reproduce the observed data, i.e. calculate the probability:
-\begin{equation*}
+reproduce the observed data, i.e. estimate (because calculating is 
+usually hard) the marginal probability:
+\begin{equation}
     p (D | M) = \int_{\Theta} p (D | M, \theta) p (\theta | M) d\theta,
-\end{equation*}
+    \label{eq:marginal_likelihood_integral}
+\end{equation}
 where $D$ is the observed data, $M$ is the model and $\Theta$ is the 
 parameter space. The function $p(\theta | M)$ is the prior probability 
 function of the parameter $\theta$ on model $M$ and the function 
@@ -474,12 +476,13 @@ probability $p (M | D)$ and use it as a ranking score~\cite{Toni2009}.
 % researchers.
 For the first task of identification of signaling pathways we described, 
 the creation of model candidates, there is not as many works on the 
-literature as there is for the second task. Generally, to do this,
-researchers must resort on their own knowledge on the biological 
-experiment and consult interactome maps available on repositories such 
-as KEGG and BioModels. That enlightens the importance to create a 
-methodology that systematically creates candidate models of signaling 
-networks, as we propose on this project.
+literature as there is for the second task. Commonly, researchers must 
+resort on their own knowledge on the biological experiment and consult 
+interactome maps available on repositories such as KEGG and BioModels to
+construct manually the hypothesis of models for a signaling pathway. 
+That enlightens the importance to create a methodology that 
+systematically creates candidate models of signaling networks, as we 
+propose on this project.
 
 
 
@@ -489,18 +492,101 @@ networks, as we propose on this project.
 %    selection.
 % -> automatic penalization; allows researcher to introduce biological
 %    information through the priors.
+% -> it makes sense that a parameter is a random variable
 % -> Explain BIBm
 % -> Explain ABC-SysBio
 % -> Even though they provide ways of ranking models, they don't treat
 % the modeling of the network topology.
 % -> Bayesian approaches
 \section{State of the Art in Selection of Biochemical Models}
+The state of the art in biochemical model selection is based on Bayesian
+inference. The Bayesian approaches provide the benefits of ranking 
+models with statistical formalism, and automatically penalizes overly 
+complex models. More than that, through the prior distribution of the
+parameters, the researcher is able to input prior knowledge about 
+interactions constants; this type of information can facilitate the 
+parameter inference of models since it tends to concentrate the search.
 
+Bayesian approaches consider that model parameters are random variables, 
+instead of fixed unknown constants. We can argue that this modeling is 
+fair to the reality in biochemical processes because interactions 
+constants can vary depending on the cell conditions. Therefore, in a 
+biological experiment in which there might be perturbations to the cell 
+environment, it should be more adequate to rank models integrating the 
+models score over a probability space of parameters instead of fitting 
+the model to data using a single point of the parameter space. We will 
+now present the basic concept of two methods that use this idea for 
+model selection, the Annealing-Melting Integration 
+(AMI)~\cite{Vyshemirsky2007} and Approximate Bayesian Computation 
+(ABC)~\cite{Toni2009}.
 
+% What to mention about AMI:
+% -> thermodynamic integral
+% -> we are estimating the log of p(D|M, theta)
+% -> theta being distributed according to some q_beta (\theta)
+% -> q_beta are bridging distributions from prior to posterior
+% -> to estimate this integral we need to use Monte Carlo Markov Chains
+The Annealing-Melting Integration is a method that estimates the 
+integral~\ref{eq:marginal_likelihood_integral} using concepts of 
+thermodynamics. With thermodynamic integration, it is possible to write 
+the logarithm of this integral as:
+\begin{equation}
+        \ln p(D|M) 
+            = \int_0^1 \expectation_{q_\beta(\theta)} 
+              [\ln p(D | M, \theta)] d\beta
+        \label{eq:thermodynamic_integral}
+\end{equation}
+where $p(D|M,\theta)$ is the likelihood function (the 
+probability of observing the data D when $M$ is the correct model, with
+parameters $\theta$); and $\expectation_{q_\beta (\theta)}$ is an 
+expectation taken over the probability space of $q_\beta(\theta) 
+\propto p(D|M, \theta)^\beta p(\theta|M)$. The 
+variable $\beta$ works in the integral as a temperature term, 
+determining the probability functions $q_{\beta}(\theta)$; note that 
+when $\beta = 0$ then 
+\begin{equation*}
+q_0(\theta) = p(\theta|M),
+\end{equation*}
+the prior distribution of the parameters, and when 
+$\beta = 1$ then 
+\begin{equation*}
+    q_1(\theta) = \frac{p(D, \theta| M)} {\int_{\Theta}
+                            p(D, \theta| M)} 
+                = \frac{p(\theta | D, M)p(D|M)} 
+                        {p(D | M)}
+                = p(\theta | D, M),
+\end{equation*}
+the posterior distribution of parameters. Therefore, the 
+integral~\ref{eq:thermodynamic_integral} takes the expected value of the
+likelihood function of $D$ over a sequence of probability distributions
+that is a ``bridge of distributions'' connecting the prior and posterior 
+distributions of parameters. Calculating the integral is usually 
+infeasible, hence in practice it is needed to estimate this integral 
+using samples of a finite number of tempered distributions, 
+$q_\beta(\theta)$.
 
-
-
-%\section{Bayesian Inference}
-%\subsection{Girolami (bioinformatics)}
-%\subsection{Kolch}
-%\subsection{ABC-Sysbio}
+% How about ABC?
+% -> Likelihood free!
+% -> Define the algorithm
+%   -> The goal of the algorithm is to find a ``good" sample of 
+%      parameters for the observed data.
+%   -> The algorithm proposes a candidate parameter \theta*.
+%   -> Simulate the model with those parameters.
+%   -> Using a distance function d, accept theta* if
+%      d(simulation, data) < eps
+As we mentioned before, the likelihood function 
+$p(D | M, \theta)$ may be very hard to calculate if not 
+impossible. For those cases it is possible to use parameter inference
+approaches that are likelihood-free, called Approximate Bayesian 
+Computation (ABC). This method has the goal of producing a sample of 
+parameters that brings the model simulations close to the observed data.
+A generic ABC algorithm starts proposing a candidate parameter 
+$\theta^*$ from a proposal distribution; then, a simulation, 
+$\phi (M, \theta^*)$ of the model using the candidate parameters is 
+produced; if, for some distance function $d$, is true that 
+$d(\phi(M, \theta^*), D) < \epsilon$, then we accept $\theta^*$ as part
+of the sample. If $\epsilon$ is sufficiently small, then the produced
+samples approximates well the posterior distribution. To use ABC methods
+for model selection it is enough to add a model indicator parameter to 
+the parameter array, then it is possible to extract model distribution
+of the accepted parameters.
