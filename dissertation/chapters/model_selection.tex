@@ -73,28 +73,116 @@ to estimate this integral value is the Importance Sampling
 Estimator~\cite{Newton1993}. This method uses the Monte Carlo integral 
 estimation method that can estimate integrals of the form 
 $\int g(\lambda) p(\lambda)d\lambda$ using the estimator:
-\begin{equation}
+\begin{equation*}
     \hat{I} = \sum_{i = 1}^m w_i g(\lambda_i) / \sum_{i = 1}^m w_i,
 \label{eq:importance_sampling_estimator}
-\end{equation}
+\end{equation*}
 where $w_i = p (\lambda) / p^* (\lambda)$, and $p^*(\cdot)$ is known as 
 the importance sampling function. If we set $\lambda = \theta | M$ and
 use the prior ($p(\theta | M)$) or the posterior ($p(\theta | M, D)$) as 
 importance sampling functions, then we would get respectively the 
 estimators:
-\begin{equation}
+\begin{equation*}
 \begin{aligned}
     \frac{1}{m} \sum_{i = 1}^m p(D|M, \theta^{(i)}) &&& 
         (\text{with } \theta^{(i)} \sim p(\theta|M)); \\
     \left(\frac{1}{m} \sum_{i = 1}^m p(D|M, \theta^{(i)})^{-1} \right)^{-1} &&&
         (\text{with } \theta^{(i)} \sim p(\theta|M)).
 \end{aligned}
-\end{equation}
+\end{equation*}
 However, as showed by Vyshemirsky et al. (2007), these estimators might
 produce very large variances and may not perform well for biochemical
-model selection applications. For that reason we decide to use a 
-Annealing-Melting method as it is proposed in the same 
-work~\cite{Vyshemirsky2007}.
+model selection applications. Hence, another method that can be used is 
+the Annealing-Melting Integration, as it is proposed in the same 
+work~\cite{Vyshemirsky2007}. 
+
+% Subsection - Thermodynamic Integration
+% -> explain how to derive it
+%   -> name what is the power posterior
+% -> include here: how to estimate it?
+{\color{blue} TODO: It is actually the power posteriors for ML estimation}
+\subsection{Annealing-Melting Integration}
+The Annealing-Melting Integration is a method that proposes to rewrite
+the integral~\ref{eq:marginal_likelihood} using ideas of thermodynamics,
+providing new estimators for the marginal likelihood. This method is
+able to rewrite the marginal likelihood integral in a way that it 
+marginalizes the likelihood through many intermediate probability spaces 
+of parameters, bridging the prior and posterior distributions of 
+parameters. These distributions are also called tempered distributions
+or power posteriors~\cite{Friel2008}.
+
+Given a parameter prior distribution $p (\theta | M)$ and a posterior 
+distributions $p (\theta | D, M)$, then we define a power posterior 
+distribution with temperature $\beta$ as:
+\begin{equation*}
+    p_{\beta} (\theta) = \frac{p (D | \theta, M)^\beta p(\theta | M)}
+                              {z (\beta)},
+\end{equation*}
+where
+\begin{equation*}
+    z (\beta) = \int_\Theta p (D | \theta, M)^\beta p(\theta | M) 
+            d\theta.
+\end{equation*}
+Note that when $\beta = 0$, then $p_{\beta=0} = p (\theta | M)$, the 
+prior distribution of the parameters; also, when $\beta = 1$, then
+\begin{equation*}
+    p_{\beta=1}(\theta) = \frac{p (D | \theta, M) p(\theta | M)}
+                         {z (\beta)}
+                        =\frac{p (D, \theta|M)}
+                              {\int_\Theta p (D, \theta | M)}
+                        =\frac{p(\theta | D, M) p(D|M)}{p (D | M)}
+                        =p (\theta | D, M),
+\end{equation*}
+the posterior distributions of the parameters.
+
+Now, let we consider the derivative of $\ln z(\beta)$.
+\begin{align}
+    \frac{d}{d\beta} \ln z(\beta) &= \frac{1}{z(\beta)}  
+        \frac{d}{d\beta} z(\beta) \notag\\
+    &= \frac{1}{z(\beta)} \frac{d}{d\beta} 
+        \int_\Theta p (D | \theta, M)^\beta p(\theta | M) d\theta \notag\\
+    \shortintertext{(using that $\frac{d}{dx} c^x = c^x \ln c$)}
+    &= \frac{1}{z(\beta)} \int_\Theta p (D | \theta, M)^\beta 
+        p(\theta | M) \ln p(D|\theta, M)d\theta \notag\\
+    &= \int_\Theta \frac{p (D | \theta, M)^\beta p(\theta | M)}
+                        {z(\beta)}
+                    \ln p(D| \theta, M)d\theta \notag\\
+    &=\int_\Theta p_\beta (\theta) \ln p (D | \theta, M)d\theta \notag\\ 
+    &=\expectation_{p_\beta (\theta)} [\ln p(D|\theta, M)]. \label{eq:z_derivative}
+\end{align}
+And it is not hard to see that:
+\begin{equation}
+\begin{gathered}
+    z (0) = \int_\Theta p (\theta | M) = 1 \\
+    z (1) = \int_\Theta p (D, \theta | M) = p (D|M) 
+    \label{eq:z_on_limits}
+\end{gathered}
+\end{equation}
+
+Using equations~\ref{eq:z_on_limits} and equality~\ref{eq:z_derivative}
+we can write that:
+\begin{align}
+    \int_0^1 \expectation_{p_\beta (\theta)} [\ln p(D|\theta, M)]d\beta 
+    &= \int_0^1 \frac{d}{d\beta} \ln z(\beta) d\beta \notag \\
+    &= \Big[\ln z(\beta)\Big]\bigg\rvert^1_0 \notag \\
+    &= \ln p (D | M).
+\end{align}
+Then we have written an expression for the logarithm of the marginal
+likelihood. This expression is still hard to be calculated analytically,
+however from this equation we will be able to find estimators for
+the logarithm of the marginal likelihood, and consequently for the
+likelihood. To calculate this estimators, we will need to generate 
+samples for a series of power posteriors of parameters, and this will
+be explained in the next section.
+
+% Subsection - Estimation of the Marginal Likelihood 
+% -> We need to find samples of the posteriors
+% -> Explain that we use the methodology of Xuan
+% -> We use three Metropolis-Hastings
+% -> A first burn-in step with jumps independent for each single 
+% parameter. Adaptive Metropolis Hastings
+% -> A second using a Variance-Covariance Matrix
+% -> A third using populational MCMC
 
 % ABC-SysBio
 % Experiments comparing both approaches
