@@ -25,10 +25,10 @@
 The marginal likelihood of an experiment measurement $D$ being 
 reproduced by a model $M$, $p (D | M)$, can be used as a model ranking 
 metric as it determines which model makes the experimental observations 
-more likely to happen. Before defining how to calculate the  marginal 
-the likelihood, we must define what the likelihood function is. To 
-calculate the likelihood $p (D | M, \theta)$, we must understand that 
-conditioning the observation to the model and parameters means that in 
+more likely to happen. Before defining how to calculate the marginal 
+likelihood, we must define what the likelihood function is. To calculate 
+the likelihood $p (D | M, \theta)$, we must understand that conditioning 
+the observation to the model and parameters means that in 
 the probability space from which $D$ is taken, the model $M$ is the 
 ``real'' model and it has the parameter values of $\theta$; i.e. the 
 model $M$ with parameters $\theta$ controls the behaviour of the system 
@@ -69,8 +69,8 @@ generally not possible in our case.
 
 Even though this integral is very hard to be calculated, there are 
 methods that allow us to estimate its value. A straight forward method 
-to estimate this integral value is the Importance Sampling 
-Estimator~\cite{Newton1993}. This method uses the Monte Carlo integral 
+to estimate this integral value is using Importance Sampling 
+Estimators~\cite{Newton1993}. This method uses the Monte Carlo integral 
 estimation method that can estimate integrals of the form 
 $\int g(\lambda) p(\lambda)d\lambda$ using the estimator:
 \begin{equation*}
@@ -85,24 +85,25 @@ estimators:
 \begin{equation*}
 \begin{aligned}
     \frac{1}{m} \sum_{i = 1}^m p(D|M, \theta^{(i)}) &&& 
-        (\text{with } \theta^{(i)} \sim p(\theta|M)); \\
+        (\text{with } \theta^{(i)} \sim p(\theta|M)), \\
     \left(\frac{1}{m} \sum_{i = 1}^m p(D|M, \theta^{(i)})^{-1} \right)^{-1} &&&
         (\text{with } \theta^{(i)} \sim p(\theta|M)).
 \end{aligned}
 \end{equation*}
 However, as showed by Vyshemirsky et al. (2007), these estimators might
 produce very large variances and may not perform well for biochemical
-model selection applications. Hence, another method that can be used is 
-the Annealing-Melting Integration, as it is proposed in the same 
-work~\cite{Vyshemirsky2007}. 
+model selection applications. Hence, new methods with ideas of 
+thermodynamics were proposed. These methods are based on rewriting the
+marginal likelihood equation using intermediate distributions of 
+parameters between the prior and posterior 
+distributions~\cite{Friel2008}.
 
 % Subsection - Thermodynamic Integration
 % -> explain how to derive it
 %   -> name what is the power posterior
 % -> include here: how to estimate it?
-{\color{blue} TODO: It is actually the power posteriors for ML estimation}
-\subsection{Annealing-Melting Integration}
-The Annealing-Melting Integration is a method that proposes to rewrite
+\subsection{Thermodynamic Integration for Marginal Likelihood}
+The Thermodynamic Integration is a method that proposes to rewrite
 the integral~\ref{eq:marginal_likelihood} using ideas of thermodynamics,
 providing new estimators for the marginal likelihood. This method is
 able to rewrite the marginal likelihood integral in a way that it 
@@ -112,7 +113,7 @@ parameters. These distributions are also called tempered distributions
 or power posteriors~\cite{Friel2008}.
 
 Given a parameter prior distribution $p (\theta | M)$ and a posterior 
-distributions $p (\theta | D, M)$, then we define a power posterior 
+distribution $p (\theta | D, M)$, then we define a power posterior 
 distribution with temperature $\beta$ as:
 \begin{equation*}
     p_{\beta} (\theta) = \frac{p (D | \theta, M)^\beta p(\theta | M)}
@@ -129,7 +130,7 @@ prior distribution of the parameters; also, when $\beta = 1$, then
     p_{\beta=1}(\theta) = \frac{p (D | \theta, M) p(\theta | M)}
                          {z (\beta)}
                         =\frac{p (D, \theta|M)}
-                              {\int_\Theta p (D, \theta | M)}
+                              {\int_\Theta p (D, \theta | M)d\theta}
                         =\frac{p(\theta | D, M) p(D|M)}{p (D | M)}
                         =p (\theta | D, M),
 \end{equation*}
@@ -153,8 +154,8 @@ Now, let we consider the derivative of $\ln z(\beta)$.
 And it is not hard to see that:
 \begin{equation}
 \begin{gathered}
-    z (0) = \int_\Theta p (\theta | M) = 1 \\
-    z (1) = \int_\Theta p (D, \theta | M) = p (D|M) 
+    z (0) = \int_\Theta p (\theta | M)d\theta = 1 \\
+    z (1) = \int_\Theta p (D, \theta | M)d\theta = p (D|M) 
     \label{eq:z_on_limits}
 \end{gathered}
 \end{equation}
@@ -183,6 +184,8 @@ be explained in the next section.
 % parameter. Adaptive Metropolis Hastings
 % -> A second using a Variance-Covariance Matrix
 % -> A third using populational MCMC
+\subsection{Estimation of the Marginal Likelihood}
+
 
 % ABC-SysBio
 % Experiments comparing both approaches
