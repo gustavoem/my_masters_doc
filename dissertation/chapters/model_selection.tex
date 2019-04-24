@@ -167,6 +167,7 @@ we can write that:
     &= \int_0^1 \frac{d}{d\beta} \ln z(\beta) d\beta \notag \\
     &= \Big[\ln z(\beta)\Big]\bigg\rvert^1_0 \notag \\
     &= \ln p (D | M).
+    \label{eq:thermodynamic_integral}
 \end{align}
 Then we have written an expression for the logarithm of the marginal
 likelihood. This expression is still hard to be calculated analytically,
@@ -185,7 +186,49 @@ be explained in the next section.
 % -> A second using a Variance-Covariance Matrix
 % -> A third using populational MCMC
 \subsection{Estimation of the Marginal Likelihood}
+To estimate the integral~\ref{eq:thermodynamic_integral} we need to 
+generate samples of a sequence of power posterior distributions.
 
 
 % ABC-SysBio
+% What do I want to talk about ABC-SysBio?
+% It is a likelihood-free approach for generating samples of a posterior
+% distribution.
+% Simply define the method: what does it do exactly?
+% -> it approximates some posterior distribution without using a 
+%    likelihood
+% Give the generic steps of the algorithm
+% Give as an example the ABC-Rejection algorithm
+% Explain the result
+% How would we get model ranking from this result?
+% The ABC-SysBio Software
+\section{Approximate Bayesian Computation}
+Approximate Bayesian Computation (ABC) is an approach that allows 
+generating samples from the posterior distribution without accessing the
+likelihood function. Adding a model indicator parameter to parameters 
+being sampled also allows us to create an approximate sample of the 
+posterior $p (\theta, M | D)$, and from this sample it is possible to 
+estimate $p (M | D)$, which can be used as a model ranking metric. The 
+main idea of ABC methods is to generate a sample from posterior by 
+generating parameter points that, when plugged into a model, generates 
+simulations that dist from the experimental measurements at most by some
+small $\epsilon$.
+
+A generic ABC method that generates a sample of the posterior 
+$p (\theta, m | D)$ is composed of the following steps:
+\begin{enumerate}
+    \item{Sample a parameter candidate $(\theta^*, M^*)$ from some 
+        proposal distribution.}
+    \item{Simulate the model $M^*$ with parameter values $\theta^*$, 
+        generating simulated measurements $\phi (M^*, \theta^*) = D*$.}
+    \item{Calculate, for some distance function $d$, the value of
+        $d (D^*, D)$. If $d (D^*, D) < \epsilon$ for some previously
+        specified $\epsilon$, then add $(\theta^*, M^*)$ to the sample.}
+    \item{Repeat until some iteration limit.}
+\end{enumerate}
+
+The simplest ABC algorithm is the ABC Rejection, and it goes very 
+similarly to the generic algorithm we just presented. This algorithm, 
+however, does not perform well when the posterior distribution is very
+different from the prior distribution. 
 % Experiments comparing both approaches

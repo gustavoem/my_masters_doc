@@ -590,3 +590,88 @@ samples approximates well the posterior distribution. To use ABC methods
 for model selection it is enough to add a model indicator parameter to 
 the parameter array, then it is possible to extract model distribution
 of the accepted parameters.
+
+% Metropolis-Hastings algorithm
+% -> Both methods for model selection, based on ABC or using 
+% thermodynamics integration needs to generate samples of probability 
+% distributions. Generating samples of distributions is easy for many 
+% well known distributions, however, for some other distributions it may
+% not simple. 
+% -> What does it do?
+% Metropolis-Hastings algorithms are capable of generating a
+% sample that has some probability distribution $p$, the target 
+% function. The method can be used even when it is not possible to 
+% calculate points of the target probability function, because all it is
+% needed is a function that is proportional to the target. This is 
+% useful for example when the target function is a posterior
+% -> How do we do this
+%   -> 
+\section{Metropolis-Hastings to Generate Samples}
+Both methods for model selection, based on ABC or using thermodynamics
+integration need to generate samples of probability distributions. 
+Generating samples of distributions is simple for many well known 
+distributions, however, for some other distributions it may not be as
+simple. Metropolis-Hastings algorithms are capable of generating a 
+sample that has some probability distribution $p$, which is called the 
+target distribution. In fact, the method can be used even when it is not
+possible to access directly the target function, because all it is 
+needed to perform the sampling is a function that is proportional to the
+target.
+
+Being able to generate a sample of a target distribution without 
+accessing the probability function itself is useful for our applications
+in Bayesian model ranking. Consider that we need to create a sample of
+the parameters posterior distribution $p (\theta | M, D)$. Calculating 
+this probability function is very hard because
+\begin{equation*}
+    p(\theta | M, D) = \frac{p (D | \theta, M) p (\theta | M)}
+                            {p (D|M)},
+\end{equation*}
+and this equation has the term $p (D|M)$, which is only known (by some 
+estimation) at the end of the model ranking; however, if we can access
+the likelihood function $p (D| \theta, M)$ and the prior 
+$p (\theta | M)$ than the product of these two is proportional to the 
+posterior distribution (since $p (D|M)$ is only a constant because it
+does not depend on $\theta$), and therefore they are enough to generate
+a sample of the posterior.
+
+A generic Metropolis-Hastings algorithm that creates a sample of a 
+target distribution $p (\lambda)$ proceeds as follows:
+\begin{enumerate}
+\item{Choose some starting point $\lambda_0$ for which $p (\lambda_0)$ 
+    is not zero. Also set $t = 1$.}
+\item{Sample a candidate point $\lambda^*$ from a proposal (or jumping) 
+    distribution with probability $J_t (\lambda^* | \lambda^{t - 1})$.}
+    \label{enum:iteration_start}
+\item{Calculate the ratio:}
+    \begin{equation}
+        r = \frac{p (\lambda^*) J_t (\lambda^{t - 1} | \lambda^*)}
+                 {p (\lambda^{t - 1}) J_t (\lambda^* | \lambda^{t - 1})}
+        \label{eq:mh_ratio}
+    \end{equation}
+\item{With probability $min (1, r)$ set $\theta^t = \theta^*$ and set
+    $\theta^t = \theta^{t - 1}$ otherwise.}
+\item{Increase $t$ by one and, if not reached limit number of 
+    iterations, go back to step~\ref{enum:iteration_start}.}
+\end{enumerate}
+Note that if the target $p (\lambda)$ is not available, and rather 
+another function $q (\lambda) = cp(\lambda)$ is available, then the 
+ratio~\ref{eq:mh_ratio} can be calculated as:
+\begin{equation*}
+    r = \frac{p (\lambda^*) J_t (\lambda^{t - 1} | \lambda^*)}
+              {p (\lambda^{t - 1}) J_t (\lambda^* | \lambda^{t - 1})} 
+      = \frac{(q (\lambda^*)c) J_t (\lambda^{t - 1} | \lambda^*)}
+           {(q (\lambda^{t - 1})c) J_t (\lambda^* | \lambda^{t - 1})} 
+      = \frac{q (\lambda^*) J_t (\lambda^{t - 1} | \lambda^*)}
+              {q (\lambda^{t - 1}) J_t (\lambda^* | \lambda^{t - 1})}
+\end{equation*}
+More than that, if the proposal distribution is symmetric, the produced 
+algorithm is called Metropolis algorithm and has the ratio 
+$r = {p (\lambda^*)}/{p (\lambda^{t - 1})}$. 
+
+Different implementations of the Metropolis-Hastings algorithm are 
+possible. The possible changes include the choice of starting point,
+the choice of proposal distributions and number of iterations. As an
+example, some algorithms are adaptive in the sense that they can change 
+the proposal distribution according to the acceptance rate of proposed 
+points~\cite{Gelman2013}.
