@@ -87,7 +87,7 @@ estimators:
     \frac{1}{m} \sum_{i = 1}^m p(D|M, \theta^{(i)}) &&& 
         (\text{with } \theta^{(i)} \sim p(\theta|M)), \\
     \left(\frac{1}{m} \sum_{i = 1}^m p(D|M, \theta^{(i)})^{-1} \right)^{-1} &&&
-        (\text{with } \theta^{(i)} \sim p(\theta|M)).
+        (\text{with } \theta^{(i)} \sim p(\theta|M, D)).
 \end{aligned}
 \end{equation*}
 However, as showed by Vyshemirsky et al. (2007), these estimators might
@@ -218,7 +218,7 @@ A generic ABC method that generates a sample of the posterior
 $p (\theta, m | D)$ is composed of the following steps:
 \begin{enumerate}
     \item{Sample a parameter candidate $(\theta^*, M^*)$ from some 
-        proposal distribution.}
+        proposal distribution.} \label{alg:abc_step1}
     \item{Simulate the model $M^*$ with parameter values $\theta^*$, 
         generating simulated measurements $\phi (M^*, \theta^*) = D*$.}
     \item{Calculate, for some distance function $d$, the value of
@@ -228,7 +228,90 @@ $p (\theta, m | D)$ is composed of the following steps:
 \end{enumerate}
 
 The simplest ABC algorithm is the ABC Rejection, and it goes very 
-similarly to the generic algorithm we just presented. This algorithm, 
-however, does not perform well when the posterior distribution is very
-different from the prior distribution. 
+similarly to the generic algorithm we just presented, with the 
+specification that on step~\ref{alg:abc_step1} the proposal distribution
+is the prior distribution. The output of this algorithm is a sample of 
+the distribution $p (\theta, M| d (\phi (M, \theta), D) \leq \epsilon)$; 
+when $\epsilon \to \infty$ this is then a sample of the prior 
+distribution, and as $\epsilon \to 0$ then this sample tends to be a
+sample of the posterior distribution~\cite{Pritchard1999}. This 
+algorithm, however, does not perform well when the posterior 
+distribution is very different from the prior distribution. For that 
+reason, new ABC methods using Monte Carlo Markov Chains were 
+created~\cite{Marjoram2003}. The ABC MCMC method proposed by Marjoram et 
+al. (2003) produces a Markov Chain whose stationary distribution is
+$p (\theta, M | d (\phi (M, \theta), D) \leq \epsilon)$. Nonetheless, 
+this algorithm might still suffer from correlation in samples or even
+get stuck in regions of local peaks of probability. For that reason,
+the ABC sequantial Monte Carlo (ABC SMC)method was 
+proposed~\cite{Toni2009}.
+
+%-> Explain ABC SMC
+The ABC SMC method creates a sequence of samples with the goal of 
+getting closer to a posterior sample in each step. Let we simplify the
+notation by saying that $d(\phi (M, \theta), D)$ is just 
+$\rho_{M, \theta}$. From a predefined sequence $\epsilon_1, \ldots, 
+\epsilon_T$ the algorithm generates a sequence of samples that 
+represents the distributions 
+$p (\theta, M| \rho_{M, \theta} \leq \epsilon_1), 
+p (\theta, M| \rho_{M, \theta} \leq \epsilon_2), \ldots,
+p (\theta, M| \rho_{M, \theta} \leq \epsilon_T)$. At the first 
+generation, a sample of 
+$p (\theta, M| \rho_{M, \theta} \leq \epsilon_1)$ is created by 
+proposing points from the prior distribution. Then, for next generations
+the candidates to the sample are proposed based on the points of the 
+last generation and their weight, plus some noise determined by a 
+perturbation Kernel; the weight of a point $(\theta^*, M^*)$ on 
+generation $t$ is a estimative of  
+$p (\theta = \theta^*, M = M^* | \rho_{M, \theta} \leq \epsilon_t)$. The 
+pseudo-code~\ref{code:abc_smc} presents the ABC SMC algorithm.
+\begin{algorithm}[h]
+\textsc{ABC SMC} $(\mathcal{M}, D)$
+\begin{algorithmic}[1]
+    \State Define the sequence $\epsilon_1, \ldots, \epsilon_T$.
+    \State Define $N$, the sample size for each generation. 
+    \State Sample $\{(\theta^{(1, 1)}, M^{(1, 1)}), 
+                     (\theta^{(1, 2)}, M^{(1, 2)}), \ldots, 
+                     (\theta^{(1, N)}, M^{(1, N)})\}$ from 
+                     $p (\theta, M| D)$.
+    \State Set $w^{(1, i)} = 1, \forall i \in {1, \ldots, N}$.  
+    \For{$t \in \{1, \ldots, T\}$}
+        \State $i \gets 1$
+        \While{$i \leq N$}
+            \State Sample $M^*$ from $p (M | D)$.
+            \State Sample $(\theta^{(t - 1, k)}, M^*)$ from the 
+                last generation with weight $w^{(t - 1, k)}$.
+            \State Create $(\theta^*, M^*)$ by perturbing 
+                $\theta^{(t - 1, k)}$; 
+                $\theta^* \propto K^t(\theta | \theta^{(t - 1, k)})$
+            \If{$p (\theta^* | M^*) = 0$}
+                \State Continue to next iteration.
+            \EndIf
+            \State $D* \gets \phi (M^*, \theta^*)$
+            \If{$d (D^*, D) \leq \epsilon$}
+                \State $i \gets i + 1$
+                \State $(\theta^{(t, i)}, M^{(t, i)}) \gets 
+                    (\theta^*, M^*)$
+            \EndIf
+        \EndWhile
+        \State Calculate the weights of each parameter of the 
+            population:
+            \begin{equation*}
+                w^{(t, i)} = \frac{p (\theta^{(t, i)} | M^{(t, i)})}
+                         {\sum_{j = 1}^N w^{(t-1, j)}p_{K^t}
+                            (\theta^{(t-1, j)}, \theta^{(t, i)})}
+            \end{equation*}
+    \EndFor
+    \Return
+\end{algorithmic}
+\vspace{1em}
+
+\caption{Pseudo-code of ABC SMC.}
+\label{code:abc_smc}
+\end{algorithm}
+
+% TODO: An implementation of the ABC SMC algorithm is available on the 
+% software...
+
+
 % Experiments comparing both approaches
