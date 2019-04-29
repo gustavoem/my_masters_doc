@@ -203,13 +203,14 @@ we explain how to choose this values and present the estimator we used
 to estimate $p (D | M)$.
 
 \subsubsection{Power posteriors sampling}
+\label{sec:power_posteriors_sampling}
 Given a sequence of temperatures, the method used to sample from the
 power posteriors has three different steps, all of them using 
 Metropolis-Hastings algorithms, similarly to what is done by Xu et al. 
 (2010). For each of the $T$ temperatures, the first two phases are
 run separately, generating $T$ chains that are samples of the power 
 posteriors. Then, on the third phase, each chain continues to grow, but
-not separately because two random chains will have their last accepted 
+not independently because two random chains will have their last accepted 
 point swapped, what causes the chains to be mixed; this approach on 
 mixing these chains is called Populational Monte Carlo Markov 
 Chain (Populational MCMC)~\cite{Friel2008}.
@@ -217,12 +218,12 @@ Chain (Populational MCMC)~\cite{Friel2008}.
 The first step of sampling is run independently for each temperature. 
 The Metropolis-Hastings performed on this step is started taking a 
 sample from the parameter priors, and the proposal distribution is 
-a multivariate log-normal that has mean on the last point sampled and
-with a diagonal covariance matrix, i.e. parameters are proposed 
-independently. This covariance matrix is updated repeatedly after a 
-predefined number of iterations with the goal of adapting the proposal 
-distribution to the parameter space. This update is performed as 
-proposed in Gelman et al. (2013): 
+a multivariate Gaussian that has mean approximately equal to the last 
+point sampled and with a diagonal covariance matrix, i.e. parameters are 
+proposed independently. This covariance matrix is updated repeatedly 
+after a predefined number of iterations with the goal of adapting the 
+proposal distribution to the parameter space. This update is performed 
+as proposed in Gelman et al. (2013): 
 \begin{itemize}
 \item{if the acceptance rate of parameter points in the last 
     iterations is greater than $0.44$, then increase the variance of the
@@ -230,25 +231,152 @@ proposed in Gelman et al. (2013):
 \item{if the acceptance rate is lower than $0.23$, then decrease the 
     variance of the jump.}
 \end{itemize}
-Recalling that our target function (sampling function) is 
-$p (\theta | M, D)$, then we have that the probability of accepting a 
-proposed parameter $\theta^*$, given that the current point is 
-$\theta^{(t, i)}$, is $\min (1, r)$ with
+Given that we are taking a sample from a power posterior with 
+temperature $\beta_t$, the target function is 
+$p_{\beta_t} (\theta)$. Hence, if the current point 
+is $\theta^{(t, i)}$, the probability of accepting a proposed parameter 
+$\theta^* \sim J_{(t, i)} (\theta^* | \theta^{(t, i)})$, is 
+$\min (1, r)$ with
 \begin{equation*}
-    r = \frac{p (\theta^* | M, D)}
-             {p (D | \theta^{(t, i)})}
+    r = \frac{p_{\beta_t} (\theta^*)}
+             {p_{\beta_t} (\theta^{(t, i)})}
         \frac{J_{(t, i)} (\theta^{(t, i)} | \theta^*)}
-             {J_{(t, i)} (\theta^* | \theta^{(t, i)})}
+             {J_{(t, i)} (\theta^* | \theta^{(t, i)})},
 \end{equation*}
-with $J$ being the 
+with $J_{(t, i)}$ being the proposal jump distribution on iteration $i$ 
+on chain of temperature $\beta_t$. Because sampling from $p_t(\theta | 
+M, D)$ directly is not possible, and  since we defined in the beginning 
+of the chapter that 
+$p_{\beta_t} (\theta)~\propto~p (D|M, \theta)^{\beta_t} p (\theta | M)$,
+we can rewrite this equation as:
+\begin{equation}
+    r = \frac{p (D | M, \theta^*)^{\beta_t}}
+             {p (D | M, \theta^{(t, i)})^{\beta_t}}
+        \frac{p (\theta^* | M)}
+             {p (\theta^{(t, i)} | M)}
+        \frac{J_{(t, i)} (\theta^{(t, i)} | \theta^*)}
+             {J_{(t, i)} (\theta^* | \theta^{(t, i)})}.
+    \label{eq:mh_ratio_step1}
+\end{equation}
+
+The second iteration also samples each temperature independently, and
+differently from the first step, the parameters are not necessarily 
+sampled independently. In fact, a portion of the last sampled parameters
+on step one is used to create a covariance matrix, and this matrix is
+then used as the covariance matrix of the first proposal distribution of 
+the second step of sampling. After the first iteration, for every 
+sampled parameter on this step, the covariance matrix is updated to be
+the sample covariance of the selected points of step one plus the  
+current points accepted on step two. The probability of accepting a 
+proposed parameter on this step is the same  as it was on the first 
+step, as described by equation~\ref{eq:mh_ratio_step1}.
+
+At the end of the second step, we will have $T$ chains of sampled 
+parameters, containing the selected parameters of the first and second 
+steps. For each of these chains there is a covariance matrix that was
+being used as the covariance of the proposal distribution of the 
+respective temperature. On step three, the covariance matrix is fixed 
+and a Populational MCMC algorithm is performed. This algorithm continues 
+the sampling for each temperature, now with a fixed covariance on the 
+proposal distribution, and also mixes the samples of different 
+temperatures in every iteration. This mix is achieved by swapping the 
+last sampled elements of two random power posterior chains; the first of
+the two chains chosen to swap, of temperature $\beta_i$, is chosen 
+uniformly, while the second chain, of temperature $\beta_j$, is chosen 
+following a Discrete Laplacian distribution given $\beta_i$, with 
+probability function $p (j | i) \propto e^{|i - j| / 2}$. This algorithm 
+was proposed by Friel et al. (2008) and can be summarized in the 
+following steps:
+\begin{enumerate}
+    \item{For each temperature $\beta_t$, $t \in \{1, \ldots, T\}$, 
+        update the $t$-th chain using MCMC with a proposal distribution
+        that has the same covariance matrix used on the last iteration
+        of temperature $\beta_t$ of the second step.}
+    \item{Choose uniformly $i$ from $\{1, \ldots, T\}$. Then, choose
+        $j$ with probability density function $p (j | i) \propto 
+        e^{|i - j| / 2}$. Finally, swap the last sampled points of 
+        the chains of temperature $\beta_i$ and $\beta_j$, which are
+        $\theta^{(i, k)}$ and $\theta^{(j, k)}$, with probability 
+        $\min\{1, r\}$, where: }
+
+    \begin{equation*}
+        r = \frac{p_{\beta_i}\left(\theta^{(j, k)}\right)}
+             {p_{\beta_i}\left(\theta^{(i, k)}\right)}
+        \frac{p_{\beta_j}\left(\theta^{(i, k)}\right)}
+             {p_{\beta_j}\left(\theta^{(j, k)}\right)}
+        \frac{p (j | i)}
+             {p (i | j)}
+    \end{equation*}
+    which can be simplified to:
+    \begin{equation*}
+        r = \left[\frac{p \left(D | \theta^{(j, k)}\right)}
+                {p \left(D | \theta^{(i, k)}\right)}\right]^{\beta_i}
+            \left[\frac{p \left(D | \theta^{(i, k)}\right)}
+                {p \left(D | \theta^{(j, k)}\right)}\right]^{\beta_j}
+            \frac{p (j | i)}
+                 {p (i | j)}
+    \end{equation*}
+\end{enumerate}
+
+After finishing the third step of sampling, the samples obtained on the
+first two phases are discarded and only the samples from the last phase
+are used to estimate the marginal likelihood.
+
+\subsubsection{Estimators of the Marginal Likelihood}
+The sampling procedure explained on the 
+section~\ref{sec:power_posteriors_sampling} produces samples of the 
+power posteriors $p_{\beta_1} (\theta), \ldots, p_{\beta_T} (\theta)$, 
+and this samples can be used to estimate logarithm of the marginal 
+likelihood:
+\begin{equation}
+    \ln p (D | M) = \int_0^1 \expectation_{p_\beta (\theta)} 
+        [\ln p(D|\theta, M)]d\beta.
+    \label{eq:marginal_likelihood_again}
+\end{equation}
+And this can be achieved using both numerical integration or creating an
+unbiased estimator. The choice of either approach of estimation will
+imply in a method for choosing the sequence of temperatures $\beta_1, 
+\ldots, \beta_T$. 
+
+The method proposed by Friel et al. (2008), uses a numerical integration 
+method to estimate the integral~\ref{eq:marginal_likelihood_again}. 
+Given that $T$ temperatures, $0 = \beta_1 < \beta_2 < \ldots < \beta_T = 
+1$, were selected and samples of its respective power posteriors were 
+generated, then using trapezoidal rule over the temperature allows us to 
+estimate the integral as:
+\begin{equation*}
+    \log{p(D| M)} \approx \sum_{t = 0}^{T - 1} (\beta_{t + 1} - \beta_t)
+\frac{
+    \expectation_{p_{\beta_{t + 1}} (\theta)}[\log p(D | M, \theta)]
++ 
+    \expectation_{p_{\beta_{t}} (\theta)}[\log p(D | M, \theta)]}
+{2}
+\end{equation*}
+and if the sample of power posterior of temperature $\beta_t$ has $M_t$
+parameter points, then we can rewrite this equation as:
+\begin{equation}
+\log{p(D| M)} \approx \sum_{t = 0}^{T - 1} (\beta_{t + 1} - \beta_t)
+\frac{
+    \frac{1}{M_{t + 1}}
+    \sum_{i = 1}^{M_{t + 1}}  \log p(D | M, \theta^{(t + 1, i)})
++ 
+    \frac{1}{M_t}
+    \sum_{i = 1}^{M_t}  \log p(D | M, \theta^{(t, i)})}
+{2}
+\end{equation}
+According to the work of Friel et al. (2008), a good temperature 
+schedule for $\beta_1, \ldots, \beta_T$ that can be used in this 
+approach is:
+\begin{equation*}
+    \beta_t = \left(\frac{t - 1}{T - 1}\right)^{c}, 
+\end{equation*}
+with $t \in {1, \ldots, T}$; with better results being achieved when 
+$n$ between $20$ and $100$ and $c$ between $3$ and $5$.
 
 
 %\subsection{Implementation of SigNetMS}
 % -> Python
 % -> Uses the libSBML python package
-
-
-
 
 
 % ABC-SysBio
