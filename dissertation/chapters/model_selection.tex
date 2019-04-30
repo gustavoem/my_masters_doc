@@ -370,9 +370,35 @@ approach is:
 \begin{equation*}
     \beta_t = \left(\frac{t - 1}{T - 1}\right)^{c}, 
 \end{equation*}
-with $t \in {1, \ldots, T}$; with better results being achieved when 
-$n$ between $20$ and $100$ and $c$ between $3$ and $5$.
+with $t \in {1, \ldots, T}$; with better results achieved when $n$ is
+between $20$ and $100$ and $c$ is between $3$ and $5$.
 
+Another method, proposed by Xu et al. (2010), considers that the 
+temperature $\beta$ can be treated as a random variable, and therefore 
+we can rewrite integral~\ref{eq:marginal_likelihood_again} as:
+\begin{equation}
+    \expectation_{p (\beta)} 
+        \left[\frac
+            {\expectation_{p_\beta (\theta)}[\ln p(D|\theta, M)]}
+            {p (\beta)}
+        \right]
+\end{equation}
+The author uses this ideas to derive the following estimator. First, 
+the interval $[0, 1]$ is discretized into $S - 1$ disjoint intervals 
+$\Delta\beta_i = [t_{i + 1}, t_i]$ such that  $\sum_{i = 1}^{S - 1} 
+(t_{i + 1} - t_{i}) = 1$. Then, for each interval $\Delta\beta_i$, $T_i$ 
+temperatures are taken randomly from the uniform distribution on the 
+interval $[t_{i + 1}, t_i]$. Finally, the estimator of the logarithm of
+the marginal likelihood is given by:
+\begin{equation}
+    \sum_{s = 1}^{S - 1}\frac{|\Delta\beta_k|}
+                             {T_k}
+        \sum_{i = 1}^{M_k} \log p (D | M, \theta^{(\beta_{k, i})})
+\end{equation}
+where $\beta_{k, i}$ is the $i$-th sampled temperature from the interval
+$\Delta\beta_k$; $\theta^{(\beta_{k, i})}$ is a parameter sampled 
+from the power posterior $p_{\beta_{k, i}} (\theta)$; and 
+$|\Delta\beta_k| = t_{k + 1} - t_k$.
 
 %\subsection{Implementation of SigNetMS}
 % -> Python
