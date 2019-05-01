@@ -1,0 +1,180 @@
+\documentclass[12pt, twoside]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, top=30mm, left=20mm, bottom=20mm,
+    right=20mm]{geometry}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{fancyhdr}
+\fancyhead[LO,RE]{\itshape \nouppercase Chapter \arabic{chapter}}
+\usepackage{amssymb}
+\usepackage{csquotes}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{mathtools} % shortintertext
+\usepackage{faktor}
+\usepackage[backend=bibtex, 
+            maxbibnames=10,
+            style=alphabetic]{biblatex}
+\usepackage{hyperref}
+\usepackage{subfigure}
+\usepackage[font={small,it}]{caption}
+\usepackage{algpseudocode}
+\usepackage[plain]{algorithm}
+\usepackage[shortlabels]{enumitem}
+\usepackage{booktabs}
+\usepackage{mhchem} % chemical reactions
+\usepackage{cleveref} % multireference (eq 1.2-1.5)
+
+\pagestyle{fancy}
+
+% Images path
+\graphicspath{ {img/} }
+
+% ABNT foreign words should be in italic
+\newcommand{\foreignword}[1]{\textit{#1}}
+\newcommand{\toolname}[1]{\textit{#1}}
+\newcommand{\fieldR}{\mathbb{R}}
+\newcommand{\powerset}{\mathcal{P}}
+\newcommand{\probability}{\mathbb{P}}
+\newcommand{\expectation}{\mathbb{E}}
+\newcommand{\algname}[1]{\texttt{#1}}
+\newcommand{\langname}[1]{\texttt{#1}}
+\newcommand{\varname}[1]{\texttt{#1}}
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+\newcommand{\ceil}[1]{\lceil #1 \rceil}
+\newcommand{\mathsc}[1]{{\normalfont\textsc{#1}}}
+\newcommand{\forest}{\mathcal{F}}
+\newcommand{\pfsnode}[1]{\mathbf #1}
+\newcommand{\species}[1]{\textit{#1}}
+\newcommand{\gender}[1]{\textit{#1}}
+
+% remove returns of the same line in pseudocodes
+\algrenewcommand\Return{\State \algorithmicreturn{} } 
+
+\DeclareMathOperator*{\argmin}{argmin} 
+
+\addbibresource{references.bib}
+
+\newtheorem{mydefinition}{Definition}
+\numberwithin{mydefinition}{section}
+\newtheorem{mytheorem}{Theorem}
+\numberwithin{mytheorem}{section}
+\newtheorem{mylemma}{Lemma}
+\numberwithin{mylemma}{section}
+\newtheorem{corollary}{Corollary}
+\numberwithin{corollary}{section}
+
+
+\begin{document}
+\pagenumbering{roman}
+\thispagestyle{empty}
+\begin{center}
+{\Large
+{\bf Identification of cell signaling pathways based on biochemical 
+    reaction kinetics repositories}\\
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+    {\bf \href{mailto:gustavo.estrela.matos@gmail.com}{Gustavo Estrela de Matos}}\\
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\textsc{
+    Text presented\\[-0.25cm] 
+    to\\[-0.25cm]
+    Institute of Mathematics and Statistics\\[-0.25cm]
+    of the\\[-0.25cm]
+    University of São Paulo\\[-0.25cm]
+    For\\[-0.25cm]
+    The Qualification Exam Of Master Of Science\\
+    }
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+Field of knowledge: Computer Science\\
+\bigskip
+Advisor: Dr. Marcelo da Silva Reis\\
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+Center of Toxins, Immune-Response and Cell Signaling (CeTICS)\\
+\bigskip
+Special Laboratory of Cell Cycle, Butantan Institute\\
+\bigskip
+\bigskip
+{\normalsize During the development of this work the author received 
+    financial support of FAPESP.}\\
+\bigskip
+\bigskip
+\bigskip
+São Paulo, \today
+}
+\end{center}
+\newpage
+
+\chapter*{Abstract}
+Cell signaling pathways are composed of a set of biochemical reactions 
+that are associated with signal transmission within the cell and its 
+surroundings. Traditionally, these pathways are identified through 
+statistical analyses on results from biological assays, in which 
+involved chemical species are quantified. However, once generally it is 
+measured only a few time points for a fraction of the chemical species, 
+to effectively tackle this problem it is required to design and simulate 
+functional dynamic models. Recently, it was introduced a method to 
+design functional models, which is based on systematic modifications of 
+an initial model through the inclusion of biochemical reactions, which 
+in turn were obtained from the interactome repository KEGG. 
+Nevertheless, this method presents some shortcomings that impair the 
+estimated model; among them are the incompleteness of the information 
+extracted from KEGG, the absence of rate constants, the usage of 
+sub-optimal search algorithms and an unsatisfactory overfitting 
+penalization. In this project, we propose a new methodology for 
+identification of cell signaling pathways, which will make use of a 
+myriad of public interactome and biochemical reaction kinetics 
+repositories to deal with the incompleteness of a priori information. 
+Moreover, we will use optimal algorithms for model selection, as well as 
+more effective cost functions for overfitting penalization. The new 
+methodology will be tested on artificial instances and also on cell 
+signaling pathways identification in our case study, the Y1 mouse 
+adrenocortical tumor cell line. (AU)
+ 
+\tableofcontents
+
+\clearpage
+\pagenumbering{arabic} 
+
+\nocite{*}
+\chapter{Introduction}
+\label{chap:intro}
+\input{chapters/introduction}
+
+\chapter{Fundamental Concepts}
+\label{chap:fundamental_concepts}
+\input{chapters/fundamental_concepts}
+
+\chapter{Model Selection}
+\label{chap:model_selection}
+\input{chapters/model_selection}
+
+\chapter{Experiments on Model Selection}
+\label{chap:exp_on_model_selection}
+\label{chaptes/exp_on_model_selection}
+
+\chapter{Future Activities}
+\label{chap:future_activities}
+\input{chapters/future_activities}
+
+\newpage
+\printbibliography
+
+\end{document}
+
