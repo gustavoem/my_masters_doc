@@ -51,7 +51,7 @@ then come up with a system of ordinary differential equations (ODEs)
 that can model the dynamics of the concentration of each chemical 
 species from the pathway. Generally, these systems are complex and 
 cumbersome, if not impossible, to be solved analytically, therefore we 
-resort on computational models that apply numerical methods to 
+resort on computational tools that apply numerical methods to 
 approximate solutions of these systems.
 
 % How do we create these computational models and what should they do?
@@ -59,12 +59,9 @@ In this work, we are interested in computational models that can
 reproduce the behavior of signaling networks, comparing experimental 
 measures---generally based on Western blot data---to simulated results.
 The figure~\ref{fig:signal_pathway_example} shows a set of interactions
-as well as parameters of a model of a signaling network. To create these 
-computational models, two main tasks need to be accomplished.
-
-{\color{blue} TODO: rewords some things here. A model has parameters, 
-finding the parameter values is more like a model calibration instead
-of a model creation.}
+as well as parameters of a model of a signaling network. To create 
+computational models that are able to simulate the behaviour of a 
+signaling pathway, two main tasks need to be accomplished.
 
 \begin{figure}[!ht]
 \centering 
@@ -81,49 +78,52 @@ of a model creation.}
 \label{fig:signal_pathway_example}
 \end{figure}
 
-The first task one must complete to create a model is to determine a set 
-of interactions to consider in the ODE system. Searching for pathway 
-maps on the Kyoto Encyclopedia of Genes and Genomes 
-(KEGG)~\cite{Kanehisa2000kegg} is a good start. The KEGG PATHWAY 
-Database provides manually drawn diagrams that represent signaling 
-networks created with experimental evidences. However, it is possible 
-that there is no pathway on KEGG that is able to correctly represent the 
-biological experiment of interest; for those situations, it is necessary 
-to modify the pathway by adding or even removing interactions. One might 
-reason that we should use as many interactions as we can to get a better 
-simulation, however, this usually implies in poor or computationally 
-infeasible models because of two reasons: first, complex models will 
-require more time in the numerical solution computation, which may be 
-infeasible due to limited computational resources; and second, when 
-considering many interactions, we are also placing many parameters 
-(multiplying constants of the differential equations) on the model, and 
-finding appropriate values for them becomes harder as we increase the 
-number of parameters.
+The first task one must complete to create a model that is able to 
+simulate a signaling pathway is to determine a set 
+of interactions that will be considered in the ODE system. Searching for 
+pathway maps on the Kyoto Encyclopedia of Genes and Genomes 
+(KEGG)~\cite{Kanehisa2000kegg} is a good start for this task. The KEGG 
+PATHWAY Database provides manually drawn diagrams that represent 
+signaling networks created with experimental evidences. However, it is 
+possible that there is no pathway on KEGG that is able to correctly 
+represent the biological experiment of interest; for those situations, 
+it is necessary to modify the pathway by adding or removing 
+interactions. One might reason that we should use as many interactions 
+as we can to get a better simulation, however, this usually implies in 
+poor or computationally infeasible models because of two reasons: first, 
+complex models will require more time for a numerical solution 
+computation, which may be infeasible due to limited computational 
+resources; and second, when considering many interactions, we are also 
+placing many parameters (multiplying constants of the differential 
+equations) on the model, and finding appropriate values for them becomes 
+harder as we increase the number of parameters.
 
-The second task to create a model is to find values for all the system
-parameters. There are two approaches for this task, one can either 
-fetch values for these constants from the literature or one can find 
-values that makes the model output approximate the experimental 
-observations. For the first approach, repositories such as 
-BioModels~\cite{le2006biomodels} can be used; for the second approach, 
-statistical and optimization methods can be used. For optimization, it 
-is necessary to define a metric that can evaluate how close the 
-parameters brings the model output to the experimental observation so
-that it is possible to search for the optimal parameter in the parameter 
-space. Statistical inference, in the other hand, usually tries to 
-maximize some likelihood function, which is defined to represent the 
-probability of a model, with a set of parameter values, to reproduce the 
-experimental observation.
+The second task is to find values for all the model parameters. There 
+are two approaches for this task, one can either fetch values for these 
+constants from the literature or one can find values that makes the 
+model output approximate the experimental observations. For the first 
+approach, repositories such as BioModels~\cite{le2006biomodels} can be 
+used; for the second approach, statistical and optimization methods can 
+be used. For optimization, it is necessary to define a metric that can 
+evaluate how close the parameters brings the model output to the 
+experimental observation so that it is possible to search for the 
+optimal parameter in the parameter space. Statistical inference, in the 
+other hand, will usually try to maximize some likelihood function (find
+parameters that makes the data more likely to happen) on a more 
+classical approach, while in a Bayesian approach the goal is usually to
+compute some posterior distribution for the model parameters (the 
+probability of parameter values given the experimental observation).
+
 
 % However, we might have missed some interactions or even added irrelevant ones
 After completing both tasks, however, as we mentioned before, we might 
-still not have found a model that fairly approximates the biological 
-experiment of interest. That could indicate that the set of chemical 
-interactions chosen for the model is incomplete or has interactions that
-are not relevant for the biological experiment. Therefore, it is 
-desirable to construct a systematic method of modifying the set of 
-chemical reactions of the model in order to find a good set to represent 
-the signaling network.
+still not have found a pair of model and parameter values that fairly 
+approximates the biological experiment of interest. That could indicate 
+that the set of chemical interactions chosen for the model is 
+incomplete or has interactions that are not relevant for the biological 
+experiment. Therefore, it is desirable to construct a systematic method 
+of modifying the set of chemical reactions of the model in order to 
+find a good set to represent the signaling network.
 
 % Lulu solved it as a combinatorial problem
 With the title ``A method to modify molecular signaling networks through
@@ -131,23 +131,25 @@ examination of interactome databases"~\cite{Wu15} Lulu Wu presented in
 her masters dissertation a methodology to systematically modify 
 computational models of signaling networks to better simulate biological 
 experiments. Starting with a model that does not approximate well the 
-biological data, this methodology proposes to add a set of interactions
-to the model topology in order to better simulate the signaling pathway 
-of interest. This set of interactions is a subset of interactions from a 
-database created by Lulu Wu, joining information from many static maps 
-of signaling networks available on KEGG. The choice of this subset can 
-be modeled as a combinatorial optimization problem, the feature 
+biological data, this methodology proposes to add to the model topology 
+a set of chemical interactions that are relevant for the biochemical 
+experiment, and consequently approximates the model simulation to 
+experimental data. This set of interactions is a subset of interactions 
+from a database created by Lulu Wu, joining information from many static 
+maps of signaling networks available on KEGG. The choice of this subset 
+can be modeled as a combinatorial optimization problem, the feature 
 selection problem, in which the search space is the set of all possible 
 subsets of interactions (features) to be added. The cost function of 
 this problem, however, is not as simple to define as the search space. 
-Note that the search space itself does not define models, but only the 
-topology, i.e. the set of interactions, therefore, to consider the 
-second task of creating computational models for signaling networks, the 
-cost function must take into account the set of values for the model 
-parameters. As an example, we could define the cost as the minimum 
-distance between model and experimental measures considering all 
-possibilities of parameter values; however, unfortunately, finding the 
-minimizing parameter values is a hard problem.
+Note that points from the search space do not fully define models, but 
+only the topology of the model, i.e. the set of interactions, so there 
+is still need to define parameter values to produce a simulation. 
+Therefore, to analyze the quality of a model, the cost function must 
+take into account the set of values for the model parameters. As an 
+example, we could define the cost as the minimum distance between 
+experimental and model measures considering all possibilities of 
+parameter values; however, unfortunately, finding the minimizing 
+parameter values is a hard problem.
 
 Since this is a hard problem, the method presented by Lulu Wu 
 implements a heuristic version of this cost function, moreover, the 
@@ -219,9 +221,11 @@ estimate
 \begin{equation*}
 p (D|M) = \int_{\theta \in \Theta} p (D | \theta, M)p(\theta | M)d\theta, 
 \end{equation*}
-where $p (D|\theta, M)$ is the likelihood of model $M$, with parameters
-$\theta$, to reproduce the experimental data $D$; $p(\theta|M)$ is the
-prior probability of $\theta$; and finally, $p (D|M)$ is the probability 
+where $p (D|\theta, M)$ is the likelihood of data $D$, given that the
+model $M$ with parameters $\theta$ are ``correct'', which is the same
+as stating that this model and parameters determine the behaviour of the
+cell; $p(\theta|M)$ is the prior probability of $\theta$; and finally, 
+$p (D|M)$ is the probability 
 of the data being generated by model $M$. This cost function has as an 
 advantage the fact that models are not ranked using a single value for 
 parameters, instead, the cost considers all possibilities of parameters, 
