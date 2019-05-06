@@ -206,12 +206,12 @@ on the choice of the sequence $\{\beta_1, \beta_2, \ldots, \beta_T\}$,
 on the Metropolis-Hastings (MH) algorithms used, and finally on the 
 estimator.
 
-We are now going to show the methodology we used to estimate parameter 
-values. First, we assume that there is a 
-chosen sequence of $\{\beta_1, \beta_2, \ldots, \beta_T\}$ to explain 
-how to generate samples of power posterior distributions with these 
-temperatures. Then, we explain how to choose this values and present two
-possible estimators for $p (D | M)$.
+We are now going to show a possible methodology to estimate parameter 
+values. First, we assume that there is a chosen sequence of 
+$\{\beta_1, \beta_2, \ldots, \beta_T\}$ to explain how to generate 
+samples of power posterior distributions with these temperatures. Then, 
+we explain how to choose these values and present two possible 
+estimators for $p (D | M)$.
 
 \subsubsection{Power posteriors sampling}
 \label{sec:power_posteriors_sampling}
@@ -228,7 +228,7 @@ Chain (Populational MCMC)~\cite{Friel2008}.
 
 The first step of sampling is run independently for each temperature. 
 The Metropolis-Hastings performed on this step is started taking a 
-sample from the parameter priors, and the proposal distribution is 
+sample from the parameter priors. The proposal distribution is 
 a multivariate Gaussian that has mean approximately equal to the last 
 point sampled and with a diagonal covariance matrix, i.e. parameters are 
 proposed independently. This covariance matrix is updated repeatedly 
@@ -276,8 +276,8 @@ sampled independently. In fact, a portion of the last sampled parameters
 on step one is used to create a covariance matrix, and this matrix is
 then used as the covariance matrix of the first proposal distribution of 
 the second step of sampling. After the first iteration, for every 
-sampled parameter on this step, the covariance matrix is updated to be
-the sample covariance of the selected points of step one plus the  
+sampled parameter on the second step, the covariance matrix is updated 
+to be the sample covariance of the selected points of step one plus the  
 current points accepted on step two. The probability of accepting a 
 proposed parameter on this step is the same  as it was on the first 
 step, as described by equation~\ref{eq:mh_ratio_step1}.
