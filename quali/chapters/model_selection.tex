@@ -13,6 +13,7 @@ allows us to estimate the probability $p (M | D)$ in a simpler
 algorithm.
 
 \section{Model ranking using Marginal Likelihood}
+\label{sec:marginal_likelihood_method}
 % Simple explanation of this model ranking
 % Describe the likelihood function 
 % However, this is very hard to calculate
@@ -228,13 +229,13 @@ Chain (Populational MCMC)~\cite{Friel2008}.
 
 The first step of sampling is run independently for each temperature. 
 The Metropolis-Hastings performed on this step is started taking a 
-sample from the parameter priors. The proposal distribution is 
-a multivariate Gaussian that has mean approximately equal to the last 
-point sampled and with a diagonal covariance matrix, i.e. parameters are 
-proposed independently. This covariance matrix is updated repeatedly 
-after a predefined number of iterations with the goal of adapting the 
-proposal distribution to the parameter space. This update is performed 
-as proposed in Gelman et al. (2013): 
+sample from the parameter priors. The proposal distribution has to 
+generate positive numbers and it should have mean approximately equal to 
+the last point sampled; more than that, we decide to use a diagonal 
+covariance matrix, i.e. parameters are proposed independently. This 
+covariance matrix is updated after every predefined number of iterations 
+with the goal of adapting the proposal distribution to the parameter 
+space. This update is performed as proposed in Gelman et al. (2013): 
 \begin{itemize}
 \item{if the acceptance rate of parameter points in the last 
     iterations is greater than $0.44$, then increase the variance of the
@@ -412,10 +413,6 @@ from the power posterior $p_{\beta_{k, i}} (\theta)$; and
 $|\Delta\beta_k| = t_{k + 1} - t_k$. However, Xu et al. do not provide
 information about the discretization method of the interval $[0, 1]$.
 
-%\subsection{Implementation of SigNetMS}
-% -> Python
-% -> Uses the libSBML python package
-
 
 % ABC-SysBio
 % What do I want to talk about ABC-SysBio?
@@ -430,6 +427,7 @@ information about the discretization method of the interval $[0, 1]$.
 % How would we get model ranking from this result?
 % The ABC-SysBio Software
 \section{Approximate Bayesian Computation}
+\label{sec:abc_method}
 Approximate Bayesian Computation (ABC) is an approach that allows 
 generating samples from the posterior distribution without accessing the
 likelihood function. Adding a model indicator parameter to parameters 

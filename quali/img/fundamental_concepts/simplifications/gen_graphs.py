@@ -35,7 +35,7 @@ ode.define_parameter ('E_0', 10)
 ode.define_parameter ('K_m', K_m)
 ode.print_equations ()
 
-ode.overtime_plot (['S', 'ES', 'P'], np.linspace (0, 100, 1000), 
+ode.overtime_plot (['S', 'P', 'ES'], np.linspace (0, 100, 1000), 
         filename='mm_system.pdf', xlabel='Time (seconds)', 
         ylabel='Concentration (mol/$\mu m^3$)', title=None)
 
