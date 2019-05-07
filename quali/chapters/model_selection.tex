@@ -337,14 +337,14 @@ are used to estimate the marginal likelihood.
 The sampling procedure explained on the 
 section~\ref{sec:power_posteriors_sampling} produces samples of the 
 power posteriors $p_{\beta_1} (\theta), \ldots, p_{\beta_T} (\theta)$, 
-and this samples can be used to estimate logarithm of the marginal 
+and these samples can be used to estimate logarithm of the marginal 
 likelihood:
 \begin{equation}
     \ln p (D | M) = \int_0^1 \expectation_{p_\beta (\theta)} 
         [\ln p(D|\theta, M)]d\beta.
     \label{eq:marginal_likelihood_again}
 \end{equation}
-And this can be achieved using both numerical integration or creating an
+This can be achieved using both numerical integration or creating an
 unbiased estimator. The choice of either approach of estimation will
 imply in a method for choosing the sequence of temperatures $\beta_1, 
 \ldots, \beta_T$. 
@@ -381,7 +381,7 @@ approach is:
 \begin{equation*}
     \beta_t = \left(\frac{t - 1}{T - 1}\right)^{c}, 
 \end{equation*}
-with $t \in {1, \ldots, T}$; with better results achieved when $n$ is
+with $t \in {1, \ldots, T}$; with better results achieved when $T$ is
 between $20$ and $100$ and $c$ is between $3$ and $5$.
 
 Another method, proposed by Xu et al. (2010), considers that the 
@@ -409,7 +409,8 @@ the marginal likelihood is given by:
 where $\beta_{k, i}$ is the $i$-th sampled temperature from the interval
 $\Delta\beta_k$; $\theta^{(\beta_{k, i})}$ is a parameter sampled 
 from the power posterior $p_{\beta_{k, i}} (\theta)$; and 
-$|\Delta\beta_k| = t_{k + 1} - t_k$.
+$|\Delta\beta_k| = t_{k + 1} - t_k$. However, Xu et al. do not provide
+information about the discretization method of the interval $[0, 1]$.
 
 %\subsection{Implementation of SigNetMS}
 % -> Python
