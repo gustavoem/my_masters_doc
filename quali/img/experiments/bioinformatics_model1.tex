@@ -1,7 +1,7 @@
 \documentclass[]{article}
 
 \usepackage[utf8]{inputenc}
-\usepackage[paperheight=1.5in,paperwidth=2.1in,margin=0in]{geometry}
+\usepackage[paperheight=1.0in,paperwidth=2.1in,margin=0in]{geometry}
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows,automata,calc}
 \usepackage{color}
@@ -29,19 +29,11 @@
 
 \node at (-4.1, 7) (Rpp) {$\bf R_{pp}$};
 \draw [->, thick] ($(RS)+(+.2,0)$) to node {$k_4$} ($(Rpp)+(-0.3, 0)$);
-
-
-\node at (-6.1, 6) (RppPha) {$\bf R_{pp}PhA$};
-\node at (-7.6, 6) (LeftRppPha) {};
-\node at (-4.6, 6) (RightRppPha) {};
-\draw [<-, thick] ($(Rpp)+(0, -0.2)$) edge[out=270, in=0] ($(RightRppPha)$);
-\draw [<-, thick] ($(R)+(0, -0.2)$) edge[out=270, in=180] ($(LeftRppPha)$);
-\draw [->, thick] ($(RightRppPha)$) to node[above] {$k_5, k_6$} (RppPha);
-\draw [-, thick] ($(LeftRppPha)$) to node[above] {$k_7$} (RppPha);
-
-\node at (-6.1, 5) (Pha) {$\bf PhA$};
-\draw [<-, thick] (Pha) edge[in=0, out=0] (RightRppPha.center);
-\draw [<-, thick] (Pha) edge[in=180, out=180] (LeftRppPha.center);
+\node at (-4.1, 6.5) (downRpp) {};
+\node at (-8.1, 6.5) (downR) {};
+    \draw [-, thick] (Rpp) -- ($(downRpp)+(0,-.014)$);
+    \draw [-, thick] (R) -- ($(downR)+(0,-.014)$);
+    \draw [-, thick] (downRpp.center) to node {$V, K_m$} (downR.center);
 
 
 
