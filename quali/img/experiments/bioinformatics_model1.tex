@@ -31,11 +31,9 @@
 \draw [->, thick] ($(RS)+(+.2,0)$) to node {$k_4$} ($(Rpp)+(-0.3, 0)$);
 \node at (-4.1, 6.5) (downRpp) {};
 \node at (-8.1, 6.5) (downR) {};
-    \draw [-, thick] (Rpp) -- ($(downRpp)+(0,-.014)$);
-    \draw [-, thick] (R) -- ($(downR)+(0,-.014)$);
+    \draw [-, thick] ($(Rpp)+(0, -.2)$) -- ($(downRpp)+(0,-.014)$);
+    \draw [<-, thick] ($(R)+(0,-.1)$) -- ($(downR)+(0,-.014)$);
     \draw [-, thick] (downRpp.center) to node {$V, K_m$} (downR.center);
-
-
 
 \end{tikzpicture} 
 }
