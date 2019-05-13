@@ -135,7 +135,7 @@ biological data, this methodology proposes to add to the model topology
 a set of chemical interactions that are relevant for the biochemical 
 experiment, and consequently approximates the model simulation to 
 experimental data. This set of interactions is a subset of interactions 
-from a database created by Lulu Wu, joining information from many static 
+from a database created by Wu, joining information from many static 
 maps of signaling networks available on KEGG. The choice of this subset 
 can be modeled as a combinatorial optimization problem, the feature 
 selection problem, in which the search space is the set of all possible 
@@ -151,7 +151,7 @@ experimental and model measures considering all possibilities of
 parameter values; however, unfortunately, finding the minimizing 
 parameter values is a hard problem.
 
-Since this is a hard problem, the method presented by Lulu Wu 
+Since this is a hard problem, the method presented by Wu 
 implements a heuristic version of this cost function, moreover, the 
 algorithm used to traverse the search space is also a heuristics. The 
 cost function heuristics is based on a Simulated Annealing procedure 
@@ -160,10 +160,10 @@ as possible) the distance between model and experimental measures. The
 best found distance is then considered as the cost of the model. The 
 size of the search space is exactly the number of all possible subsets
 of interactions to be added, and this number grows exponentially on the 
-number of interactions from the database. That explains why Lulu Wu used
+number of interactions from the database. That explains why Wu used
 a heuristic to traverse the search space. This heuristic is based on the 
 greedy algorithm called Sequential Forward Selection 
-(SFS)~\cite{Whitney1971}. The heuristic implemented by Lulu Wu selects a
+(SFS)~\cite{Whitney1971}. The heuristic implemented by Wu selects a
 fixed number of interactions from the database and then creates 
 candidate models by adding to the current solution the respective 
 interaction; then, after evaluating the cost function for each model, 
@@ -173,7 +173,7 @@ the algorithm moves to the best candidate.
 % 2. no information about reactions constants
 % 3. the algorithm can only add interactions but not remove
 % 4. cost function apply penalization randomly and arbitrarily
-The results presented on Lulu Wu's dissertation show that the method is 
+The results presented on Wu's dissertation show that the method is 
 useful when there are only a few differences between the starting model
 and a model that closely approximates the biological experiment. This
 limitation could be explained by the intrinsic difficulty of the 
@@ -204,7 +204,7 @@ to the data collected.
 % - create new search algorithms
 % - use Bayesian approach 
 We propose on this project to create a new method for modifying 
-models of signaling networks, based on the work of Lulu Wu, and 
+models of signaling networks, based on the work of Wu, and 
 including possible solutions to the three aspects mentioned on the last 
 paragraph. To the first aspect, we propose to create a database that 
 includes interactions informations gathered from KEGG and STRING, and 
@@ -233,15 +233,9 @@ integrating over the parameter space. Another advantage of this cost
 function is that, since it is based on likelihoods of the model to 
 reproduce data, overly complex models are automatically penalized.
 
-The method developed on this work for model selection will then be 
-applied in biological models, mainly related to tumor cells, that are
-relevant for Center of Toxins, Immune-response and Cell Signaling 
-(CeTICS).
-
-
 \section{Objectives}
 In this work we propose to create a software that applies a method, 
-based on the work o Lulu Wu, that is able to select a model to
+based on the work o Wu, that is able to select a model to
 reproduce some biological experiment. This method should be able to 
 consult a vast database of interactions and modify a starting model by
 removing or adding those interactions in order to construct a model that
