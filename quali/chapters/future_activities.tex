@@ -68,6 +68,7 @@ the credits required by the Computer Science MSc program.
 
 
 \section{Activities description}
+\label{sec:future_activities}
 \begin{itemize}
     \item{\bf Activity 1:} Finalize experiments with SigNetMS.
     \item{\bf Activity 2:} Determine, between ABC-SysBio and SigNetMS,
@@ -79,16 +80,49 @@ the credits required by the Computer Science MSc program.
         interactions that is able to store the topology and rate 
         constants of reactions gathered from chemical kinetics 
         databases.
-    \item{\bf Activity 6:} Implementation of a feature selection cost
-        function and search space on featsel, which will allows us to 
-        solve the identification of signaling pathways as a feature 
-        selection problem.
-    \item{\bf Activity 7:} Create new algorithms of feature selection
-        for the problem of identification of signaling pathways.
-    \item{\bf Activity 8:} Tests of the methodology developed on known
+    \item{\bf Activity 5:} Implementation of a feature selection cost
+        function and definition of the search space on featsel, which 
+        will allows us to solve the identification of signaling pathways 
+        as a feature selection problem.
+    \item{\bf Activity 6:} Creation of new algorithms of feature 
+        selection for the problem of identification of signaling 
         pathways.
-    \item{\bf Activity 9:} Aplication of the method in ERK signaling 
+    \item{\bf Activity 7:} Testing of the methodology developed on known
+        pathways.
+    \item{\bf Activity 8:} Application of the method in ERK signaling 
         pathways of tumor cell lines Y1 and HEK293.
 \end{itemize}
 
 \section{Plan of Work for Future Activities}
+On Table~\ref{tab:Gantt} we show Gantt diagram with our estimate of 
+start and finish of each future activity of the project.
+
+\begin{table}[H]
+\centering
+  \begin{ganttchart}[x unit=0.38mm, y unit chart=7mm, time slot format=isodate, bar/.append style={fill=gray!30},vgrid={
+      draw=none,
+      draw=none,
+      dotted
+    },]{2019-5-13}{2019-12-31}
+  \gantttitlecalendar{year}\\
+  \gantttitle{May}{20}
+  \gantttitle{Jun}{30}
+  \gantttitle{Jul}{31}
+  \gantttitle{Aug}{30}
+  \gantttitle{Sep}{31}
+  \gantttitle{Oct}{30}
+  \gantttitle{Nov}{31}
+  \gantttitle{Dec}{30} \\
+  \ganttbar{Activity 1}{2019-5-13}{2019-5-30}\\
+  \ganttbar{Activity 2}{2019-5-24}{2019-6-15}\\
+  \ganttbar{Activity 3}{2019-6-1}{2019-6-15}\\
+  \ganttbar{Activity 4}{2019-6-15}{2019-7-15}\\
+  \ganttbar{Activity 5}{2019-7-15}{2019-8-15}\\
+  \ganttbar{Activity 6}{2019-8-15}{2019-10-30}\\
+  \ganttbar{Activity 7}{2019-9-20}{2019-10-30}\\
+  \ganttbar{Activity 8}{2019-11-1}{2019-12-30}
+  \end{ganttchart}
+\caption{Gantt diagram containing a proposed schedule for all activity
+    described on section~\ref{sec:future_activities}.} 
+\label{tab:Gantt}
+\end{table}
