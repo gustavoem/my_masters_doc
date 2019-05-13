@@ -110,7 +110,7 @@ bound to guanosine triphosphate (Ras-GTP).
     that means that its concentration is fairly the same through the 
     experiment, and therefore it is used as a normalizing factor to 
     total ERK concentration. Figure  {\bf b} shows values of 
-    phosphorylated ERK that are obtained after processing figure 
+    phosphorylated ERK that are obtained after processing Figure 
     {\bf a}. Original image of Marcelo S. Reis et al. 
     (2017)~\cite{Reis2017}.}
     \label{fig:western_blot_example}
@@ -201,7 +201,7 @@ composed of a simple enzymatic reaction:
 where E is an enzyme, S is a substrate, ES is the enzyme-substrate
 complex, and P is the product.
 
-Each arrow in equation~\ref{eq:simple_enzymatic} represents one 
+Each arrow in Equation~\ref{eq:simple_enzymatic} represents one 
 elementary reaction, and the names over or under arrows represent 
 reaction rate constants. All three reactions can be represented by the
 equations:
@@ -231,11 +231,11 @@ and they have, respectively, reaction rates of:
 \end{equation*}
 
 Now, to determine a model of the concentration dynamics of every 
-chemical species involved in reaction~\ref{eq:simple_enzymatic}, we will
+chemical species involved in Reaction~\ref{eq:simple_enzymatic}, we will
 write a system of ordinary differential equations. To do so, for every 
 species we should calculate its concentration change rate based on the 
 rate of each reaction that it participates. For instance, the enzyme E is a 
-reactant on reaction~\ref{eq:es_complex_fwd} and is also a product on 
+reactant on Reaction~\ref{eq:es_complex_fwd} and is also a product on 
 reactions~\ref{eq:es_complex_rev} and~\ref{eq:es_pe}, then we consider 
 that E changes its concentration over time ($t$) according to the 
 differential equation:
@@ -270,7 +270,7 @@ reaction induces the desired system of ordinary differential equations:
 % - Mention that we can suppress a lot of parameters with this 
 %   simplification
 \subsection{Simplification of Dynamic Models}
-The system~\ref{eq:full_system} can be simplified if we
+The System~\ref{eq:full_system} can be simplified if we
 apply properties of enzymatic reactions together with algebraic 
 simplifications. We will show then how to derive the quasi-steady-state 
 Michaelis-Menten model for enzymatic reactions. With the correct 
@@ -304,7 +304,7 @@ does not change over time, i.e. $\frac{d[\text{ES}]}{dt} = 0$, and it
 was first proposed in 1925 by Briggs and Haldane~\cite{Briggs1925}. 
 Generally, this assumption is applicable whenever [S] $\gg$ [E]. 
 Applying this assumption together with the mass conservation assumption 
-on the equation~\ref{eq:dESdt_2}, we get:
+on the Equation~\ref{eq:dESdt_2}, we get:
 \begin{equation*}  
     \begin{aligned}
         \text{[ES]} (k_r + k_{cat}) &= 
@@ -334,7 +334,7 @@ quasi-steady-state assumption ($\frac{d\text{[ES]}}{dt} = 0$) to obtain:
 Now, with equations~\ref{eq:dPdt_2}~and~\ref{eq:dSdt_2} we are able to
 reproduce the dynamics of the substrate and product of the enzymatic 
 reaction. Therefore, using the Michaelis-Menten model, we could simplify 
-the system~\ref{eq:full_system} that had four equations and three 
+the System\ref{eq:full_system} that had four equations and three 
 parameters to a new model that has only two equation and two parameters 
 ($k_{cat}$ and $K_m$). Figure~\ref{fig:michaelis_menten} shows a 
 comparison between the complete and Michaelis-Menten models of enzymatic 
@@ -352,9 +352,9 @@ reactions.
     \label{fig:enzymatic_mm}}
   \end{tabular}
     \caption{An example of the dynamics produced by two models of 
-        enzymatic reactions. The figure~\ref{fig:enzymatic_full} 
+        enzymatic reactions. The Figure~\ref{fig:enzymatic_full} 
         presents the dynamics of the model~\ref{eq:full_system} and 
-        figure~\ref{fig:enzymatic_mm} presents the dynamics of the 
+        Figure~\ref{fig:enzymatic_mm} presents the dynamics of the 
         Michaelis-Menten simplification to the same model. For this 
         simulations, it is necessary to define initial concentrations of
         the chemical species involved, and it is used: 

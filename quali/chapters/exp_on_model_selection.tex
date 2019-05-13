@@ -3,10 +3,10 @@
 In this section we describe the software we used to perform the ranking
 of signaling network models. The first software, SigNetMS, is an 
 implementation of the model ranking method presented on 
-section~\ref{sec:marginal_likelihood_method}, which estimates the 
+Section~\ref{sec:marginal_likelihood_method}, which estimates the 
 marginal likelihood of the data being reproduced by a model.  The second 
 software, ABC-SysBio implements the method based on the approximate 
-Bayesian Computation, presented on section~\ref{sec:abc_method}.
+Bayesian Computation, presented on Section~\ref{sec:abc_method}.
 
 \subsection{SigNetMS}
 To perform the model ranking using an estimate of the marginal 
@@ -25,7 +25,7 @@ other parameters are necessary to run SigNetMS, all of them related to
 the sampling of the power posteriors. 
 
 The method we used to sample each of the power posterior distributions
-is the one we presented on section~\ref{sec:power_posteriors_sampling}.
+is the one we presented on Section~\ref{sec:power_posteriors_sampling}.
 The four parameters related to the sampling determine the size of all
 sampling  performed and also the adaptive behaviour of one of the 
 Metropolis-Hastings algorithm used. The first parameter defines the 
@@ -111,7 +111,7 @@ since experiments of SigNetMS are still being performed and analyzed.
 \subsection{The First Experiment}
 \label{sec:experiment_one}
 The four candidate models of the first experiment are presented in 
-figure~\ref{fig:girolami_models}. The model 1, represented on figure
+Figure~\ref{fig:girolami_models}. The model 1, represented on Figure
 ~\ref{fig:gir_hyp1} is used to generate artificial experimental data
 for which all models will be ranked. This network has as components the
 degradation of S into dS with reaction rate constant $k_1$; a reversible 
@@ -120,13 +120,13 @@ and reverse rate constant of $k_3$; a first order reaction
 \ce{RS -> R_{pp}}; and a Michaelis-Menten (MM) reaction \ce{R_{pp} -> R} 
 for which the reaction rate constant and the omitted enzyme 
 concentration are combined into one single parameter $V$. Model 2, on 
-figure~\ref{fig:gir_hyp2} is a simplification of model 1 in which the
+Figure~\ref{fig:gir_hyp2} is a simplification of model 1 in which the
 enzymatic reaction of phosphorilation of R is reformulated as a 
 MM reaction with enzyme $S$; the other MM reaction, \ce{R_{pp} -> R}, 
-now has speed constant $V$ and MM constant $k_3$. Model 3, on figure
+now has speed constant $V$ and MM constant $k_3$. Model 3, on Figure
 \ref{fig:gir_hyp3}, is a simplification of model 2 because it neglects 
 the degradation of the chemical species S into dS. The model 4, on 
-figure~\ref{fig:gir_hyp4}, is a more complex version of model 1, in 
+Figure~\ref{fig:gir_hyp4}, is a more complex version of model 1, in 
 which the dephosphorylation of R$_{pp}$ is not simplified as a MM 
 reaction.
 
@@ -188,22 +188,22 @@ observations.
 \subsection{The Second Experiment}
 The second experiment was created for this project and it consists in a
 problem with simpler hypothesis than experiment 1. The four candidate
-models are presented in figure~\ref{fig:smallest_models}. The model 1
+models are presented in Figure~\ref{fig:smallest_models}. The model 1
 is the one used to generate the artificial experimental data. This model
-is presented on figure~\ref{fig:sma_hyp1} and it is composed by a 
+is presented on Figure~\ref{fig:sma_hyp1} and it is composed by a 
 reversible reaction \ce{A + B <=> AB} with forward rate constant $k_1$ 
 and reverse rate constant $k_2$; an enzymatic reaction \ce{B -> C} with 
 Michaelis constant $K_4$ and with omitted enzyme concentration and 
 catalytic rate constant combined into a single parameter $V5$; and 
 another enzymatic reaction \ce{C -> B} with catalytic action of AB. 
-Model 2, presented on figure~\ref{fig:sma_hyp2} is a simplification of
+Model 2, presented on Figure~\ref{fig:sma_hyp2} is a simplification of
 the first model that do not consider the enzymatic reaction that 
-transforms B into C. Model 3, presented on figure~\ref{fig:sma_hyp3} is
+transforms B into C. Model 3, presented on Figure~\ref{fig:sma_hyp3} is
 a generalization of the first model that adds an enzymatic reaction that
 can transform C into A, with Michaelis constant $K_{5m}$ and has 
 catalytic rate constant combined with the omitted enzyme concentration 
 into the parameter $V_5$. Model 4, presented on 
-figure~\ref{fig:sma_hyp4}, is a spurious version of model 1, since it 
+Figure~\ref{fig:sma_hyp4}, is a spurious version of model 1, since it 
 inverts the two enzymatic reactions between B and C. 
 
 \begin{figure}[H]
@@ -271,7 +271,7 @@ In this experiment, we are expected to achieve the same ranking as
 Vyshemirsky and Girolami, which is 1, 4, 2, 3 from the best to the worst 
 model. We already showed part of the set up by showing the candidate 
 models, the artificial data generation procedure and initial 
-concentrations on section~\ref{sec:experiment_one}. Now we also define 
+concentrations on Section~\ref{sec:experiment_one}. Now we also define 
 the prior distributions we used. 
 
 We started the experiment following the work of Vyshemirsky and Girolami
@@ -355,14 +355,14 @@ simulations that generated these mean values.
     \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/simulations_model3_26.pdf}
     \label{fig:abc_bio_avgsim3_it4}} 
     \end{tabular}
-    \caption{Continuation of figure~\ref{fig:abc_bio_avgsim1}, but 
+    \caption{Continuation of Figure~\ref{fig:abc_bio_avgsim1}, but 
     average simulations are from model 3. Note that there is a 
     concentration of the simulations around an intermediary value 
     between a high and low concentration of R$_{pp}$.}
     \label{fig:abc_bio_avgsim3}
 \end{figure}
 
-On figure~\ref{fig:abc_bio_allsim} we can see the simulation of all 
+On Figure~\ref{fig:abc_bio_allsim} we can see the simulation of all 
 individuals of model 1 and 3 of the populations of iteration 20 and 26.
 Through the red translucent lines of the graph we are able to see 
 simulations generated by all parameters of a model in a specific 
@@ -418,7 +418,7 @@ experiment again on ABC-SysBio, but using priors $Lognormal (1, 0.2)$.
     iteration 26 of the ABC-SysBio run. Red translucid lines show the 
     simulation of a single parameter. Stronger red color means 
     overlapping points between simulations.
-    Figures~\ref{fig:abc_bio_allsim1_it20}~and~\ref{fig:abc_bio_allsim3_it26}
+    figures~\ref{fig:abc_bio_allsim1_it20}~and~\ref{fig:abc_bio_allsim3_it26}
     show individuals of model 1 while 
     figures~\ref{fig:abc_bio_allsim3_it20}~and~\ref{fig:abc_bio_allsim3_it26}
     show individuals of model 3.
@@ -496,7 +496,7 @@ then decrease of concentration of R$_{pp}$, in the dynamics induced by
 the found parameters the trend is to have only decrease of 
 concentrations of R$_{pp}$ over time. We also plotted an estimation of
 the posterior distribution of parameters of model one, presented on 
-figure~\ref{fig:posterior_estimate_model1}. This estimative was created
+Figure~\ref{fig:posterior_estimate_model1}. This estimative was created
 with parameters of model 1 on iteration 26 of the algorithm, and it is
 possible to see that the estimated posterior is not concentrated around
 the expected values, which should be the parameters values used to 
@@ -569,7 +569,7 @@ create the experimental data.
 \subsection{Results on the Second Experiment}
 For the second experiment we used only Gamma priors for the model 
 parameters. A complete definition of the priors is presented on 
-table~\ref{tab:smallest_priors}. We used the ABC-SysBio software to 
+Table~\ref{tab:smallest_priors}. We used the ABC-SysBio software to 
 perform the model ranking using the automatic $\epsilon$ scheduler with 
 a population size of 100 individuals per iteration. As a result, the
 ranking produced by the software was: 2, 1, 4, 3. 
@@ -604,19 +604,19 @@ $\hat{p} (M = 1 | D, \epsilon = 31.03) = 0.44$ and
 $\hat{p} (M = 2 | D, \epsilon = 31.03) = 0.56$. Therefore, the result
 is inconclusive for which model performs better, 1 or 2. 
 
-On figure~\ref{fig:smallest_all_sim_it20} we show the average of the 
+On Figure~\ref{fig:smallest_all_sim_it20} we show the average of the 
 simulations produced by parameters of iteration 20. It is possible to
 see that model 3 indeed performs worse comparing to all other models,
 and more than that, the curve produced by model 3 is different from the 
 experimental data and curves produces by other models; while in model 3
 the concentration of B increases and then decreases, for the other 
 models the concentration increases until it stabilizes. On 
-figure~\ref{fig:smallest_all_sim_it50} we show the average simulation
+Figure~\ref{fig:smallest_all_sim_it50} we show the average simulation
 of parameters of the 50\textsuperscript{th} iteration of the algorithm.
 We can see that models 1 and 2 approximates the curve reasonably well
 while model 4, in the other hand, has more error, specially in the 
 time steps of 200 and 400 seconds. Finally, on 
-figure~\ref{fig:smallest_all_sim_it64} we show the average simulations 
+Figure~\ref{fig:smallest_all_sim_it64} we show the average simulations 
 of models 1 and 2 on the 64\textsuperscript{th} iteration of the 
 algorithm. We can see that parameters of the last population bring both
 models simulations very close to the experimental data.

@@ -65,7 +65,7 @@ therefore we can simplify~\ref{eq:likelihood_multivariate} to:
         \sigma^2\right)}} (\phi_i (M,\theta) - D_i).
 \label{eq:likelihood}
 \end{equation}
-The $\sigma^2$ used in equation~\ref{eq:likelihood} is also a parameter
+The $\sigma^2$ used in Equation~\ref{eq:likelihood} is also a parameter
 of the model, which means that, for some $k$, $\theta_k = \sigma^2$.
 
 Now that we defined the likelihood function, we can write the marginal 
@@ -116,7 +116,7 @@ distributions~\cite{Friel2008}.
 % -> include here: how to estimate it?
 \subsection{Thermodynamic Integration for Marginal Likelihood}
 The Thermodynamic Integration is a method that proposes to rewrite
-the integral~\ref{eq:marginal_likelihood} using ideas of thermodynamics,
+the Integral~\ref{eq:marginal_likelihood} using ideas of thermodynamics,
 providing new estimators for the marginal likelihood. This method is
 able to rewrite the marginal likelihood integral in a way that it 
 marginalizes the likelihood through many intermediate probability spaces 
@@ -172,7 +172,7 @@ And it is not hard to see that:
 \end{gathered}
 \end{equation}
 
-Using equations~\ref{eq:z_on_limits} and equality~\ref{eq:z_derivative}
+Using equations~\ref{eq:z_on_limits} and Equality~\ref{eq:z_derivative}
 we can write that:
 \begin{align}
     \int_0^1 \expectation_{p_\beta (\theta)} [\ln p(D|\theta, M)]d\beta 
@@ -199,7 +199,7 @@ be explained in the next section.
 % -> A third using populational MCMC
 \subsection{Estimation of the Marginal Likelihood}
 There are multiple approaches on estimating the 
-integral~\ref{eq:thermodynamic_integral}, and for all of them, it is 
+Integral~\ref{eq:thermodynamic_integral}, and for all of them, it is 
 necessary to find samples of $p_{\beta_t} (\theta | M, D)$ for a 
 sequence of values of $\beta_t$ that vary from zero to one~\cite{Xura20, 
 Vyshemirsky2007, Friel2008}. The differences on these methods are mainly 
@@ -281,7 +281,7 @@ sampled parameter on the second step, the covariance matrix is updated
 to be the sample covariance of the selected points of step one plus the  
 current points accepted on step two. The probability of accepting a 
 proposed parameter on this step is the same  as it was on the first 
-step, as described by equation~\ref{eq:mh_ratio_step1}.
+step, as described by Equation~\ref{eq:mh_ratio_step1}.
 
 At the end of the second step, we will have $T$ chains of sampled 
 parameters, containing the selected parameters of the first and second 
@@ -336,7 +336,7 @@ are used to estimate the marginal likelihood.
 
 \subsubsection{Estimators of the Marginal Likelihood}
 The sampling procedure explained on the 
-section~\ref{sec:power_posteriors_sampling} produces samples of the 
+Section~\ref{sec:power_posteriors_sampling} produces samples of the 
 power posteriors $p_{\beta_1} (\theta), \ldots, p_{\beta_T} (\theta)$, 
 and these samples can be used to estimate logarithm of the marginal 
 likelihood:
@@ -351,7 +351,7 @@ imply in a method for choosing the sequence of temperatures $\beta_1,
 \ldots, \beta_T$. 
 
 The method proposed by Friel et al. (2008), uses a numerical integration 
-method to estimate the integral~\ref{eq:marginal_likelihood_again}. 
+method to estimate the Integral~\ref{eq:marginal_likelihood_again}. 
 Given that $T$ temperatures, $0 = \beta_1 < \beta_2 < \ldots < \beta_T = 
 1$, were selected and samples of its respective power posteriors were 
 generated, then using trapezoidal rule over the temperature allows us to 
@@ -387,7 +387,7 @@ between $20$ and $100$ and $c$ is between $3$ and $5$.
 
 Another method, proposed by Xu et al. (2010), considers that the 
 temperature $\beta$ can be treated as a random variable, and therefore 
-we can rewrite integral~\ref{eq:marginal_likelihood_again} as:
+we can rewrite Integral~\ref{eq:marginal_likelihood_again} as:
 \begin{equation}
     \expectation_{p (\beta)} 
         \left[\frac
