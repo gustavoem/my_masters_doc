@@ -564,11 +564,165 @@ create the experimental data.
 \end{figure}
 
 
-%-> Yeah, it does give the ~right ordering
-%-> the last population with individuals of all models is the 10th
-%-> model 3 is still on average... However, this time it looses space to
-   %other models 
-%-> We are not sure why that happens.
-
-
 \subsection{Results on the Second Experiment}
+For the second experiment we used only Gamma priors for the model 
+parameters. A complete definition of the priors is presented on 
+table~\ref{tab:smallest_priors}. We used the ABC-SysBio software to 
+perform the model ranking using the automatic $\epsilon$ scheduler with 
+a population size of 100 individuals per iteration. As a result, the
+ranking produced by the software was: 2, 1, 4, 3. 
+
+\begin{table}[h]
+\centering
+\begin{tabular}{l l l}
+Parameter   & Models     & Prior             \\ \hline
+\hline
+$k1$        & 1, 2, 3, 4 & $Gamma (1, 0.01)$ \\
+$k2$        & 1, 2, 3, 4 & $Gamma (2, 0.5)$  \\
+$k_{3cat}$  & 1, 2, 3, 4 & $Gamma (4, 1)$    \\
+$K_{3m}$    & 1, 2, 3, 4 & $Gamma (2, 1500)$ \\
+$V_4$       & 1, 3, 4    & $Gamma (2, 1)$    \\
+$K_{4m}$    & 1, 3, 4    & $Gamma (2, 100)$  \\
+$V_5$       & 3          & $Gamma (2, 0.4)$  \\
+$K_{5m}$    & 3          & $Gamma (2, 100)$  \\ \hline
+\end{tabular}
+\caption{Prior distribution for each parameter of models of the second 
+    experiment.}
+\label{tab:smallest_priors}
+\end{table}
+
+The algorithm created 64 iterations until it reached the last iteration
+with $\epsilon = 31.03$. After iteration 26, no individuals from the 
+populations were from model 3, considered the worst model. After 
+iteration 56, no individuals from model 4 were in the populations. Then,
+from iterations 56 to 64 only individuals from model 1 and 2 were in 
+the populations. In the last population, the estimated probabilities
+created by the software were: 
+$\hat{p} (M = 1 | D, \epsilon = 31.03) = 0.44$ and 
+$\hat{p} (M = 2 | D, \epsilon = 31.03) = 0.56$. Therefore, the result
+is inconclusive for which model performs better, 1 or 2. 
+
+On figure~\ref{fig:smallest_all_sim_it20} we show the average of the 
+simulations produced by parameters of iteration 20. It is possible to
+see that model 3 is indeed performs worse comparing to all other models,
+and more than that, the curve produced by model 3 is different from the 
+experimental data and curves produces by other models; while in model 3
+the concentration of B increases and then decreases, for the other 
+models the concentration increases until it stabilizes. On 
+figure~\ref{fig:smallest_all_sim_it50} we show the average simulation
+of parameters of the 50\textsuperscript{th} iteration of the algorithm.
+We can see that models 1 and 2 approximates the curve reasonably well
+while model 4, in the other hand, has more error, specially in the 
+time steps of 200 and 400 seconds. Finally, on 
+figure~\ref{fig:smallest_all_sim_it64} we show the average simulations 
+of models 1 and 2 on the 64\textsuperscript{th} iteration of the 
+algorithm. We can see that parameters of the last population bring both
+models simulations very close to the experimental data.
+
+\begin{figure}[H]
+    \centering
+    \begin{tabular}{c c}
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/simulations_model1_20.pdf}
+    \label{fig:abc_sma_1it20}}
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/simulations_model2_20.pdf}
+    \label{fig:abc_sma_2it20}} 
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/simulations_model3_20.pdf}
+    \label{fig:abc_sma_3it20}} 
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/simulations_model4_20.pdf}
+    \label{fig:abc_sma_4it20}} 
+    \end{tabular}
+    \caption{Average simulation of iteration 20 for all candidate 
+    models.}
+    \label{fig:smallest_all_sim_it20}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \begin{tabular}{c}
+    \subfigure{
+    \includegraphics[clip=true,width=.6\linewidth]{experiments/results/smallest/simulations_model1_50.pdf}
+    \label{fig:abc_sma_1it50}}
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.6\linewidth]{experiments/results/smallest/simulations_model2_50.pdf}
+    \label{fig:abc_sma_2it50}} 
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.6\linewidth]{experiments/results/smallest/simulations_model4_50.pdf}
+    \label{fig:abc_sma_4it50}} 
+    \end{tabular}
+    \caption{Average simulation of iteration 50 for all candidate 
+    models.}
+    \label{fig:smallest_all_sim_it50}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{tabular}{c c}
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/simulations_model1_64.pdf}
+    \label{fig:abc_sma_1it64}}
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/simulations_model2_64.pdf}
+    \label{fig:abc_sma_2it64}} 
+    \end{tabular}
+    \caption{Average simulation of iteration 20 for all candidate 
+    models.}
+    \label{fig:smallest_all_sim_it64}
+\end{figure}
+
+Since we achieved good results on the simulations of the model 1, we 
+also plotted the estimation of the posterior distribution of the 
+parameters given the data. Figure~\ref{fig:smallest_model1_posteriors}
+shows the estimated posterior distribution for each parameter. We can 
+note that the posterior distributions estimated have high density around
+the true parameter values, i.e. parameter values used to create the
+artificial experimental data.
+
+
+\begin{figure}[p]
+    \centering
+    \begin{tabular}{c c}
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/model1_64_p0_k_1.pdf}
+    }
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/model1_64_p1_k_2.pdf}
+    }
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/model1_64_p2_k_3cat.pdf}
+    }
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/model1_64_p3_K_3m.pdf}
+    }
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/model1_64_p4_V_4.pdf}
+    }
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/model1_64_p5_K_4m.pdf}
+    }
+    \end{tabular}
+    \caption{Estimates of the posterior distribution of model 1 
+    parameters. These estimates were created using the kernel density 
+    estimation method from the seaborn Python package. The parameter 
+    name on the abscissa of the graph indicates the location of the 
+    correct value of the parameter, i.e. the value used to create the 
+    experimental data. The estimated posterior is not concentrated
+    around the correct parameter values, which are $k_1 = 0.07$, 
+    $k_2 = 0.6$, $k_3 = 0.05$, $k_4 = 0.3$, $V = 0.017$.}
+    \label{fig:posterior_estimate_model1}
+\end{figure}
+
