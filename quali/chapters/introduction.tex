@@ -234,15 +234,15 @@ function is that, since it is based on likelihoods of the model to
 reproduce data, overly complex models are automatically penalized.
 
 \section{Objectives}
-In this work we propose to create a software that applies a method, 
-based on the work o Wu, that is able to select a model to
-reproduce some biological experiment. This method should be able to 
-consult a vast database of interactions and modify a starting model by
-removing or adding those interactions in order to construct a model that
-approximates more closely the biological experiment. The construction of
-this database and how the method consults it is also part of this work. 
-We also propose to validate the methodology with real cell data. To 
-achieve these goals, we should complete the following tasks:
+In this work we propose to create a methodology that allows us to solve
+the problem of identification of cell signaling pathways as a feature 
+selection problem. This method should be able to consult a vast database 
+of interactions and modify a starting model by removing or adding those 
+interactions in order to construct a model that approximates more 
+closely the biological experiment. The construction of this database and 
+how the method consults it is also part of this work. We also propose to 
+validate the methodology with real cell data. To achieve these goals, we 
+should complete the following tasks:
 \begin{enumerate}
     \item{{\bf Define a cost function for models}. We propose to use a 
         Bayesian approach to implement an algorithm that allows us to 
@@ -274,6 +274,39 @@ achieve these goals, we should complete the following tasks:
     \item{{\bf Apply the methodology on a real case}. Finally, with a
         tested implementation of the methodology, we should help 
         researchers from CeTICS to identify cell signaling networks of
-        cells that are relevant to their research.}
+        cells that are relevant to their research. More specifically,
+        we are interested in finding adequate dynamic models to describe
+        the ERK signaling networks in HEK-293, in both parental and 
+        HRas-transformed cell lines.}
 \end{enumerate}
 \section{Organization}
+This text is organized in five chapters. In the first chapter, we 
+present the problem we are trying to solve, giving a brief context
+and motivation. Then, after the introduction, there are four more 
+chapters as follows:
+
+\begin{itemize}
+    \item{\em Chapter 2 (Fundamental Concepts):} we will give more details
+        about the identification of signaling pathway problem. We will
+        show how to obtain experimental data for signaling pathways and
+        how can chain of chemical reactions can be modeled as a system 
+        of differential equations. We close the chapter presenting 
+        briefly state of the art methods of model ranking and also the 
+        Metropolis-Hastings algorithm, which is a useful tool for 
+        methods of model ranking.
+    \item{\em Chapter 3 (Model Selection Methods):} we will present two
+        methodologies that are the state of the art in model selection.
+        Both methods are Bayesian approaches, where the first is based
+        on the estimation of marginal likelihoods and the second is
+        based on Approximate Bayesian Computation.
+    \item{\em Chapter 4 (Experiments of Model Selection):} we start this
+        chapter by presenting both the software that implement the 
+        methodologies of Chapter 2. The first, implemented on this 
+        project, is called SigNetMS while the second is called 
+        ABC-SysBio. Then, we also present two experiments of model 
+        ranking that we performed with the goal of evaluating the 
+        performance of both software.
+    \item{\em Chapter 5 (Future Activities):} we close this text 
+        presenting the future work that is necessary to achieve the goal
+        of this project.
+\end{itemize}
