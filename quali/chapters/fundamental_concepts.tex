@@ -37,9 +37,9 @@ Cell signaling pathways are part of the complex cell communication
 system, and it allows the cell to perceive the conditions of the 
 environment in which it is placed and change its behaviour accordingly.
 Signaling pathways participate in the regulation of many cell functions,
-including development, division and cell death. Bad functioning 
-signaling pathways can also be related to diseases, as in many cases of
-cancer.
+including development, division and cell death~\cite{Hancock2017}. Bad 
+functioning signaling pathways can also be related to diseases, as in 
+many cases of cancer.
 
 The signal perceived by a cell can come from cells that are close 
 (including the same cell that produced the signal), as in synapses, or 
@@ -72,19 +72,20 @@ pathway of interest.
 % related to the behaviour of interest of the cell, this protein is a 
 % good candidate as a measure of the system.
 \section{Measurements of Proteins in Cell Signaling Pathways}
-Western blot is a laboratory technique that can indicate the amount of a
-specific protein that is present in a mixture. This technique show the 
-presence of a protein in a mixture by ``blotting'' a membrane where the 
-molecules of interest are located. We can superficially summarize the 
-procedure in the following steps: first a mixture containing a sample of 
-cells of interest must be created; second, proteins from the mixture 
-should be fixed on the blotting membrane; third, an antibody should bind 
-to the target protein molecules; and finally, a method for highlighting 
-the bound antibody should be applied. An image of the resulting membrane 
-can then be analyzed with computer programs to quantify the relative 
-concentration (with respect to some other protein, usually a control 
-protein that has fairly the same concentration during the whole 
-experiment) of the protein of interest.
+Western blot~\cite{Towbin1979} is a laboratory technique that can 
+indicate the amount of a specific protein that is present in a mixture. 
+This technique show the presence of a protein in a mixture by 
+``blotting'' a membrane where the molecules of interest are located. We 
+can superficially summarize the procedure in the following steps: first 
+a mixture containing a sample of cells of interest must be created; 
+second, proteins from the mixture should be fixed on the blotting 
+membrane; third, an antibody should bind to the target protein 
+molecules; and finally, a method for highlighting the bound antibody 
+should be applied. An image of the resulting membrane can then be 
+analyzed with computer programs to quantify the relative concentration 
+(with respect to some other protein, usually a control protein that has 
+fairly the same concentration during the whole experiment) of the 
+protein of interest.
 
 By repeating this procedure in different times it is possible to create 
 time-course observations of proteins throughout the biological 
@@ -146,13 +147,13 @@ evidences of the biological phenomena.
 \section{Dynamic Modeling of Cell Signaling Pathways}
 One approach onto modeling cell signaling pathways is to model the 
 dynamics of the concentrations of chemical species involved. This can be
-accomplished when using the law of mass action. This law states that, 
-in an elementary reaction, the speed (or rate) of a chemical reaction is 
-proportional to the product of the concentration of all reactants. An 
-elementary reaction is a reaction in which there is no participation or 
-need of an intermediate reaction to describe the first in a molecular 
-level. In practice, it is more common to see two types of elementary 
-reactions, they are first or second order reactions. 
+accomplished when using the law of mass action~\cite{Voet}. This law 
+states that, in an elementary reaction, the speed (or rate) of a 
+chemical reaction is proportional to the product of the concentration of 
+all reactants. An elementary reaction is a reaction in which there is no 
+participation or need of an intermediate reaction to describe the first 
+in a molecular level. In practice, it is more common to see two types of 
+elementary reactions, they are first or second order reactions. 
 
 \subsection{Modeling Elementary Reaction Rates}
 A first order reaction is composed of one reactant only. Suppose A is 
@@ -457,13 +458,15 @@ parameter values was conduced, $D$ is the experimental measurement,
 $\phi$ is a function that determines the simulated measurement on the 
 model, and $R$ is a regularization function that penalizes model 
 complexity. This approach was implemented on the work of Lulu 
-Wu~\cite{Wu15}, using a Simulated Annealing algorithm to search for 
+Wu~\cite{Wu15}, using a Simulated Annealing procedure to search for 
 parameter values that minimizes the distance between simulation and 
-experiment; however, the methodology showed limitations when testing the 
-ability to reconstruct models from experiments, and this could be 
-related to the used penalization term. In fact, choosing a good 
-regularization function is crucial to the performance of this 
-methodology.
+experiment. The Simulated Annealing procedure used is available on the 
+software SigNetSim (Signaling Network Simulator), which is based on the
+of the work of Chu on~\cite{Chu1999}. However, Wu's methodology showed 
+limitations when testing the ability to reconstruct models from 
+experiments, and this could be related to the used penalization term. 
+In fact, choosing a good regularization function is crucial to the 
+performance of this methodology.
 
 Another approach is to consider the model parameters as random variables 
 and then marginalize the probability of the model and parameters to 

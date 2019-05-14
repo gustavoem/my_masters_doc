@@ -14,15 +14,16 @@ likelihood, we created the software SigNetMS, which is an acronym of
 {\bf Sig}naling {\bf Net}work {\bf M}odel {\bf S}election. This software
 was implemented in Python and it is a free software, under the \emph{GNU 
 General Public License}, and available on
-\href{https://github.com/gustavoem/SigNetMS}{GitHub}. The SigNetMS 
+\href{https://github.com/gustavoem/SigNetMS}{GitHub}
+\footnote{https://github.com/gustavoem/SigNetMS}. The SigNetMS 
 software can read and parse files containing models of signaling network 
-represented in the Systems Biology Markup Language (SBML) format and 
-then construct the respective system of differential equations according 
-to the chemical species and interactions defined on the file. The 
-experiments observations and prior distributions of parameters are 
-defined by the user with Extensible Markup Language (XML) files. Four 
-other parameters are necessary to run SigNetMS, all of them related to 
-the sampling of the power posteriors. 
+represented in the Systems Biology Markup Language 
+(SBML)~\cite{Hucka2003} format and then construct the respective system 
+of differential equations according to the chemical species and 
+interactions defined on the file. The experiments observations and prior 
+distributions of parameters are defined by the user with Extensible 
+Markup Language (XML) files. Four other parameters are necessary to run 
+SigNetMS, all of them related to the sampling of the power posteriors. 
 
 The method we used to sample each of the power posterior distributions
 is the one we presented on Section~\ref{sec:power_posteriors_sampling}.
@@ -74,7 +75,7 @@ logarithm of the marginal likelihood.
 %-> implemented in Python
 %-> implements the ABC-SMC method we explained earlier
 %-> also reads models in SBML format
-\section{ABC-SysBio}
+\subsection{ABC-SysBio}
 ABC-SysBio is a Python software that implements the Approximate Bayesian
 Computation Sequential Monte Carlo (ABC SMC) method~\cite{Liepe2010}. 
 This software, similarly to SigNetMS, also takes as input SBML models as 
@@ -82,7 +83,8 @@ well as prior distribution of parameters and experimental data. As the
 output, the software returns, for each candidate model, an estimate of 
 the probability of that model reproducing the experimental data. The 
 source code of the method is available on 
-\href{https://sourceforge.net/projects/abc-sysbio/files/}{SourceForge}.
+\href{https://sourceforge.net/projects/abc-sysbio/files/}{SourceForge}
+\footnote{https://sourceforge.net/projects/abc-sys}.
 
 \section{Model Selection Experiments}
 The experiments we performed to test both methods consists in taking 
@@ -103,9 +105,6 @@ transduction; the second, created for this project, consists of a
 simpler network, containing a few enzymatic reactions and other first 
 order chemical interactions.
 
-Even though we designed the experiment for both software ABC-SysBio and
-SigNetMS, we will only present experiments performed on ABC-SysBio, 
-since experiments of SigNetMS are still being performed and analyzed.
 
 
 \subsection{The First Experiment}
@@ -167,17 +166,18 @@ concentration of R$_{pp}$ on the time steps: 2s, 5s, 10s, 20s, 40s,
 60s, and 100s. The parameter values chosen for simulation are: 
 $k_1 = 0.07$, $k_2 = 0.6$, $k_3 = 0.05$, $k_4 = 0.3$, $V = 0.017$, and
 $K_m = 0.3$. The initial concentrations are: S $= 1$, R $= 1$, dS $= 0$,
-RS $= 0$, R$_{pp} = 0$. {\color{blue}TODO: Why can I omit the unit of 
-concentrations and reaction rate?} The model is then simulated and a 
-Gaussian error with mean zero and standard deviation $0.01$ is added to 
-the simulation data; this procedure is repeated three times and hence 
-produces three experimental observations. 
+RS $= 0$, R$_{pp} = 0$. For the sake of simplicity, we omit the units
+of reaction rate constants and initial concentrations. The model is then 
+simulated and a Gaussian error with mean zero and standard deviation 
+$0.01$ is added to the simulation data; this procedure is repeated three 
+times and hence produces three experimental observations. 
 Figure~\ref{fig:girolami_simulation} shows one of the experimental 
 observations.
 \begin{figure}
     \begin{center}
     \includegraphics[width=.75\textwidth]{experiments/simulations/girolami_data.pdf}
-    \caption{Artificial experimental observation generated with model 1.}
+    \caption{Artificial experimental observation generated with 
+        model 1 (\ref{fig:gir_hyp1}).}
     \label{fig:girolami_simulation}
     \end{center}
 \end{figure}
@@ -255,13 +255,18 @@ Figure~\ref{fig:sma_simulation} shows one of these observations.
     \begin{center}
     \includegraphics[width=.75\textwidth]{experiments/simulations/smallest_data.pdf}
     \caption{Artificial experimental observation generated with model 1 
-        on the second experiment.}
+        of the second experiment (\ref{fig:sma_hyp1}).}
     \label{fig:sma_simulation}
     \end{center}
 \end{figure}
 
 
 \section{Results}
+
+Even though we designed the experiment for both software ABC-SysBio and
+SigNetMS, we will only present experiments performed on ABC-SysBio, 
+since experiments of SigNetMS are still being performed and analyzed.
+
 
 \subsection{Results on the First Experiment}
 We performed the first experiment using a setup similar to the work of
