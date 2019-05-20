@@ -4,7 +4,7 @@
 \usepackage{amsmath}
 \usepackage{subfigure}
 \usepackage{booktabs}
-
+\usepackage{mhchem}             % chemical reactions
 \usetheme{metropolis}           % Use metropolis theme
 
 \newtheorem{mydefinition}{Definição}
@@ -21,8 +21,6 @@
 \newcommand{\floor}[1]{\lfloor #1 \rfloor}
 \newcommand{\ceil}[1]{\lceil #1 \rceil}
 \newcommand{\mathsc}[1]{{\normalfont\textsc{#1}}}
-\newcommand{\forest}{\mathcal{F}}
-\newcommand{\pfsnode}[1]{\mathbf #1}
 \newcommand{\species}[1]{\textit{#1}}
 \newcommand{\gender}[1]{\textit{#1}}
 
@@ -41,6 +39,8 @@ reaction kinetics repositories}
 %Introduction
 %- Cell Signaling Pathways;
 %- Modeling it mathematically;
+%- With a computational working computational model, we can enlight the
+%  structure of a change of behaviour of a cell;
 %- Creating a model;
     %- find a set of reactions;
     %- estimate the parameters of this model;
@@ -61,7 +61,7 @@ reaction kinetics repositories}
 
 
 \section{Introduction}
-\begin{frame}{Cell Signaling Pathwyas}
+\begin{frame}{Cell Signaling}
 % Antes de mais nada, vamos entender o que são vias de sinalização 
 % celular. 
 % A sinalização celular faz parte da comunicação das células de um 
@@ -69,77 +69,152 @@ reaction kinetics repositories}
 
 %\begin{itemize}
 %\item{
-        Cell signaling pathways are important structures that allow cells
-    to respond to signals that come from its environment.
+Cell signaling pathways are important structures that allow cells
+to respond to signals that come from its environment.
 %}
 \pause
 %\item{
 
-        These pathways are essential for many cell functions, including
-    reproduction, growth and death.
+This mechanism is essential for many cell functions, including 
+reproduction, growth and death.
 %}
 \pause
 %\item{
 
-        Understanding the functioning of cell signaling pathways is 
-    important in many biological areas.
+Understanding the functioning of cell signaling is important in many 
+biological areas.
 %}
 %\end{itemize}
 \end{frame}
 
 
+\begin{frame}{Cell Signaling}
+\begin{figure}
+    \includegraphics[clip=True, scale=.85]{introduction/signaling_mechanism.pdf}
+    \caption{A general cell signaling mechanism.}
+\end{figure}
+\end{frame}
+
 \begin{frame}{Cell Signaling Pathways}
+A cell signaling network can be characterized by a sequence of chemical 
+reactions that allows the presence of a signal to modify the state or 
+behaviour of a cell.
+\begin{figure}
+    \includegraphics{introduction/csp_example.pdf}
+    \caption{An example of a signaling pathway.}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Mathematical Models of Signaling Networks}
+In many applications, we summarize the state of the cell with a 
+measurement based on the concentration of chemical species of the cell.
+\pause
+
+Using biochemical and enzymatic kinetics, we can write equations that
+represent the rate of change of concentration for a chemical species.
+\end{frame}
+
+
+\begin{frame}{Mathematical Models of Signaling Networks}
+As an example, for the chemical reaction
+\begin{equation*}
+\ce{
+    A -> B
+},
+\end{equation*}
+
+\pause
+we can write the following equation:
+\begin{equation*}
+        \frac{d[\text{A}]}{dt} = k_1[\text{A}]; 
+\end{equation*}
+where $k_1$ is a reaction rate constant.
+
+\pause
+Repeating this procedure for all reactions of a pathway allows us to 
+derive a system of ordinary differential equations that can model the 
+signaling pathway.
+\end{frame}
+
+
+\begin{frame}{Identification of Cell Signaling Pathways}
+The problem of identification of cell signaling pathways is the problem
+of finding the components of a signaling pathway and how they interact
+given a set of experimental measurement.
+
+\pause
+As the input, a description of a biological experiment and a set of 
+experimental measurements are given. A possible output to the problem is
+a mathematical model of the pathway, \pause composed by:
 \begin{itemize}
-    \item{From an input signal}
+    \item{a set of chemical reactions that are relevant for the 
+        biological experiment;}
+    \pause
+    \item{information about the reaction rate constants of the model.}
 \end{itemize}
 \end{frame}
 
 
-\begin{frame}{Modeling Cell Singaling }
+\begin{frame}{Identification of Cell Signaling Pathways}
+One can search for the set of chemical reactions relevant for a 
+biological experiment in repositories like the Kyoto Encyclopedia of 
+Genes and Genomes (KEGG). \pause However, the pathway maps from KEGG may
+be incomplete or have impertinent reactions for the biological 
+experiment of interest.
+\pause
+
+Hence, it is desirable to construct a method that can systematically 
+modify these models and choose the one that better represents the 
+experiment.
 \end{frame}
 
-\begin{frame}{}
+
+\begin{frame}{Identification of Cell Signaling Pathways}
+Lulu Wu (2015) presented in her master dissertation a methodology that 
+proposes to systematically modify models of signaling network in order
+to better represent experiments.
+\pause
+
+On her work, the problem of identification of cell signaling pathways is
+treated as a feature selection problem.
 \end{frame}
-%\begin{frame}{Modelos computacionais}
-%\begin{frame}{Modelos computacionais}
-  %Modelos computacionais são criados para simular sistemas complexos. \\
-  %\pause
-  %\begin{center}
-  %\alert{ 
-  %$
-  %\begin{aligned}
-    %\text{entrada} &\longrightarrow& \text{sistema} &\longrightarrow& \text{saída} \\
+
+
+\begin{frame}{Feature Selection Problem}
+The feature selection problem is a combinatorial optimization problem:
+\begin{center}
+Given a set of features $S$ and a cost function $c$, find subset 
+        $X \in \powerset (S)$, with minimum cost $c(X)$.
+\end{center}
+
+\pause
+\begin{figure}
+    \includegraphics[scale=.24]{introduction/Boolean_lattice.pdf}
+    \caption{An example of feature selection search space with 5 
+    features.}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Feature Selection for Identification of Signaling Pathways}
+If we consider that the set of all possible chemical reactions is the
+set of features, than we can tackle the identification of signaling 
+pathway problem as a feature selection problem.
+\end{frame}
+
+%\begin{frame}{Mathematical Models of Signaling Pathways}
+%To build a model of a signaling pathway we must accomplish two tasks:
+%\begin{itemize}
     %\pause
-    %\text{entrada} &\longrightarrow& \text{modelo} &\longrightarrow& \sim\text{saída} \\
-  %\end{aligned}
-  %$
-  %}
-  %\end{center}
-%\end{frame} 
+    %\item{Determine a set of chemical reactions that is relevant in
+        %the pathway.}
+    %\pause
+    %\item{Determine values for the reactions rate constants.}
+%\end{itemize}
+%Theses tasks can be accomplished by looking for static interactome maps
+%in directories 
+%\end{frame}
 
-\begin{frame}{}
-\end{frame}
-
-\begin{frame}{}
-\end{frame}
-
-\begin{frame}{}
-\end{frame}
-
-\begin{frame}{}
-\end{frame}
-
-\begin{frame}{}
-\end{frame}
-
-\begin{frame}{}
-\end{frame}
-
-\begin{frame}{}
-\end{frame}
-
-\begin{frame}{}
-\end{frame}
 
 %Fundamental Concepts
 %- How are the experimental measures taken
@@ -160,10 +235,14 @@ reaction kinetics repositories}
     %- What does it do;
     %- How to derive the thermodynamic integration
     %- How to estimate this value
+% Implementations
 \section{Model Selection}
 
 
 \section{Experiments on Model Selection}
+\begin{frame}
+\end{frame}
+\section{Next Steps}
 
 \end{document}
 
