@@ -69,8 +69,8 @@ reaction kinetics repositories}
 
 %\begin{itemize}
 %\item{
-Cell signaling pathways are important structures that allow cells
-to respond to signals that come from its environment.
+Cell signaling allows cells to respond to signals that come from its 
+environment changing its behaviour accordingly.
 %}
 \pause
 %\item{
@@ -144,11 +144,12 @@ given a set of experimental measurement.
 
 \pause
 As the input, a description of a biological experiment and a set of 
-experimental measurements are given. A possible output to the problem is
-a mathematical model of the pathway, \pause composed by:
+experimental measurements are given. \pause A possible output to the 
+problem is composed by:
 \begin{itemize}
-    \item{a set of chemical reactions that are relevant for the 
-        biological experiment;}
+    \pause
+    \item{a model composed by a set of chemical reactions that are 
+        relevant for the biological experiment;}
     \pause
     \item{information about the reaction rate constants of the model.}
 \end{itemize}
@@ -196,24 +197,47 @@ Given a set of features $S$ and a cost function $c$, find subset
 \end{frame}
 
 
-\begin{frame}{Feature Selection for Identification of Signaling Pathways}
-If we consider that the set of all possible chemical reactions is the
-set of features, than we can tackle the identification of signaling 
-pathway problem as a feature selection problem.
+\begin{frame}{Feature Selection for Identification of Signaling 
+Pathways}
+The methodology proposed by Wu defines the set of features as a set of 
+chemical reactions that can be added to a starting model.\pause This set 
+of chemical reactions is fetched from KEGG.
 \end{frame}
 
-%\begin{frame}{Mathematical Models of Signaling Pathways}
-%To build a model of a signaling pathway we must accomplish two tasks:
-%\begin{itemize}
-    %\pause
-    %\item{Determine a set of chemical reactions that is relevant in
-        %the pathway.}
-    %\pause
-    %\item{Determine values for the reactions rate constants.}
-%\end{itemize}
-%Theses tasks can be accomplished by looking for static interactome maps
-%in directories 
-%\end{frame}
+
+\begin{frame}{Wu's Search Algorithm for Feature Selection}
+The search algorithm used by Wu is the Sequential Forward Selection 
+(SFS).
+\end{frame}
+
+
+\begin{frame}{Wu's Cost Function for Feature Selection}
+Wu defines the cost function as the minimum distance between 
+experimental and simulated data. 
+\pause
+The minimum distance is found using a Simmulated Annealing 
+that traverses the parameter space.
+\end{frame}
+
+\begin{frame}{Wu's Cost Function for Feature Selection}
+If we define that:\pause
+\begin{itemize}
+    \item{the experimental measurement is $D$;} \pause
+    \item{the simulated measure is $\phi (M, \theta)$;} \pause
+    \item{all elements visited on the Simmulated Annealing process 
+        define $\Theta'$.}
+\end{itemize}
+\pause
+Then, the cost function used on Wu's work is:
+\begin{equation*}
+    c (M) = min_{\{\theta \in \Theta' \subset \Theta\}}  
+        dist (\phi(M, \theta), D) + R (M),
+\end{equation*}
+\pause
+where $R (M)$ is a regularization function.
+\end{frame}
+
+
 
 
 %Fundamental Concepts
