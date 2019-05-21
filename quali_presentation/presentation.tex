@@ -134,6 +134,7 @@ where $k_1$ is a reaction rate constant.
 Repeating this procedure for all reactions of a pathway allows us to 
 derive a system of ordinary differential equations that can model the 
 signaling pathway.
+% TODO: maybe we should do this more detailed!
 \end{frame}
 
 
@@ -285,13 +286,13 @@ SABIO-RK.
 
 
 \begin{frame}{What we Propose on this Project}
-To create better search algorithms, \pause we intend to use more general
+To create new search algorithms, \pause we intend to use more general
 algorithms that can also remove interactions.
 \end{frame}
 
 
 \begin{frame}{What we Propose on this Project}
-To define better cost functions, \pause we intend to use Bayesian 
+To define new cost functions, \pause we intend to use Bayesian 
 approaches of model selection that allow us to create estimates of 
 probabilities such as $p (M | D)$ or $p (D | M)$.
 \end{frame}
@@ -325,7 +326,65 @@ probabilities such as $p (M | D)$ or $p (D | M)$.
 %- How can we choose between models
     %- Approximate Bayesian Computation
     %- Annealing-Melting Integration
+
+% TODO: do we need to talk about western blot?
 \section{Fundamental Concepts}
+
+
+%\begin{frame}{Experimental Measurements of Cell Signaling Pathways}
+%Experimental measurements of signaling pathways usually represent the
+%ratio of chemical species over time. \pause It is possible to get these
+%measurements using a Western blot procedure.
+%\begin{figure}
+%\end{figure}
+%\end{frame}
+
+
+\begin{frame}{Mathematical Modeling of Enzymatic Reactions}
+In this project we use three possible models of kinetics of an 
+interaction:
+\begin{itemize}
+\pause
+\item{first order interaction kinetics;}
+\pause
+\item{second order interaction kinetics;}
+\pause
+\item{Michaelis-Menten enzymatic kinetics.}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Kinetic Model of First Order Iteration}
+A first order reaction:
+\begin{equation*}
+\ce{R ->[\ce{$k_1$}] P},
+\end{equation*}
+\pause
+has rate of:
+\begin{equation*}
+k_1[R]
+\end{equation*}
+\end{frame}
+
+\begin{frame}{Kinetic Model of Second Order Iteration}
+A first order reaction:
+\begin{equation*}
+\ce{R_1 + R_2 ->[\ce{$k_1$}] P},
+\end{equation*}
+\pause
+has rate of:
+\begin{equation*}
+    k_1[R_1][R_2]
+\end{equation*}
+\end{frame}
+
+
+%A simple enzymatic equation can be written as:
+%\begin{equation*}
+%\ce{
+    %E + S <=>[\ce{$k$_f}][\ce{$k$_r}] ES ->[\ce{$k_{cat}$}] E + P
+%},
+%\end{equation*}
 
 %Model Selection
 %- Approximate Bayesian Computation
