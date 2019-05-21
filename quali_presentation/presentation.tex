@@ -201,7 +201,8 @@ Given a set of features $S$ and a cost function $c$, find subset
 Pathways}
 The methodology proposed by Wu defines the set of features as a set of 
 chemical reactions that can be added to a starting model.\pause This set 
-of chemical reactions is fetched from KEGG.
+of chemical reactions is fetched from KEGG and stored in a database of
+interactions.
 \end{frame}
 
 
@@ -218,6 +219,7 @@ experimental and simulated data.
 The minimum distance is found using a Simmulated Annealing 
 that traverses the parameter space.
 \end{frame}
+
 
 \begin{frame}{Wu's Cost Function for Feature Selection}
 If we define that:\pause
@@ -238,6 +240,80 @@ where $R (M)$ is a regularization function.
 \end{frame}
 
 
+\begin{frame}{Wu's Cost Function for Feature Selection}
+The $R (M)$ term is implicitly defined by imposing a time limit to the 
+Simmulated Annealing procedure used to calculate the cost function. 
+\pause As a result, the penalization of the cost function is random.
+\end{frame}
+
+
+\begin{frame}{Results of Wu's Methodology}
+Lulu Wu tested her methodology by trying to recreate models given a cut
+of the original model. \pause However, the methodology worked 
+satisfactorily only when the cut was similar to the original model.
+\end{frame}
+
+
+\begin{frame}{Difficulties of Wu's Methodology}
+We can point three aspects of Wu's work that could explain its 
+limitation.
+\begin{itemize}
+\pause
+\item{the database of interactions used could be more nearly complete;} 
+\pause
+\item{the search algorithm could also consider removing interactions;}
+\pause
+\item{the cost function could implement a proper penalization of 
+models;}
+\end{itemize}
+\end{frame}
+
+% TODO: maybe we should separate this in another section
+
+\begin{frame}{What we Propose on this Project}
+We propose to create a methodology that uses a feature selection 
+approach for identification of signaling pathways, tackling the 
+difficulties encountered by Wu.
+\end{frame}
+
+
+\begin{frame}{What we Propose on this Project}
+To get a more nearly complete database of interactions, we should fetch 
+information from KEGG and other databases, \pause such as STRING and
+SABIO-RK.
+\end{frame}
+
+
+\begin{frame}{What we Propose on this Project}
+To create better search algorithms, \pause we intend to use more general
+algorithms that can also remove interactions.
+\end{frame}
+
+
+\begin{frame}{What we Propose on this Project}
+To define better cost functions, \pause we intend to use Bayesian 
+approaches of model selection that allow us to create estimates of 
+probabilities such as $p (M | D)$ or $p (D | M)$.
+\end{frame}
+
+
+\begin{frame}{Objectives of this Project}
+\begin{itemize}
+\pause
+\item{Build a database of interactions.}
+\pause
+\item{Create a cost function for models of signaling pathways.}
+\pause
+\item{Formulate systematic modifications to a model as the search space
+    of a feature selection model.}
+\pause
+\item{Create search algorithms for the feature selection problem.}
+\pause
+\item{Test the methodology on known signaling pathways.}
+\pause
+\item{Apply the methodology on a real case.}
+\end{itemize}
+\end{frame}
 
 
 %Fundamental Concepts
