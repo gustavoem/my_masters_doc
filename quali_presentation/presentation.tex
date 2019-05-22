@@ -326,7 +326,6 @@ probabilities such as $p (M | D)$ or $p (D | M)$.
 %- How can we choose between models
     %- Approximate Bayesian Computation
     %- Annealing-Melting Integration
-
 % TODO: do we need to talk about western blot?
 \section{Fundamental Concepts}
 
@@ -340,7 +339,7 @@ probabilities such as $p (M | D)$ or $p (D | M)$.
 %\end{frame}
 
 
-\begin{frame}{Mathematical Modeling of Enzymatic Reactions}
+\begin{frame}{Mathematical Modeling of Reactions}
 In this project we use three possible models of kinetics of an 
 interaction:
 \begin{itemize}
@@ -354,37 +353,86 @@ interaction:
 \end{frame}
 
 
-\begin{frame}{Kinetic Model of First Order Iteration}
+\begin{frame}{Kinetic Modeling of First Order Iteration}
 A first order reaction:
-\begin{equation*}
-\ce{R ->[\ce{$k_1$}] P},
-\end{equation*}
+\begin{figure}
+\includegraphics[scale=1.5]{fundamental_concepts/first_order_reaction.pdf}
+\end{figure}
 \pause
 has rate of:
 \begin{equation*}
-k_1[R]
+k_1[\text{A}].
 \end{equation*}
 \end{frame}
 
-\begin{frame}{Kinetic Model of Second Order Iteration}
-A first order reaction:
-\begin{equation*}
-\ce{R_1 + R_2 ->[\ce{$k_1$}] P},
-\end{equation*}
+\begin{frame}{Kinetic Modeling of Second Order Iteration}
+A second order reaction:
+\begin{figure}
+\includegraphics[scale=1.5]{fundamental_concepts/second_order_reaction.pdf}
+\end{figure}
 \pause
 has rate of:
 \begin{equation*}
-    k_1[R_1][R_2]
+    k_1[\text{A}][\text{C}].
 \end{equation*}
 \end{frame}
 
 
 %A simple enzymatic equation can be written as:
-%\begin{equation*}
-%\ce{
-    %E + S <=>[\ce{$k$_f}][\ce{$k$_r}] ES ->[\ce{$k_{cat}$}] E + P
-%},
-%\end{equation*}
+\begin{frame}{Kinetic Modeling of Enzymatic Reactions}
+An enzymatic reaction:
+\begin{figure}
+\includegraphics[scale=1.5]{fundamental_concepts/enzymatic_reaction.pdf}
+\end{figure}
+\pause
+Can be divided in two first order reactions plus a second order 
+reaction.
+\pause
+However, with the appropriate assumptions, it is possible to use a 
+Michaelis-Menten simplification of this reaction.
+\end{frame}
+
+
+\begin{frame}{Michaelis-Menten Kinetics}
+We denote Michaelis-Menten simplification of the last enzymatic reaction
+as
+\begin{figure}
+\includegraphics[scale=1.5]{fundamental_concepts/michaelis_menten_reaction.pdf}
+\end{figure}
+\pause
+and it has rate of:
+\begin{equation*}
+    k_{cat} \frac{[\text{E}][\text{S}]}{K_M + [\text{S}]}.
+\end{equation*}
+\end{frame}
+
+
+\begin{frame}{Kinetics of a System of Reactions}
+Suppose we want to model the kinetics of these reactions:
+\begin{figure}
+    \includegraphics[scale=1.5]{fundamental_concepts/system_reactions.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Kinetics of a System of Reactions}
+This system can be divided in three reactions:
+\begin{itemize}
+    \pause
+    \item{\ce{A + B -> C}, with rate $k_1[\text{A}][\text{B}]$,}
+    \pause
+    \item{\ce{C -> A + B}, with rate $k_2[\text{C}]$,}
+    \pause
+    \item{\ce{A -> D}, with rate $k_3[\text{A}]$.}
+\end{itemize}
+\pause
+Then, the differential equation that models the concentration change of 
+A, for instance, is:
+\pause
+\begin{equation*}
+    \frac{d[\text[A]]}{dt} = -k_1[\text{A}][\text{B}] + k_2[\text{C}]
+        - k_3[\text{D}].
+\end{equation*}
+\end{frame}
 
 %Model Selection
 %- Approximate Bayesian Computation
@@ -395,8 +443,9 @@ has rate of:
     %- How to derive the thermodynamic integration
     %- How to estimate this value
 % Implementations
-\section{Model Selection}
 
+
+\section{Model Selection}
 
 \section{Experiments on Model Selection}
 \begin{frame}
