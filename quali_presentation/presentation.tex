@@ -190,11 +190,11 @@ Given a set of features $S$ and a cost function $c$, find subset
 \end{center}
 
 \pause
-\begin{figure}
-    \includegraphics[scale=.24]{introduction/Boolean_lattice.pdf}
-    \caption{An example of feature selection search space with 5 
-    features.}
-\end{figure}
+%\begin{figure}
+    %\includegraphics[scale=.24]{introduction/Boolean_lattice.pdf}
+    %\caption{An example of feature selection search space with 5 
+    %features.}
+%\end{figure}
 \end{frame}
 
 
@@ -222,30 +222,30 @@ that traverses the parameter space.
 \end{frame}
 
 
-\begin{frame}{Wu's Cost Function for Feature Selection}
-If we define that:\pause
-\begin{itemize}
-    \item{the experimental measurement is $D$;} \pause
-    \item{the simulated measure is $\phi (M, \theta)$;} \pause
-    \item{all elements visited on the Simmulated Annealing process 
-        define $\Theta'$.}
-\end{itemize}
-\pause
-Then, the cost function used on Wu's work is:
-\begin{equation*}
-    c (M) = min_{\{\theta \in \Theta' \subset \Theta\}}  
-        dist (\phi(M, \theta), D) + R (M),
-\end{equation*}
-\pause
-where $R (M)$ is a regularization function.
-\end{frame}
+%\begin{frame}{Wu's Cost Function for Feature Selection}
+%If we define that:\pause
+%\begin{itemize}
+    %\item{the experimental measurement is $D$;} \pause
+    %\item{the simulated measure is $\phi (M, \theta)$;} \pause
+    %\item{all elements visited on the Simmulated Annealing process 
+        %define $\Theta'$.}
+%\end{itemize}
+%\pause
+%Then, the cost function used on Wu's work is:
+%\begin{equation*}
+    %c (M) = min_{\{\theta \in \Theta' \subset \Theta\}}  
+        %dist (\phi(M, \theta), D) + R (M),
+%\end{equation*}
+%\pause
+%where $R (M)$ is a regularization function.
+%\end{frame}
 
 
-\begin{frame}{Wu's Cost Function for Feature Selection}
-The $R (M)$ term is implicitly defined by imposing a time limit to the 
-Simmulated Annealing procedure used to calculate the cost function. 
-\pause As a result, the penalization of the cost function is random.
-\end{frame}
+%\begin{frame}{Wu's Cost Function for Feature Selection}
+%The $R (M)$ term is implicitly defined by imposing a time limit to the 
+%Simmulated Annealing procedure used to calculate the cost function. 
+%\pause As a result, the penalization of the cost function is random.
+%\end{frame}
 
 
 \begin{frame}{Results of Wu's Methodology}
@@ -515,10 +515,201 @@ $p(\lambda)$ doing the following:
 % Implementations
 
 \section{Model Selection}
+\begin{frame}{}
+\begin{center}
+    \texttt{Ranking with Marginal Likelihood Estimation}
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Likelihood of Data Given Model and Parameters}
+If we consider that a model $M$ with parameters $\theta$ correctly 
+represent the signaling pathway \pause and that there is a Gaussian 
+observation error on $D$.
+\pause
+Then, the likelihood of observing experimental data $D$ is:
+\begin{equation*}
+     p (D | M, \theta) = \pause 
+        p_{\mathcal{N}_{\left(\vec{0}, \Sigma\right)}} 
+            (\phi (M,\theta) - D).
+\end{equation*}
+Where $\phi (M, \theta)$ is the simulated observation.
+\end{frame}
+
+
+\begin{frame}{Marginal Likelihood of Data}
+We can marginalize the likelihood to obtain:
+\begin{equation*}
+    p (D | M) = \int_{\Theta} p (D | M, \theta) p (\theta | M)d\theta
+\end{equation*}
+
+\pause
+Calculating this integral is hard, therefore we resort to estimating
+another integral.
+\end{frame}
+
+
+\begin{frame}{Power-posterior distributions}
+We define a power-posterior distribution as:
+\begin{equation*}
+    p_{\beta} (\theta) = \frac{p (D | \theta, M)^\beta p(\theta | M)}
+                    {\int_\Theta p (D | \theta, M)^\beta p(\theta | M) 
+                    d\theta},
+\end{equation*}
+\pause
+Note that:
+
+\begin{equation*}
+    p_{\beta=0} (\theta) = p (\theta | M),
+\end{equation*}
+
+\pause
+and that
+\begin{equation*}
+    p_{\beta=1}(\theta) =\frac{p (D, \theta|M)}
+                              {\int_\Theta p (D, \theta | M)d\theta}
+                        =\frac{p(\theta | D, M) p(D|M)}{p (D | M)}
+                        =p (\theta | D, M).
+\end{equation*}
+\end{frame}
+
+
+\begin{frame}{The Thermodynamic Integral}
+Using power-posteriors distributions, it is possible to show that
+\pause
+\begin{equation*}
+    \ln p (D | M) = \int_0^1 \expectation_{p_\beta (\theta)} 
+        [\ln p(D|\theta, M)]d\beta.
+    \label{eq:marginal_likelihood_again}
+\end{equation*}
+\end{frame}
+
+
+\begin{frame}{Estimating the Thermodynamic Integral}
+It is possible to estimate the Thermodynamic Integral using the 
+trapezoidal rule. \pause Setting $0 = \beta_0 < \beta_1 < \ldots 
+< \beta_T = 1$, the marginal likelihood is approximately equal to:
+\pause
+\begin{equation*}
+    \footnotesize
+    \sum_{t = 0}^{T - 1} (\beta_{t + 1} - \beta_t)
+\frac{
+    \expectation_{p_{\beta_{t + 1}} (\theta)}[\log p(D | M, \theta)]
++ 
+    \expectation_{p_{\beta_{t}} (\theta)}[\log p(D | M, \theta)]}
+{2}
+\end{equation*}
+\end{frame}
+
+\begin{frame}{Estimating the Thermodynamic Integral}
+To produce the estimates of 
+\begin{equation*}
+    \expectation_{p_{\beta_{t}} (\theta)}[\log p(D | M, \theta)]
+    \text{ for }
+    t \in \{0, \ldots, T\}
+\end{equation*}    
+we need to produce samples of the 
+power-posteriors $p_{\beta_{t}} (\theta)$.
+\end{frame}
+
+% Samples are generated running metropolis-hastings for each temperature
+% The sampling is divided in three steps. 
+%
+% On all sampling steps, the proposal distribution is Truncated Normal 
+% with only positive numbers
+%
+% On the first step, the jump distribution used has diagonal covariance
+%
+% On the second and third step, the jump covariance is estimated with 
+% the current sample of the posterior.
+%
+% On the third step, we use a Populational-MCMC. This method of smapling
+% helps mixing chains of different temperature.
+\begin{frame}{Sampling from Power-posteriors}
+The sampling of the power-posteriors are generated using 
+Metropolis-Hastings algorithms in three steps. \pause In all of the 
+steps, the proposal distribution used is a truncated multivariate 
+normal.
+\end{frame}
+
+
+\begin{frame}{Sampling from Power-posteriors}
+On the first step, the jump distribution has a diagonal covariance 
+matrix. \pause This matrix is updated according to the rate of 
+acceptance of parameters.
+
+\pause
+\begin{itemize}
+\item{if the acceptance rate is high, then increase the variance of the
+    jump;}
+
+\pause
+\item{if the acceptance rate is low, then decrease the variance of the 
+    jump.}
+\end{itemize}
+
+\pause
+On the second and third step, the covariance matrix of the jump 
+distributed is estimated with the current sample of the posterior.
+\end{frame}
+
+\begin{frame}{Sampling from the Power-posteriors}
+On the third step a Populational Monte Carlo Markov Chain is performed.
+This algorithm allows us to mix samples from different temperatures.
+\end{frame}
+
+
+\begin{frame}{}
+\begin{center}
+    \texttt{Ranking with Approximate Bayesian Computation}
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Approximate Bayesian Computation}
+Approximate Bayesian Computation (ABC) is a method that allows one to
+obtain samples of a distribution close to $p (\theta, M | D)$. \pause
+A general ABC implementation works as follow:
+
+\begin{enumerate}
+    \pause
+    \item{Sample a parameter candidate $(\theta^*, M^*)$ from some 
+        proposal distribution.}
+    \pause
+    \item{Generate simulations $\phi (M^*, \theta^*) = D^*$.}
+    \pause
+    \item{Calculate $d (D^*, D). If d (D^*, D) < \epsilon$ for some 
+        previously specified $\epsilon$, then add $(\theta^*, M^*)$ to 
+        the sample.}
+    \pause
+    \item{Repeat until some iteration limit.}
+\end{enumerate}
+\end{frame}
+
+
+\begin{frame}{Approximate Bayesian Computation}
+The result of the algorithm is a sample of the distribution 
+\begin{equation*}
+p (\theta, M| d (\phi (M, \theta), D) \leq \epsilon).
+\end{equation*}
+
+\end{frame}
+
+\begin{frame}{ABC Sequential Monte Carlo}
+ABC sequential Monte Carlo improves a simple ABC algorithm by using a 
+sequence $\{\epsilon_0, \ldots, \epsilon_T\}$ acceptance tolerances. 
+\pause The sample for a tolerance $\epsilon_i$ is used to generate 
+candidates for sample of tolerance $\epsilon_{i + 1}$.
+
+\pause
+We can use the accepted parameters of tolerance $\epsilon$ and model $M$
+to estimate 
+\begin{equation*}
+    p (M | d (\phi (M, \theta)) < \epsilon, D).
+\end{equation*}
+\end{frame}
 
 \section{Experiments on Model Selection}
-\begin{frame}
-\end{frame}
 \section{Next Steps}
 
 \end{document}
