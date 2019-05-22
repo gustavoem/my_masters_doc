@@ -52,39 +52,47 @@
 \headcommand {\sectionentry {2}{Fundamental Concepts}{58}{Fundamental Concepts}{0}}
 \headcommand {\slideentry {2}{0}{1}{58/58}{}{0}}
 \headcommand {\beamer@framepages {58}{58}}
-\headcommand {\slideentry {2}{0}{2}{59/62}{}{0}}
-\headcommand {\beamer@framepages {59}{62}}
-\headcommand {\slideentry {2}{0}{3}{63/64}{}{0}}
-\headcommand {\beamer@framepages {63}{64}}
-\headcommand {\slideentry {2}{0}{4}{65/66}{}{0}}
-\headcommand {\beamer@framepages {65}{66}}
-\headcommand {\slideentry {2}{0}{5}{67/69}{}{0}}
-\headcommand {\beamer@framepages {67}{69}}
-\headcommand {\slideentry {2}{0}{6}{70/71}{}{0}}
-\headcommand {\beamer@framepages {70}{71}}
-\headcommand {\slideentry {2}{0}{7}{72/72}{}{0}}
-\headcommand {\beamer@framepages {72}{72}}
-\headcommand {\slideentry {2}{0}{8}{73/78}{}{0}}
-\headcommand {\beamer@framepages {73}{78}}
-\headcommand {\beamer@sectionpages {58}{78}}
-\headcommand {\beamer@subsectionpages {58}{78}}
-\headcommand {\sectionentry {3}{Model Selection}{79}{Model Selection}{0}}
-\headcommand {\slideentry {3}{0}{1}{79/79}{}{0}}
-\headcommand {\beamer@framepages {79}{79}}
-\headcommand {\beamer@sectionpages {79}{79}}
-\headcommand {\beamer@subsectionpages {79}{79}}
-\headcommand {\sectionentry {4}{Experiments on Model Selection}{80}{Experiments on Model Selection}{0}}
-\headcommand {\slideentry {4}{0}{1}{80/80}{}{0}}
-\headcommand {\beamer@framepages {80}{80}}
-\headcommand {\slideentry {4}{0}{2}{81/81}{}{0}}
-\headcommand {\beamer@framepages {81}{81}}
-\headcommand {\beamer@sectionpages {80}{81}}
-\headcommand {\beamer@subsectionpages {80}{81}}
-\headcommand {\sectionentry {5}{Next Steps}{82}{Next Steps}{0}}
-\headcommand {\slideentry {5}{0}{1}{82/82}{}{0}}
+\headcommand {\slideentry {2}{0}{2}{59/59}{}{0}}
+\headcommand {\beamer@framepages {59}{59}}
+\headcommand {\slideentry {2}{0}{3}{60/63}{}{0}}
+\headcommand {\beamer@framepages {60}{63}}
+\headcommand {\slideentry {2}{0}{4}{64/65}{}{0}}
+\headcommand {\beamer@framepages {64}{65}}
+\headcommand {\slideentry {2}{0}{5}{66/67}{}{0}}
+\headcommand {\beamer@framepages {66}{67}}
+\headcommand {\slideentry {2}{0}{6}{68/70}{}{0}}
+\headcommand {\beamer@framepages {68}{70}}
+\headcommand {\slideentry {2}{0}{7}{71/72}{}{0}}
+\headcommand {\beamer@framepages {71}{72}}
+\headcommand {\slideentry {2}{0}{8}{73/76}{}{0}}
+\headcommand {\beamer@framepages {73}{76}}
+\headcommand {\slideentry {2}{0}{9}{77/81}{}{0}}
+\headcommand {\beamer@framepages {77}{81}}
+\headcommand {\slideentry {2}{0}{10}{82/82}{}{0}}
 \headcommand {\beamer@framepages {82}{82}}
-\headcommand {\beamer@partpages {1}{82}}
-\headcommand {\beamer@subsectionpages {82}{82}}
-\headcommand {\beamer@sectionpages {82}{82}}
-\headcommand {\beamer@documentpages {82}}
-\headcommand {\gdef \inserttotalframenumber {29}}
+\headcommand {\slideentry {2}{0}{11}{83/86}{}{0}}
+\headcommand {\beamer@framepages {83}{86}}
+\headcommand {\slideentry {2}{0}{12}{87/93}{}{0}}
+\headcommand {\beamer@framepages {87}{93}}
+\headcommand {\beamer@sectionpages {58}{93}}
+\headcommand {\beamer@subsectionpages {58}{93}}
+\headcommand {\sectionentry {3}{Model Selection}{94}{Model Selection}{0}}
+\headcommand {\slideentry {3}{0}{1}{94/94}{}{0}}
+\headcommand {\beamer@framepages {94}{94}}
+\headcommand {\beamer@sectionpages {94}{94}}
+\headcommand {\beamer@subsectionpages {94}{94}}
+\headcommand {\sectionentry {4}{Experiments on Model Selection}{95}{Experiments on Model Selection}{0}}
+\headcommand {\slideentry {4}{0}{1}{95/95}{}{0}}
+\headcommand {\beamer@framepages {95}{95}}
+\headcommand {\slideentry {4}{0}{2}{96/96}{}{0}}
+\headcommand {\beamer@framepages {96}{96}}
+\headcommand {\beamer@sectionpages {95}{96}}
+\headcommand {\beamer@subsectionpages {95}{96}}
+\headcommand {\sectionentry {5}{Next Steps}{97}{Next Steps}{0}}
+\headcommand {\slideentry {5}{0}{1}{97/97}{}{0}}
+\headcommand {\beamer@framepages {97}{97}}
+\headcommand {\beamer@partpages {1}{97}}
+\headcommand {\beamer@subsectionpages {97}{97}}
+\headcommand {\beamer@sectionpages {97}{97}}
+\headcommand {\beamer@documentpages {97}}
+\headcommand {\gdef \inserttotalframenumber {33}}

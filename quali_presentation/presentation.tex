@@ -338,6 +338,11 @@ probabilities such as $p (M | D)$ or $p (D | M)$.
 %\end{figure}
 %\end{frame}
 
+\begin{frame}{}
+\begin{center}
+\texttt{Kinetics Modeling of Chemical Reactions}
+\end{center}
+\end{frame}
 
 \begin{frame}{Mathematical Modeling of Reactions}
 In this project we use three possible models of kinetics of an 
@@ -408,13 +413,10 @@ and it has rate of:
 
 
 \begin{frame}{Kinetics of a System of Reactions}
-Suppose we want to model the kinetics of these reactions:
+Suppose we want to model the kinetics of A on these reactions:
 \begin{figure}
     \includegraphics[scale=1.5]{fundamental_concepts/system_reactions.pdf}
 \end{figure}
-\end{frame}
-
-\begin{frame}{Kinetics of a System of Reactions}
 This system can be divided in three reactions:
 \begin{itemize}
     \pause
@@ -424,14 +426,82 @@ This system can be divided in three reactions:
     \pause
     \item{\ce{A -> D}, with rate $k_3[\text{A}]$.}
 \end{itemize}
+\end{frame}
+
+\begin{frame}{Kinetics of a System of Reactions}
+In \ce{A + B -> C}, with rate 
+{\color{red!50!black}$k_1[\text{A}][\text{B}]$}, A is a reactant.
 \pause
+
+In \ce{C -> A + B}, with rate 
+{\color{green!50!black}$k_2[\text{C}]$}, A is a product.
+\pause
+
+In \ce{A -> D}, with rate 
+{\color{red!50!black}$k_3[\text{A}]$}, A is a reactant.
+\pause
+
 Then, the differential equation that models the concentration change of 
-A, for instance, is:
+A is:
 \pause
 \begin{equation*}
-    \frac{d[\text[A]]}{dt} = -k_1[\text{A}][\text{B}] + k_2[\text{C}]
-        - k_3[\text{D}].
+    \frac{d[\text{A}]}{dt} = 
+        {\color{red!50!black}- k_1[\text{A}][\text{B}]}
+        {\color{green!50!black}+ k_2[\text{C}]}
+        {\color{red!50!black}- k_3[\text{D}]}.
 \end{equation*}
+\end{frame}
+
+
+\begin{frame}{}
+\begin{center}
+\texttt{Bayesian Methods for Biochemical Model Selection}
+\end{center}
+\end{frame}
+
+\begin{frame}{State of the Art Methods for Model Selection}
+There are two main Bayesian methods available for biochemical model 
+selection:
+\begin{itemize}
+\pause
+\item{Approximate Bayesian Computation;}
+
+\pause
+\item{Marginal likelihood estimation through Thermodynamic Integration.}
+\end{itemize}
+
+\pause
+For both methods, we resort to Metropolis-Hastings algorithm to generate
+samples of distributions.
+\end{frame}
+
+
+\begin{frame}{Metropolis-Hastings algorithm}
+With Metropolis-Hastings, we can generate a sample of a distribution 
+$p(\lambda)$ doing the following:
+\pause
+    \begin{enumerate}
+        \pause
+        \item{Choose some $\lambda_0$ for which $p (\lambda_0) > 0$, and
+            set $t = 1$;}
+
+        \pause
+        \item{Sample a candidate point $\lambda^*$ from a jump 
+            distribution, $J (\lambda | \lambda_{t-1})$;}
+
+        \pause
+        \item{Calculate the ratio 
+            $r = \frac{p (\lambda^*) J_t (\lambda^{t - 1} | \lambda^*)}
+            {p (\lambda^{t - 1}) J_t (\lambda^* | \lambda^{t - 1})}$;}
+
+        \pause
+        \item{Set $\lambda_t = \lambda^*$ with probability $\min (1, r)$
+            and $\lambda_t = \lambda_{t-1}$ otherwise;}
+
+        \pause
+        \item{Increase $t$ by one and repeat from Step 2 if not reached
+            iteration limit.}
+    \end{enumerate}
 \end{frame}
 
 %Model Selection
@@ -443,7 +513,6 @@ A, for instance, is:
     %- How to derive the thermodynamic integration
     %- How to estimate this value
 % Implementations
-
 
 \section{Model Selection}
 
