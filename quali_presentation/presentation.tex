@@ -853,6 +853,25 @@ and Girolami (2007):
 \end{equation*}
 \end{frame}
 
+\begin{frame}{Results on SigNetMS}
+\begin{figure}
+    \centering
+    \begin{tabular}{c c}
+    \subfigure{
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_39.png}}
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/girolami/gamma/snm/simulations_model2_39.png}} 
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/girolami/gamma/snm/simulations_model3_39.png}} 
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/girolami/gamma/snm/simulations_model4_39.png}} 
+    \end{tabular}
+\end{figure}
+\end{frame}
+
 
 \begin{frame}{Results on SigNetMS}
 \begin{figure}
@@ -900,7 +919,6 @@ and Girolami (2007):
     \end{tabular}
 \end{figure}
 \end{frame}
-
 
 
 \begin{frame}{}
@@ -1042,9 +1060,114 @@ The ABC-SysBio software returned the following ranking of models:
 \begin{frame}{Results on SigNetMS}
 SigNetMS returned the following ranking of models:
 \begin{equation*}
-a
+2 > 1 > 3 > 4
 \end{equation*}
 \end{frame}
 
-\section{Next Steps}
+
+\begin{frame}{Results on SigNetMS}
+\begin{figure}
+    \centering
+    \begin{tabular}{c c}
+    \subfigure{
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/simulations_model1_39.png}}
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/simulations_model2_39.png}} 
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/simulations_model3_39.png}} 
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/simulations_model4_39.png}} 
+    \end{tabular}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Results on SigNetMS}
+\begin{figure}
+    \centering
+    \begin{tabular}{c c}
+    \subfigure{
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/simulations_model1_0.png}}
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/simulations_model1_19.png}} 
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/simulations_model1_29.png}} 
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/simulations_model1_39.png}} 
+    \end{tabular}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Results on SigNetMS}
+\begin{figure}
+    \centering
+    \begin{tabular}{c c}
+    \subfigure{
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/model1_0_p2.png}
+    \label{fig:abc_bio_avgsim3_it1}}
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/model1_19_p2.png}
+    \label{fig:abc_bio_avgsim3_it2}} 
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/model1_29_p2.png}
+    \label{fig:abc_bio_avgsim3_it3}} 
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/model1_39_p2.png}
+    \label{fig:abc_bio_avgsim3_it4}} 
+    \end{tabular}
+\end{figure}
+\end{frame}
+
+\section{Future Work}
+
+\begin{frame}{Future Work}
+More activities are expected to be completed in this project, mainly the
+follow:
+\begin{itemize}
+    \pause
+    \item{} Finalize experiments with SigNetMS.
+    \pause
+    \item{} Determine, between ABC-SysBio and SigNetMS,
+        which is best to rank models.
+    \pause
+    \item{} Studies of databases of chemical kinetics 
+        such as SABIO-RK and BRENDA.
+    \pause
+    \item{} Creation of a relational database of chemical 
+        interactions that is able to store the topology and rate 
+        constants of reactions gathered from chemical kinetics 
+        databases.
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Future Work}
+\begin{itemize}
+    \item{} Implementation of a feature selection cost
+        function and definition of the search space on featsel, which 
+        will allows us to solve the identification of signaling pathways 
+        as a feature selection problem.
+    \pause
+    \item{} Creation of new algorithms of feature 
+        selection for the problem of identification of signaling 
+        pathways.
+    \pause
+    \item{} Testing of the methodology developed on known
+        pathways.
+    \pause
+    \item{} Application of the method in ERK signaling 
+        pathways of tumor cell lines Y1 and HEK293.
+\end{itemize}
+\end{frame}
+
 \end{document}
