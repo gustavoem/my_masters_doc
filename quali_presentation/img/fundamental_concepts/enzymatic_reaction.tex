@@ -1,7 +1,7 @@
 \documentclass[]{article}
 
 \usepackage[utf8]{inputenc}
-\usepackage[paperheight=0.6in,paperwidth=1.7in,margin=.1mm]{geometry}
+\usepackage[paperheight=0.6in,paperwidth=1.9in,margin=.1mm]{geometry}
 \usepackage{tikz}
 \usetikzlibrary{shapes, arrows, calc}
 \usepackage{color}
@@ -16,12 +16,14 @@
 \node  at (0, -1)  (S) {$\bf S$};
 \node  at (2, -.5) (ES) {$\bf ES$};
 \node  at (1, -.5) (fakeES) {};
-\node  at (3, -.5) (P) {$\bf P$};
-\path (E) edge[<-, out=0, in=180] (fakeES);
+\node  at (3.5, -.5) (P) {$\bf P$};
+\node  at (2.5, -.5)   (fakeES2) {};
+\path ($(E.east)+(0,-0.05)$) edge[<-, out=0, in=180] (fakeES);
 \path (S) edge[<-, out=0, in=180] (fakeES);
 \path ($(fakeES)+(-.1,0)$) edge[->] node[above, xshift=-0.2cm] 
     {$k_3, k_4$} (ES);
-\path (ES) edge[->, out=0, in=180] node[above] {$k_{cat}$} (P);
+\path (ES) edge[->, out=0, in=180] node[below] {$k_{cat}$} (P);
+\path ($(fakeES2)$) edge[->, in=0, out=0] ($(E.east)+(0,0.05)$);
 \end{tikzpicture} 
 \end{document}
 

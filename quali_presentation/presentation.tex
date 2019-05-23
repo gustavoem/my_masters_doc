@@ -30,10 +30,12 @@
 \title{Identification of cell signaling pathways based on biochemical 
 reaction kinetics repositories}
 \date{May 2019}
-\author{Gustavo Estrela}
+\author{Student: Gustavo Estrela\\
+Advisor: Marcelo da Silva Reis (Butantan Institute)}
 \institute{Instituto de Matemática e Estatística \\ 
            Centro de Toxinas, Resposta-imune e Sinalização Celular (CeTICS) \\
-           Laboratório Especial de Ciclo Celular, Instituto Butantan}
+           Laboratório Especial de Ciclo Celular, Instituto Butantan\\
+           \tiny{This project receives funding from FAPESP}}
 \begin{document}
 
 \maketitle
@@ -64,80 +66,73 @@ reaction kinetics repositories}
 
 \section{Introduction}
 \begin{frame}{Cell Signaling}
-% Antes de mais nada, vamos entender o que são vias de sinalização 
-% celular. 
-% A sinalização celular faz parte da comunicação das células de um 
-% organismo. Um sinal pode avançar 
-
-%\begin{itemize}
-%\item{
 Cell signaling allows cells to respond to signals that come from its 
 environment changing its behaviour accordingly.
-%}
 \pause
-%\item{
 
 This mechanism is essential for many cell functions, including 
 reproduction, growth and death.
-%}
 \pause
-%\item{
 
 Understanding the functioning of cell signaling is important in many 
 biological areas.
-%}
-%\end{itemize}
 \end{frame}
 
 
 \begin{frame}{Cell Signaling}
 \begin{figure}
     \includegraphics[clip=True, scale=.85]{introduction/signaling_mechanism.pdf}
-    \caption{A general cell signaling mechanism.}
 \end{figure}
 \end{frame}
+
+
+\begin{frame}{Cell Signaling}
+A signal propagates in an organism though chemical reactions that are
+caused by the change of concentration of chemical species.
+
+\pause
+We call the path of a signal a cell signaling pathway.
+\end{frame}
+
 
 \begin{frame}{Cell Signaling Pathways}
 A cell signaling network can be characterized by a sequence of chemical 
-reactions that allows the presence of a signal to modify the state or 
-behaviour of a cell.
+reactions 
 \begin{figure}
-    \includegraphics{introduction/csp_example.pdf}
-    \caption{An example of a signaling pathway.}
+    \includegraphics[scale=1.2, trim={.5cm 0 0 0}, clip]{introduction/csp_example.pdf}
 \end{figure}
 \end{frame}
 
 \begin{frame}{Mathematical Models of Signaling Networks}
-In many applications, we summarize the state of the cell with a 
-measurement based on the concentration of chemical species of the cell.
+We can summarize the state of the cell with measurements based on the 
+concentration of some chemical species.
 \pause
 
-Using biochemical and enzymatic kinetics, we can write equations that
-represent the rate of change of concentration for a chemical species.
+Using biochemical and enzymatic kinetics, we can model the concentration
+change of chemical species over time of a pathway.
 \end{frame}
 
 
-\begin{frame}{Mathematical Models of Signaling Networks}
-As an example, for the chemical reaction
-\begin{equation*}
-\ce{
-    A -> B
-},
-\end{equation*}
+%\begin{frame}{Mathematical Models of Signaling Networks}
+%As an example, for the chemical reaction
+%\begin{equation*}
+%\ce{
+    %A -> B
+%},
+%\end{equation*}
 
-\pause
-we can write the following equation:
-\begin{equation*}
-        \frac{d[\text{A}]}{dt} = k_1[\text{A}]; 
-\end{equation*}
-where $k_1$ is a reaction rate constant.
+%\pause
+%we can write the following equation:
+%\begin{equation*}
+        %\frac{d[\text{A}]}{dt} = k_1[\text{A}]; 
+%\end{equation*}
+%where $k_1$ is a reaction rate constant.
 
-\pause
-Repeating this procedure for all reactions of a pathway allows us to 
-derive a system of ordinary differential equations that can model the 
-signaling pathway.
-% TODO: maybe we should do this more detailed!
-\end{frame}
+%\pause
+%Repeating this procedure for all reactions of a pathway allows us to 
+%derive a system of ordinary differential equations that can model the 
+%signaling pathway.
+%\end{frame}
 
 
 \begin{frame}{Identification of Cell Signaling Pathways}
@@ -184,20 +179,20 @@ treated as a feature selection problem.
 \end{frame}
 
 
-\begin{frame}{Feature Selection Problem}
-The feature selection problem is a combinatorial optimization problem:
-\begin{center}
-Given a set of features $S$ and a cost function $c$, find subset 
-        $X \in \powerset (S)$, with minimum cost $c(X)$.
-\end{center}
+%\begin{frame}{Feature Selection Problem}
+%The feature selection problem is a combinatorial optimization problem:
+%\begin{center}
+%Given a set of features $S$ and a cost function $c$, find subset 
+        %$X \in \powerset (S)$, with minimum cost $c(X)$.
+%\end{center}
 
-\pause
+%\pause
 %\begin{figure}
     %\includegraphics[scale=.24]{introduction/Boolean_lattice.pdf}
     %\caption{An example of feature selection search space with 5 
     %features.}
 %\end{figure}
-\end{frame}
+%\end{frame}
 
 
 \begin{frame}{Feature Selection for Identification of Signaling 
@@ -259,7 +254,7 @@ satisfactorily only when the cut was similar to the original model.
 
 \begin{frame}{Difficulties of Wu's Methodology}
 We can point three aspects of Wu's work that could explain its 
-limitation.
+limitations.
 \begin{itemize}
 \pause
 \item{the database of interactions used could be more nearly complete;} 
@@ -271,7 +266,6 @@ models;}
 \end{itemize}
 \end{frame}
 
-% TODO: maybe we should separate this in another section
 
 \begin{frame}{What we Propose on this Project}
 We propose to create a methodology that uses a feature selection 
@@ -310,11 +304,8 @@ probabilities such as $p (M | D)$ or $p (D | M)$.
 \item{Formulate systematic modifications to a model as the search space
     of a feature selection model.}
 \pause
-\item{Create search algorithms for the feature selection problem.}
-\pause
-\item{Test the methodology on known signaling pathways.}
-\pause
-\item{Apply the methodology on a real case.}
+\item{Test the methodology on known signaling pathways and also on 
+    pathways of interest in our lab.}
 \end{itemize}
 \end{frame}
 
@@ -328,10 +319,7 @@ probabilities such as $p (M | D)$ or $p (D | M)$.
 %- How can we choose between models
     %- Approximate Bayesian Computation
     %- Annealing-Melting Integration
-% TODO: do we need to talk about western blot?
 \section{Fundamental Concepts}
-
-
 %\begin{frame}{Experimental Measurements of Cell Signaling Pathways}
 %Experimental measurements of signaling pathways usually represent the
 %ratio of chemical species over time. \pause It is possible to get these
@@ -652,7 +640,7 @@ acceptance of parameters.
 
 \pause
 On the second and third step, the covariance matrix of the jump 
-distributed is estimated with the current sample of the posterior.
+distribution is estimated with the current sample of the posterior.
 \end{frame}
 
 \begin{frame}{Sampling from the Power-posteriors}
@@ -762,16 +750,16 @@ which they present results of Annealing Melting Integration.
 \begin{figure}
   \begin{tabular}{c c}
     \subfigure[Model 1]{
-    \includegraphics[clip=true,width=.40\linewidth]{experiments/diagrams/bioinformatics_model1.pdf}}
+    \includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model1.pdf}}
     &
     \subfigure[Model 2]{
-    \includegraphics[clip=true,width=.40\linewidth]{experiments/diagrams/bioinformatics_model2.pdf}}
+    \includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model2.pdf}}
     \\
     \subfigure[Model 3] {
-    \includegraphics[clip=true,width=.40\linewidth]{experiments/diagrams/bioinformatics_model3.pdf}}
+    \includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model3.pdf}}
     &
     \subfigure[Model 4] {
-    \includegraphics[clip=true,width=.40\linewidth]{experiments/diagrams/bioinformatics_model4.pdf}}
+    \includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model4.pdf}}
     \end{tabular}
 \end{figure}
 \end{frame}
@@ -793,23 +781,24 @@ The ABC-SysBio software returned the following ranking of models:
 
 
 \begin{frame}{Results on ABC-SysBio}
+    \vspace{-2em}
 \begin{figure}[h]
   \centering 
   \begin{tabular}{c c}
     \subfigure{
-    \includegraphics[clip=true,width=.40\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_1.pdf}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_1.pdf}
     \label{fig:abc_bio_avgsim1_it1}}
     &
     \subfigure{
-    \includegraphics[clip=true,width=.40\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_10.pdf}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_10.pdf}
     \label{fig:abc_bio_avgsim1_it2}} 
     \\
     \subfigure{
-    \includegraphics[clip=true,width=.40\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_20.pdf}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_20.pdf}
     \label{fig:abc_bio_avgsim1_it3}} 
     &
     \subfigure{
-    \includegraphics[clip=true,width=.40\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_26.pdf}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_26.pdf}
     \label{fig:abc_bio_avgsim1_it4}} 
     \end{tabular}
 \end{figure}
@@ -817,23 +806,24 @@ The ABC-SysBio software returned the following ranking of models:
 
 
 \begin{frame}{Results on ABC-SysBio}
+    \vspace{-2em}
 \begin{figure}
     \centering
     \begin{tabular}{c c}
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/girolami/gamma/abc/simulations_model3_1.pdf}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model3_1.pdf}
     \label{fig:abc_bio_avgsim3_it1}}
     &
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/girolami/gamma/abc/simulations_model3_10.pdf}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model3_10.pdf}
     \label{fig:abc_bio_avgsim3_it2}} 
     \\
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/girolami/gamma/abc/simulations_model3_20.pdf}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model3_20.pdf}
     \label{fig:abc_bio_avgsim3_it3}} 
     &
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/girolami/gamma/abc/simulations_model3_26.pdf}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model3_26.pdf}
     \label{fig:abc_bio_avgsim3_it4}} 
     \end{tabular}
 \end{figure}
@@ -854,43 +844,45 @@ and Girolami (2007):
 \end{frame}
 
 \begin{frame}{Results on SigNetMS}
+\vspace{-2em}
 \begin{figure}
     \centering
     \begin{tabular}{c c}
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_39.png}}
+    \includegraphics[clip=true,width=.46\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_39.png}}
     &
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/girolami/gamma/snm/simulations_model2_39.png}} 
+    \includegraphics[clip=true,width=.46\linewidth]{experiments/results/girolami/gamma/snm/simulations_model2_39.png}} 
     \\
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/girolami/gamma/snm/simulations_model3_39.png}} 
+    \includegraphics[clip=true,width=.46\linewidth]{experiments/results/girolami/gamma/snm/simulations_model3_39.png}} 
     &
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/girolami/gamma/snm/simulations_model4_39.png}} 
+    \includegraphics[clip=true,width=.46\linewidth]{experiments/results/girolami/gamma/snm/simulations_model4_39.png}} 
     \end{tabular}
 \end{figure}
 \end{frame}
 
 
 \begin{frame}{Results on SigNetMS}
+    \vspace{-2em}
 \begin{figure}
     \centering
     \begin{tabular}{c c}
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_0.png}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_0.png}
     \label{fig:abc_bio_avgsim3_it1}}
     &
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_19.png}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_19.png}
     \label{fig:abc_bio_avgsim3_it2}} 
     \\
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_29.png}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_29.png}
     \label{fig:abc_bio_avgsim3_it3}} 
     &
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_39.png}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_39.png}
     \label{fig:abc_bio_avgsim3_it4}} 
     \end{tabular}
 \end{figure}
@@ -898,23 +890,24 @@ and Girolami (2007):
 
 
 \begin{frame}{Results on SigNetMS}
+    \vspace{-2em}
 \begin{figure}
     \centering
     \begin{tabular}{c c}
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/girolami/gamma/snm/model1_0_p0_k_1.png}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/model1_0_p0_k_1.png}
     \label{fig:abc_bio_avgsim3_it1}}
     &
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/girolami/gamma/snm/model1_19_p0_k_1.png}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/model1_19_p0_k_1.png}
     \label{fig:abc_bio_avgsim3_it2}} 
     \\
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/girolami/gamma/snm/model1_29_p0_k_1.png}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/model1_29_p0_k_1.png}
     \label{fig:abc_bio_avgsim3_it3}} 
     &
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/girolami/gamma/snm/model1_39_p0_k_1.png}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/model1_39_p0_k_1.png}
     \label{fig:abc_bio_avgsim3_it4}} 
     \end{tabular}
 \end{figure}
@@ -982,38 +975,40 @@ The ABC-SysBio software returned the following ranking of models:
 
 
 \begin{frame}{Results on ABC-SysBio}
+    \vspace{-2em}
 \begin{figure}
     \centering
     \begin{tabular}{c c}
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/abc/simulations_model1_20.pdf}}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model1_20.pdf}}
     &
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/abc/simulations_model2_20.pdf}} 
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model2_20.pdf}} 
     \\
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/abc/simulations_model3_20.pdf}} 
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model3_20.pdf}} 
     &
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/abc/simulations_model4_20.pdf}} 
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model4_20.pdf}} 
     \end{tabular}
 \end{figure}
 \end{frame}
 
 
 \begin{frame}{Results on ABC-SysBio}
+    \vspace{-2em}
 \begin{figure}
     \centering
     \begin{tabular}{c c}
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/abc/simulations_model1_50.pdf}}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model1_50.pdf}}
     &
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/abc/simulations_model2_50.pdf}} 
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model2_50.pdf}} 
     \\
     \multicolumn{2}{c}{
     \subfigure{
-        \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/abc/simulations_model4_50.pdf}} }
+        \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model4_50.pdf}} }
     \end{tabular}
 \end{figure}
 \end{frame}
@@ -1034,23 +1029,24 @@ The ABC-SysBio software returned the following ranking of models:
 
 
 \begin{frame}{Results on ABC-SysBio}
+    \vspace{-2em}
 \begin{figure}
     \centering
     \begin{tabular}{c c}
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/abc/model1_64_p0_k_1.pdf}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/model1_64_p0_k_1.pdf}
     }
     &
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/abc/model1_64_p1_k_2.pdf}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/model1_64_p1_k_2.pdf}
     }
     \\
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/abc/model1_64_p2_k_3cat.pdf}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/model1_64_p2_k_3cat.pdf}
     }
     &
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/abc/model1_64_p3_K_3m.pdf}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/model1_64_p3_K_3m.pdf}
     }
 \end{tabular}
 \end{figure}
@@ -1066,63 +1062,66 @@ SigNetMS returned the following ranking of models:
 
 
 \begin{frame}{Results on SigNetMS}
+    \vspace{-2em}
 \begin{figure}
     \centering
     \begin{tabular}{c c}
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/simulations_model1_39.png}}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model1_39.png}}
     &
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/simulations_model2_39.png}} 
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model2_39.png}} 
     \\
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/simulations_model3_39.png}} 
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model3_39.png}} 
     &
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/simulations_model4_39.png}} 
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model4_39.png}} 
     \end{tabular}
 \end{figure}
 \end{frame}
 
 
 \begin{frame}{Results on SigNetMS}
+    \vspace{-2em}
 \begin{figure}
     \centering
     \begin{tabular}{c c}
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/simulations_model1_0.png}}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model1_0.png}}
     &
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/simulations_model1_19.png}} 
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model1_19.png}} 
     \\
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/simulations_model1_29.png}} 
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model1_29.png}} 
     &
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/simulations_model1_39.png}} 
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model1_39.png}} 
     \end{tabular}
 \end{figure}
 \end{frame}
 
 
 \begin{frame}{Results on SigNetMS}
+    \vspace{-2em}
 \begin{figure}
     \centering
     \begin{tabular}{c c}
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/model1_0_p2.png}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/model1_0_p2.png}
     \label{fig:abc_bio_avgsim3_it1}}
     &
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/model1_19_p2.png}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/model1_19_p2.png}
     \label{fig:abc_bio_avgsim3_it2}} 
     \\
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/model1_29_p2.png}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/model1_29_p2.png}
     \label{fig:abc_bio_avgsim3_it3}} 
     &
     \subfigure{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/results/smallest/snm/model1_39_p2.png}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/model1_39_p2.png}
     \label{fig:abc_bio_avgsim3_it4}} 
     \end{tabular}
 \end{figure}
@@ -1143,6 +1142,8 @@ follow:
     \item{} Studies of databases of chemical kinetics 
         such as SABIO-RK and BRENDA.
     \pause
+    % TODO: one class to fulfill credits requirements
+    % TODO: comment on focusing the database for our applications.
     \item{} Creation of a relational database of chemical 
         interactions that is able to store the topology and rate 
         constants of reactions gathered from chemical kinetics 
@@ -1152,18 +1153,14 @@ follow:
 
 
 \begin{frame}{Future Work}
+% TODO: from the experiments we defined that we're going to use SigNetMS from now on
+% TODO: optimize computationally SigNetMS
 \begin{itemize}
+    % TODO: comment -> cost function is just a wrapper
+    % TODO: comment -> many search algorithms are ready to use on 
+    % featsel
     \item{} Implementation of a feature selection cost
-        function and definition of the search space on featsel, which 
-        will allows us to solve the identification of signaling pathways 
-        as a feature selection problem.
-    \pause
-    \item{} Creation of new algorithms of feature 
-        selection for the problem of identification of signaling 
-        pathways.
-    \pause
-    \item{} Testing of the methodology developed on known
-        pathways.
+        function and definition of the search space on featsel. 
     \pause
     \item{} Application of the method in ERK signaling 
         pathways of tumor cell lines Y1 and HEK293.
