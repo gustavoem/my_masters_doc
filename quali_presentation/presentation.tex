@@ -1133,11 +1133,11 @@ SigNetMS returned the following ranking of models:
 More activities are expected to be completed in this project, mainly the
 follow:
 \begin{itemize}
+    \pause 
+    \item{} Complete program credits requirement.
     \pause
-    \item{} Finalize experiments with SigNetMS.
-    \pause
-    \item{} Determine, between ABC-SysBio and SigNetMS,
-        which is best to rank models.
+    \item{} Improve computationally SigNetMS, since we chose it as our
+        cost function for models.
     \pause
     \item{} Studies of databases of chemical kinetics 
         such as SABIO-RK and BRENDA.
@@ -1145,9 +1145,7 @@ follow:
     % TODO: one class to fulfill credits requirements
     % TODO: comment on focusing the database for our applications.
     \item{} Creation of a relational database of chemical 
-        interactions that is able to store the topology and rate 
-        constants of reactions gathered from chemical kinetics 
-        databases.
+        interactions focused on our further applications.
     \end{itemize}
 \end{frame}
 
@@ -1159,12 +1157,20 @@ follow:
     % TODO: comment -> cost function is just a wrapper
     % TODO: comment -> many search algorithms are ready to use on 
     % featsel
-    \item{} Implementation of a feature selection cost
-        function and definition of the search space on featsel. 
+    \item{} Define a wrapper on featsel that allows the use of SigNetMS
+        as a cost function.
     \pause
-    \item{} Application of the method in ERK signaling 
+    \item{} Choice of a feature selection search algorithm.
+    \pause
+    \item{} Apply the method in ERK signaling 
         pathways of tumor cell lines Y1 and HEK293.
 \end{itemize}
+\end{frame}
+
+\begin{frame}{}
+\begin{center}
+    \texttt{Thank you!}
+\end{center}
 \end{frame}
 
 \end{document}
