@@ -1,0 +1,15 @@
+We model the Signaling by
+-> Cell Signaling Pathways, a cascade of chemical interactions with 
+proteins.
+-> We can the concentration change of the proteins with odinary 
+differential equations
+-> If we model all interactions of a pathway we get a system of EDOs, 
+which actually has a lot of unkown parameters, related to rates of 
+chemical reactions.
+
+How do we chose the best model
+-> Given some experimental data, we can model likelihood of a model and
+its parameters.
+-> Using something called Thermodynamic Integration we can marginalize
+it and create a score.
+
