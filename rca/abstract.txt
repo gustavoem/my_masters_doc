@@ -1,0 +1,54 @@
+Introduction
+Cell signaling pathways are mechanisms that participate in cell 
+communication and allow cells to adapt its behaviour according to 
+signals that reach the cell. These mechanisms participate in many cell 
+functions, such as growth, division and death; they can also participate 
+in the causes of diseases, including cancer. Therefore, creating models 
+for signaling pathways can elucidate the functioning of many cell 
+mechanisms. Traditionally, the identification of cell signaling pathways
+involves a biological assay that quantify concentrations of chemical 
+species over time in the cell followed by statistical analyses 
+considering experimental data and a proposed model. Recently, a method 
+was introduced to propose candidate models systematically by adding 
+chemical interactions to a starting model. In this approach, 
+with the definition of a score metric for models, it was possible to 
+tackle the identification of cell signaling pathways as a feature 
+selection problem, where the set of features is a set of chemical 
+reactions extracted from KEGG. However, this method presented some 
+shortcomings that impair the selected model; among them are the 
+incompleteness of the information extracted from KEGG, the usage of
+naive heuristics of feature selection, and the usage of an 
+unsatisfactory score metric that was unable to penalize overfitting.
+ 
+Objectives
+In this work, we propose to create a new methodology that also uses
+a feature selection approach to solve the problem of identification of
+cell signaling pathways. We propose to use a more general search 
+algorithm that allows not only adding but also removing chemical 
+reactions from models; we also propose a new metric that evaluates a 
+model using Bayesian inference to estimate the marginal likelihood of 
+the experimental data given such model. Ultimately, after testing the 
+methodology on artificial data, we propose to apply this methodology on 
+identification of cell signaling pathways of the Y1 adrenocortical
+tumor cell line.
+
+Methods
+To evaluate the quality of the models, we implemented an open source 
+Python program called SigNetMS, which is able to create an estimative 
+of the marginal likelihood of the experimental data given a model. This
+estimative is created using a thermodynamic integral decomposition of 
+the marginal likelihood, which allow us to get the estimative using only
+samples of intermediate distributions linking prior and posterior 
+distributions of model parameters. To test and implement search 
+algorithms, we intend to use a C++ feature selection framework called 
+featsel.
+
+Results and Discussion
+Initial results with synthetic data show that the chosen score function 
+does penalize well overly complex models and can actually give higher 
+scores to simpler models that can correctly simulate the dynamics 
+observed in the biological experiments. The next steps include the 
+implementation of the systematic model proposals, using the featsel 
+framework with its current feature selection algorithms, and the
+creation of a relational database of chemical reactions, gathering 
+information from a myriad of public biochemical reaction repositories.
