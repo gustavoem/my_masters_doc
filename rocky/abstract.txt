@@ -1,0 +1,23 @@
+Cell signaling pathways are important mechanisms that participate in 
+many cell functions. It is possible to create computational models for 
+these pathways with the analyses of biological assays in which the state 
+of the cell is depicted with a series of concentration of chemical 
+species. To construct such models, it is necessary to determine the set 
+of chemical reactions that are relevant in the biological assay. 
+Recently, a method was introduced to propose models systematically 
+by adding reactions to a starting model. In this approach, with the 
+definition of a score metric for models it was possible to solve the 
+identification of signaling pathways as a feature selection problem, in
+which the set of features is a set of possible chemical reactions 
+extracted from KEGG. However, this method presented 
+some shortcomings that impair the selected model; among them are the 
+usage of naive search heuristics and the unsatisfactory penalization of 
+overfitting models. We propose in this project to create a new
+methodology that also tackles the identification of signaling pathways
+as a feature selection problem. We propose to use a more general search
+algorithm and a score metric that uses Bayesian inference to estimate 
+the marginal likelihood of experimental data given a candidate model. 
+We propose to test this methodology on the identification of pathways for
+the Y1 adrenocortical tumor cell line. We already have produced a Python
+program that calculates the chosen score metric and early results show 
+that the chosen metric does penalize overly complex models.

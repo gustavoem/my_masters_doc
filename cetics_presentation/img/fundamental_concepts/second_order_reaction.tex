@@ -1,0 +1,21 @@
+\documentclass[]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[paperheight=0.6in,paperwidth=1.2in,margin=.1mm]{geometry}
+\usepackage{tikz}
+\usetikzlibrary{shapes, arrows, calc}
+\usepackage{color}
+
+\begin{document}
+
+\begin{tikzpicture}[>=latex']
+\tiny
+\node  at (0, 0) (A) {$\bf A$};
+\node  at (0, -1) (C) {$\bf C$};
+\node  at (2, -.5) (D) {$\bf D$};
+\node  at (1, -.5) (fakeD) {};
+\path (A) edge[-, out=0, in=180] (fakeD);
+\path (C) edge[-, out=0, in=180] (fakeD);
+\path ($(fakeD)+(-.1,0)$) edge[->] node[above,xshift=-0.5em] {$k_2$} (D);
+\end{tikzpicture} 
+\end{document}
