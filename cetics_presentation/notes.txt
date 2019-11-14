@@ -1,0 +1,10 @@
+slide 11: melhorar notação, deixar mais verboso..
+
+Given a set of features S and an error function err(), find a subset 
+X \subseteq S s.t. err(X) is minimum.
+
+slide 12: remover
+
+
+slides 30 e 31: manter apenas bullets 2 e 4 e explicar que tem outras 
+tasks mais técnicas.

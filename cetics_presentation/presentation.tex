@@ -209,18 +209,11 @@ treated as a feature selection problem.
 \begin{frame}{Feature Selection Problem}
 The feature selection problem can be defined in the following way:
 \begin{center}
-Given a set of features $S$ and a cost function $c$, find subset 
-        $X \in \powerset (S)$, with minimum cost $c(X)$.
+Given a set of features $S$ and a error function $err()$, find subset 
+        $X \subseteq S$, with minimum error $err(X)$.
 \end{center}
-
-\pause
 \end{frame}
 
-\begin{frame}{Feature Selection Problem}
-\begin{figure}
-    \includegraphics[scale=.37]{introduction/Boolean_lattice.pdf}
-\end{figure}
-\end{frame}
 
 \begin{frame}{Feature Selection for Identification of Signaling 
 Pathways}
@@ -230,10 +223,11 @@ of chemical reactions is fetched from KEGG and stored in a database of
 interactions.
 \end{frame}
 
+
 \begin{frame}{Dynamic of Cell Signaling Pathways}
 \begin{flushleft}
 \begin{figure}
-    \includegraphics[scale=.35]{introduction/Lulu_methodology_diagram.pdf}
+    \includegraphics[scale=.57]{introduction/Lulu_methodology_diagram.pdf}
 \end{figure}
 \end{flushleft}
 \end{frame}
@@ -241,7 +235,7 @@ interactions.
 
 \begin{frame}{Results of Wu's Methodology}
 However, the methodology worked satisfactorily only when the Kernel 
-model was similar to the original model.
+model was similar to a correct model.
 \end{frame}
 
 
@@ -269,30 +263,30 @@ difficulties encountered by Wu.
 \begin{frame}{What we Propose on this Project}
 \begin{flushleft}
 \begin{figure}
-    \includegraphics[scale=.35]{introduction/my_dissertation_diagram.pdf}
+    \includegraphics[scale=.57]{introduction/my_dissertation_diagram.pdf}
 \end{figure}
 \end{flushleft}
 \end{frame}
 
 
-\begin{frame}{What we Propose on this Project}
-To get a more nearly complete database of interactions, we should fetch 
-information from KEGG and other databases, \pause such as STRING and
-SABIO-RK.
-\end{frame}
+%\begin{frame}{What we Propose on this Project}
+%To get a more nearly complete database of interactions, we should fetch 
+%information from KEGG and other databases, \pause such as STRING and
+%SABIO-RK.
+%\end{frame}
 
 
-\begin{frame}{What we Propose on this Project}
-To use new search algorithms, \pause we intend to use more general
-algorithms that can also remove interactions.
-\end{frame}
+%\begin{frame}{What we Propose on this Project}
+%To use new search algorithms, \pause we intend to use more general
+%algorithms that can also remove interactions.
+%\end{frame}
 
 
-\begin{frame}{What we Propose on this Project}
-To define new cost functions, \pause we intend to use Bayesian 
-approaches of model selection that allow us to create estimates of 
-probabilities such as $p (M | D)$ or $p (D | M)$.
-\end{frame}
+%\begin{frame}{What we Propose on this Project}
+%To define new cost functions, \pause we intend to use a Bayesian 
+%approach of model selection that allow us to create estimates of 
+%$p (D | M)$.
+%\end{frame}
 
 
 \begin{frame}{Objectives of this Project}
@@ -432,18 +426,21 @@ a model that is present in the search space.
 
 
 \begin{frame}{Surface Walk Experiment}
-    *the starting model*
+\begin{figure}
+    \includegraphics[scale=1.2]{experiments/surface_walk/correct_model.pdf}
+\end{figure}
 \end{frame}
 
 \begin{frame}{Surface Walk Experiment}
-    *the base model*
+\begin{figure}
+    \includegraphics[scale=1.2]{experiments/surface_walk/base_model.pdf}
+\end{figure}
 \end{frame}
 
 \begin{frame}{Surface Walk Experiment}
-    *gráfico com valores calculados na cadeia percorrida*
-    *provavelmente um comentário sobre a penalização dos modelos, e 
-    sobre o fato de que a cadeia percorrida não passa pelo modelo 
-    correto, o que fez os custos apenas subissem. *
+\begin{figure}
+    \includegraphics[scale=0.6]{experiments/surface_walk/surface_curve.png}
+\end{figure}
 \end{frame}
 
 \section{Future Work}
@@ -452,11 +449,9 @@ a model that is present in the search space.
 More activities are expected to be completed in this project, mainly the
 follow:
 \begin{itemize}
-    \item{} Embedding SigNetMS as a cost function for featsel, a 
-        framework for feature selection.
-    \pause
-    % TODO: one class to fulfill credits requirements
-    % TODO: comment on focusing the database for our applications.
+    %\item{} Embedding SigNetMS as a cost function for featsel, a 
+        %framework for feature selection.
+    %\pause
     \item{} Creation of a relational database of chemical 
         interactions focused on our further applications.
     \end{itemize}
@@ -464,14 +459,9 @@ follow:
 
 
 \begin{frame}{Future Work}
-% TODO: from the experiments we defined that we're going to use SigNetMS from now on
-% TODO: optimize computationally SigNetMS
 \begin{itemize}
-    % TODO: comment -> cost function is just a wrapper
-    % TODO: comment -> many search algorithms are ready to use on 
-    % featsel
-    \item{} Choice of a feature selection search algorithm.
-    \pause
+    %\item{} Choice of a feature selection search algorithm.
+    %\pause
     \item{} Apply the method in ERK signaling 
         pathways of tumor cell lines Y1 and HEK293.
 \end{itemize}
