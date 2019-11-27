@@ -17,50 +17,44 @@
 \begin{tikzpicture}[shorten >=1pt,->,draw=black!30, 
     node distance=\layersep]
 
-    \useasboundingbox (0, -6) rectangle (10, 2);
-
+    \useasboundingbox (-2, -6) rectangle (10, 2);
         
     \footnotesize
     \tikzstyle{every pin edge}=[<-,shorten <=1pt]
     %\tikzstyle{annot} = [text width=4em, text centered]
     \tikzstyle{chemical}=[rectangle, rounded corners, fill=black!20] 
-    \tikzstyle{cell}=[draw, rectangle, fill=orange!20, rounded corners,
-        minimum width=5cm, minimum height=6cm]
+    \tikzstyle{cell}=[draw, rectangle, fill=ye!40, rounded corners,
+        minimum width=8cm, minimum height=6cm]
     \tikzstyle{receptor}=[ellipse, fill=orange!30]
-    \tikzstyle{nucleus}=[circle, minimum size=1.75cm, fill=my_red]
-    \tikzstyle{organelles}=[chemical, fill=my_purple!70]
-
+    \tikzstyle{nucleus}=[circle, minimum size=1.75cm, fill=tu!50]
+    \tikzstyle{organelles}=[chemical, fill=my_purple!50]
 
     \node[cell] (cell) at (5, -1) {};
-    \node[cell, minimum width=4.8cm, minimum height=5.8cm, 
-        fill=orange!10] (cell interior) at (5, -1) {};
+    \node[cell, minimum width=7.8cm, minimum height=5.8cm, 
+        fill=ye!20] (cell interior) at (5, -1) {};
     
-    \node[chemical, fill=red!10, draw=red!30, line width=1pt] 
-        (inputA) at (0, 0) {Signal A};
-    \node[receptor, draw=orange!40, line width=.5pt] (receptor) at 
-        (2.5, 0) {Receptor};
+    \node[chemical, fill=or1!20, draw=or1, line width=1pt] 
+        (inputA) at (-2, -1) {Signal A};
+    \node[receptor, draw=ye, line width=.5pt] (receptor) at 
+        (1, -1) {Receptor};
 
-    \node[chemical, fill=red!10, draw=red!30, line width=1pt] 
-        (inputB) at (0, -2) {Signal B};
-    \node (fake receptor) at (3, -2) {};
-
-
-    \node[nucleus, draw=my_red!130, line width=1.2pt] (nucleus) at 
-        (6, 0.5) {Nucleus};
-    \node[organelles, draw=my_purple, line width=1pt]  (organelles) at 
-        (5, -3) {Organelles};
-    \node[align=center] (other) at (5.7, -1.5) {Other cell\\components};
+    \node[nucleus, draw=tu, line width=1.2pt] (nucleus) at 
+        (7.5, 0.5) {Nucleus};
+    \node[organelles, draw=my_purple!50!black, line width=1pt]  (organelles) at 
+        (7.5, -3) {Organelles};
+    \node[align=center] (other) at (7.5, -1.5) {Other cell\\components};
 
     \path (inputA) edge (receptor);
-    \path (inputB) edge[-] node[above, xshift=-4pt] {\tiny by diffusion} 
-        ($(fake receptor)+(0.1, 0)$);
-    \path ($(fake receptor)$) edge[out=0, in=200] (nucleus);
-    \path ($(fake receptor)$) edge[out=0, in=190] (other);
-    \path ($(fake receptor)$) edge[out=0, in=160] (organelles);
-    
-    \path (receptor) edge[out=0, in=180] (nucleus);
-    \path (receptor) edge[out=0, in=180] (other);
-    \path (receptor) edge[out=0, in=180] (organelles);
+
+        
+    \path (receptor) edge[out=0, in=180, thick, red!40!black] (nucleus);
+    \path (receptor) edge[out=0, in=180, thick, red!40!black] (other);
+    \path (receptor) edge[out=0, in=180, thick, red!40!black] (organelles);
+
+    \node[draw=re, rectangle, fill=white, rounded corners, 
+        minimum width=2.2cm, minimum height=3cm, align=left, thick,
+        fill=re!25!white] (csp) 
+        at (4.2, -1.2) {Cell \\Signaling \\Pathways};
     \end{tikzpicture}
 \end{document}
 
