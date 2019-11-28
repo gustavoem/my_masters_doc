@@ -2,7 +2,7 @@
 \usepackage{mhchem}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
 \title{\usebeamerfont*{title} Identification of cell signaling pathways 
     based on \\biochemical reaction kinetics repositories
@@ -10,17 +10,21 @@
 
 \author{\vspace*{.5cm} \usebeamerfont*{author font} Gustavo Estrela de 
     Matos$^{\text{a, b, c}}$ \\ 
-    \vspace*{.5cm}{\usebeamerfont*{supervisor font} Hugo Armelin$^{\text{b, c}}$, Marcelo S. Reis$^{\text{b, c}}$}}
+    \vspace*{.5cm}{\usebeamerfont*{supervisor font} Hugo
+    Armelin$^{\text{b, c}}$, Marcelo S. Reis$^{\text{b, c}}$}}
 
 \institute{%
-    $^{\text{a}}$Institute of Mathematics and Statistics, University of São Paulo, Brazil\\%
-$^{\text{b}}$Center of Toxins, Immune-response and Cell Signaling (CeTICS), Instituto Butantan, Brazil\\%
-$^{\text{c}}$Special Laboratory of Cell Cycle, Instituto Butantan, Brazil}
+    $^{\text{a}}$Institute of Mathematics and Statistics, University of
+    São Paulo, Brazil\\%
+$^{\text{b}}$Center of Toxins, Immune-response and Cell Signaling
+(CeTICS), Instituto Butantan, Brazil\\%
+$^{\text{c}}$Special Laboratory of Cell Cycle, Instituto Butantan,
+Brazil}
 
 
 \setbeamercolor{alerted text}{fg=alert_blue}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
 
@@ -55,21 +59,10 @@ $^{\text{c}}$Special Laboratory of Cell Cycle, Instituto Butantan, Brazil}
 \paragraph{
     What is the structure of a cell signaling pathway, given a set of 
     concentration measurements? We answer this question
-    with a computational model, created from \alert{a set of chemical 
+    with a computational model, created for \alert{a set of chemical
     reactions}, that can reproduce the concentration dynamics observed 
-    experimentally. These models are created using the laws of 
-    biochemical kinetics, deriving a system of ordinary differential 
-    equations.
-    
-    %\begin{center}
-    %\begin{tabular}{c c}
-        %$\ce{
-            %A + B -> C
-        %}$ &  meu filhooo
-    %\end{tabular}
-    %\end{center}
-    
-        
+    experimentally. These models are created using the laws of mass 
+    action, deriving a system of ordinary differential equations.
 }
 \paragraph{
     As an example, we can model the following equation:
@@ -85,39 +78,71 @@ $^{\text{c}}$Special Laboratory of Cell Cycle, Instituto Butantan, Brazil}
 \end{block}
 
 %\vspace{-1cm}
-\begin{block}{Feature Selection}
-\paragraph{
-    We proposed to solve the identification of cell signaling pathways
-    as a feature selection problem. This problem consists of: given 
-    a set of features (reactions) and a score for each subset (the
-    \alert{quality of a model}), what is the best subset?
+%\begin{block}{Feature Selection}
+%\paragraph{
+    %We proposed to solve the identification of cell signaling pathways
+    %as a feature selection problem. This problem consists of: given 
+    %a set of features (reactions) and a score for each subset (the
+    %\alert{quality of a model}), what is the best subset?
     %\begin{figure}
         %\includegraphics[width=\textwidth]{featsel/featsel.pdf}
     %\end{figure}
-}
-\end{block}
+%}
+%\end{block}
 
 
 \begin{block}{Bayesian Ranking of Models}
-    To determine the \alert{quality of a model} we implemented a 
-    score function that is a estimative of $p(D | M)$, which is the 
-    likelihood of observing experiment $D$ under the assumption that 
-    model $M$ is correct. To create this estimative we generate 
-    samples of the posterior distribution of model 
-    parameters ($\theta$).
+    \paragraph{
+    Given some experimental data $D$ and a model $M$ (composed by a
+    \alert{a set o reactions}), we use an estimative of $p(D | M)$ as 
+    a quality measure of model $M$. To create this estimative, we need
+    to take samples from the posterior distribution of model parameters
+    (reactions rate constants), denoted by $\theta | D, M$.
+    %To determine the \alert{quality of a model} we implemented a 
+    %score function that is an estimative of $p(D | M)$, which is the 
+    %likelihood of observing experiment $D$ under the assumption that 
+    %model $M$ is correct. To create this estimative we generate 
+    %samples of the posterior distribution of model 
+    %parameters ($\theta$).
     
     \begin{equation*}
         \underbrace{p (\theta | M, D)}_{\text{posterior}} \propto 
         \underbrace{p(D | M, \theta)}_{\text{likelihood}}
         \underbrace{p(\theta|M)}_{\text{prior}}
     \end{equation*}
-    
+
     \leftfigparagraph{signetms_qr.png}{8}{4}{\hspace{1em}\\
         This ranking score was implemented as a Python package \\
         called SigNetMS. It is an open source software and \\
         it is available on GitHub.
     }
+}
 \end{block}
+%\vspace{-1cm}
+\begin{block}{Acknowledgement}%
+\vspace*{-0.5cm}%
+\begin{figure}[h]
+    \begin{tabular*}{0.7\textwidth}{c@{\extracolsep{\fill}}cc}
+    \centering
+    %\subfigure {
+        %\includegraphics[clip=true,
+        %width=0.2\textwidth]{institutions/FAPESP.jpg}
+    %}
+    &
+    \subfigure {
+        \includegraphics[clip=true,
+        width=0.2\textwidth]{institutions/FAPESP.jpg}
+    }
+    &
+    %\subfigure {
+        %\includegraphics[clip=true,
+        %width=0.1\textwidth]{institutions/capes.jpg}
+    %}
+    \end{tabular*}   
+\end{figure}
+\vspace*{1.5cm}%
+\end{block}%
+
 
 } % end \leftcolumn
 
@@ -126,47 +151,90 @@ $^{\text{c}}$Special Laboratory of Cell Cycle, Instituto Butantan, Brazil}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \rightcolumn{              
 \begin{block}{The Proposed Methodology}%
+\paragraph{
+    We proposed to solve the identification of cell signaling pathways
+    as a feature selection problem. This problem consists of: given 
+    a set of features (\alert{candidate reactions}) and a score for each
+    subset (\alert{estimative of $p(D|M)$}), what is the best subset?
     \begin{figure}
-        \includegraphics[width=\textwidth]{featsel/featsel.pdf}
+        \includegraphics[width=.94\textwidth]{featsel/featsel.pdf}
     \end{figure}
+    The set of candidate reactions is stored in a database, which also
+    stores information about model parameters, namely, the reactions 
+    rate constants. The information in the database is extracted from 
+    other public databases.
+    %TODO: colocar KEGG e STRING 
+}    
 \end{block}
 
-
+\vspace{-1em}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{block}{Experiments}%
+\begin{block}{Experiments}
 \paragraph{
-}
-\end{block}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{block}{Conclusão}%
-\paragraph{
-}
-\end{block}
-%\vfill 
-\vspace*{.5cm}%
-\begin{block}{Acknowledgement}%
-\vspace*{-1.5cm}%
+    We tested our ranking method on an experiment where create
+    aritifical experimental data and try compare the found ranking for
+    four models.
+\setcounter{subfigure}{0}
 \begin{figure}[h]
-    \begin{tabular*}{0.7\textwidth}{c@{\extracolsep{\fill}}cc}
     \centering
-    \subfigure {
-        \includegraphics[clip=true, width=0.2\textwidth]{institutions/FAPESP.jpg}
+    \begin{tabular}{l r}
+        \subfigure[Simulated model]{
+        \includegraphics[clip=true,
+        width=0.3\textwidth]{experiments/bioinformatics_model1.pdf}
     }
     &
-    \subfigure {
-        \includegraphics[clip=true, width=0.2\textwidth]{institutions/CNPq.png}
+    \subfigure[Simplified model]{
+        \includegraphics[clip=true,
+        width=0.3\textwidth]{experiments/bioinformatics_model2.pdf}
+    }
+    \\
+    \subfigure[Overly simplified model]{
+        \includegraphics[clip=true,
+        width=0.3\textwidth]{experiments/bioinformatics_model3.pdf}
     }
     &
-    \subfigure {
-        \includegraphics[clip=true, width=0.1\textwidth]{institutions/capes.jpg}
+    \subfigure[Model generalisation]{
+        \includegraphics[clip=true,
+        width=0.3\textwidth]{experiments/bioinformatics_model4.pdf}
     }
-    \end{tabular*}   
+
+\end{tabular}
 \end{figure}
-\vspace*{1.5cm}%
-\end{block}%
+    On this experiment we got the ranking: a $>$ b $>$ d $>$ c. This
+    showed not only that we ranked the correct model first but also that 
+    the complex models were penalized.
+
+\rightfigparagraph{experiments/surface_curve.png}{15}{6}{
+    \hspace{1em} \\
+    We also performed an expeirment in which we add reactions
+    iteratively to a starting model. In this experiment we could 
+    understand the surface of the score metric over our search space.
+    %\begin{figure}
+        %\includegraphics[width=.6\textwidth,
+        %clip]{experiments/surface_curve.png}
+    %\end{figure}
+}
+}
+\end{block}
+
+\begin{block}{Conclusion and Future Work}
+    In this work we were able to create a score metric that is able to
+    rank models in a Bayesian approach and embed this function to a 
+    feature selection procedure. The next tasks we aim to accomplish
+    are:
+    \begin{itemize}
+        \item{Continue to study the surface of the search space;}
+        \item{Apply the methodology in ERK signaling pathways of
+            cell lines Y1 and HEK293.}
+    \end{itemize}
+
+\end{block}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace*{.5cm}%
 }% end of right column
+
 \end{columns}
 \end{frame}
 \end{document}
