@@ -11,7 +11,7 @@
 \author{\vspace*{.5cm} \usebeamerfont*{author font} Gustavo Estrela de 
     Matos$^{\text{a, b, c}}$ \\ 
     \vspace*{.5cm}{\usebeamerfont*{supervisor font} Hugo
-    Armelin$^{\text{b, c}}$, Marcelo S. Reis$^{\text{b, c}}$}}
+    A. Armelin$^{\text{b, c}}$, Marcelo S. Reis$^{\text{b, c}}$}}
 
 \institute{%
     $^{\text{a}}$Institute of Mathematics and Statistics, University of
@@ -46,11 +46,9 @@ Brazil}
 }
 \leftfigparagraph{csp/western_blot.png}{15}{6}{
     \hspace{1em}\\
-    We can summarize the state of a \\
-    cell signaling pathway by measuring \\
-    the concentration over time of some \\ 
-    chemical species that are present on \\
-    the pathway.
+    We can summarize the state of a cell signaling pathway by measuring
+    the concentration over time of some chemical species that are
+    present on the pathway, yielding experimental data D.
 }
 \end{block}
 
@@ -114,20 +112,15 @@ Brazil}
     \leftfigparagraph{signetms_qr.png}{7}{4}{\hspace{1em}\\
         This ranking score was implemented as a Python package 
         called SigNetMS. It is an open source software and 
-        it is available on GitHub.
+        it is available on GitHub: github.com/gustavoem/SigNetMS.
     }
 \end{block}
 %\vspace{-1cm}
-\begin{block}{Acknowledgement}%
+\begin{block}{Acknowledgements}%
 \vspace*{-0.5cm}%
 \begin{figure}[h]
     \begin{tabular*}{0.7\textwidth}{c@{\extracolsep{\fill}}cc}
     \centering
-    %\subfigure {
-        %\includegraphics[clip=true,
-        %width=0.2\textwidth]{institutions/FAPESP.jpg}
-    %}
-    &
     \subfigure {
         \includegraphics[clip=true,
         width=0.2\textwidth]{institutions/FAPESP.jpg}
@@ -135,8 +128,13 @@ Brazil}
     &
     %\subfigure {
         %\includegraphics[clip=true,
-        %width=0.1\textwidth]{institutions/capes.jpg}
+        %width=0.2\textwidth]{institutions/FAPESP.jpg}
     %}
+    &
+    \subfigure {
+        \includegraphics[clip=true,
+        width=0.2\textwidth]{institutions/ime.png}
+    }
     \end{tabular*}   
 \end{figure}
 \vspace*{1.5cm}%
@@ -170,9 +168,9 @@ Brazil}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{block}{Experiments}
 \paragraph{
-    We tested our ranking method on an experiment where create
-    aritifical experimental data and try compare the found ranking for
-    four models.
+    We tested our ranking method on an experiment in which we create
+    artificial experimental data and try to compare the found ranking 
+    for four models.
 \setcounter{subfigure}{0}
 \begin{figure}[h]
     \centering
@@ -202,20 +200,22 @@ Brazil}
     On this experiment we got the ranking: a $>$ b $>$ d $>$ c. This
     showed not only that we ranked the correct model first but also that 
     the complex models were penalized.
+    
+    {\color{c_green}\dotfill}
+    \vspace{-.5em}
 
-    \rightfigparagraph{experiments/surface_curve.png}{17}{5}{
+    \rightfigparagraph{experiments/surface_curve.png}{17}{7}{
     \hspace{1em} \\
-    We also performed an expeirment in which we add reactions
-    iteratively to a starting model. In this experiment we could 
-    understand the surface of the score metric over our search space.
-    %\begin{figure}
-        %\includegraphics[width=.6\textwidth,
-        %clip]{experiments/surface_curve.png}
-    %\end{figure}
+    We also performed an experiment in which we add reactions
+    iteratively to a model. We could have a glance of the surface of the 
+    score metric over our search space. We could also notice that the 
+    model error does not increase monotonically as we add more
+    reactions.
 }
 }
 \end{block}
 
+\vspace{-2em}
 \begin{block}{Conclusion and Future Work}
     In this work we were able to create a score metric that is able to
     rank models in a Bayesian approach and embed this function to a 
