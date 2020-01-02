@@ -1,0 +1,247 @@
+\documentclass[12pt]{article}
+\usepackage[portuguese]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage[top=3cm, bottom=2cm, left=3cm, right=2cm]{geometry}
+\usepackage{tikz}
+\usepackage{indentfirst}
+\usepackage{textcomp}
+\usepackage{float}
+\usepackage[font={small,it}]{caption}
+\usepackage{mhchem}
+\title{Relatorio Final Mestrado}
+
+% packages added by Marcelo
+%
+\usepackage{lscape}    % for landscape pages
+\usepackage{hyperref}  % to allow hyperlinks
+\usepackage{booktabs}  % nicer table borders
+\usepackage{subfigure} % add subfigures
+
+% My default commands
+\newcommand{\foreignword}[1]{\textit{#1}}
+\newcommand{\toolname}[1]{\textit{#1}}
+%\newcommand{\fieldR}{\mathbb{R}}
+\newcommand{\powerset}{\mathcal{P}}
+%\newcommand{\probability}{\mathbb{P}}
+\newcommand{\expectation}{\mathbb{E}}
+\newcommand{\algname}[1]{\texttt{#1}}
+\newcommand{\langname}[1]{\texttt{#1}}
+%\newcommand{\varname}[1]{\texttt{#1}}
+%\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+%\newcommand{\ceil}[1]{\lceil #1 \rceil}
+%\newcommand{\mathsc}[1]{{\normalfont\textsc{#1}}}
+\newcommand{\forest}{\mathcal{F}}
+\newcommand{\pfsnode}[1]{\mathbf #1}
+\newcommand{\species}[1]{\textit{#1}}
+\newcommand{\gender}[1]{\textit{#1}}
+
+\graphicspath{{./img/}} 
+
+\setstretch{1.5}
+
+\begin{document}
+
+% FAPESP demands the usage of double spacing
+%
+\doublespacing
+
+\begin{titlepage}
+    \vfill 
+    \begin{center}
+        {\Large Relatório Científico Final -- Mestrado\\
+         \bigskip
+         Processo FAPESP 17/20575-9
+        }
+        
+        \bigskip
+        \bigskip
+    
+        {\LARGE Identificação de vias de sinalização celular baseada em
+        repositórios de cinética de reações bioquímicas}
+
+        \bigskip
+        \bigskip
+        {\Large {\bf Beneficiário:}
+        \href{mailto:gustavo.estrela.matos@usp.br}{Gustavo Estrela de
+        Matos}\\ 
+        
+        {\bf Responsável:}
+        \href{mailto:marcelo.reis@butantan.gov.br}{Marcelo da Silva
+        Reis}\\
+
+        \bigskip
+        \bigskip
+        \bigskip
+        \bigskip
+        \bigskip
+        \bigskip
+        \bigskip
+        Relatório referente aos trabalhos desenvolvidos entre 1 de
+        janeiro de 2018 e 31 de dezembro de 2019
+
+        \bigskip
+        \bigskip
+        \bigskip
+        \bigskip
+        \bigskip
+        \bigskip
+        \bigskip
+
+        Laboratório Especial de Toxinologia Aplicada, Instituto
+        Butantan\\
+        \bigskip
+        São Paulo, \today\\
+        }
+
+        \bigskip
+        \bigskip
+
+       
+
+\end{center}
+\end{titlepage}
+
+
+\tableofcontents
+
+\pagebreak
+
+
+
+\section{Resumo do Projeto Proposto} \label{sec:resumo} % até 2 páginas
+A construção de modelos funcionais é uma técnica comum para se 
+estudar vias de sinalização celular e, quando a via estudada é pouco
+conhecida, é possível que os modelos já propostos sejam incompletos, 
+tornando necessário a sua modificação.
+Lulu Wu apresentou em 2015, em sua dissertação de mestrado, um método 
+para  modificar sistematicamente modelos funcionais, adicionando a estes
+interações extraídas de repositórios como KEGG. Entretanto, esta 
+metodologia apresentou limitações: a primeira é a incompletude do banco 
+de dados de interações criado, que extraia informações apenas do 
+repositório KEGG; a segunda, a falta de informações sobre constantes 
+de velocidade de interações, que podem ser extraídas de repositórios 
+como BioNumbers; a terceira, a dinâmica do algoritmo de busca, 
+incremental, que pode não achar o mínimo global; e a última, a 
+penalização na complexidade dos modelos, que era feita de maneira 
+aleatória. Propomos neste trabalho enfrentar as limitações encontradas
+pela metodologia de Lulu, criando um banco de dados de interações mais
+completo e também novas funções de custo que sejam capazes de 
+penalizar modelos mais complexos (como critério de informação Akaike e 
+{\em Bayesian inference-based modeling}); esta penalização deve induzir,
+em cadeias do  espaço de busca, curvas em u no custo dos modelos, 
+portanto também propomos a criação de novos algoritmos de busca que 
+explorem essa característica da função de custo. Por fim, esperamos 
+testar nossa metodologia na identificação de vias de sinalização celular 
+da linhagem tumoral murina Y1.
+
+
+% - Estudo de seleção de modelos de cinética bioquímica
+% - Estimação de verossimilhança marginal
+% - Implementaçãoo do pacote SigNetMS
+% - Alternativa de avaliação de modelos. (ABC-SysBio)
+% - Avaliação de ambas alternativas
+% - Paralelização do SigNetMS
+% - Implementação eficiente de integração de sistemas de equações
+%   diferenciais.
+% - Teste com uma cadeia do espaço de busca.
+
+\section{Atividades desenvolvidas}
+% - Disciplinas cursadas
+
+\subsection{Disciplinas cursadas}
+
+\subsection{Estudo de seleção de modelos de via de sinalização celular}
+O desenvolvimento deste projeto se iniciou com o estudo de métodos
+capazes de avaliar a qualidade de um modelo de via de sinalização 
+celular. Dado um conjunto de experimentos $\mathbf{D}$, que medem
+concentrações de espécies químicas, precisamos escolher uma função de
+custo $c (\mathbf{D}, M)$ que possa indicar a capacidade de um modelo
+$M$ em reproduzir corretamente dados observados $\mathbf{D}$. O modelos
+de via que utilizamos é definido por um conjunto de reações químicas,
+produzindo um sistema de equações diferenciais, capaz de simular a
+dinâmica das concentrações de espécies químicas da via ao longo do
+tempo. Este sistema de equações diferenciais é criado utilizando leis de
+cinética química, como no modelo de Michaelis-Menten, e possuem
+constantes de velocidade que são usualmente desconhecidas; estas
+constantes são parâmetros dos modelos de vias.
+
+A função de custo escolhida deve considerar possíveis valores para as
+constantes de velocidade do modelo avaliado. A abordagem de Lulu
+Wu~\cite{Wu2015metodo}, por exemplo, utiliza um processo de simulated
+annealing para encontrar o melhor conjunto de valores de parâmetros para
+um modelo e conjunto de experimentos. Entretanto, esta abordagem teve
+limitações que podem estar associadas a falta de informação a priori
+sobre as constantes e também a falta de penalização apropriada a modelos
+mais complexos. Por conta destas limitações, decidimos implementar uma
+função de custo baseada em estatística Bayesiana, chamada de
+verossimilhança marginal; denotamos $p (\mathbf{D} | M)$ a 
+verossimilhança marginal de um conjunto de dados $\mathbf{D}$ dado um 
+modelo $M$. Esta abordagem, apresentada no mesmo contexto no trabalho de 
+Vyshemirsky e Girolami~\cite{Vyshemirsky2008}, permite a definição de 
+informações a priori sobre constantes de velocidades e também induzem a 
+penalização automática de modelos mais complexos.
+
+% definir verossimilhança
+% mostrar a integral e dizer que é difícil de ser implementada
+
+Para calcular a verossimilhança marginal, precisamos definir a função de
+verossimilhança, $p(\mathbf{D} | M, \theta)$, onde $\mathbf{D}$ é o 
+conjunto de experimentos, $M$ é o modelo de interesse, e $\theta$ é um
+conjunto de valores para os parâmetros (constantes de velocidade) do
+modelo. Seguindo a abordagem de Kolch e Girolami, assumimos erro
+Gaussiano e independente:
+\begin{equation}
+    p (\mathbf{D} | M, \theta) = \prod_{i = 1}^m
+    p_{\mathcal{N}_{\left(0, \sigma^2\right)}} ([\phi (M,\theta) -
+    \mathbf{D}]_i).
+\label{eq:likelihood}
+\end{equation}
+Onde $\phi (M, \theta)$ é um vetor com os valores simulados de 
+concentrações, em cada intervalo de tempo, pelo modelo $M$ usando 
+parâmetros $\theta$. A partir da função de verossimilhança, podemos
+obter a verossimilhança marginal com uma marginalização sobre os valores
+de parâmetros de modelos, ou seja, integrando a função de 
+verossimilhança sobre o espaço paramétrico, $\Theta$. Desta forma
+podemos escrever:
+\begin{equation}
+    p (D | M) = \int_{\Theta} p (D | M, \theta) p (\theta | M)d\theta.
+\label{eq:marginal_likelihood}
+\end{equation}
+
+Entretanto, a integral~\ref{eq:marginal_likelihood} normalmente não pode
+ser calculada analiticamente. Para se calcular esta integral
+analiticamente, seria necessário determinar a distribuição de 
+probabilidade conjunta $p(D, \theta | M)$, o que não é possível
+usualmente. Portanto, como é muito difícil (ou impossível) calcular a
+verossimilhança marginal, utilizamos um estimador desse valor como nossa
+função de custo. Este estimador é construído utilizando um método
+conhecido como Integral Termodinâmica~\cite{Friel2008}.
+
+\subsection{Estimação de verossimilhança marginal}
+
+\subsection{Implementação do pacote SigNetMS}
+
+\subsection{Alternativa de avaliação de modelos}
+% dá pra falar do Pull Request que eu fiz aqui.
+
+\subsection{Paralelização do SigNetMS}
+
+\subsection{Implementação eficiente de integração de sistemas de
+equações diferenciais}
+
+\subsection{Testes da metodologia em uma cadeia do espaço de busca}
+
+
+
+
+
+\addcontentsline{toc}{section}{Referências}
+\bibliographystyle{unsrt} 
+\bibliography{bib-relatorio}
+\end{document}
