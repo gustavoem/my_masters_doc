@@ -210,7 +210,8 @@ de parâmetros de modelos, ou seja, integrando a função de
 verossimilhança sobre o espaço paramétrico, $\Theta$. Desta forma
 podemos escrever:
 \begin{equation}
-    p (D | M) = \int_{\Theta} p (D | M, \theta) p (\theta | M)d\theta.
+    p (\mathbf{D} | M) = \int_{\Theta} p (\mathbf{D} | M, \theta) p
+    (\theta | M)d\theta.
 \label{eq:marginal_likelihood}
 \end{equation}
 
@@ -219,13 +220,98 @@ ser calculada analiticamente. Para se calcular esta integral
 analiticamente, seria necessário determinar a distribuição de 
 probabilidade conjunta $p(D, \theta | M)$, o que não é possível
 usualmente. Portanto, como é muito difícil (ou impossível) calcular a
-verossimilhança marginal, utilizamos um estimador desse valor como nossa
+verossimilhança marginal, utilizamos um estimador desse valor como 
 função de custo. Este estimador é construído utilizando um método
 conhecido como Integral Termodinâmica~\cite{Friel2008}.
 
 \subsection{Estimação de verossimilhança marginal}
+% - É possível reescrever a verossimilhança marginal em outra integral 
+% usando potencias de posteriori.
+% - Definir o que é a potência de posteriori
+% - Dizer que é possível provar que log p (D | M) = ...
+% - Dizer que é possível estimar esse valor de diferentes maneiras, mas
+% todos dependem de criar uma amostra das power posteriors
+O trabalho de Friel et al. ~\cite{Friel2008} mostra que é possível
+reescrever o logaritmo da integral~\ref{eq:marginal_likelihood} como uma 
+outra integral, um pouco menos simples, mas que nos permite criar 
+estimadores para o logaritmo da verossimilhança marginal. Esta segunda 
+forma de se escrever a verossimilhança marginal é baseada na integração 
+de várias distribuições de probabilidade que são intermediárias entre as 
+distribuições a priori e a posteriori das constantes de velocidade. As 
+distribuições intermediárias são denominadas potências de posteriori.
+
+Dada uma distribuição a priori $p (\theta | M)$ e a posteriori $p
+(\theta | \mathbf{D}, M)$, definimos a distribuição potência de
+posteriori como:
+\begin{equation*}
+    p_{\beta} (\theta) = \frac{p (\mathbf{D} | \theta, M)^\beta 
+        p(\theta | M)}{z (\beta)},
+\end{equation*}
+onde
+\begin{equation*}
+    z (\beta) = \int_\Theta p (\mathbf{D} | \theta, M)^\beta 
+        p(\theta | M) d\theta.
+\end{equation*}
+Note que $p_{0} (\theta)$ é a distribuição a priori e que $p_{1}
+(\theta)$ é a distribuição a posteriori. Portanto, podemos dizer que
+quando variamos o valor de $\beta$ entre 0 e 1 estamos produzindo
+distribuição intermediárias que conectam a priori a posteriori. Friel et
+al. provam que é possível escrever:
+\begin{align}
+    \int_0^1 \expectation_{p_\beta (\theta)} 
+        [\ln p(\mathbf{D}|\theta, M)]d\beta 
+    &= \int_0^1 \frac{d}{d\beta} \ln z(\beta) d\beta \notag \\
+    &= \Big[\ln z(\beta)\Big]\bigg\rvert^1_0 \notag \\
+    &= \ln p (\mathbf{D} | M).
+    \label{eq:thermodynamic_integral}
+\end{align}
+
+O lado esquerdo da equação~\ref{eq:thermodynamic_integral} recebe o nome 
+de integral termodinâmica. Este nome se justifica pela variação do
+parâmetro $\beta$, que pode ser visto como um parâmetro de temperatura
+nas distribuições potência de posteriori. Esta integral pode ser
+estimada ou aproximada numericamente, permitindo acessar um valor 
+próximo ao logaritmo da verossimilhança marginal. Para estimar ou
+aproximar esta integral, é necessário construir amostras de
+distribuições potência de posteriori para um conjunto finito de valores
+de $\beta$.
+
+Em resumo, reescrevemos o logaritmo da verossimilhança marginal como uma
+integral que chamamos de integral termodinâmica. Esta integral pode ser
+aproximada numericamente ou estimada. Para ambas opções, é necessário 
+escolher uma sequência de valores para $\beta$ entre 0 e 1, e gerar
+amostras das distribuições potência de posteriori para os respectivos
+valores de $\beta$ escolhidos.
 
 \subsection{Implementação do pacote SigNetMS}
+% - explicar como decidimos fazer a amostragem das power posteriors
+%   - etapa 1: burn-in
+%   - etapa 2: burn-in informado
+%   - etapa 3: amostragem
+% - dizer qual tipo de estimador decidimos escolher
+Após nossos estudos sobre seleção de modelos, decidimos implementar
+um pacote Python que nos providenciaria uma aproximação do logaritmo da
+verossimilhança marginal, usando os conceitos de integral termodinâmica.
+Este pacote foi implementado e recebeu o nome SigNetMS, e está 
+disponível em um repositório público no
+\href{https://github.com/gustavoem/SigNetMS}{GitHub}
+\footnote{https://github.com/gustavoem/SigNetMS}. O pacote SigNetMS 
+recebe como entrada um arquivo no formato \emph{Systems Biology Makup
+Language} (SBML)~\cite{Hucka2003}, com a definição das reações e 
+constantes de velocidade da via; um arquivo \emph{Extensible Markup 
+Language} (XML) com resultados de experimentos; e um arquivo XML com 
+definições de distribuições a priori para constantes de velocidade das
+reações da via. O pacote pode devolver como resposta o valor aproximado
+de $\log p (\mathbf{D} | M)$ e também amostras das distribuições
+potência de posteriori.
+
+O pacote SigNetMS é capaz de processar modelos no formato SBML e,
+transforma-los em sistemas de equações diferenciais ordinárias.
+Utilizando o pacote \algname{Scipy} e seu integrador \algname{odeint} é
+possível integrar esse sistema de equações diferenciais, gerando uma
+simulação da dinâmica gerada pelo par modelo e parâmetros $(M, \theta)$.
+Esta simulação é utilizada na função de verossimilhança implementada,
+de acordo com a equação~\ref{eq:likelihood}.
 
 \subsection{Alternativa de avaliação de modelos}
 % dá pra falar do Pull Request que eu fiz aqui.
