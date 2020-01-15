@@ -82,8 +82,8 @@
         \bigskip
         \bigskip
         \bigskip
-        Relatório referente aos trabalhos desenvolvidos entre 1 de
-        janeiro de 2018 e 31 de dezembro de 2019
+        Relatório referente aos trabalhos desenvolvidos entre 10 de
+        dezembro de 2018 e 31 de dezembro de 2019
 
         \bigskip
         \bigskip
@@ -156,7 +156,8 @@ da linhagem tumoral murina Y1.
 
 \subsection{Disciplinas cursadas}
 
-\subsection{Estudo de seleção de modelos de via de sinalização celular}
+\subsection{Resumo de atividades anteriores}
+\subsubsection{Estudo de seleção de modelos de via de sinalização celular}
 O desenvolvimento deste projeto se iniciou com o estudo de métodos
 capazes de avaliar a qualidade de um modelo de via de sinalização 
 celular. Dado um conjunto de experimentos $\mathbf{D}$, que medem
@@ -224,7 +225,7 @@ verossimilhança marginal, utilizamos um estimador desse valor como
 função de custo. Este estimador é construído utilizando um método
 conhecido como Integral Termodinâmica~\cite{Friel2008}.
 
-\subsection{Estimação de verossimilhança marginal}
+\subsubsection{Estimação de verossimilhança marginal}
 % - É possível reescrever a verossimilhança marginal em outra integral 
 % usando potencias de posteriori.
 % - Definir o que é a potência de posteriori
@@ -283,7 +284,7 @@ escolher uma sequência de valores para $\beta$ entre 0 e 1, e gerar
 amostras das distribuições potência de posteriori para os respectivos
 valores de $\beta$ escolhidos.
 
-\subsection{Implementação do pacote SigNetMS}
+\subsubsection{Implementação do pacote SigNetMS}
 % - explicar como decidimos fazer a amostragem das power posteriors
 %   - etapa 1: burn-in
 %   - etapa 2: burn-in informado
@@ -305,16 +306,131 @@ reações da via. O pacote pode devolver como resposta o valor aproximado
 de $\log p (\mathbf{D} | M)$ e também amostras das distribuições
 potência de posteriori.
 
-O pacote SigNetMS é capaz de processar modelos no formato SBML e,
-transforma-los em sistemas de equações diferenciais ordinárias.
+O pacote SigNetMS é capaz de processar modelos no formato SBML e criar
+os correspondentes sistemas de equações diferenciais ordinárias.
 Utilizando o pacote \algname{Scipy} e seu integrador \algname{odeint} é
-possível integrar esse sistema de equações diferenciais, gerando uma
-simulação da dinâmica gerada pelo par modelo e parâmetros $(M, \theta)$.
-Esta simulação é utilizada na função de verossimilhança implementada,
-de acordo com a equação~\ref{eq:likelihood}.
+possível integrar esses sistema de equações diferenciais, criando uma
+simulação da dinâmica das concentrações gerada pelo par modelo e 
+parâmetros $(M, \theta)$. Esta simulação é utilizada na função de 
+verossimilhança, implementada de acordo com a 
+equação~\ref{eq:likelihood}. A verossimilhança do experimento, dado um
+modelo e conjunto de parâmetros, é usada no processo de geração da
+amostra de distribuições potência de posteriori e também na aproximação 
+da verossimilhança marginal.
+
+Para calcular a verossimilhança marginal, o pacote SigNetMS segue uma 
+abordagem que faz uma aproximação numérica da 
+integral~\ref{eq:thermodynamic_integral}. Esta aproximação é 
+simplesmente a aplicação da regra dos trapézios para integrais. Desta 
+maneira, é necessário escolher uma sequência de valores para $\beta$, 
+o que também determina o conjunto de potências de posteriori que serão 
+amostradas. O pacote SigNetMS faz esta escolha de $\beta_1, \ldots, 
+\beta_T$ da maneira recomendada por Friel et al.:
+\begin{equation*}
+    \beta_t = \left(\frac{t - 1}{T - 1}\right)^{c}, 
+\end{equation*}
+com $T = 20$ e $c = 5$. Assim, aplicando a regra dos trapézios na
+integral~\ref{eq:thermodynamic_integral}, podemos escrever:
+\begin{equation*}
+    \log{p(\mathbf{D}| M)} \approx \sum_{t = 0}^{T - 1} 
+        (\beta_{t + 1} - \beta_t)
+    \frac{
+    \expectation_{p_{\beta_{t + 1}} (\theta)}[\log p(D | M, \theta)]
++ 
+    \expectation_{p_{\beta_{t}} (\theta)}[\log p(D | M, \theta)]}
+{2}
+\end{equation*}
+Além disso, se considerarmos que a potência de posteriori $\beta_t$ tem
+$M_t$ parâmetros amostrados, então podemos substituir a esperança por
+um estimador de seu valor, produzindo a equação:
+\begin{equation}
+\log{p(D| M)} \approx \sum_{t = 0}^{T - 1} (\beta_{t + 1} - \beta_t)
+\frac{
+    \frac{1}{M_{t + 1}}
+    \sum_{i = 1}^{M_{t + 1}}  \log p(D | M, \theta^{(t + 1, i)})
++ 
+    \frac{1}{M_t}
+    \sum_{i = 1}^{M_t}  \log p(D | M, \theta^{(t, i)})}
+{2}
+\end{equation}
+onde $\theta^{(j, i)}$ é o i-ésimo parâmetro amostrado para a
+potência de posteriori $p_{\beta_j}(\theta)$. Resta agora definir como
+as amostras de potência de posteriori são criadas.
+
+As amostras de potência de posteriori são criadas em três etapas que
+utilizam o algoritmo Metropolis-Hastings. Esse algoritmo permite gerar
+uma amostra de uma distribuição (geralmente desconhecida ou difícil de
+se amostrar) a partir de uma distribuição de proposta, com a criação de
+uma cadeia de Markov. Chamamos estas três etapas de burn-in, burn-in
+informativo e amostragem final; todas estas etapas utilizam a
+distribuição log-normal como distribuição de proposta para os 
+parâmetros. 
+
+Na versão do SigNetMS que utilizamos até a escrita do relatório parcial,
+a etapa de burn-in amostrava a distribuição a posteriori (ou seja,
+apenas uma cadeia) de parâmetros de maneira independente, com uma
+distribuição de pulo com covariância diagonal. Na etapa de burn-in
+informativo, uma amostragem similar a primeira etapa ocorria, porém
+utilizando uma distribuição de pulo com matriz de covariância diagonal
+tal que cada variância fosse igual a variância da amostra atual. Por
+fim, na ultima etapa, $T$ cadeias eram geradas, uma para cada potência
+de posteriori escolhida, com distribuição de pulo igual a última
+utilizada na etapa anterior.
+
+\subsubsection{Primeiros testes da metodologia}
+Ainda no primeiro ano do projeto, testamos o SigNetMS na seleção de 
+modelos. Porém, os resultados eram satisfatórios apenas para exemplos
+pequenos. Com exemplos maiores e com mais parâmetros, o pacote não
+apresentava bons resultados. Por esse motivo, começamos o segundo
+período do projeto (entre dezembro de 2018 e dezembro de 2019) ajustando
+nossa implementação 
+
+\subsection{Melhorando a estimação da posteriori}
+% Falar sobre a autocorrelação das amostras quando usávamos a
+% metodologia anterior.
+
+% Usando multiplas cadeias em todas etapas diminuimos a auto-correlação
+
+% Falar sobre usar a matriz de covariância para o MH ter informação 
+
+% TODO: elaborar isso aqui um pouco mais...
+
+Logo após a entrega do relatório parcial, identificamos que as amostras
+de potência de posteriori geradas pelo SigNetMS eram muito parecidas.
+Isso indicava que existia uma correlação grande entre as cadeias
+amostradas. Consultando o trabalho de Xu et al.~\cite{Xu2010} e Friel
+et al.~\cite{Friel2008} identificamos que as duas primeiras etapas de
+amostragem, burn-in e burn-in informativo também deveriam ser feitas
+para cada potência de posteriori escolhida, e não apenas para a
+distribuição a posteriori. Além disso, identificamos que a distribuição
+de pulo da etapa de burn-in informativo poderia ter como covariância a
+covariância amostral do conjunto de parâmetros aceitos até o instante. 
 
 \subsection{Alternativa de avaliação de modelos}
 % dá pra falar do Pull Request que eu fiz aqui.
+Ao mesmo tempo que investigamos possíveis erros na metodologia do
+SigNetMS também experimentamos uma outra função de custo Bayesiana para
+seleção de modelos de via, chamada ABC-SMC~\cite{Liepe2014}. A função
+ABC-SMC se baseia em um método de geração de amostras conhecido como
+\foreignword{Approximate Bayesian Computation} (ABC). Na função de custo
+ABC-SMC, amostras da distribuição $p(\theta, M | \mathbf{D})$ são 
+geradas, permitindo estimar o valor de $p (M | \mathbf{D})$.
+
+Podemos escrever um algoritmo genérico ABC que se propõe a gerar 
+amostras da distribuição $p(\theta, M | \mathbf{D})$ com os seguintes 
+passos:
+\begin{enumerate}
+    \item Amostre um parâmetro candidato $(\theta^* | M^*)$ de uma
+        distribuição de propostas.
+    \item Simule o par $(M^*, \theta^*)$ com os mesmos intervalos de
+        tempo e para a mesma métrica do experimento $\mathbf{D}$, 
+        gerando $\mathbf{D}^*$.
+    \item Calcule, para alguma métrica de distância $d$, se o valor $d 
+        (\mathbf{D}, \mathbf{D^*})$ for menor que um $\epsilon$
+        pré-determinado, então adicione o par $(\theta^*, M^*)$ a 
+        amostra.
+    \item Repita até uma condição de parada.
+\end{enumerate}
 
 \subsection{Paralelização do SigNetMS}
 
