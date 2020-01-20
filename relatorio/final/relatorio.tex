@@ -14,6 +14,9 @@
 \usepackage{float}
 \usepackage[font={small,it}]{caption}
 \usepackage{mhchem}
+\usepackage{algpseudocode}
+\usepackage[plain]{algorithm}
+
 \title{Relatorio Final Mestrado}
 
 % packages added by Marcelo
@@ -420,26 +423,318 @@ Podemos escrever um algoritmo genérico ABC que se propõe a gerar
 amostras da distribuição $p(\theta, M | \mathbf{D})$ com os seguintes 
 passos:
 \begin{enumerate}
-    \item Amostre um parâmetro candidato $(\theta^* | M^*)$ de uma
-        distribuição de propostas.
-    \item Simule o par $(M^*, \theta^*)$ com os mesmos intervalos de
+    \item Amostre um parâmetro candidato $(\theta^* | M^*)$ da
+        distribuição a priori $p(\theta, M)$.
+    \item Simule o par $(\theta^*, M^*)$ com os mesmos intervalos de
         tempo e para a mesma métrica do experimento $\mathbf{D}$, 
-        gerando $\mathbf{D}^*$.
+        gerando $\phi(\theta, M) = \mathbf{D}^*$.
     \item Calcule, para alguma métrica de distância $d$, se o valor $d 
         (\mathbf{D}, \mathbf{D^*})$ for menor que um $\epsilon$
         pré-determinado, então adicione o par $(\theta^*, M^*)$ a 
         amostra.
     \item Repita até uma condição de parada.
 \end{enumerate}
+O resultado deste algoritmo é uma amostra da distribuição $p (\theta, M
+| d(\phi(\theta, M), \mathbf{D}) \leq \epsilon).$ De acordo com
+Pritchard et al., quando $\epsilon \to \infty$, então o resultado será
+uma amostra da distribuição a priori, $p (\theta, M)$, e quando 
+$\epsilon \to 0$, então o resultado será uma amostra da distribuição a
+posteriori~\cite{Pritchard1999}, $p (\theta, M | \mathbf{D})$.
+Entretanto, escolher um $\epsilon$ pequeno pode ser problemático quando
+a priori e a posteriori tem distribuições muito diferentes, pois neste
+caso os candidatos gerados são pouco prováveis a posteriori.
+
+Para solucionar este problema, Toni et al. proporam o algoritmo ABC
+Sequential Monte Carlo (ABC-SMC)~\cite{Toni2008}. Este algoritmo cria
+uma sequência de amostras que podem ser vistas como amostras de
+distribuições intermediárias entre a priori e a posteriori. Dado uma
+sequência $\epsilon_1 > \epsilon_2 > \ldots > \epsilon_T$ este algoritmo
+gera amostras das distribuições 
+$p (\theta, M | d(\phi(\theta, M), \mathbf{D}) \leq \epsilon_1),$
+$p (\theta, M | d(\phi(\theta, M), \mathbf{D}) \leq \epsilon_2), \ldots$
+, $p (\theta, M | d(\phi(\theta, M), \mathbf{D}) \leq \epsilon_T).$ A
+primeira amostra, que tem limiar $\epsilon_1$, é gerada usando a 
+distribuição a priori, enquanto as próximas amostras, de limiares
+$\epsilon_2, \ldots, \epsilon_T$, são geradas com perturbações 
+aleatórias as amostras de limiares anteriores. O 
+pseudocódigo~\ref{code:abc_smc} mostra como o ABC-SMC funciona.
+
+Note que o desempenho e a qualidade da solução encontrada pelo algoritmo 
+ABC-SMC dependem da sequência de limiares $\epsilon_1, \ldots,
+\epsilon_T$. Quanto maior o valor de $T$, maior é a quantidade de
+amostras geradas, e além disso, quanto menor é o valor do limiar, maior
+é a quantidade média de propostas necessárias até uma proposta
+satisfazer o limiar. A diferença entre dois limiares seguidos também não
+pode ser grande, para evitar o mesmo problema do algoritmo ABC, que
+falha quando a distribuição de proposta é muito diferente da
+distribuição de interesse. Por outro lado, o valor de $\epsilon_1$ deve
+ser alto, pois a primeira amosta deve ser parecida com a prioro, 
+enquanto o valor de $\epsilon_T$ deve ser pequeno, para que a amostra se 
+pareça com a posteriori. Portanto, a sequência de limiares deve ter 
+grande extensão, com valor de $T$ pequeno, e com $\epsilon_T$ também 
+pequeno.
+
+\begin{algorithm}[h]
+\textsc{ABC SMC} $(\mathcal{M}, D)$
+\begin{algorithmic}[1]
+    \State Defina a sequência $\epsilon_1, \ldots, \epsilon_T$.
+    \State Defina $N$, o tamanho das amostras.
+    \State Amostre $\{(\theta^{(1, 1)}, M^{(1, 1)}), 
+                     (\theta^{(1, 2)}, M^{(1, 2)}), \ldots, 
+                     (\theta^{(1, N)}, M^{(1, N)})\}$ de 
+                     $p (\theta, M| \mathbf{D})$.
+    \State Seja $w^{(1, i)} = 1, \forall i \in {1, \ldots, N}$.  
+    \For{$t \in \{1, \ldots, T\}$}
+        \State $i \gets 1$
+        \While{$i \leq N$}
+            \State Amostre $M^* \propto p (M | \mathbf{D})$.
+            \State Amostre $(\theta^{(t - 1, k)}, M^*)$ da amostra de
+            limiar $\epsilon_{t-1}$, com peso $w^{(t - 1, k)}$.
+            \State Produza $(\theta^*, M^*)$ ao perturbar
+                $\theta^{(t - 1, k)}$; 
+                $\theta^* \propto K^t(\theta | \theta^{(t - 1, k)})$.
+            \If{$p (\theta^* | M^*) = 0$}
+                \State Continue para próxima iteração.
+            \EndIf
+            \State $\mathbf{D}^* \gets \phi (M^*, \theta^*)$
+            \If{$d (\mathbf{D^*, D}) \leq \epsilon_t$}
+                \State $i \gets i + 1$
+                \State $(\theta^{(t, i)}, M^{(t, i)}) \gets 
+                    (\theta^*, M^*)$
+            \EndIf
+        \EndWhile
+        \State Calcule os pesos da amostra atual:
+            %\begin{equation*}
+$                w^{(t, i)} = \frac{p (\theta^{(t, i)} | M^{(t, i)})}
+                         {\sum_{j = 1}^N w^{(t-1, j)}p_{K^t}
+                            (\theta^{(t-1, j)}, \theta^{(t, i)})}$
+            %\end{equation*}
+    \EndFor
+    \Return
+\end{algorithmic}
+\caption{Pseudo-code of ABC SMC.}
+\label{code:abc_smc}
+\end{algorithm}
+
+\subsection{Testes de seleção de modelos}
+Após as mudanças implementadas ao SigNetMS e o estudo da função ABC-SMC,
+decidimos comparar as duas abordagens em experimentos de seleção de
+modelos. Para testar a função ABC-SMC, usamos o programa ABC-SysBio, que
+implementa em Python o ABC-SMC para seleção de modelos.
+
+Para testar as duas abordagens, realizamos dois experimentos similares,
+em que quatro modelos são avaliados de acordo com dados gerados por um
+destes modelos, chamado de modelo correto.
+
+\subsubsection{Primeiro experimento}
+O primeiro experimento que realizamos analisou quatro modelos 
+candidatos, de maneira similar a Vyshemirsky et 
+al.~\cite{Vyshemirsky2008}. A figura~\ref{fig:experiment_1} mostra os
+quatro modelos candidatos: um modelo correto; um modelo que é uma
+simplificação do correto; um modelo que é incompleto; e, por fim, um
+modelo que é uma generalização do modelo correto.
+
+Os dados experimentais foram gerados com simulações do modelo correto,
+medindo as concentrações de R$_{pp}$ nos intervalos de tempo: $2s$,
+$5s$, $10s$, $20s$, $40s$, $60s$, e $100s$, seguindo da adição de erro
+Gaussiano com média zero e variância de $0,01$, três vezes seguidas,
+para se gerar três conjuntos de medições. Os valores utilizados para 
+constantes de velocidade foram: $k_1 = 0,07$, $k_2 = 0,6$, $k_3 = 0,05$,
+$k_4 = 0,3$, $V = 0,017$, e $K_m = 0,3$. As concentrações iniciais
+usadas foram: S $= 1$, R $= 1$, dS $= 0$, RS $= 0$, R$_{pp} = 0$. Por
+motivos de simplificação, não indicamos as unidades de medida destas
+constantes.
+
+\begin{figure}
+  \begin{tabular}{c c}
+    \subfigure[Modelo correto]{
+    \includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model1.pdf}}
+    &
+    \subfigure[Modelo simplificado]{
+    \includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model2.pdf}}
+    \\
+    \subfigure[Modelo incompleto] {
+    \includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model3.pdf}}
+    &
+    \subfigure[Modelo generalizado] {
+    \includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model4.pdf}}
+    \end{tabular}
+    \caption{Os quatro modelos candidatos do primeiro experimento. A
+    medida de interesse na dinâmica destes modelos é a concentração de
+    R$_{pp}$.}
+    \label{fig:experiment_1}
+\end{figure}
+
+No SigNetMS utilizamos 15000 iterações de burn-in e 5000 iterações para
+burn-in informado e para amostragem final. Como resultado, os modelos
+foram ordenados da seguinte maneira: modelo correto, modelo 
+simplificado, modelo generalizado e modelo incompleto. Este resultado é
+similar ao resultado original de Vyshemirsky e Girolami (2007), que tem
+apenas os modelos simplificado e generalizado invertidos. Já no 
+ABC-SysBio, utilizamos a sequência de limiares gerada automaticamente 
+para o problema e tivemos como resultado a ordenação: modelo incompleto,
+modelo simplificado, modelo generalizado e modelo correto. 
+
+Para entender estes resultados, criamos gráficos que mostram as
+simulações geradas pelos parâmetros amostrados pelo SigNetMS e
+ABC-SysBio. 
+
+Na figura~\ref{fig:exp:abc-sysbio} mostramos simulações geradas por 
+amostras de parâmetros de diferentes iterações no programa ABC-SysBio, 
+considerando o modelo correto. É possível ver que ao longo das iterações
+os parâmetros fazem a dinâmica simulada se aproximar dos dados
+experimentais. Entretanto, a dinâmica gerada pelas amostras não reproduz
+a dinâmica do experimento. Isto significa que a amostra gerada pelo
+programa ABC-SysBio não se aproxima da amostra da distribuição a
+posteriori dos parâmetros, comprometendo a qualidade da função de
+avaliação de modelos.
+
+\begin{figure}[h]
+  \centering 
+  \begin{tabular}{c c}
+    \subfigure[iteração 1]{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_1.pdf}
+    \label{fig:abc_bio_avgsim1_it1}}
+    &
+    \subfigure[iteração 10]{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_10.pdf}
+    \label{fig:abc_bio_avgsim1_it2}} 
+    \\
+      \subfigure[iteração 20]{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_20.pdf}
+    \label{fig:abc_bio_avgsim1_it3}} 
+    &
+      \subfigure[iteração 26]{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_26.pdf}
+      \label{fig:abc_bio_avgsim1_it4}}
+    \end{tabular}
+    \caption{Simulação média gerada pelos parâmetros amostrados na
+      iterações 1, 10, 20 e 26 pelo programa ABC-SysBio, para o modelo
+      correto.}
+    \label{fig:exp:abc-sysbio}
+\end{figure}
+
+Na figura~\ref{fig:exp:snm1} podemos ver simulações geradas por
+parâmetros amostrados em diferentes potências de posteriori no programa
+SigNetMS, considerando o modelo correto. Podemos ver que com o aumento
+do valor de $\beta$, as amostras geradas se aproximam da distribuição a
+posteriori, pois a curva simulada se aproxima da curva gerada no
+experimento. A figura~\ref{fig:exp:snm2} mostra as simulações geradas
+pelos parâmetros amostrados no SigNetMS da distribuição a posteriori, e
+podemos observar que apenas o modelo incompleto, classificado como o
+pior, não se aproximou da dinâmica medida no experimento. 
+
+\begin{figure}
+    \centering
+    \begin{tabular}{c c}
+    \subfigure[$\beta = 0$]{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_0.png}
+    \label{fig:abc_bio_avgsim3_it1}}
+    &
+    \subfigure[$\beta = 0,05$]{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_19.png}
+    \label{fig:abc_bio_avgsim3_it2}} 
+    \\
+    \subfigure[$\beta = 0,3$]{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_29.png}
+    \label{fig:abc_bio_avgsim3_it3}} 
+    &
+    \subfigure[$\beta = 1$]{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_39.png}
+    \label{fig:abc_bio_avgsim3_it4}} 
+    \end{tabular}
+    \caption{Simulação média gerada pelos parâmetros amostrados no
+    programa SigNetMS, para potências de posteriori com $\beta$ 
+    valendo $0, 0,5, 0,3$ e $1$, para o modelo correto.}
+    \label{fig:exp:snm1}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \begin{tabular}{c c}
+        \subfigure[Modelo correto]{
+    \includegraphics[clip=true,width=.46\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_39.png}}
+    &
+        \subfigure[Modelo simplificado]{
+    \includegraphics[clip=true,width=.46\linewidth]{experiments/results/girolami/gamma/snm/simulations_model2_39.png}} 
+    \\
+        \subfigure[Modelo completo]{
+    \includegraphics[clip=true,width=.46\linewidth]{experiments/results/girolami/gamma/snm/simulations_model3_39.png}} 
+    &
+        \subfigure[Modelo generalizado]{
+    \includegraphics[clip=true,width=.46\linewidth]{experiments/results/girolami/gamma/snm/simulations_model4_39.png}} 
+    \end{tabular}
+    \caption{Simulação média gerada pela amostra da posteriori criada
+    para os quatro modelos candidatos, no programa SigNetMS.}
+    \label{fig:exp:snm2}
+\end{figure}
+
+
+\subsubsection{Segundo experimento}
+O segundo experimento, similarmente ao primeiro, consiste em usar as
+duas propostas de avaliação de modelos para criar uma ordenação de
+quatro modelos em que um deles é o modelo correto, usado para geração de
+dados experimentais. Os quatro modelos são apresentados da
+figura~\ref{fig:experiment_2}, e são compostos, além do modelo correto,
+por um modelo simplificado, por um modelo generalizado e um modelo
+incorreto. 
+
+Usando o programa ABC-SysBio obtivemos a seguinte ordenação de modelos:
+modelo simplificado, modelo correto, modelo incorreto e modelo
+generalizado. Por outro lado, quando utilizamos o programa SigNetMS
+obtivemos a ordenação: modelo simplificado, modelo correto, modelo
+generalizado e modelo incorreto.
+
+Gerando gráficos similares ao que apresentamos no último experimento,
+que mostram as simulações geradas por parâmetros amostrados, conseguimos
+analisar a ordenação gerada por ambos programas. Para os modelos correto
+e simplificado, ambos programas amostraram parâmetros que aproximavam a
+curva simulada da curva do experimento. Para o modelo incorreto nenhum
+dos dois programas amostrou parâmetros que aproximassem a dinâmica do
+experimento. Por fim, para o modelo generalizado, apenas o programa
+SigNetMS encontrou parâmetros que faziam a simulação aproximar os dados
+do experimento.
+
+\begin{figure}
+    \centering
+    \begin{tabular}{c c}
+    \subfigure[Modelo correto]{
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/diagrams/smallest_model1.pdf}}
+    &
+    \subfigure[Modelo simplificado]{
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/diagrams/smallest_model2.pdf}} 
+    \\
+    \subfigure[Modelo generalizado] {
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/diagrams/smallest_model3.pdf}}
+    &
+    \subfigure[Modelo incorreto] {
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/diagrams/smallest_model4.pdf}} 
+    \end{tabular}
+    \caption{Os quatro modelos candidatos no segundo experimento. A
+    medida de interesse nestas vias é a concentração de C.}
+    \label{fig:experiment_2}
+\end{figure}
+
+\subsubsection{Escolha de método de avaliação de modelos}
+Com os resultados obtidos nos dois experimentos anteriores, concluímos
+que a ferramenta SigNetMS é mais adequada para nossas aplicações do que
+a ferramenta ABC-SysBio. É importante também ressaltar que a ferramenta
+ABC-SysBio pode ser mais adequada em aplicações em que uma função de
+verossimilhança não pode ser escrita, e também em situações em que é
+difícil determinar uma distribuição a priori para constantes de
+velocidade. 
 
 \subsection{Paralelização do SigNetMS}
+Apesar de se mostrar mais adequada para nossas aplicações, a ferramenta
+SigNetMS possuia como grande desvantagem o seu tempo de execução. Por
+conta disto, analisamos a ferramenta com objetivo de identificar porções 
+de código que poderiam ser executadas em paralelo.
 
 \subsection{Implementação eficiente de integração de sistemas de
 equações diferenciais}
 
 \subsection{Testes da metodologia em uma cadeia do espaço de busca}
-
-
 
 
 
