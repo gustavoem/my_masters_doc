@@ -155,9 +155,13 @@ da linhagem tumoral murina Y1.
 % - Teste com uma cadeia do espaço de busca.
 
 \section{Atividades desenvolvidas}
-% - Disciplinas cursadas
 
 \subsection{Disciplinas cursadas}
+No primeiro período de bolsa, o beneficiário já havia cursado três
+disciplinas: Tópicos em Análise de Algoritmos, Probabilidade e
+Inferência Estatística I, e Laboratório de Programação Extrema. No
+segundo período da bolsa, entre os meses de agosto e dezembro de 2019, o
+beneficiário também cursou a disciplina Modelagem de Banco de Dados.
 
 \subsection{Resumo de atividades anteriores}
 \subsubsection{Estudo de seleção de modelos de via de sinalização celular}
@@ -729,14 +733,124 @@ velocidade.
 Apesar de se mostrar mais adequada para nossas aplicações, a ferramenta
 SigNetMS possuia como grande desvantagem o seu tempo de execução. Por
 conta disto, analisamos a ferramenta com objetivo de identificar porções 
-de código que poderiam ser executadas em paralelo.
+de código que poderiam ser executadas em paralelo. Identificamos então
+que o procedimento de geração de amostras de potências de posteriori era 
+responsável por grande parte do tempo de execução.
+
+O procedimento de geração de amostras foi implementado com o algoritmo
+de Metropolis-Hastings, que é de difícil paralelização, pois um passo
+depende do passo anterior. Entretanto, as amostras de diferentes
+potências de posteriori são geradas de maneira independente nas etapas
+de burn-in e burn-in informado. Logo, paralelizamos estas duas etapas da
+amostragem. Para implementar a paralelização utilizamos a biblioteca
+\toolname{pathos}\footnote{https://github.com/uqfoundation/pathos},
+e a função \toolname{map}, que nos permitiu fazer com que cada potência
+de posteriori fosse amostrada, nas etapas de burn-in e burn-in
+informado, em uma thread diferente.
+
+A última etapa do processo de amostragem não foi paralelizada, pois nela
+é realizado o processo de Monte Carlo Markov Chain
+Populacional~\cite{Friel2008}, que mistura amostras de diferentes
+potências de posteriori, dificultando a paralelização.
 
 \subsection{Implementação eficiente de integração de sistemas de
 equações diferenciais}
+Mesmo com a paralelização do processo de amostragem, o tempo de execução
+do programa SigNetMS ainda era muito grande, mesmo para exemplos
+pequenos. Decidimos então investigar o processo de integração de sistema
+de equações diferenciais.
 
-\subsection{Testes da metodologia em uma cadeia do espaço de busca}
+Até este momento, estávamos usando uma representação literal do sistema
+de equações diferenciais. Portanto, para fazer sua integração, usávamos
+uma função que interpretava as derivadas em formato texto e calculava 
+seus respectivos valores. Propomos então, utilizar uma notação simbólica 
+do sistema de equações diferenciais, utilizando a biblioteca 
+\toolname{SymPy}. 
 
+Ao utilizar a notação simbólica no SymPy, fomos capazes de usar funções
+da própria biblioteca que permitem transformar o sistema de equações
+diferenciais em uma função escrita em C, que é automaticamente compilada
+e transformada em uma função em Python. Além disso, a notação simbólica
+também nos permite facilmente calcular a matriz Jacobiana do sistema de
+equações diferenciais, o que melhora o desempenho do integrador
+numérico. A tabela~\ref{tab:integrador} mostra o tempo de execução do
+integrador numérico quando usamos as duas diferentes abordagens de
+representação do sistema, e é possível ver que com a notação simbólica,
+o tempo de execução diminuiu consideravelmente.
 
+\begin{table}[]
+\centering
+\begin{tabular}{ccc}
+\hline
+\multicolumn{1}{l}{}  & \multicolumn{2}{c}{Tempo de execução em segundos} \\ 
+\hline
+
+\multicolumn{1}{l}{\# de integrações do sistema}
+    & Representação literal  & Representação simbólica  \\
+\hline
+100 & 31,1  & 5,4  \\
+200 & 63,3  & 10,5 \\
+400 & 125,6 & 20,3 \\ 
+\hline
+\end{tabular}
+\caption{Tempo de execução do integrador numérico usando as duas
+    abordagens de representação do sistema de equações diferenciais.
+    Para gerar esta tabela, o modelo correto da
+    figura~\ref{fig:experiment_1} foi integrado numericamente repetidas 
+    vezes.}
+\label{tab:integrador}
+\end{table}
+
+\subsection{Testes da metodologia em uma cadeia do espaço de busca} 
+Com a melhora de desempenho do pacote SigNetMS, seguimos o trabalho com
+um experimento maior de seleção de via de sinalização celular. Este
+experimento consistiu em adicionar, uma a uma e de maneira aleatória, 
+reações candidatas a um modelo inicial e analisar o comportamento da 
+função de custo sobre sequência de modelos criada. Do ponto de vista de
+seleção de características (em que reações candidatas são
+características), este experimento é equivalente a um passeio aleatório
+no espaço de busca (todos os subconjuntos de características) que sempre
+adiciona características, começando no conjunto vazio, correspondente ao
+modelo base, e terminando no conjunto completo, correspondente ao modelo
+base mais todas as reações candidatas.
+
+Os dados experimentais para avaliação dos modelos foram gerados por um
+modelo intermediário, entre o modelo base e o modelo com conjunto
+completo de reações. A figura~\ref{fig:random_walk} mostra o resultado 
+deste experimento, e nela podemos ver que a função de custo de fato 
+penaliza modelos mais complexos, e que a função de custo não é 
+monotônica em uma cadeia do espaço de busca e também não tem um formato
+de U, o que vai influenciar na nossa escolha por um algoritmo de busca.
+
+\begin{figure}
+    \includegraphics[clip=true]{experiments/surface_curve.png}
+    \caption{Curva com comportamento da função de custo ao adicionar
+    iterativamente reações a um modelo base. Para facilitar a
+    visualização, mostramos no gráfico a verossimilhança marginal vezes 
+    a constante $-1$, ou seja, quanto menor o valor na curva, melhor a
+    qualidade do modelo. 
+    }
+    \label{fig:random_walk}
+\end{figure}
+
+\section{Atividades futuras}
+Nos mês de fevereiro, projetamos finalizar experimentos de percorrimento
+do espaço de busca. Em seguida, nos meses de março, abril e maio
+projetamos construir um pequeno banco de dados de reações químicas,
+e aplicar a metodologia proposta em linhagens de células Y1 e HEK293.
+
+\section{Outras atividades acadêmicas}
+No mês de janeiro de 2019, entre os dias 7 e 11, o beneficiário 
+participou da XIV Escuela de Verano en Matemáticas Discretas, em 
+Valparaíso, Chile. Nesta escola três cursos foram oferecidos, envolvendo
+otimização combinatória, análise de algoritmos parametrizados e
+problemas computacionais no estudo do cérebro.
+
+Além disso, o beneficiário teve um resumo aceito para participação na
+conferência Rocky 2019. O beneficiário participou da conferência entre
+os dias 5 e 7 de dezembro, na cidade Snowmass Village, Colorado, Estados
+Unidos. Esta conferência possuiu uma seção de posters na qual o
+beneficiário apresentou o trabalho desenvolvido neste projeto.
 
 \addcontentsline{toc}{section}{Referências}
 \bibliographystyle{unsrt} 

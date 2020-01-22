@@ -23,10 +23,11 @@ results =  [('11111000000000000000000', -1579.900369772535),
 subsets = [t[0] for t in results]
 scores = [-t[1] for t in results]
 
+axes = plt.gca()
 plt.yscale('log')
 plt.xticks (range(len(subsets)), range(len(subsets)))
-plt.xlabel('# of added features')
-plt.ylabel('Estimated model error')
+plt.xlabel('# de reações adicionadas')
+plt.ylabel('-log p(D|M)')
 
 plt.plot(scores[:9])
 plt.show()
