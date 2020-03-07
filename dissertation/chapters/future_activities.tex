@@ -1,0 +1,128 @@
+%begin-include
+As we presented in the last sections of this text, we are close to
+defining a ranking framework for models of signaling pathway. To achieve
+our goal, of creating a methodology for identification of signaling 
+pathway using an approach based on the feature selection problem, a few
+activities need to be accomplished. These activities include the
+definition of a reliable method of model ranking, the construction of
+a relational database with chemical reactions information, the creation
+of search algorithms in the space of models, and finally the validation
+of the proposed methodology.
+
+The first activity that should be tackled is the definition of a 
+framework for ranking models of signaling pathways. This framework will
+use either the ABC-SysBio or SigNetMS software. The first has been 
+tested already and the last is still being tested and analyzed. 
+Therefore, to define the framework, we need to finish the tests of 
+SigNetMS and decide which software is more adequate for our use. After
+that, it is of our interest to propose changes in the implementation of 
+the chosen software in order to achieve better computational times, 
+using, as an example, distributed computation or computation in multiple 
+processors, including graphics processing units (GPUs).
+
+After defining the model ranking framework, we will define the 
+relational database of chemical reactions, which will be used to define 
+the search space of the feature selection problem. This database should
+be able to store interactions between chemical species as well as 
+reaction rate constants.  This database will be populated with 
+information from other databases available, such as 
+SABIO-RK~\cite{Wittig2011} and BRENDA~\cite{Schomburg2004}. Interactions 
+of the database will be used to propose new model hypothesis for the 
+experimental data, while the reaction rate constants will be used to 
+define the prior distribution of model parameters (distributions should 
+have high mass concentration around plausible values for reaction rate 
+constants).
+
+With a defined model ranking framework and a database with informations
+of chemical reactions, we will then work on the definition of the
+search space and cost function that will allow us to solve the 
+identification of signaling pathways as a feature selection problem.
+The cost function should be implemented on featsel, a framework that 
+will also allow us to implement different search algorithms of 
+feature selection that we create to solve our problem. The featsel
+framework can also benchmark search algorithms, and this feature is 
+going to be used by us to improve algorithms and choose the ones with 
+better performance.
+
+Using the cost function and search space that we defined on the featsel
+framework, we will then be able to test our methodology on well known
+signaling pathways that were previously modeled. One possible approach 
+to test the methodology is to use an incomplete model of a signaling 
+pathway and a set of experimental data to test if the created 
+methodology can extend the incomplete model to a model that can 
+successfully reproduce the data. A similar test is to give an overly 
+complex model (or even a model with spurious interactions) of a 
+signaling pathway and a set of experimental data to test if the 
+methodology can remove the unnecessary (or spurious) interactions. 
+
+Finally, after testing and validating, we can apply our methodology on
+problems that are relevant for other researchers of the our laboratory, 
+mostly problems related to ERK signaling pathways of tumor cell lines
+Y1 and HEK293.
+
+From now to the end of the project we will also produce a dissertation
+with our work. We also intend to produce a manuscript that can be sent 
+for publication in a journal of Systems Biology. Moreover, the student
+still need to take one class on the second semester of 2019, to fulfill
+the credits required by the Computer Science MSc program. 
+
+
+\section{Activities Description}
+\label{sec:future_activities}
+\begin{itemize}
+    \item{\bf Activity 1:} Finalize experiments with SigNetMS.
+    \item{\bf Activity 2:} Determine, between ABC-SysBio and SigNetMS,
+        which is best to rank models.
+    \item{\bf Activity 3:} Studies of databases of chemical kinetics 
+        such as SABIO-RK~\cite{Wittig2011} and 
+        BRENDA~\cite{Schomburg2004}.
+    \item{\bf Activity 4:} Creation of a relational database of chemical 
+        interactions that is able to store the topology and rate 
+        constants of reactions gathered from chemical kinetics 
+        databases.
+    \item{\bf Activity 5:} Implementation of a feature selection cost
+        function and definition of the search space on featsel, which 
+        will allows us to solve the identification of signaling pathways 
+        as a feature selection problem.
+    \item{\bf Activity 6:} Creation of new algorithms of feature 
+        selection for the problem of identification of signaling 
+        pathways.
+    \item{\bf Activity 7:} Testing of the methodology developed on known
+        pathways.
+    \item{\bf Activity 8:} Application of the method in ERK signaling 
+        pathways of tumor cell lines Y1 and HEK293.
+\end{itemize}
+
+\section{Plan of Work for Future Activities}
+On Table~\ref{tab:Gantt} we show Gantt diagram with our estimate of 
+start and finish of each future activity of the project.
+
+\begin{table}[H]
+\centering
+  \begin{ganttchart}[x unit=0.38mm, y unit chart=7mm, time slot format=isodate, bar/.append style={fill=gray!30},vgrid={
+      draw=none,
+      draw=none,
+      dotted
+    },]{2019-5-13}{2019-12-31}
+  \gantttitlecalendar{year}\\
+  \gantttitle{May}{20}
+  \gantttitle{Jun}{30}
+  \gantttitle{Jul}{31}
+  \gantttitle{Aug}{30}
+  \gantttitle{Sep}{31}
+  \gantttitle{Oct}{30}
+  \gantttitle{Nov}{31}
+  \gantttitle{Dec}{30} \\
+  \ganttbar{Activity 1}{2019-5-13}{2019-5-30}\\
+  \ganttbar{Activity 2}{2019-5-24}{2019-6-15}\\
+  \ganttbar{Activity 3}{2019-6-1}{2019-6-15}\\
+  \ganttbar{Activity 4}{2019-6-15}{2019-7-15}\\
+  \ganttbar{Activity 5}{2019-7-15}{2019-8-15}\\
+  \ganttbar{Activity 6}{2019-8-15}{2019-10-30}\\
+  \ganttbar{Activity 7}{2019-9-20}{2019-10-30}\\
+  \ganttbar{Activity 8}{2019-11-1}{2019-12-30}
+  \end{ganttchart}
+\caption{Gantt diagram containing a proposed schedule for all activity
+    described on Section~\ref{sec:future_activities}.} 
+\label{tab:Gantt}
+\end{table}

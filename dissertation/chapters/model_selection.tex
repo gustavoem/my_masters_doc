@@ -7,12 +7,13 @@ being reproduced by a model $M$, $p (D | M)$. The estimation of this
 probability is done by taking samples of tempered posterior 
 distributions of model parameters; these tempered posterior 
 distributions bridge the prior and posterior parameter distributions and 
-allow a better estimation of the marginal likelihood. Another method,
-likelihood-free, is to use Approximate Bayesian Computation; this method
-allows us to estimate the probability $p (M | D)$ in a simpler 
-algorithm.
+allow a better estimation of the marginal likelihood. Another method 
+is to use Approximate Bayesian Computation. This method allows us to 
+estimate the probability $p (M | D)$ in a simpler algorithm, which is
+likelihood-free.
 
 \section{Model ranking using Marginal Likelihood}
+\label{sec:marginal_likelihood_method}
 % Simple explanation of this model ranking
 % Describe the likelihood function 
 % However, this is very hard to calculate
@@ -64,7 +65,7 @@ therefore we can simplify~\ref{eq:likelihood_multivariate} to:
         \sigma^2\right)}} (\phi_i (M,\theta) - D_i).
 \label{eq:likelihood}
 \end{equation}
-The $\sigma^2$ used in equation~\ref{eq:likelihood} is also a parameter
+The $\sigma^2$ used in Equation~\ref{eq:likelihood} is also a parameter
 of the model, which means that, for some $k$, $\theta_k = \sigma^2$.
 
 Now that we defined the likelihood function, we can write the marginal 
@@ -115,7 +116,7 @@ distributions~\cite{Friel2008}.
 % -> include here: how to estimate it?
 \subsection{Thermodynamic Integration for Marginal Likelihood}
 The Thermodynamic Integration is a method that proposes to rewrite
-the integral~\ref{eq:marginal_likelihood} using ideas of thermodynamics,
+the Integral~\ref{eq:marginal_likelihood} using ideas of thermodynamics,
 providing new estimators for the marginal likelihood. This method is
 able to rewrite the marginal likelihood integral in a way that it 
 marginalizes the likelihood through many intermediate probability spaces 
@@ -171,7 +172,7 @@ And it is not hard to see that:
 \end{gathered}
 \end{equation}
 
-Using equations~\ref{eq:z_on_limits} and equality~\ref{eq:z_derivative}
+Using equations~\ref{eq:z_on_limits} and Equality~\ref{eq:z_derivative}
 we can write that:
 \begin{align}
     \int_0^1 \expectation_{p_\beta (\theta)} [\ln p(D|\theta, M)]d\beta 
@@ -198,7 +199,7 @@ be explained in the next section.
 % -> A third using populational MCMC
 \subsection{Estimation of the Marginal Likelihood}
 There are multiple approaches on estimating the 
-integral~\ref{eq:thermodynamic_integral}, and for all of them, it is 
+Integral~\ref{eq:thermodynamic_integral}, and for all of them, it is 
 necessary to find samples of $p_{\beta_t} (\theta | M, D)$ for a 
 sequence of values of $\beta_t$ that vary from zero to one~\cite{Xura20, 
 Vyshemirsky2007, Friel2008}. The differences on these methods are mainly 
@@ -206,12 +207,12 @@ on the choice of the sequence $\{\beta_1, \beta_2, \ldots, \beta_T\}$,
 on the Metropolis-Hastings (MH) algorithms used, and finally on the 
 estimator.
 
-We are now going to show the methodology we used to estimate parameter 
-values. First, we assume that there is a 
-chosen sequence of $\{\beta_1, \beta_2, \ldots, \beta_T\}$ to explain 
-how to generate samples of power posterior distributions with these 
-temperatures. Then, we explain how to choose this values and present two
-possible estimators for $p (D | M)$.
+We are now going to show a possible methodology to estimate parameter 
+values. First, we assume that there is a chosen sequence of 
+$\{\beta_1, \beta_2, \ldots, \beta_T\}$ to explain how to generate 
+samples of power posterior distributions with these temperatures. Then, 
+we explain how to choose these values and present two possible 
+estimators for $p (D | M)$.
 
 \subsubsection{Power posteriors sampling}
 \label{sec:power_posteriors_sampling}
@@ -228,13 +229,13 @@ Chain (Populational MCMC)~\cite{Friel2008}.
 
 The first step of sampling is run independently for each temperature. 
 The Metropolis-Hastings performed on this step is started taking a 
-sample from the parameter priors, and the proposal distribution is 
-a multivariate Gaussian that has mean approximately equal to the last 
-point sampled and with a diagonal covariance matrix, i.e. parameters are 
-proposed independently. This covariance matrix is updated repeatedly 
-after a predefined number of iterations with the goal of adapting the 
-proposal distribution to the parameter space. This update is performed 
-as proposed in Gelman et al. (2013): 
+sample from the parameter priors. The proposal distribution has to 
+generate positive numbers and it should have mean approximately equal to 
+the last point sampled; more than that, we decide to use a diagonal 
+covariance matrix, i.e. parameters are proposed independently. This 
+covariance matrix is updated after every predefined number of iterations 
+with the goal of adapting the proposal distribution to the parameter 
+space. This update is performed as proposed in Gelman et al. (2013): 
 \begin{itemize}
 \item{if the acceptance rate of parameter points in the last 
     iterations is greater than $0.44$, then increase the variance of the
@@ -276,11 +277,11 @@ sampled independently. In fact, a portion of the last sampled parameters
 on step one is used to create a covariance matrix, and this matrix is
 then used as the covariance matrix of the first proposal distribution of 
 the second step of sampling. After the first iteration, for every 
-sampled parameter on this step, the covariance matrix is updated to be
-the sample covariance of the selected points of step one plus the  
+sampled parameter on the second step, the covariance matrix is updated 
+to be the sample covariance of the selected points of step one plus the  
 current points accepted on step two. The probability of accepting a 
 proposed parameter on this step is the same  as it was on the first 
-step, as described by equation~\ref{eq:mh_ratio_step1}.
+step, as described by Equation~\ref{eq:mh_ratio_step1}.
 
 At the end of the second step, we will have $T$ chains of sampled 
 parameters, containing the selected parameters of the first and second 
@@ -335,22 +336,22 @@ are used to estimate the marginal likelihood.
 
 \subsubsection{Estimators of the Marginal Likelihood}
 The sampling procedure explained on the 
-section~\ref{sec:power_posteriors_sampling} produces samples of the 
+Section~\ref{sec:power_posteriors_sampling} produces samples of the 
 power posteriors $p_{\beta_1} (\theta), \ldots, p_{\beta_T} (\theta)$, 
-and this samples can be used to estimate logarithm of the marginal 
+and these samples can be used to estimate logarithm of the marginal 
 likelihood:
 \begin{equation}
     \ln p (D | M) = \int_0^1 \expectation_{p_\beta (\theta)} 
         [\ln p(D|\theta, M)]d\beta.
     \label{eq:marginal_likelihood_again}
 \end{equation}
-And this can be achieved using both numerical integration or creating an
+This can be achieved using both numerical integration or creating an
 unbiased estimator. The choice of either approach of estimation will
 imply in a method for choosing the sequence of temperatures $\beta_1, 
 \ldots, \beta_T$. 
 
 The method proposed by Friel et al. (2008), uses a numerical integration 
-method to estimate the integral~\ref{eq:marginal_likelihood_again}. 
+method to estimate the Integral~\ref{eq:marginal_likelihood_again}. 
 Given that $T$ temperatures, $0 = \beta_1 < \beta_2 < \ldots < \beta_T = 
 1$, were selected and samples of its respective power posteriors were 
 generated, then using trapezoidal rule over the temperature allows us to 
@@ -381,12 +382,12 @@ approach is:
 \begin{equation*}
     \beta_t = \left(\frac{t - 1}{T - 1}\right)^{c}, 
 \end{equation*}
-with $t \in {1, \ldots, T}$; with better results achieved when $n$ is
+with $t \in {1, \ldots, T}$; with better results achieved when $T$ is
 between $20$ and $100$ and $c$ is between $3$ and $5$.
 
 Another method, proposed by Xu et al. (2010), considers that the 
 temperature $\beta$ can be treated as a random variable, and therefore 
-we can rewrite integral~\ref{eq:marginal_likelihood_again} as:
+we can rewrite Integral~\ref{eq:marginal_likelihood_again} as:
 \begin{equation}
     \expectation_{p (\beta)} 
         \left[\frac
@@ -409,11 +410,8 @@ the marginal likelihood is given by:
 where $\beta_{k, i}$ is the $i$-th sampled temperature from the interval
 $\Delta\beta_k$; $\theta^{(\beta_{k, i})}$ is a parameter sampled 
 from the power posterior $p_{\beta_{k, i}} (\theta)$; and 
-$|\Delta\beta_k| = t_{k + 1} - t_k$.
-
-%\subsection{Implementation of SigNetMS}
-% -> Python
-% -> Uses the libSBML python package
+$|\Delta\beta_k| = t_{k + 1} - t_k$. However, Xu et al. do not provide
+information about the discretization method of the interval $[0, 1]$.
 
 
 % ABC-SysBio
@@ -429,6 +427,7 @@ $|\Delta\beta_k| = t_{k + 1} - t_k$.
 % How would we get model ranking from this result?
 % The ABC-SysBio Software
 \section{Approximate Bayesian Computation}
+\label{sec:abc_method}
 Approximate Bayesian Computation (ABC) is an approach that allows 
 generating samples from the posterior distribution without accessing the
 likelihood function. Adding a model indicator parameter to parameters 

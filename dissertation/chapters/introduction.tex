@@ -58,7 +58,7 @@ approximate solutions of these systems.
 In this work, we are interested in computational models that can 
 reproduce the behavior of signaling networks, comparing experimental 
 measures---generally based on Western blot data---to simulated results.
-The figure~\ref{fig:signal_pathway_example} shows a set of interactions
+The Figure~\ref{fig:signal_pathway_example} shows a set of interactions
 as well as parameters of a model of a signaling network. To create 
 computational models that are able to simulate the behaviour of a 
 signaling pathway, two main tasks need to be accomplished.
@@ -135,7 +135,7 @@ biological data, this methodology proposes to add to the model topology
 a set of chemical interactions that are relevant for the biochemical 
 experiment, and consequently approximates the model simulation to 
 experimental data. This set of interactions is a subset of interactions 
-from a database created by Lulu Wu, joining information from many static 
+from a database created by Wu, joining information from many static 
 maps of signaling networks available on KEGG. The choice of this subset 
 can be modeled as a combinatorial optimization problem, the feature 
 selection problem, in which the search space is the set of all possible 
@@ -151,7 +151,7 @@ experimental and model measures considering all possibilities of
 parameter values; however, unfortunately, finding the minimizing 
 parameter values is a hard problem.
 
-Since this is a hard problem, the method presented by Lulu Wu 
+Since this is a hard problem, the method presented by Wu 
 implements a heuristic version of this cost function, moreover, the 
 algorithm used to traverse the search space is also a heuristics. The 
 cost function heuristics is based on a Simulated Annealing procedure 
@@ -160,10 +160,10 @@ as possible) the distance between model and experimental measures. The
 best found distance is then considered as the cost of the model. The 
 size of the search space is exactly the number of all possible subsets
 of interactions to be added, and this number grows exponentially on the 
-number of interactions from the database. That explains why Lulu Wu used
+number of interactions from the database. That explains why Wu used
 a heuristic to traverse the search space. This heuristic is based on the 
 greedy algorithm called Sequential Forward Selection 
-(SFS)~\cite{Whitney1971}. The heuristic implemented by Lulu Wu selects a
+(SFS)~\cite{Whitney1971}. The heuristic implemented by Wu selects a
 fixed number of interactions from the database and then creates 
 candidate models by adding to the current solution the respective 
 interaction; then, after evaluating the cost function for each model, 
@@ -173,7 +173,7 @@ the algorithm moves to the best candidate.
 % 2. no information about reactions constants
 % 3. the algorithm can only add interactions but not remove
 % 4. cost function apply penalization randomly and arbitrarily
-The results presented on Lulu Wu's dissertation show that the method is 
+The results presented on Wu's dissertation show that the method is 
 useful when there are only a few differences between the starting model
 and a model that closely approximates the biological experiment. This
 limitation could be explained by the intrinsic difficulty of the 
@@ -204,7 +204,7 @@ to the data collected.
 % - create new search algorithms
 % - use Bayesian approach 
 We propose on this project to create a new method for modifying 
-models of signaling networks, based on the work of Lulu Wu, and 
+models of signaling networks, based on the work of Wu, and 
 including possible solutions to the three aspects mentioned on the last 
 paragraph. To the first aspect, we propose to create a database that 
 includes interactions informations gathered from KEGG and STRING, and 
@@ -233,22 +233,16 @@ integrating over the parameter space. Another advantage of this cost
 function is that, since it is based on likelihoods of the model to 
 reproduce data, overly complex models are automatically penalized.
 
-The method developed on this work for model selection will then be 
-applied in biological models, mainly related to tumor cells, that are
-relevant for Center of Toxins, Immune-response and Cell Signaling 
-(CeTICS).
-
-
 \section{Objectives}
-In this work we propose to create a software that applies a method, 
-based on the work o Lulu Wu, that is able to select a model to
-reproduce some biological experiment. This method should be able to 
-consult a vast database of interactions and modify a starting model by
-removing or adding those interactions in order to construct a model that
-approximates more closely the biological experiment. The construction of
-this database and how the method consults it is also part of this work. 
-We also propose to validate the methodology with real cell data. To 
-achieve these goals, we should complete the following tasks:
+In this work we propose to create a methodology that allows us to solve
+the problem of identification of cell signaling pathways as a feature 
+selection problem. This method should be able to consult a vast database 
+of interactions and modify a starting model by removing or adding those 
+interactions in order to construct a model that approximates more 
+closely the biological experiment. The construction of this database and 
+how the method consults it is also part of this work. We also propose to 
+validate the methodology with real cell data. To achieve these goals, we 
+should complete the following tasks:
 \begin{enumerate}
     \item{{\bf Define a cost function for models}. We propose to use a 
         Bayesian approach to implement an algorithm that allows us to 
@@ -280,6 +274,39 @@ achieve these goals, we should complete the following tasks:
     \item{{\bf Apply the methodology on a real case}. Finally, with a
         tested implementation of the methodology, we should help 
         researchers from CeTICS to identify cell signaling networks of
-        cells that are relevant to their research.}
+        cells that are relevant to their research. More specifically,
+        we are interested in finding adequate dynamic models to describe
+        the ERK signaling networks in HEK-293, in both parental and 
+        HRas-transformed cell lines.}
 \end{enumerate}
 \section{Organization}
+This text is organized in five chapters. In the first chapter, we 
+present the problem we are trying to solve, giving a brief context
+and motivation. Then, after the introduction, there are four more 
+chapters as follows:
+
+\begin{itemize}
+    \item{\em Chapter 2 (Fundamental Concepts):} we will give more details
+        about the identification of signaling pathway problem. We will
+        show how to obtain experimental data for signaling pathways and
+        how can chain of chemical reactions can be modeled as a system 
+        of differential equations. We close the chapter presenting 
+        briefly state of the art methods of model ranking and also the 
+        Metropolis-Hastings algorithm, which is a useful tool for 
+        methods of model ranking.
+    \item{\em Chapter 3 (Model Selection Methods):} we will present two
+        methodologies that are the state of the art in model selection.
+        Both methods are Bayesian approaches, where the first is based
+        on the estimation of marginal likelihoods and the second is
+        based on Approximate Bayesian Computation.
+    \item{\em Chapter 4 (Experiments of Model Selection):} we start this
+        chapter by presenting both the software that implement the 
+        methodologies of Chapter 2. The first, implemented on this 
+        project, is called SigNetMS while the second is called 
+        ABC-SysBio. Then, we also present two experiments of model 
+        ranking that we performed with the goal of evaluating the 
+        performance of both software.
+    \item{\em Chapter 5 (Future Activities):} we close this text 
+        presenting the future work that is necessary to achieve the goal
+        of this project.
+\end{itemize}
