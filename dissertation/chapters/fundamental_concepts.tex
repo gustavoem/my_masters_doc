@@ -6,14 +6,14 @@ results that we will present in this work. We start this chapter
 presenting what is a cell signaling pathway and how can one take 
 measures to identify its activity on the cell. Later we present how 
 it is possible to represent chemical iteractions as differential 
-equations, which implies in how can one model a cell signaling pathway
-in a system of ordinary differential equations. Then, we present 
+equations, and how that allows one to model a cell signaling pathway
+with a system of ordinary differential equations. Then, we present 
 more formally the problem we are trying to solve on this project, the
 identification of cell signaling pathways, as well as the state of the
-art methods of model (of signaling pathways) ranking. Finally, we 
-present the basics of posterior distribution sampling, which is a useful
-tool when working with Bayesian approaches, such as the ones used on
-this project to rank models.
+art methods of model ranking. Finally, we present the basics of 
+posterior distribution sampling, which is a useful tool when working 
+with Bayesian approaches, such as the ones used on this project to rank 
+models.
 
 % What I want to talk about in this section?
 % - Cells signaling pathways are part of the cell communication system,
@@ -37,16 +37,15 @@ Cell signaling pathways are part of the complex cell communication
 system, and it allows the cell to perceive the conditions of the 
 environment in which it is placed and change its behaviour accordingly.
 Signaling pathways participate in the regulation of many cell functions,
-including development, division and cell death~\cite{Hancock2017}. Bad 
-functioning signaling pathways can also be related to diseases, as in 
+including development, division and cell death~\cite{Hancock2017}. The
+dynamic of a signaling pathway can also be releated to diseases, as in
 many cases of cancer.
 
 The signal perceived by a cell can come from cells that are close 
 (including the same cell that produced the signal), as in synapses, or 
 it can travel long distances in the organism, as in hormones. When a 
-signal reaches a cell, it can either penetrate the cell or bind to some 
-specific receptor in the membrane. Once either of those events happen, 
-the signal or the receptor can trigger a sequence of chemical 
+signal reaches a cell, it binds to a specific receptor in the membrane,
+and once that happens, the receptor can trigger a sequence of chemical 
 interactions that can include change of conformation of proteins, 
 activation or inactivation of proteins, and change of concentration of
 chemical species in the cell. Ultimately, this chain of chemical 
@@ -57,8 +56,8 @@ Since signaling pathways participate in many of the cell functions, and
 are also related to diseases, it is important to study those structures
 in order to get a better understanding of the cell mechanisms and 
 diseases. One approach on the study of the cell signaling pathways is to 
-measure the concentration change of proteins that participate on the 
-pathway of interest.
+measure the concentration change of proteins and how they interact to
+produce those changes.
 
 % - Western blot is a technique that can indicate the amount of a 
 % specific protein that is in a mixture of proteins
@@ -74,10 +73,10 @@ pathway of interest.
 \section{Measurements of Proteins in Cell Signaling Pathways}
 Western blot~\cite{Towbin1979} is a laboratory technique that can 
 indicate the amount of a specific protein that is present in a mixture. 
-This technique show the presence of a protein in a mixture by 
+This technique shows the presence of a protein in a mixture by 
 ``blotting'' a membrane where the molecules of interest are located. We 
-can superficially summarize the procedure in the following steps: first 
-a mixture containing a sample of cells of interest must be created; 
+can summarize the procedure in the following steps: first a mixture 
+containing a sample of cells of interest must be created; 
 second, proteins from the mixture should be fixed on the blotting 
 membrane; third, an antibody should bind to the target protein 
 molecules; and finally, a method for highlighting the bound antibody 
@@ -106,7 +105,7 @@ bound to guanosine triphosphate (Ras-GTP).
 \centering
     \includegraphics[width=\textwidth]{fundamental_concepts/western_blot.png}
     \caption{Figure {\bf a} shows time-course measurements of ERK, 
-    phosphorylated ERK and hypoxanthine-guanine 
+    phosphorylated ERK (p-ERK) and hypoxanthine-guanine 
     phosphoribosyltransferase (HPRT). HPRT is a ``loading'' protein, 
     that means that its concentration is fairly the same through the 
     experiment, and therefore it is used as a normalizing factor to 
@@ -119,8 +118,8 @@ bound to guanosine triphosphate (Ras-GTP).
 
 These measurements alone do not always provide means for researchers to 
 understand a cell signaling pathway experiment. However, if we create a 
-computational models for this signaling networks that is able to 
-reproduce experimental data, then it is possible to use this model as a 
+computational model for this signaling networks that is able to 
+reproduce experimental data, then we might use this model as a 
 summary of the signaling network, which can provide to researchers 
 evidences of the biological phenomena.
 
@@ -190,7 +189,7 @@ concentrations of C and D, respectively.
 
 Using these two laws to calculate the speed of reactions, we are able 
 to describe how the concentration of chemical species in a system change 
-though time using differential equations. To illustrate this and future 
+through time using differential equations. To illustrate this and future 
 concepts of this section, we are going to consider a minimal system 
 composed of a simple enzymatic reaction:
 \begin{equation}
@@ -231,11 +230,11 @@ and they have, respectively, reaction rates of:
 \end{aligned}
 \end{equation*}
 
-Now, to determine a model of the concentration dynamics of every 
-chemical species involved in Reaction~\ref{eq:simple_enzymatic}, we will
-write a system of ordinary differential equations. To do so, for every 
-species we should calculate its concentration change rate based on the 
-rate of each reaction that it participates. For instance, the enzyme E is a 
+Now, to determine a model of the concentration dynamics for
+Reaction~\ref{eq:simple_enzymatic}, we will write a system of ordinary
+differential equations. To do so, we should take every chemical species 
+and calculate its concentration change rate based on the rate of each 
+reaction that it participates. For instance, the enzyme E is a 
 reactant on Reaction~\ref{eq:es_complex_fwd} and is also a product on 
 reactions~\ref{eq:es_complex_rev} and~\ref{eq:es_pe}, then we consider 
 that E changes its concentration over time ($t$) according to the 
@@ -243,8 +242,11 @@ differential equation:
 \begin{equation}
     \frac{d[\text{E}]}{dt} = -k_f\text{[E][S]} + (k_r + k_{cat}) \text{[ES]}
 \end{equation} 
-Repeating this procedure for every other species of the enzymatic 
-reaction induces the desired system of ordinary differential equations:
+Note that we are adding reation rates in which the species is a product
+and we are subtracting reaction rates in which the species is a
+reactant. Repeating this procedure for every other species of the 
+enzymatic reaction leads to the following system of ordinary 
+differential equations:
 \begin{subequations}
     \label{eq:full_system}
     \begin{align}
