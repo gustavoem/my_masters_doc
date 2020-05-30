@@ -180,7 +180,7 @@ we can write this reaction as:
     C + D -> F
 }.
 \end{equation*}
-The reaction rate of this reaction is:
+The reaction rate of this reaction is
 \begin{equation*}
     k_2\text{[C][D]},
 \end{equation*}
@@ -279,7 +279,7 @@ simplifications. We will show then how to derive the quasi-steady-state
 Michaelis-Menten model for enzymatic reactions. With the correct 
 assumptions, this model is able to reproduce the behaviour of an 
 enzymatic reaction without considering the intermediate enzyme-substrate 
-complex.
+complex, leading then to simpler models.
 
 A basic the principle we need to apply to our system in order to derive
 the Michaelis-Menten model is the principle of mass conservation. This 
@@ -409,24 +409,26 @@ reactions.
 \section{Identification of Cell Signaling Pathways}
 Identification of signaling pathways is the problem of finding the 
 components of a signaling pathway and how they interact in order to
-reproduce a behaviour of the cell that has been previously measured 
+reproduce a cell behaviour that has been previously measured 
 experimentally. The input of this problem is usually a description of 
 the biological experiment, containing previous information about the 
-signaling pathway, and a set of measurements, commonly Western blot 
-data. The output to this problem is then composed of a set of 
-interactions that are actively controlling the behaviour of interest of 
-the cell, and also the set of parameter values that should be used on 
-these interactions to create a model that approximates the experimental 
-observations; it is possible to output a single value for each 
-parameter, as it was presented in~\cite{Wu15}, or output information 
-about these values, using a posterior (to the experimental data) 
-distribution, as it was presented in~\cite{Liepe2014}~and~\cite{Xura20}.
+signaling pathway, such as known reactions and parameters, and a set of 
+measurements, commonly Western blot data, which is the only type of
+measurement we consider in this work. The output to this problem is then
+composed of a set of interactions that are actively controlling the
+behaviour of interest of the cell, and also the set of parameter values 
+that should be used on these interactions to create a model that
+approximates the experimental observations; it is possible to output a
+single value for each parameter, as it was presented in~\cite{Wu15}, or
+output information about these values, using a posterior (to the
+experimental data) distribution, as it was presented
+in~\cite{Liepe2014}~and~\cite{Xura20}.
 
-Two main tasks must be completed to produce this output. The first task
+Two main tasks must be completed to produce such output. The first task
 is to find candidate topologies for the pathway model, i.e. different
 set of interactions that are relevant to the pathway of interest. The
 second task is to rank those models according to their ability to 
-simulate the pathway and approximate the experimental measurements.
+simulate the pathway, approximating the experimental measurements.
 
 % To the second task, you can use combinatorics optimization to fit the
 % model to the data and calculate the distance of the measurements on 
@@ -438,62 +440,68 @@ simulate the pathway and approximate the experimental measurements.
 % probability.
 
 The second task is also known as the model selection problem and even
-though it is a broad area, there are works on the literature that treats 
+though it is a broad area, there are works on the literature that treat 
 specifically the problem in a biochemical context. Solutions to this 
 problem should be able to choose model candidates according to their 
-ability to reproduce observed data and penalize overly complex models 
+ability to reproduce observed data, penalizing overly complex models 
 to avoid overfitting. 
 
 One approach on setting the score of a model is to search for the set of 
-parameter values that makes the model measurements the closest to the 
-experimental data and then define a distance between these two 
-measurements; then it is possible to use this distance plus a penalty 
-for complexity to create a ranking of the models. We can write this 
-scoring function as:
+parameter values that make the model measurements the closest to the 
+experimental data, and then define a distance between these two 
+measurements; then it is possible to use this distance, plus a penalty 
+for complexity, to create a ranking of the models. Note that a penalty 
+function is needed because complex and more general models can overfit,
+producing models that cannot represent the same signaling network with
+small perturbations to biological experiment. We can write this scoring 
+function as:
 \begin{equation*}
-    score_1 (M) = - min_{\{\theta \in \Theta' \subset \Theta\}}  
-        dist (\phi(M, \theta), D) + R (M),
+    score_1 (M) = - min_{\{{\boldsymbol \theta} \in \Theta' \subset
+        \Theta\}} dist (\phi(M, {\bm \theta}), {\bm D}) + R (M),
 \end{equation*}
-where $M$ is the model, $\Theta$ is the parameter space, $\Theta'$ is 
-the subset of the parameter space where the search for the best 
-parameter values was conduced, $D$ is the experimental measurement,
-$\phi$ is a function that determines the simulated measurement on the 
-model, and $R$ is a regularization function that penalizes model 
-complexity. This approach was implemented on the work of Lulu 
-Wu~\cite{Wu15}, using a Simulated Annealing procedure to search for 
-parameter values that minimizes the distance between simulation and 
-experiment. The Simulated Annealing procedure used is available on the 
-software SigNetSim (Signaling Network Simulator), which is based on the
-of the work of Chu on~\cite{Chu1999}. However, Wu's methodology showed 
-limitations when testing the ability to reconstruct models from 
-experiments, and this could be related to the used penalization term. 
-In fact, choosing a good regularization function is crucial to the 
-performance of this methodology.
+where $M$ is the model, $\Theta$ is the parameter space for model $M$, 
+$\Theta'$ is the subset of the parameter space where the search for the
+best parameter values was conduced, ${\bm D}$ is a list of experiment
+measurement (each measurement is a time-course observation of the
+biological phenomena of interest), $\phi$ is a function that determines
+the simulated measurement on the model, and $R$ is a regularization
+function that penalizes model complexity. This approach was implemented
+on the work of Lulu Wu~\cite{Wu15}, using a Simulated Annealing
+procedure to search for parameter values that minimize the distance
+between simulation and experiment. The Simulated Annealing procedure
+used is available on the software SigNetSim (Signaling Network
+Simulator), which is based on the of the work of Chu on~\cite{Chu1999}.
+However, Wu's methodology showed limitations when testing the ability to
+reconstruct models from experiments, and this could be related to the
+used penalization term. In fact, choosing a good regularization function
+is crucial to the performance of this methodology.
 
-Another approach is to consider the model parameters as random variables 
-and then marginalize the probability of the model and parameters to 
-reproduce the observed data, i.e. estimate (because calculating is 
-usually hard) the marginal probability:
+Another approach to setting the model score is to consider the model 
+parameters as random variables and then marginalize the probability of 
+the model and parameters to reproduce the observed data, i.e. estimate 
+(because calculating is usually hard) the marginal probability:
 \begin{equation}
-    p (D | M) = \int_{\Theta} p (D | M, \theta) p (\theta | M) d\theta,
+    p ({\bm D} | M) = \int_{\Theta} p ({\bm D} | M, {\bm \theta}) 
+        p({\bm \theta} | M) d{\bm \theta},
     \label{eq:marginal_likelihood_integral}
 \end{equation}
-where $D$ is the observed data, $M$ is the model and $\Theta$ is the 
-parameter space. The function $p(\theta | M)$ is the prior probability 
-function of the parameter $\theta$ on model $M$ and the function 
-$p (D | M, \theta)$ is the likelihood of observing the data $D$ when
-simulating the model $M$ using parameters $\theta$. Sometimes, however,
-the likelihood function is unknown or computationally intractable; for
-these cases, it is possible to use an alternative Bayesian approach, 
-called Aproximate Bayesian Computation (ABC), to estimate the 
-probability $p (M | D)$ and use it as a ranking score~\cite{Toni2009}.
+where ${\bm D}$ is the observed data, $M$ is the model and $\Theta$ is 
+the parameter space for model $M$. The function $p({\bm \theta} | M)$ is 
+the prior probability function of the parameter ${\bm \theta}$ on model 
+$M$. The function $p ({\bm D} | M, {\bm \theta})$ is the likelihood of 
+observing the data ${\bm D}$ when simulating the model $M$ using 
+parameters $\theta$. Sometimes, however, the likelihood function is 
+unknown or computationally intractable; for these cases, it is possible 
+to use an alternative Bayesian approach, called Aproximate Bayesian 
+Computation (ABC), to estimate the probability $p (M | {\bm D})$ and use 
+it as a ranking score~\cite{Toni2009}.
 
 % However, to the first task, there are not many methods on the 
 % literature to solve this problem. Generally, this is solved using 
 % both interactome maps from KEGG and the prior knowledge of the 
 % researchers.
-For the first task of identification of signaling pathways we described, 
-the creation of model candidates, there are not as many works on the 
+For the first task of identification of signaling pathways we described
+(the creation of model candidates), there are not as many works on the 
 literature as there are for the second task. Commonly, researchers must 
 resort on their own knowledge on the biological experiment and consult 
 interactome maps available on repositories such as KEGG and BioModels to
@@ -549,39 +557,41 @@ integral~\ref{eq:marginal_likelihood_integral} using concepts of
 thermodynamics. With thermodynamic integration, it is possible to write 
 the logarithm of this integral as:
 \begin{equation}
-        \ln p(D|M) 
-            = \int_0^1 \expectation_{q_\beta(\theta)} 
-              [\ln p(D | M, \theta)] d\beta
+    \ln p({\bm D}|M) 
+            = \int_0^1 \expectation_{q_\beta({\bm \theta})} 
+              [\ln p({\bm D} | M, \theta)] d\beta
         \label{eq:thermodynamic_integral}
 \end{equation}
-where $p(D|M,\theta)$ is the likelihood function (the 
-probability of observing the data D when $M$ is the correct model, with
-parameters $\theta$); and $\expectation_{q_\beta (\theta)}$ is an 
-expectation taken over the probability space of $q_\beta(\theta) 
-\propto p(D|M, \theta)^\beta p(\theta|M)$. The 
-variable $\beta$ works in the integral as a temperature term, 
-determining the probability functions $q_{\beta}(\theta)$; note that 
-when $\beta = 0$ then 
+where $p({\bm D}|M,\theta)$ is the likelihood function (the 
+probability of observing the data ${\bm D}$ when $M$ is the correct
+model, with parameters ${\bm \theta}$); and 
+$\expectation_{q_\beta ({\bm \theta})}$ is an expectation taken over the 
+probability space of 
+$q_\beta({\bm \theta}) \propto 
+p({\bm D}|M, {\bm \theta})^\beta p({\bm \theta}|M)$. The variable 
+$\beta$ works in the integral as a temperature term, determining the 
+probability functions $q_{\beta}({\bm \theta})$, $\beta \in [0, 1]$; 
+note that when $\beta = 0$ then 
 \begin{equation*}
-q_0(\theta) = p(\theta|M),
+q_0({\bm \theta}) = p({\bm \theta}|M),
 \end{equation*}
-the prior distribution of the parameters, and when 
+the prior distribution of the parameters; also, and when 
 $\beta = 1$ then 
 \begin{equation*}
-    q_1(\theta) = \frac{p(D, \theta| M)} {\int_{\Theta}
-                            p(D, \theta| M)} 
-                = \frac{p(\theta | D, M)p(D|M)} 
-                        {p(D | M)}
-                = p(\theta | D, M),
+    q_1(\theta) = \frac{p({\bm D}, {\bm \theta}| M)} {\int_{\Theta}
+                            p({\bm D}, {\bm \theta}| M)} 
+                = \frac{p({\bm \theta} | {\bm D}, M)p({\bm D}|M)} 
+                        {p({\bm D} | M)}
+                = p({\bm \theta} | {\bm D}, M),
 \end{equation*}
 the posterior distribution of parameters. Therefore, the 
 integral~\ref{eq:thermodynamic_integral} takes the expected value of the
-likelihood function of $D$ over a sequence of probability distributions
-that is a ``bridge of distributions'' connecting the prior and posterior 
-distributions of parameters. Calculating the integral is usually 
-infeasible, hence in practice it is needed to estimate this integral 
-using samples of a finite number of tempered distributions, 
-$q_\beta(\theta)$.
+likelihood function of ${\bm D}$ over a sequence of probability 
+distributions that is a ``bridge of distributions'' connecting the prior
+and posterior distributions of parameters. Calculating this integral is 
+usually infeasible, hence in practice it is needed to estimate this 
+integral using samples of a finite number of tempered distributions, 
+$q_\beta({\bm \theta})$.
 
 % How about ABC?
 % -> Likelihood free!
@@ -593,21 +603,21 @@ $q_\beta(\theta)$.
 %   -> Using a distance function d, accept theta* if
 %      d(simulation, data) < eps
 As we mentioned before, the likelihood function 
-$p(D | M, \theta)$ may be very hard to calculate if not 
-impossible. For those cases it is possible to use parameter inference
-approaches that are likelihood-free, called Approximate Bayesian 
+$p({\bm D} | M, {\bm \theta})$ may be very hard to calculate if not 
+impossible. For those cases it is possible to use a parameter inference
+approach that is likelihood-free, called Approximate Bayesian 
 Computation (ABC). This method has the goal of producing a sample of 
 parameters that brings the model simulations close to the observed data.
 A generic ABC algorithm starts proposing a candidate parameter 
-$\theta^*$ from a proposal distribution; then, a simulation, 
-$\phi (M, \theta^*)$ of the model using the candidate parameters is 
-produced; if, for some distance function $d$, is true that 
-$d(\phi(M, \theta^*), D) < \epsilon$, then we accept $\theta^*$ as part
-of the sample. If $\epsilon$ is sufficiently small, then the produced
-samples approximates well the posterior distribution. To use ABC methods
-for model selection it is enough to add a model indicator parameter to 
-the parameter array, then it is possible to extract model distribution
-of the accepted parameters.
+${\bm \theta}^*$ from a proposal distribution; then, a simulation, 
+$\phi (M, {\bm \theta}^*)$ of the model using the candidate parameters
+is produced; if, for some distance function $d$, it is true that 
+$d(\phi(M, {\bm \theta}^*), {\bm D}) < \epsilon$, then we accept 
+${\bm \theta}^*$ as part of the sample. If $\epsilon$ is sufficiently 
+small, then the produced samples approximates well the posterior 
+distribution. To use ABC methods for model selection it is enough to add
+a model indicator parameter to the parameter array, then it is possible
+to extract model distribution from the accepted parameters.
 
 % Metropolis-Hastings algorithm
 % -> Both methods for model selection, based on ABC or using 
