@@ -279,9 +279,9 @@ simplifications. We will show then how to derive the quasi-steady-state
 Michaelis-Menten model for enzymatic reactions. With the correct 
 assumptions, this model is able to reproduce the behaviour of an 
 enzymatic reaction without considering the intermediate enzyme-substrate 
-complex, leading then to simpler models.
+complex, leading to simpler models.
 
-A basic the principle we need to apply to our system in order to derive
+A basic principle we need to apply to our system in order to derive
 the Michaelis-Menten model is the principle of mass conservation. This 
 principle is valid if we assume that the 
 reactions~\ref{eq:simple_enzymatic} are isolated, meaning that the 
@@ -306,8 +306,8 @@ assumption states that the concentration of substrate-enzyme complex
 does not change over time, i.e. $\frac{d[\text{ES}]}{dt} = 0$, and it 
 was first proposed in 1925 by Briggs and Haldane~\cite{Briggs1925}. 
 Generally, this assumption is applicable whenever [S] $\gg$ [E]. 
-Applying this assumption together with the mass conservation assumption 
-on the Equation~\ref{eq:dESdt_2}, we get:
+If we apply this assumption together with the mass conservation 
+assumption on the Equation~\ref{eq:dESdt_2}, we get:
 \begin{equation*}  
     \begin{aligned}
         \text{[ES]} (k_r + k_{cat}) &= 
@@ -338,10 +338,10 @@ Now, with equations~\ref{eq:dPdt_2}~and~\ref{eq:dSdt_2} we are able to
 reproduce the dynamics of the substrate and product of the enzymatic 
 reaction. Therefore, using the Michaelis-Menten model, we could simplify 
 the System\ref{eq:full_system} that had four equations and three 
-parameters to a new model that has only two equation and two parameters 
+parameters to a new model that has only two equations and two parameters 
 ($k_{cat}$ and $K_m$). Figure~\ref{fig:michaelis_menten} shows a 
-comparison between the complete and Michaelis-Menten models of enzymatic 
-reactions.
+comparison between the dynamics of the complete and Michaelis-Menten 
+models of enzymatic reactions.
 
 \begin{figure}[H]
   \centering 
