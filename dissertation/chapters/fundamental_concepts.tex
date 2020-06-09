@@ -636,32 +636,34 @@ to extract model distribution from the accepted parameters.
 %   -> 
 \section{Metropolis-Hastings to Generate Samples}
 Both methods for model selection, based on ABC or using thermodynamics
-integration need to generate samples of probability distributions. 
+integration, need to generate samples of probability distributions. 
 Generating samples of distributions is simple for many well known 
-distributions, however, for some other distributions it may not be as
-simple. Metropolis-Hastings algorithms are capable of generating a 
+distributions, however, for some other distributions this task may not 
+be as simple. Metropolis-Hastings algorithms are capable of generating a 
 sample that has some probability distribution $p$, which is called the 
 target distribution. In fact, the method can be used even when it is not
-possible to access directly the target function, because all it is 
-needed to perform the sampling is a function that is proportional to the
-target.
+possible to access the target function directly; for those cases, a 
+distribution that is proportional to the target is necessary.
 
 Being able to generate a sample of a target distribution without 
 accessing the probability function itself is useful for our applications
 in Bayesian model ranking. Consider that we need to create a sample of
-the parameters posterior distribution $p (\theta | M, D)$. Calculating 
-this probability function is very hard because
+the parameters posterior distribution $p ({\bm \theta} | M, {\bm D})$. 
+Calculating this probability function is very hard because
 \begin{equation*}
-    p(\theta | M, D) = \frac{p (D | \theta, M) p (\theta | M)}
-                            {p (D|M)},
+  p({\bm \theta} | M, {\bm D}) 
+    = \frac{p ({\bm D} | {\bm \theta}, M) p ({\bm \theta} | M)}
+      {p ({\bm D}|M)},
 \end{equation*}
-and this equation has the term $p (D|M)$, which is only known (by some 
-estimation) at the end of the model ranking; however, if we can access
-the likelihood function $p (D| \theta, M)$ and the prior 
-$p (\theta | M)$ than the product of these two is proportional to the 
-posterior distribution (since $p (D|M)$ is only a constant because it
-does not depend on $\theta$), and therefore they are enough to generate
-a sample of the posterior.
+and this equation has the term $p ({\bm D}|M)$, which is only known 
+(through some estimation) at the end of the model ranking. However, if 
+we can access the likelihood function $p ({\bm D}| {\bm \theta}, M)$ and 
+the prior $p ({\bm \theta} | M)$, then we can calculate the product of 
+these two, which is proportional to the posterior distribution (since 
+$p ({\bm D}|M)$ is only a constant because it does not depend on 
+${\bm \theta}$). Therefore, using the likelihood and the prior 
+distributions together with a Metropolis-Hastings algorithm provides a 
+mean to generate a sample of the posterior.
 
 A generic Metropolis-Hastings algorithm that creates a sample of a 
 target distribution $p (\lambda)$ proceeds as follows:
@@ -693,7 +695,8 @@ then the ratio~\ref{eq:mh_ratio} can be calculated as:
       = \frac{q (\lambda^*) J_t (\lambda^{t - 1} | \lambda^*)}
               {q (\lambda^{t - 1}) J_t (\lambda^* | \lambda^{t - 1})}
 \end{equation*}
-More than that, if the proposal distribution is symmetric, the produced 
+% TODO: definir symmetric
+More than that, if the proposal distribution is symmetric (symmetric definition), the produced 
 algorithm is called Metropolis algorithm and has the ratio 
 $r = {p (\lambda^*)}/{p (\lambda^{t - 1})}$. 
 
