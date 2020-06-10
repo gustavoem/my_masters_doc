@@ -16,3 +16,6 @@
 *.bcf
 *.bbl
 *.run.xml
+
+## vim files
+*.swp

@@ -695,9 +695,10 @@ then the ratio~\ref{eq:mh_ratio} can be calculated as:
       = \frac{q (\lambda^*) J_t (\lambda^{t - 1} | \lambda^*)}
               {q (\lambda^{t - 1}) J_t (\lambda^* | \lambda^{t - 1})}
 \end{equation*}
-% TODO: definir symmetric
-More than that, if the proposal distribution is symmetric (symmetric definition), the produced 
-algorithm is called Metropolis algorithm and has the ratio 
+More than that, if the proposal distribution is symmetric 
+($J_t(\lambda_a|\lambda_b) = J_t(\lambda_b|\lambda_a)$ for all 
+$\lambda_a$, $\lambda_b$ and $t$), the produced algorithm is called 
+Metropolis algorithm and has the ratio 
 $r = {p (\lambda^*)}/{p (\lambda^{t - 1})}$. 
 
 Different implementations of the Metropolis-Hastings algorithm are 
@@ -705,4 +706,9 @@ possible. The possible changes include the choice of starting point,
 the choice of proposal distributions and number of iterations. As an
 example, some algorithms are adaptive in the sense that they can change 
 the proposal distribution according to the acceptance rate of proposed 
-points~\cite{Gelman2013}.
+points~\cite{Gelman2013}. These types of algorithms are handy when we
+are not sure of how spread the proposal distribution should be: with
+larger variance, we are likely to stay in a local minima for a longer 
+time, rejecting most of the proposed jumps; in the other hand, if the 
+proposal distribution has small variance, then the algorithm needs more
+time to explore the parameter space.
