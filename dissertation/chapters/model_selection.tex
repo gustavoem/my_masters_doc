@@ -2,15 +2,23 @@
 
 In this chapter we will present two state of the art methodologies that 
 can be used to rank models, both of them are Bayesian approaches. The
-first approach is to estimate the marginal likelihood of the data $D$ 
-being reproduced by a model $M$, $p (D | M)$. The estimation of this 
-probability is done by taking samples of tempered posterior 
-distributions of model parameters; these tempered posterior 
-distributions bridge the prior and posterior parameter distributions and 
-allow a better estimation of the marginal likelihood. Another method 
-is to use Approximate Bayesian Computation. This method allows us to 
-estimate the probability $p (M | D)$ in a simpler algorithm, which is
-likelihood-free.
+first approach is to estimate the marginal likelihood of the data 
+${\bm D}$ being reproduced by a model $M$, $p ({\bm D} | M)$. To use
+this method, it is necessary to define a likelihood function, $p({\bm D}
+| M, {\bm \theta})$, and prior distributions of model parameters $p({\bm
+\theta} | M)$.
+The estimation of this probability is done by taking samples of tempered 
+posteriors (to experimental data) of model parameters; these tempered 
+posterior distributions construct a bridge of distributions connecting 
+the prior and posterior parameter distributions, allowing a better
+estimation of the marginal likelihood. Another method is to use
+Approximate Bayesian Computation. ABC methods are used to estimate
+posterior (also to experimental data) distributions of parameters. In
+our case, we add to ${\bm \theta}$ a model indicator parameter M, and
+create a sample of $p({\bm \theta}, M | {\bm D})$. When we marginalize
+this sample, we can calculate an  estimative of the probability $p (M |
+{\bm D})$. ABC methods allow simpler algorithms, that need only the
+definition of prior distributions to model parameters. 
 
 \section{Model ranking using Marginal Likelihood}
 \label{sec:marginal_likelihood_method}
