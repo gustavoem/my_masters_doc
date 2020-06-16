@@ -1,24 +1,32 @@
 %begin-include
 
 In this chapter we will present two state of the art methodologies that 
-can be used to rank models, both of them are Bayesian approaches. The
-first approach is to estimate the marginal likelihood of the data 
+can be used to rank models, both of them are Bayesian approaches. These
+methods create estimatives of $p ({\bm D} | M)$ or $p (M | {\bm D})$ and
+use these values as model scores. 
+
+The first approach is to estimate the marginal likelihood of the data 
 ${\bm D}$ being reproduced by a model $M$, $p ({\bm D} | M)$. To use
 this method, it is necessary to define a likelihood function, $p({\bm D}
 | M, {\bm \theta})$, and prior distributions of model parameters $p({\bm
-\theta} | M)$.
-The estimation of this probability is done by taking samples of tempered 
-posteriors (to experimental data) of model parameters; these tempered 
-posterior distributions construct a bridge of distributions connecting 
-the prior and posterior parameter distributions, allowing a better
-estimation of the marginal likelihood. Another method is to use
-Approximate Bayesian Computation. ABC methods are used to estimate
-posterior (also to experimental data) distributions of parameters. In
-our case, we add to ${\bm \theta}$ a model indicator parameter M, and
-create a sample of $p({\bm \theta}, M | {\bm D})$. When we marginalize
-this sample, we can calculate an  estimative of the probability $p (M |
-{\bm D})$. ABC methods allow simpler algorithms, that need only the
-definition of prior distributions to model parameters. 
+\theta} | M)$. The estimation of this probability is done by taking
+samples of tempered posteriors (to experimental data) of model
+parameters. These tempered posterior distributions construct a bridge of
+distributions connecting the prior and posterior parameter
+distributions, allowing an estimation of the marginal likelihood. 
+
+Another method is to use Approximate Bayesian Computation. ABC methods 
+are used to estimate posterior (also to experimental data) distributions
+of parameters. On this method, a sequence of populations of parameters
+is created, and for each generation, the distance between experimental
+data and data simulated by the population is decreased, leading to a
+population that tends to be closer to a posterior distribution. In our
+case, we add to ${\bm \theta}$ a model indicator parameter M, and then
+we create a sample of $p({\bm \theta}, M | {\bm D})$. If we marginalize
+this sample, we can calculate an estimative of the probability $p (M |
+{\bm D})$. ABC methods allow simpler algorithms, and they also allow
+selection models without the neeed of a likelihood function, altough
+defining the prior distribution of parameters is still needed.
 
 \section{Model ranking using Marginal Likelihood}
 \label{sec:marginal_likelihood_method}
