@@ -1,9 +1,10 @@
 %begin-include
 
-In this chapter we will present two state of the art methodologies that 
-can be used to rank models, both of them are Bayesian approaches. These
-methods create estimatives of $p ({\bm D} | M)$ or $p (M | {\bm D})$ and
-use these values as model scores. 
+In this chapter we will define the model selection problem in the 
+context of this work and we will also present two state of the art 
+methodologies that can be used to rank models, both of them are Bayesian
+approaches. These methods create estimatives of $p ({\bm D} | M)$ or $p
+(M | {\bm D})$ and use these values as model scores. 
 
 The first approach is to estimate the marginal likelihood of the data 
 ${\bm D}$ being reproduced by a model $M$, $p ({\bm D} | M)$. To use
@@ -25,8 +26,56 @@ case, we add to ${\bm \theta}$ a model indicator parameter M, and then
 we create a sample of $p({\bm \theta}, M | {\bm D})$. If we marginalize
 this sample, we can calculate an estimative of the probability $p (M |
 {\bm D})$. ABC methods allow simpler algorithms, and they also allow
-selection models without the neeed of a likelihood function, altough
+selecting models without the neeed of a likelihood function, altough
 defining the prior distribution of parameters is still needed.
+
+\section{Elements of model selection}
+% what is the model selection problem
+%   -> the problem of finding the model that best represent experimental
+%   data
+%   -> these models contain parameters that are related to reaction
+%   rates and observation errors.
+%   -> We can list then three main entities of this problem: the models,
+%   model parameters and experimental data.
+% what do we consider as a model and how do we represent it
+%   -> we consider a model as a set o chemical reactions with specified
+%   initial concentrations.
+%   -> a parameter prior distribution.
+% what are model parameters and how do we represent it
+% what is experimental data and how do we represent it
+The model selection problem we consider in this work consists in the
+selection of a biochemical model that can best simulate the dynamics 
+of concentrations of chemical species, measured previously on a 
+biological experiment. The models we consider are mathematically 
+represented by a system of ordinary differential equations that
+contains parameters related to reaction rates and experimental errors.
+We can list three main entities of this problem: the set of models, the 
+parameter space of each model, and the biological experimental data.
+We shall then define how we represent these entities through this text.
+
+We indicate a model with a random variable that assume natural values, 
+$M: \Omega \to \naturals$. We consider that a model is not only bound to
+a set of chemical reactions and its mathematical representation, but 
+it is also bound to initial concentrations of chemical species and a
+prior distribution of model parameters, which we represent as $p({\bm
+\theta} | M)$.
+
+Since we are using a Bayesian approach, we consider that model
+parameters is a random vector ${\bm\theta} | M: \Omega \to \fieldR^{n}_+$,
+where $d$ equals to the number of parameters in $M$ plus one, so we can
+also represent one parameter related to experimental error. This
+parameter represents the standard deviation of errors in the observation
+of the experiment. It is important to note that all parameters are
+positive, since reaction rates and standard deviations can only be
+positive. That is an important information to choose a prior
+distribution for model parameters.
+
+The experimental data is a vector of values that describe the dynamics
+of some measurement made on the biological phenomena of interest. We
+represent data as ${\bm D} \in \fieldR^{d}$. As we described in
+Section~\ref{sec:fund_concepts:measurements}, these measurements are
+often created with Western Blot experiments, and the values of ${\bm D}$
+usually represent the ratio of concentrations of proteins.
 
 \section{Model ranking using Marginal Likelihood}
 \label{sec:marginal_likelihood_method}
@@ -50,18 +99,13 @@ defining the prior distribution of parameters is still needed.
 % parameter. Adaptive Metropolis Hastings
 % -> A second using a Variance-Covariance Matrix
 % -> A third using populational MCMC
-The marginal likelihood of an experiment measurement $D$ being 
-reproduced by a model $M$, $p (D | M)$, can be used as a model ranking 
-metric as it determines which model makes the experimental observations 
-more likely to happen. Before defining how to calculate the marginal 
-likelihood, we must define what the likelihood function is. To calculate 
-the likelihood $p (D | M, \theta)$, we must understand that conditioning 
-the observation to the model and parameters means that in 
-the probability space from which $D$ is taken, the model $M$ is the 
-``real'' model and it has the parameter values of $\theta$; i.e. the 
-model $M$ with parameters $\theta$ controls the behaviour of the system 
-from which $D$ was observed. Then, assuming that the observations have a 
-Gaussian error, and that they are taken in a time series of $m$ time 
+The marginal likelihood of an experiment measurement ${\bm D}$ being 
+reproduced by a model $M$, $p ({\bm D} | M)$, can be used as a model ranking metric as it determines which model makes the experimental observations more likely to happen. Before defining how to calculate the marginal 
+likelihood, we must define some likelihood function. To understand our
+chosen likelihood function $p ({\bm D} | M, \theta)$, we must 
+understand that conditioning the observation to a model and a set of parameters means that, in the probability space from which $D$ is taken, the model $M$ is the ``real'' model and it has the parameter values of $\theta$; i.e. the model $M$ with parameters $\theta$ controls the behaviour of the system from which $D$ was observed. Now, after understanding in which probability space we are, we can assume that: 
+% first: our phi function is deterministic
+% second: the observations have a Gaussian error, and that they are taken in a time series of $m$ time 
 steps, we can define the likelihood as:
 \begin{equation}
     p (D | M, \theta) = p_{\mathcal{N}_{\left(\vec{0}, \Sigma\right)}}
