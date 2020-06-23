@@ -207,50 +207,72 @@ of parameters, bridging the prior and posterior distributions of
 parameters. These distributions are also called tempered distributions
 or power posteriors~\cite{Friel2008}.
 
-Given a parameter prior distribution $p (\theta | M)$ and a posterior 
-distribution $p (\theta | D, M)$, then we define a power posterior 
-distribution with temperature $\beta$ as:
+Given a parameter prior distribution $p ({\bm \theta} | M)$ and a 
+posterior distribution $p ({\bm \theta} | {\bm D}, M)$, then we define a
+power posterior distribution with ``temperature'' $\beta$ as:
 \begin{equation*}
-    p_{\beta} (\theta) = \frac{p (D | \theta, M)^\beta p(\theta | M)}
+    p_{\beta} ({\bm \theta}) = 
+        \frac{p ({\bm D} | {\bm \theta}, M)^\beta p({\bm \theta} | M)}
                               {z (\beta)},
 \end{equation*}
 where
 \begin{equation*}
-    z (\beta) = \int_\Theta p (D | \theta, M)^\beta p(\theta | M) 
-            d\theta.
+    z (\beta) = 
+        \int_\Theta p ({\bm D} | {\bm \theta}, M)^\beta 
+        p({\bm \theta} | M) d{\bm \theta}.
 \end{equation*}
-Note that when $\beta = 0$, then $p_{\beta=0} = p (\theta | M)$, the 
-prior distribution of the parameters; also, when $\beta = 1$, then
+Note that when $\beta = 0$, then $p_{\beta=0} = p ({\bm \theta} | M)$, 
+the prior distribution of the parameters; also, when $\beta = 1$, then
 \begin{equation*}
-    p_{\beta=1}(\theta) = \frac{p (D | \theta, M) p(\theta | M)}
-                         {z (\beta)}
-                        =\frac{p (D, \theta|M)}
-                              {\int_\Theta p (D, \theta | M)d\theta}
-                        =\frac{p(\theta | D, M) p(D|M)}{p (D | M)}
-                        =p (\theta | D, M),
+    p_{\beta=1}({\bm \theta}) = 
+        \frac{p ({\bm D} | {\bm \theta}, M) p({\bm \theta} | M)}
+             {z (\beta)}
+                        =
+        \frac{p ({\bm D}, {\bm \theta} | M)}
+             {\int_\Theta p ({\bm D}, {\bm \theta} | M)d{\bm \theta}}
+                        =
+        \frac{p({\bm \theta} | {\bm D}, M) p({\bm D} | M)}
+             {p ({\bm D} | M)}
+                        =
+        p ({\bm \theta} | {\bm D}, M),
 \end{equation*}
-the posterior distributions of the parameters.
+the posterior distributions of the parameters. Therefore, if we vary the
+value of $\beta$ from $0$ to $1$ we can create a path of probability 
+distributions that connect the prior and posterior distributions. We
+will explain now, how this sequence of distributions are applied to
+calculate the marginal likelihood.
 
-Now, let we consider the derivative of $\ln z(\beta)$.
+Consider the derivative of $\ln z(\beta)$.
 \begin{align}
     \frac{d}{d\beta} \ln z(\beta) &= \frac{1}{z(\beta)}  
         \frac{d}{d\beta} z(\beta) \notag\\
-    &= \frac{1}{z(\beta)} \frac{d}{d\beta} 
-        \int_\Theta p (D | \theta, M)^\beta p(\theta | M) d\theta \notag\\
+    &= 
+    \frac{1}{z(\beta)} \frac{d}{d\beta} 
+    \int_\Theta p ({\bm D} | {\bm \theta}, M)^\beta 
+    p({\bm \theta} | M) d{\bm \theta} \notag\\
     \shortintertext{(using that $\frac{d}{dx} c^x = c^x \ln c$)}
-    &= \frac{1}{z(\beta)} \int_\Theta p (D | \theta, M)^\beta 
-        p(\theta | M) \ln p(D|\theta, M)d\theta \notag\\
-    &= \int_\Theta \frac{p (D | \theta, M)^\beta p(\theta | M)}
-                        {z(\beta)}
-                    \ln p(D| \theta, M)d\theta \notag\\
-    &=\int_\Theta p_\beta (\theta) \ln p (D | \theta, M)d\theta \notag\\ 
-    &=\expectation_{p_\beta (\theta)} [\ln p(D|\theta, M)]. \label{eq:z_derivative}
+    &= 
+    \frac{1}{z(\beta)} \int_\Theta p ({\bm D} | {\bm \theta}, M)^\beta 
+    p({\bm \theta} | M) \ln p({\bm D}|{\bm \theta}, M)
+    d{\bm \theta} \notag\\
+    &= 
+    \int_\Theta \frac{p ({\bm D} | {\bm \theta}, M)^\beta 
+        p({\bm \theta} | M)}
+                     {z(\beta)}
+    \ln p({\bm D}| {\bm \theta}, M)d{\bm \theta} \notag\\
+    &=
+    \int_\Theta p_\beta ({\bm \theta}) 
+    \ln p ({\bm D} | {\bm \theta}, M)d{\bm \theta} \notag\\ 
+    &=
+    \expectation_{p_\beta ({\bm \theta})} 
+    [\ln p({\bm D} | {\bm \theta}, M)]. \label{eq:z_derivative}
 \end{align}
 And it is not hard to see that:
 \begin{equation}
 \begin{gathered}
-    z (0) = \int_\Theta p (\theta | M)d\theta = 1 \\
-    z (1) = \int_\Theta p (D, \theta | M)d\theta = p (D|M) 
+    z (0) = \int_\Theta p ({\bm \theta} | M)d{\bm \theta} = 1 \\
+    z (1) = \int_\Theta p ({\bm D}, {\bm \theta} | M)d
+        {\bm \theta} = p ({\bm D} | M)
     \label{eq:z_on_limits}
 \end{gathered}
 \end{equation}
@@ -258,17 +280,18 @@ And it is not hard to see that:
 Using equations~\ref{eq:z_on_limits} and Equality~\ref{eq:z_derivative}
 we can write that:
 \begin{align}
-    \int_0^1 \expectation_{p_\beta (\theta)} [\ln p(D|\theta, M)]d\beta 
+    \int_0^1 \expectation_{p_\beta ({\bm \theta})} 
+        [\ln p({\bm D}|{\bm \theta}, M)]d\beta 
     &= \int_0^1 \frac{d}{d\beta} \ln z(\beta) d\beta \notag \\
     &= \Big[\ln z(\beta)\Big]\bigg\rvert^1_0 \notag \\
-    &= \ln p (D | M).
+    &= \ln p ({\bm D} | M).
     \label{eq:thermodynamic_integral}
 \end{align}
 Then we have written an expression for the logarithm of the marginal
 likelihood. This expression is still hard to be calculated analytically,
 however from this equation we will be able to find estimators for
 the logarithm of the marginal likelihood, and consequently for the
-likelihood. To calculate this estimators, we will need to generate 
+likelihood. To calculate these estimators, we will need to generate 
 samples for a series of power posteriors of parameters, and this will
 be explained in the next section.
 
@@ -280,6 +303,10 @@ be explained in the next section.
 % parameter. Adaptive Metropolis Hastings
 % -> A second using a Variance-Covariance Matrix
 % -> A third using populational MCMC
+% TODO: talk about temperature: how the posterior is a "colder"
+% distribution; 
+% TODO: talk about how sampling from intermediate distributions is
+% better than sampling directly from the posterior distribution
 \subsection{Estimation of the Marginal Likelihood}
 There are multiple approaches on estimating the 
 Integral~\ref{eq:thermodynamic_integral}, and for all of them, it is 
