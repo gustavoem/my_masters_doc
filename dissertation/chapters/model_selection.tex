@@ -309,44 +309,55 @@ be explained in the next section.
 % better than sampling directly from the posterior distribution
 \subsection{Estimation of the Marginal Likelihood}
 There are multiple approaches on estimating the 
-Integral~\ref{eq:thermodynamic_integral}, and for all of them, it is 
-necessary to find samples of $p_{\beta_t} (\theta | M, D)$ for a 
-sequence of values of $\beta_t$ that vary from zero to one~\cite{Xura20, 
-Vyshemirsky2007, Friel2008}. The differences on these methods are mainly 
-on the choice of the sequence $\{\beta_1, \beta_2, \ldots, \beta_T\}$,
-on the Metropolis-Hastings (MH) algorithms used, and finally on the 
-estimator.
+Integral~\ref{eq:thermodynamic_integral} and, usually it is necessary to 
+find samples of $p_{\beta_t} ({\bm \theta} | M, {\bm D})$ for a sequence 
+of values of $\beta_t$ that vary from zero to one~\cite{Xura20, 
+Vyshemirsky2007, Friel2008}. The methods that create such samples can 
+take different approaches on the choice of the sequence $\beta_1 < 
+\beta_2 < \ldots < \beta_T$, on the Metropolis-Hastings (MH) algorithms 
+used, and finally on the estimator.
 
-We are now going to show a possible methodology to estimate parameter 
-values. First, we assume that there is a chosen sequence of 
-$\{\beta_1, \beta_2, \ldots, \beta_T\}$ to explain how to generate 
-samples of power posterior distributions with these temperatures. Then, 
-we explain how to choose these values and present two possible 
-estimators for $p (D | M)$.
+We are now going to show one possible methodology to estimate parameter 
+values. First, we assume that there is a chosen sequence of $\beta_1 <
+\beta_2 < \ldots < \beta_T$, so we can explain how to generate samples 
+of power posterior distributions with these values of $\beta$. After
+that we will explain how to choose the sequence of $\beta$ values and,
+finally, present two possible estimators for $p (D | M)$.
 
 \subsubsection{Power posteriors sampling}
 \label{sec:power_posteriors_sampling}
-Given a sequence of temperatures, the method used to sample from the
-power posteriors has three different steps, all of them using 
+Given a sequence of $\beta$ values, the method we present to sample from 
+the power posteriors has three different steps, and all of them use
 Metropolis-Hastings algorithms, similarly to what is done by Xu et al. 
-(2010). For each of the $T$ temperatures, the first two phases are
-run separately, generating $T$ chains that are samples of the power 
+(2010). For each of the $T$ $\beta$ values, the first two phases are
+run independently, generating $T$ chains that are samples of the power 
 posteriors. Then, on the third phase, each chain continues to grow, but
-not independently because two random chains will have their last accepted 
-point swapped, what causes the chains to be mixed; this approach on 
-mixing these chains is called Populational Monte Carlo Markov 
-Chain (Populational MCMC)~\cite{Friel2008}.
+not independently, because two random chains will have their last 
+accepted points swapped. This exchange leads to a mixture of chains of
+samples of different power posteriors; this approach is called 
+Populational Monte Carlo Markov Chain (Populational 
+MCMC)~\cite{Friel2008}.
 
-The first step of sampling is run independently for each temperature. 
-The Metropolis-Hastings performed on this step is started taking a 
-sample from the parameter priors. The proposal distribution has to 
-generate positive numbers and it should have mean approximately equal to 
-the last point sampled; more than that, we decide to use a diagonal 
-covariance matrix, i.e. parameters are proposed independently. This 
-covariance matrix is updated after every predefined number of iterations 
-with the goal of adapting the proposal distribution to the parameter 
-space. This update is performed as proposed in Gelman et al. (2013): 
+% We have to define names for the three different phases of the
+% algorithm
+%
+% naive burn-in
+% posterior shaped burn-in
+% populational mcmc
+
+The first step of sampling is run independently for each temperature and
+we call it naive burn-in. The Metropolis-Hastings performed on this step
+is started by taking a sample from the parameter priors. For each step,
+the proposal distribution has to generate positive values and the
+covariance matrix should be a diagonal covariance matrix, i.e. 
+parameters are proposed independently. This covariance matrix is updated 
+after every predefined number of iterations to adapt the proposal 
+distribution according to the current sample. This type of MCMC 
+algorithm, that updates its rules according to its trace is also called
+adaptive MCMC algorithm. This update is performed as proposed in Gelman 
+et al. (2013): 
 %TODO: https://arxiv.org/pdf/1504.01896.pdf look for "that the acceptance rate should be close to"
+% TODO: continuar aqui
 \begin{itemize}
 \item{if the acceptance rate of parameter points in the last 
     iterations is greater than $0.44$, then increase the variance of the
