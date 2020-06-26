@@ -356,7 +356,8 @@ distribution according to the current sample. This type of MCMC
 algorithm, that updates its rules according to its trace is also called
 adaptive MCMC algorithm. This update is performed as proposed in Gelman 
 et al. (2013): 
-%TODO: https://arxiv.org/pdf/1504.01896.pdf look for "that the acceptance rate should be close to"
+%TODO: https://arxiv.org/pdf/1504.01896.pdf look for "that the
+%acceptance rate should be close to"
 % TODO: continuar aqui
 \begin{itemize}
 \item{if the acceptance rate of parameter points in the last 
@@ -365,18 +366,26 @@ et al. (2013):
 \item{if the acceptance rate is lower than $0.23$, then decrease the 
     variance of the jump.}
 \end{itemize}
+This rule is a golden rule for Metropolis-Hastings calibration since the
+work of Roberts et al.~\cite{Roberts1997}. The rationale behind this
+rule is that chains generated with small variance tend to need more 
+steps to cover the space, while chains generated with larger variance
+tend to reject more proposed parameters, staying at the same point of
+the chain for many iterations.
+
 Given that we are taking a sample from a power posterior with 
-temperature $\beta_t$, the target function is 
-$p_{\beta_t} (\theta)$. Hence, if the current point 
-is $\theta^{(t, i)}$, the probability of accepting a proposed parameter 
-$\theta^* \sim J_{(t, i)} (\theta^* | \theta^{(t, i)})$, is 
-$\min (1, r)$ with
+temperature $\beta_t$, the target function is  $p_{\beta_t} ({\bm
+\theta})$. Hence, if the current point is ${\bm \theta}^{(t, i)}$, the 
+probability of accepting a proposed parameter 
+${\bm \theta}^* \sim J_{(t, i)} ({\bm \theta}^* | {\bm \theta}^{(t,
+i)})$, is $\min (1, r)$ with
 \begin{equation*}
-    r = \frac{p_{\beta_t} (\theta^*)}
-             {p_{\beta_t} (\theta^{(t, i)})}
-        \frac{J_{(t, i)} (\theta^{(t, i)} | \theta^*)}
-             {J_{(t, i)} (\theta^* | \theta^{(t, i)})},
+    r = \frac{p_{\beta_t} ({\bm \theta}^*)}
+             {p_{\beta_t} ({\bm \theta}^{(t, i)})}
+        \frac{J_{(t, i)} ({\bm \theta}^{(t, i)} | {\bm \theta}^*)}
+             {J_{(t, i)} ({\bm \theta}^* | {\bm \theta}^{(t, i)})},
 \end{equation*}
+%TODO: continue from here
 with $J_{(t, i)}$ being the proposal jump distribution on iteration $i$ 
 on chain of temperature $\beta_t$. Because sampling from $p_t(\theta | 
 M, D)$ directly is not possible, and  since we defined in the beginning 
