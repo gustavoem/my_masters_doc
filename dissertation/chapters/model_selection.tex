@@ -346,10 +346,10 @@ MCMC)~\cite{Friel2008}.
 % populational mcmc
 
 The first step of sampling is run independently for each temperature and
-we call it naive burn-in. The Metropolis-Hastings performed on this step
-is started by taking a sample from the parameter priors. For each step,
-the proposal distribution has to generate positive values and the
-covariance matrix should be a diagonal covariance matrix, i.e. 
+we call it {\bf naive burn-in}. The Metropolis-Hastings performed on 
+this step is started by taking a sample from the parameter priors. For 
+each step, the proposal distribution has to generate positive values and 
+the covariance matrix should be a diagonal covariance matrix, i.e. 
 parameters are proposed independently. This covariance matrix is updated 
 after every predefined number of iterations to adapt the proposal 
 distribution according to the current sample. This type of MCMC 
@@ -385,77 +385,116 @@ i)})$, is $\min (1, r)$ with
         \frac{J_{(t, i)} ({\bm \theta}^{(t, i)} | {\bm \theta}^*)}
              {J_{(t, i)} ({\bm \theta}^* | {\bm \theta}^{(t, i)})},
 \end{equation*}
-%TODO: continue from here
 with $J_{(t, i)}$ being the proposal jump distribution on iteration $i$ 
-on chain of temperature $\beta_t$. Because sampling from $p_t(\theta | 
-M, D)$ directly is not possible, and  since we defined in the beginning 
-of the chapter that 
-$p_{\beta_t} (\theta)~\propto~p (D|M, \theta)^{\beta_t} p (\theta | M)$,
-we can rewrite this equation as:
+on chain of power posterior $\beta_t$. Since we do not have direct
+access to the $p_t({\bm \theta} | M, {\bm D})$ distribution, and
+considering the definition of power posterior we presented in the 
+beginning of the chapter, that $p_{\beta_t} ({\bm \theta})~\propto~p
+({\bm D}|M, {\bm \theta})^{\beta_t} p ({\bm \theta} | M)$, we can 
+rewrite this equation as:
 \begin{equation}
-    r = \frac{p (D | M, \theta^*)^{\beta_t}}
-             {p (D | M, \theta^{(t, i)})^{\beta_t}}
-        \frac{p (\theta^* | M)}
-             {p (\theta^{(t, i)} | M)}
-        \frac{J_{(t, i)} (\theta^{(t, i)} | \theta^*)}
-             {J_{(t, i)} (\theta^* | \theta^{(t, i)})}.
+    r = \frac{p ({\bm D} | M, {\bm \theta}^*)^{\beta_t}}
+             {p ({\bm D} | M, {\bm \theta}^{(t, i)})^{\beta_t}}
+        \frac{p ({\bm \theta}^* | M)}
+             {p ({\bm \theta}^{(t, i)} | M)}
+        \frac{J_{(t, i)} ({\bm \theta}^{(t, i)} | {\bm \theta}^*)}
+             {J_{(t, i)} ({\bm \theta}^* | {\bm \theta}^{(t, i)})}.
     \label{eq:mh_ratio_step1}
 \end{equation}
 
-The second iteration also samples each temperature independently, and
-differently from the first step, the parameters are not necessarily 
-sampled independently. In fact, a portion of the last sampled parameters
-on step one is used to create a covariance matrix, and this matrix is
-then used as the covariance matrix of the first proposal distribution of 
-the second step of sampling. After the first iteration, for every 
-sampled parameter on the second step, the covariance matrix is updated 
-to be the sample covariance of the selected points of step one plus the  
-current points accepted on step two. The probability of accepting a 
-proposed parameter on this step is the same  as it was on the first 
-step, as described by Equation~\ref{eq:mh_ratio_step1}.
+After a pre-determined number of iterations, we stop the naive burn-in
+to move to the next sampling algorithm. By the end of the naive burn-in,
+we expect to have generated a sample that nearly approximates a sample
+of the posterior distribution. However, the sampled points might still
+be very correlated. To reduce this correlation and improve the posterior
+approximation, we will need the next two steps of sampling. We call the 
+sampling algorithm that follows naive burn-in as {\bf posterior shaped
+burn-in}.
 
-At the end of the second step, we will have $T$ chains of sampled 
-parameters, containing the selected parameters of the first and second 
-steps. For each of these chains there is a covariance matrix that was
-being used as the covariance of the proposal distribution of the 
-respective temperature. On step three, the covariance matrix is fixed 
-and a Populational MCMC algorithm is performed. This algorithm continues 
-the sampling for each temperature, now with a fixed covariance on the 
-proposal distribution, and also mixes the samples of different 
-temperatures in every iteration. This mix is achieved by swapping the 
-last sampled elements of two random power posterior chains; the first of
-the two chains chosen to swap, of temperature $\beta_i$, is chosen 
-uniformly, while the second chain, of temperature $\beta_j$, is chosen 
-following a Discrete Laplacian distribution given $\beta_i$, with 
-probability function $p (j | i) \propto e^{|i - j| / 2}$. This algorithm 
-was proposed by Friel et al. (2008) and can be summarized in the 
-following steps:
+The posterior shaped burn-in has this name because the used proposal
+distribution has a covariance matrix similar to an estimative of the 
+covariance of the posterior distribution. To create this estimative, we 
+use, for each chain, the current sample of the posterior generated. On 
+the first iteration of posterior shaped burn-in, we estimate the 
+covariance of the posterior using the last half points sampled in the 
+naive burn-in (we discard the first half of the chain because we assume 
+that these points can have very low probability on the posterior 
+distribution). For the second and further iterations of the posterior
+shaped burn-in, we estimate the covariance of the posterior considering
+the second half of sampled points of the first iterations plus all the
+points accepted after that.
+
+The proposal distribution chosen on the posterior shaped burn-in must be 
+multivariate with a covariance that is similar to the one estimated from 
+the current sample of the posterior, differently from the naive burn-in, 
+in which pairs of parameters $({\bm \theta_i}, {\bm \theta_j})$, $i, j 
+\in \{1, \ldots, n\}$, $i \neq j$, were sampled independently. Similarly
+to the first sampling phase, we also sample each chain (for each
+$\beta_t$ value) separately, and we also scale the covariance matrix
+according to the number of accepted parameters (as the golden rule for
+MCMC suggests). The probability of accepting a proposed parameter on
+this sampling phase is the same as it was on the first phase, as 
+described by Equation~\ref{eq:mh_ratio_step1}.
+
+By the end of the posterior shaped burn-in it is expected that the
+created sample is more likely to be a sample of the posterior
+distribution. However, there might still exist big correlations between
+sampled points of the same chain. To solve this problem, we need the
+third and last sampling phase: the {\bf Populational Monte Carlo Markov
+Chain}. This algorithm continues the chains for each value of $\beta_t$,
+and after each step, a couple of chains have their last sampled value
+exchanged. This procedure mixes the chains and reduces correlation of
+sampled points.
+
+%This mixture that reduces correlations of a chain produced by the
+%Metropolis Hastings algorithm is one of the reasons for which it is
+%important to take samples 
+
+At the begin of the Populational MCMC phase, we will have $T$ chains of 
+sampled parameters, containing the selected parameters of the first and 
+second steps. For each of these chains there is a covariance matrix that 
+was being used to determine the covariance of the proposal distribution 
+of the respective temperature. On the third phase, we fix all of these
+matrices and, for each iteration, two steps are performed. The first
+step is to iterate all chains, using the respective fixed covariance 
+matrix, identically to how it was done in the posterior shaped burn-in.
+The second step consists in choosing two different chains $\beta_i$ and
+$\beta_j$, with $i \neq j$ and $i, j \in \{1, \ldots, T\}$, and exchange
+the last sampled parameters of these chains with a certain probability.
+The value of $i$ is chosen randomly and uniformly over $\{1, \ldots,
+T\}$. Once $i$ is chosen, the second chain, of temperature $\beta_j$, is
+chosen following a Discrete Laplacian distribution given $i$, with 
+probability function $p (j | i) \propto e^{|i - j| / 2}$. This
+algorithm, as we described, was proposed by Friel et al. (2008) and can 
+be summarized in the following steps:
 \begin{enumerate}
     \item{For each temperature $\beta_t$, $t \in \{1, \ldots, T\}$, 
         update the $t$-th chain using MCMC with a proposal distribution
         that has the same covariance matrix used on the last iteration
-        of temperature $\beta_t$ of the second step.}
+        of the same chain, on the last sampling phase.}
     \item{Choose uniformly $i$ from $\{1, \ldots, T\}$. Then, choose
         $j$ with probability density function $p (j | i) \propto 
         e^{|i - j| / 2}$. Finally, swap the last sampled points of 
-        the chains of temperature $\beta_i$ and $\beta_j$, which are
-        $\theta^{(i, k)}$ and $\theta^{(j, k)}$, with probability 
-        $\min\{1, r\}$, where: }
+        the chains of power posteriors $\beta_i$ and $\beta_j$, 
+        ${\bm \theta}^{(i, k)}$ and ${\bm \theta}^{(j, k)}$, with 
+        probability $\min\{1, r\}$, where: }
 
     \begin{equation*}
-        r = \frac{p_{\beta_i}\left(\theta^{(j, k)}\right)}
-             {p_{\beta_i}\left(\theta^{(i, k)}\right)}
-        \frac{p_{\beta_j}\left(\theta^{(i, k)}\right)}
-             {p_{\beta_j}\left(\theta^{(j, k)}\right)}
+        r = \frac{p_{\beta_i}\left({\bm \theta}^{(j, k)}\right)}
+             {p_{\beta_i}\left({\bm \theta}^{(i, k)}\right)}
+        \frac{p_{\beta_j}\left({\bm \theta}^{(i, k)}\right)}
+             {p_{\beta_j}\left({\bm \theta}^{(j, k)}\right)}
         \frac{p (j | i)}
              {p (i | j)}
     \end{equation*}
     which can be simplified to:
     \begin{equation*}
-        r = \left[\frac{p \left(D | \theta^{(j, k)}\right)}
-                {p \left(D | \theta^{(i, k)}\right)}\right]^{\beta_i}
-            \left[\frac{p \left(D | \theta^{(i, k)}\right)}
-                {p \left(D | \theta^{(j, k)}\right)}\right]^{\beta_j}
+        r = \left[\frac{p \left(D | {\bm \theta}^{(j, k)}\right)}
+                {p \left(D | {\bm \theta}^{(i,
+                k)}\right)}\right]^{\beta_i}
+            \left[\frac{p \left(D | {\bm \theta}^{(i, k)}\right)}
+                {p \left(D | {\bm \theta}^{(j,
+                k)}\right)}\right]^{\beta_j}
             \frac{p (j | i)}
                  {p (i | j)}
     \end{equation*}
@@ -465,6 +504,7 @@ After finishing the third step of sampling, the samples obtained on the
 first two phases are discarded and only the samples from the last phase
 are used to estimate the marginal likelihood.
 
+%Todo: continue from here
 \subsubsection{Estimators of the Marginal Likelihood}
 The sampling procedure explained on the 
 Section~\ref{sec:power_posteriors_sampling} produces samples of the 
