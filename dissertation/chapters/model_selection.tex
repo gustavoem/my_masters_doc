@@ -489,11 +489,11 @@ be summarized in the following steps:
     \end{equation*}
     which can be simplified to:
     \begin{equation*}
-        r = \left[\frac{p \left(D | {\bm \theta}^{(j, k)}\right)}
-                {p \left(D | {\bm \theta}^{(i,
+        r = \left[\frac{p \left({\bm D} | {\bm \theta}^{(j, k)}\right)}
+                {p \left({\bm D} | {\bm \theta}^{(i,
                 k)}\right)}\right]^{\beta_i}
-            \left[\frac{p \left(D | {\bm \theta}^{(i, k)}\right)}
-                {p \left(D | {\bm \theta}^{(j,
+            \left[\frac{p \left({\bm D} | {\bm \theta}^{(i, k)}\right)}
+                {p \left({\bm D} | {\bm \theta}^{(j,
                 k)}\right)}\right]^{\beta_j}
             \frac{p (j | i)}
                  {p (i | j)}
@@ -504,16 +504,15 @@ After finishing the third step of sampling, the samples obtained on the
 first two phases are discarded and only the samples from the last phase
 are used to estimate the marginal likelihood.
 
-%Todo: continue from here
 \subsubsection{Estimators of the Marginal Likelihood}
 The sampling procedure explained on the 
 Section~\ref{sec:power_posteriors_sampling} produces samples of the 
-power posteriors $p_{\beta_1} (\theta), \ldots, p_{\beta_T} (\theta)$, 
-and these samples can be used to estimate logarithm of the marginal 
-likelihood:
+power posteriors $p_{\beta_1} ({\bm \theta}), \ldots, p_{\beta_T} ({\bm
+\theta})$, and these samples can be used to estimate logarithm of the 
+marginal likelihood:
 \begin{equation}
-    \ln p (D | M) = \int_0^1 \expectation_{p_\beta (\theta)} 
-        [\ln p(D|\theta, M)]d\beta.
+    \ln p ({\bm D} | M) = \int_0^1 \expectation_{p_\beta ({\bm \theta})} 
+        [\ln p({\bm D}|{\bm \theta}, M)]d\beta.
     \label{eq:marginal_likelihood_again}
 \end{equation}
 This can be achieved using both numerical integration or creating an
@@ -523,28 +522,32 @@ imply in a method for choosing the sequence of temperatures $\beta_1,
 
 The method proposed by Friel et al. (2008), uses a numerical integration 
 method to estimate the Integral~\ref{eq:marginal_likelihood_again}. 
-Given that $T$ temperatures, $0 = \beta_1 < \beta_2 < \ldots < \beta_T = 
-1$, were selected and samples of its respective power posteriors were 
-generated, then using trapezoidal rule over the temperature allows us to 
-estimate the integral as:
+Given that $T$ power posteriors, $0 = \beta_1 < \beta_2 < \ldots <
+\beta_T = 1$, were selected and samples of its respective distributions
+posteriors were generated, then using trapezoidal rule over the $\beta$
+values allows us to estimate the integral as:
 \begin{equation*}
-    \log{p(D| M)} \approx \sum_{t = 0}^{T - 1} (\beta_{t + 1} - \beta_t)
+    \log{p({\bm D}| M)} \approx \sum_{t = 0}^{T - 1} (\beta_{t + 1} -
+    \beta_t)
 \frac{
-    \expectation_{p_{\beta_{t + 1}} (\theta)}[\log p(D | M, \theta)]
+    \expectation_{p_{\beta_{t + 1}} ({\bm \theta})}[\log p({\bm D} | M,
+    {\bm \theta})]
 + 
-    \expectation_{p_{\beta_{t}} (\theta)}[\log p(D | M, \theta)]}
+    \expectation_{p_{\beta_{t}} ({\bm \theta})}[\log p({\bm D} | M,
+    {\bm \theta})]}
 {2}
 \end{equation*}
-and if the sample of power posterior of temperature $\beta_t$ has $M_t$
+and if the sample of power posterior of temperature $\beta_t$ has $L_t$
 parameter points, then we can rewrite this equation as:
 \begin{equation}
 \log{p(D| M)} \approx \sum_{t = 0}^{T - 1} (\beta_{t + 1} - \beta_t)
 \frac{
-    \frac{1}{M_{t + 1}}
-    \sum_{i = 1}^{M_{t + 1}}  \log p(D | M, \theta^{(t + 1, i)})
+    \frac{1}{L_{t + 1}}
+    \sum_{i = 1}^{L_{t + 1}}  \log p({\bm D} | M, {\bm \theta}^{(t + 1,
+    i)})
 + 
-    \frac{1}{M_t}
-    \sum_{i = 1}^{M_t}  \log p(D | M, \theta^{(t, i)})}
+    \frac{1}{L_t}
+    \sum_{i = 1}^{L_t}  \log p({\bm D} | M, {\bm \theta}^{(t, i)})}
 {2}
 \end{equation}
 According to the work of Friel et al. (2008), a good temperature 
@@ -556,13 +559,14 @@ approach is:
 with $t \in {1, \ldots, T}$; with better results achieved when $T$ is
 between $20$ and $100$ and $c$ is between $3$ and $5$.
 
-Another method, proposed by Xu et al. (2010), considers that the 
-temperature $\beta$ can be treated as a random variable, and therefore 
-we can rewrite Integral~\ref{eq:marginal_likelihood_again} as:
+Another method, proposed by Xu et al. (2010), considers that $\beta$ can
+be treated as a random variable, and therefore we can rewrite 
+Integral~\ref{eq:marginal_likelihood_again} as:
 \begin{equation}
     \expectation_{p (\beta)} 
         \left[\frac
-            {\expectation_{p_\beta (\theta)}[\ln p(D|\theta, M)]}
+            {\expectation_{p_\beta ({\bm \theta})}[\ln p({\bm D}|{\bm
+            \theta}, M)]}
             {p (\beta)}
         \right]
 \end{equation}
@@ -576,11 +580,12 @@ the marginal likelihood is given by:
 \begin{equation}
     \sum_{s = 1}^{S - 1}\frac{|\Delta\beta_k|}
                              {T_k}
-        \sum_{i = 1}^{M_k} \log p (D | M, \theta^{(\beta_{k, i})})
+        \sum_{i = 1}^{M_k} \log p ({\bm D} | M, {\bm \theta}^{(\beta_{k,
+        i})})
 \end{equation}
 where $\beta_{k, i}$ is the $i$-th sampled temperature from the interval
-$\Delta\beta_k$; $\theta^{(\beta_{k, i})}$ is a parameter sampled 
-from the power posterior $p_{\beta_{k, i}} (\theta)$; and 
+$\Delta\beta_k$; ${\bm \theta}^{(\beta_{k, i})}$ is a parameter sampled 
+from the power posterior $p_{\beta_{k, i}} ({\bm \theta})$; and 
 $|\Delta\beta_k| = t_{k + 1} - t_k$. However, Xu et al. do not provide
 information about the discretization method of the interval $[0, 1]$.
 
@@ -603,23 +608,25 @@ Approximate Bayesian Computation (ABC) is an approach that allows
 generating samples from the posterior distribution without accessing the
 likelihood function. Adding a model indicator parameter to parameters 
 being sampled also allows us to create an approximate sample of the 
-posterior $p (\theta, M | D)$, and from this sample it is possible to 
-estimate $p (M | D)$, which can be used as a model ranking metric. The 
-main idea of ABC methods is to generate a sample from posterior by 
-generating parameter points that, when plugged into a model, generates 
-simulations that dist from the experimental measurements at most by some
-small $\epsilon$.
+posterior $p ({\bm \theta}, M | {\bm D})$, and from this sample it is
+possible to estimate $p (M | {\bm D})$, which can be used as a model
+ranking metric. The main idea of ABC methods is to generate a sample
+from posterior by generating parameter points that, when plugged into a
+model, generates simulations that differ from the experimental 
+measurements at most by some small $\epsilon$.
 
 A generic ABC method that generates a sample of the posterior 
-$p (\theta, m | D)$ is composed of the following steps:
+$p ({\bm \theta}, M | {\bm D})$ is composed of the following steps:
 \begin{enumerate}
-    \item{Sample a parameter candidate $(\theta^*, M^*)$ from some 
+    \item{Sample a parameter candidate $({\bm \theta}^*, M^*)$ from some 
         proposal distribution.} \label{alg:abc_step1}
-    \item{Simulate the model $M^*$ with parameter values $\theta^*$, 
-        generating simulated measurements $\phi (M^*, \theta^*) = D*$.}
+    \item{Simulate the model $M^*$ with parameter values ${\bm
+        \theta}^*$, generating simulated measurements $\phi (M^*,
+        {\bm \theta}^*) = D^*$.}
     \item{Calculate, for some distance function $d$, the value of
         $d (D^*, D)$. If $d (D^*, D) < \epsilon$ for some previously
-        specified $\epsilon$, then add $(\theta^*, M^*)$ to the sample.}
+        specified $\epsilon$, then add $({\bm \theta}^*, M^*)$ to the
+        sample.}
     \item{Repeat until some iteration limit.}
 \end{enumerate}
 
@@ -627,40 +634,39 @@ The simplest ABC algorithm is the ABC Rejection, and it goes very
 similarly to the generic algorithm we just presented, with the 
 specification that on step~\ref{alg:abc_step1} the proposal distribution
 is the prior distribution. The output of this algorithm is a sample of 
-the distribution $p (\theta, M| d (\phi (M, \theta), D) \leq \epsilon)$; 
-when $\epsilon \to \infty$ this is then a sample of the prior 
-distribution, and as $\epsilon \to 0$ then this sample tends to be a
-sample of the posterior distribution~\cite{Pritchard1999}. This 
+the distribution $p ({\bm \theta}, M| d (\phi (M, {\bm \theta}), {\bm
+D}) \leq \epsilon)$. When $\epsilon \to \infty$ this is then a sample of
+the prior distribution, and as $\epsilon \to 0$ then this sample tends 
+to be a sample of the posterior distribution~\cite{Pritchard1999}. This 
 algorithm, however, does not perform well when the posterior 
 distribution is very different from the prior distribution. For that 
 reason, new ABC methods using Monte Carlo Markov Chains were 
 created~\cite{Marjoram2003}. The ABC MCMC method proposed by Marjoram et 
 al. (2003) produces a Markov Chain whose stationary distribution is
-$p (\theta, M | d (\phi (M, \theta), D) \leq \epsilon)$. Nonetheless, 
-this algorithm might still suffer from correlation in samples or even
-get stuck in regions of local peaks of probability. For that reason,
-the ABC sequantial Monte Carlo (ABC SMC)method was 
-proposed~\cite{Toni2009}.
+$p ({\bm \theta}, M | d (\phi (M, {\bm \theta}), {\bm D}) \leq
+\epsilon)$. Nonetheless, this algorithm might still suffer from
+correlation in samples or even get stuck in regions of local peaks of
+probability. For that reason, the ABC sequantial Monte Carlo (ABC
+SMC)method was proposed~\cite{Toni2009}.
 
 %-> Explain ABC SMC
 The ABC SMC method creates a sequence of samples with the goal of 
 getting closer to a posterior sample in each step. Let we simplify the
-notation by saying that $d(\phi (M, \theta), D)$ is just 
-$\rho_{M, \theta}$. From a predefined sequence $\epsilon_1, \ldots, 
-\epsilon_T$ the algorithm generates a sequence of samples that 
-represents the distributions 
-$p (\theta, M| \rho_{M, \theta} \leq \epsilon_1), 
-p (\theta, M| \rho_{M, \theta} \leq \epsilon_2), \ldots,
-p (\theta, M| \rho_{M, \theta} \leq \epsilon_T)$. At the first 
-generation, a sample of 
-$p (\theta, M| \rho_{M, \theta} \leq \epsilon_1)$ is created by 
-proposing points from the prior distribution. Then, for next generations
-the candidates to the sample are proposed based on the points of the 
-last generation and their weight, plus some noise determined by a 
-perturbation Kernel; the weight of a point $(\theta^*, M^*)$ on 
-generation $t$ is a estimative of  
-$p (\theta = \theta^*, M = M^* | \rho_{M, \theta} \leq \epsilon_t)$. The 
-pseudo-code~\ref{code:abc_smc} presents the ABC SMC algorithm.
+notation by saying that $d(\phi (M, {\bm \theta}), {\bm D})$ is just 
+$\rho_{M, {\bm \theta}}$. From a predefined sequence $\epsilon_1,
+\ldots, \epsilon_T$ the algorithm generates a sequence of samples that 
+represents the distributions $p ({\bm \theta}, M| \rho_{M, {\bm \theta}}
+\leq \epsilon_1), p ({\bm \theta}, M| \rho_{M, {\bm \theta}} \leq
+\epsilon_2), \ldots, p ({\bm \theta}, M| \rho_{M, {\bm \theta}} \leq
+\epsilon_T)$. At the first generation, a sample of $p ({\bm \theta}, M|
+\rho_{M, {\bm \theta}} \leq \epsilon_1)$ is created by proposing points
+from the prior distribution. Then, for next generations the candidates
+to the sample are proposed based on the points of the last generation
+and their weight, plus some noise determined by a perturbation Kernel;
+the weight of a point $({\bm \theta}^*, M^*)$ on generation $t$ is an
+estimative of  $p ({\bm \theta} = {\bm \theta}^*, M = M^* | \rho_{M,
+{\bm \theta}} \leq \epsilon_t)$. The pseudo-code~\ref{code:abc_smc}
+presents the ABC SMC algorithm.
 
 \begin{algorithm}[h]
 \textsc{ABC SMC} $(\mathcal{M}, D)$
