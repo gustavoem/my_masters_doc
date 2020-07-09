@@ -205,20 +205,21 @@ to the data collected.
 % - gather information from many data sources
 % - create new search algorithms
 % - use Bayesian approach 
-We propose on this project to create a new method for modifying 
+We propose on this project to create and test a new method for modifying 
 models of signaling networks, based on the work of Wu, and including 
-possible solutions to the second and third aspects mentioned on the last 
-paragraph. Although the first aspect has potential of improvements, we
-have not prioritized this theme and, because of the complexity of the
-second and third aspects, we decided that including the first aspect in
-this work would excessively enlarge the scope of this work. Then, to
-the second aspect, we propose to test other search algorithms that are
-more general than SFS. The last aspect, which considers the cost 
-function, is our major concern in this work, and we intend to use 
-Bayesian approaches to rank models~\cite{Vyshemirsky2007} based on the
-likelihood of them to reproduce the observed data; if we say $M$ is a
-model with parameter space $\Theta$ and $D$ is a set of observations,
-then we would like to estimate 
+a possible solution to the third aspect mentioned on the last 
+paragraph. Although the first and second aspects have potential of 
+improvements, we have not prioritized them and, because of the 
+complexity of the third aspect, we decided that including the first and 
+second aspect would excessively enlarge the scope of this work.
+Therefore, we limit our work to a few known cell signaling pathways, and
+we only include simple algorithms for traversing the search space. To
+the last aspect, which considers the cost function, as our major 
+concern in this work, we intend to use Bayesian approaches to rank 
+models~\cite{Vyshemirsky2007} based on the likelihood of them to 
+reproduce the observed data; if we say $M$ is a model with parameter 
+space $\Theta$ and $D$ is a set of observations, then we would like to 
+estimate 
 \begin{equation*}
     p ({\bm D}|M) = \int_{{\bm \theta} \in \Theta} p ({\bm D} | {\bm
     \theta}, M)p({\bm \theta} | M)d{\bm \theta}, 
@@ -237,15 +238,13 @@ model to reproduce data, overly complex models are automatically
 penalized.
 
 \section{Objectives}
-In this work we propose to create a methodology that allows us to solve
-the problem of identification of cell signaling pathways as a feature 
-selection problem. This method should be able to consult a vast database 
-of interactions and modify a starting model by removing or adding those 
-interactions in order to construct a model that approximates more 
-closely the biological experiment. The construction of this database and 
-how the method consults it is also part of this work. We also propose to 
-validate the methodology with real cell data. To achieve these goals, we 
-should complete the following tasks:
+In this work we propose to create implement a methodology that allows us 
+to solve the problem of identification of cell signaling pathways as a 
+feature selection problem. This method should be able to consult a
+simple database of interactions and modify a starting model by removing 
+or adding those interactions in order to construct a model that 
+approximates more closely the biological experiment. To achieve these 
+goals, we should complete the following tasks:
 \begin{enumerate}
     \item{{\bf Define a cost function for models}. We propose to use a 
         Bayesian approach to implement an algorithm that allows us to 
@@ -283,11 +282,7 @@ should complete the following tasks:
         HRas-transformed cell lines.}
 \end{enumerate}
 \section{Organization}
-This text is organized in five chapters. In the first chapter, we 
-present the problem we are trying to solve, giving a brief context
-and motivation. Then, after the introduction, there are four more 
-chapters as follows:
-
+{\color{blue}\bf TODO}
 \begin{itemize}
     \item{\em Chapter 2 (Fundamental Concepts):} we will give more details
         about the identification of signaling pathway problem. We will
@@ -302,14 +297,4 @@ chapters as follows:
         Both methods are Bayesian approaches, where the first is based
         on the estimation of marginal likelihoods and the second is
         based on Approximate Bayesian Computation.
-    \item{\em Chapter 4 (Experiments of Model Selection):} we start this
-        chapter by presenting both the software that implement the 
-        methodologies of Chapter 2. The first, implemented on this 
-        project, is called SigNetMS while the second is called 
-        ABC-SysBio. Then, we also present two experiments of model 
-        ranking that we performed with the goal of evaluating the 
-        performance of both software.
-    \item{\em Chapter 5 (Future Activities):} we close this text 
-        presenting the future work that is necessary to achieve the goal
-        of this project.
 \end{itemize}
