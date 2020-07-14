@@ -17,6 +17,15 @@
 \usepackage{algpseudocode}
 \usepackage[plain]{algorithm}
 
+% pacote 'algorithm' não é suportado pelo babel, o que exige
+% as redefinições dos comandos abaixo para que os mesmos sejam
+% apresentados em português.
+%
+\makeatletter
+\renewcommand{\ALG@name}{Algoritmo}
+\makeatother
+\renewcommand{\listalgorithmname}{Lista de Algoritmos}
+
 \title{Relatorio Final Mestrado}
 
 % packages added by Marcelo
@@ -85,7 +94,7 @@
         \bigskip
         \bigskip
         \bigskip
-        Relatório referente aos trabalhos desenvolvidos entre 10 de
+    \large    Relatório referente aos trabalhos desenvolvidos entre\\ 10 de
         dezembro de 2018 e 31 de dezembro de 2019
 
         \bigskip
@@ -95,8 +104,8 @@
         \bigskip
         \bigskip
         \bigskip
-
-        Laboratório Especial de Toxinologia Aplicada, Instituto
+\large {\em Center of Toxins, Immune-response and Cell Signaling} (CeTICS)
+        Laboratório de Ciclo Celular, Instituto
         Butantan\\
         \bigskip
         São Paulo, \today\\
@@ -117,7 +126,7 @@
 
 
 
-\section{Resumo do Projeto Proposto} \label{sec:resumo} % até 2 páginas
+\section{Resumo do projeto proposto} \label{sec:resumo} % até 2 páginas
 A construção de modelos funcionais é uma técnica comum para se 
 estudar vias de sinalização celular e, quando a via estudada é pouco
 conhecida, é possível que os modelos já propostos sejam incompletos, 
@@ -157,11 +166,13 @@ da linhagem tumoral murina Y1.
 \section{Atividades desenvolvidas}
 
 \subsection{Disciplinas cursadas}
-No primeiro período de bolsa, o beneficiário já havia cursado três
-disciplinas: Tópicos em Análise de Algoritmos, Probabilidade e
-Inferência Estatística I, e Laboratório de Programação Extrema. No
-segundo período da bolsa, entre os meses de agosto e dezembro de 2019, o
-beneficiário também cursou a disciplina Modelagem de Banco de Dados.
+No período da bolsa coberto pelo primeiro Relatório Científico, o beneficiário já havia cursado três disciplinas: Tópicos em Análise de Algoritmos, Probabilidade e Inferência Estatística I, e Laboratório de Programação Extrema. Após esse período, entre os meses de agosto e dezembro de 2019, o beneficiário também cursou a disciplina Modelagem de Banco de Dados. As notas das disciplinas cursadas estão disponíveis no histórico escolar que segue em anexo a este relatório.
+
+\subsection{Participação em cursos e conferências}
+No mês de janeiro de 2019, entre os dias 7 e 11, o beneficiário participou da \href{http://eventos.cmm.uchile.cl/discretas2019/}{XIV {\em Escuela de Verano en Matemáticas Discretas}}, em  Valparaíso, Chile. Nesta escola três cursos foram oferecidos, envolvendo
+otimização combinatória, análise de algoritmos parametrizados e problemas computacionais no estudo do cérebro. A participação do beneficiário foi financiada com reserva técnica da FAPESP e também com recursos da própria organização do evento.
+
+Além disso, o beneficiário teve um resumo aceito para participação na \href{https://www.iscb.org/rocky2019}{ROCKY 2019}, conferência que foi realizada entre os dias 5 e 7 de dezembro, na cidade Snowmass Village, Colorado, Estados Unidos. Nessa conferência, o beneficiário apresentou o trabalho desenvolvido neste projeto (o pôster apresentado segue em anexo). A participação do beneficiário nessa conferência foi financiada com reserva técnica da FAPESP e também com recursos da Pós-graduação em Computação do IME-USP.
 
 \subsection{Resumo de atividades anteriores}
 \subsubsection{Estudo de seleção de modelos de via de sinalização celular}
@@ -181,8 +192,8 @@ constantes são parâmetros dos modelos de vias.
 
 A função de custo escolhida deve considerar possíveis valores para as
 constantes de velocidade do modelo avaliado. A abordagem de Lulu
-Wu~\cite{Wu2015metodo}, por exemplo, utiliza um processo de simulated
-annealing para encontrar o melhor conjunto de valores de parâmetros para
+Wu~\cite{Wu2015metodo}, por exemplo, utiliza um processo de {\em simulated
+annealing} para encontrar o melhor conjunto de valores de parâmetros para
 um modelo e conjunto de experimentos. Entretanto, esta abordagem teve
 limitações que podem estar associadas a falta de informação a priori
 sobre as constantes e também a falta de penalização apropriada a modelos
@@ -202,15 +213,15 @@ Para calcular a verossimilhança marginal, precisamos definir a função de
 verossimilhança, $p(\mathbf{D} | M, \theta)$, onde $\mathbf{D}$ é o 
 conjunto de experimentos, $M$ é o modelo de interesse, e $\theta$ é um
 conjunto de valores para os parâmetros (constantes de velocidade) do
-modelo. Seguindo a abordagem de Kolch e Girolami, assumimos erro
+modelo. Seguindo a abordagem de Kolch e Girolami~\cite{Xu2010}, assumimos erro
 Gaussiano e independente:
 \begin{equation}
     p (\mathbf{D} | M, \theta) = \prod_{i = 1}^m
     p_{\mathcal{N}_{\left(0, \sigma^2\right)}} ([\phi (M,\theta) -
-    \mathbf{D}]_i).
+    \mathbf{D}]_i),
 \label{eq:likelihood}
 \end{equation}
-Onde $\phi (M, \theta)$ é um vetor com os valores simulados de 
+onde $\phi (M, \theta)$ é um vetor com os valores simulados de 
 concentrações, em cada intervalo de tempo, pelo modelo $M$ usando 
 parâmetros $\theta$. A partir da função de verossimilhança, podemos
 obter a verossimilhança marginal com uma marginalização sobre os valores
@@ -224,10 +235,9 @@ podemos escrever:
 \end{equation}
 
 Entretanto, a integral~\ref{eq:marginal_likelihood} normalmente não pode
-ser calculada analiticamente. Para se calcular esta integral
-analiticamente, seria necessário determinar a distribuição de 
+ser calculada analiticamente; para isso, seria necessário determinar a distribuição de 
 probabilidade conjunta $p(D, \theta | M)$, o que não é possível
-usualmente. Portanto, como é muito difícil (ou impossível) calcular a
+usualmente. Portanto, como é muito difícil (ou mesmo impossível) calcular a
 verossimilhança marginal, utilizamos um estimador desse valor como 
 função de custo. Este estimador é construído utilizando um método
 conhecido como Integral Termodinâmica~\cite{Friel2008}.
@@ -305,7 +315,7 @@ disponível em um repositório público no
 \href{https://github.com/gustavoem/SigNetMS}{GitHub}
 \footnote{https://github.com/gustavoem/SigNetMS}. O pacote SigNetMS 
 recebe como entrada um arquivo no formato \emph{Systems Biology Makup
-Language} (SBML)~\cite{Hucka2003}, com a definição das reações e 
+Language} (SBML)~\cite{hucka2003systems}, com a definição das reações e 
 constantes de velocidade da via; um arquivo \emph{Extensible Markup 
 Language} (XML) com resultados de experimentos; e um arquivo XML com 
 definições de distribuições a priori para constantes de velocidade das
@@ -345,7 +355,7 @@ integral~\ref{eq:thermodynamic_integral}, podemos escrever:
     \expectation_{p_{\beta_{t + 1}} (\theta)}[\log p(D | M, \theta)]
 + 
     \expectation_{p_{\beta_{t}} (\theta)}[\log p(D | M, \theta)]}
-{2}
+{2}.
 \end{equation*}
 Além disso, se considerarmos que a potência de posteriori $\beta_t$ tem
 $M_t$ parâmetros amostrados, então podemos substituir a esperança por
@@ -358,7 +368,7 @@ um estimador de seu valor, produzindo a equação:
 + 
     \frac{1}{M_t}
     \sum_{i = 1}^{M_t}  \log p(D | M, \theta^{(t, i)})}
-{2}
+{2},
 \end{equation}
 onde $\theta^{(j, i)}$ é o i-ésimo parâmetro amostrado para a
 potência de posteriori $p_{\beta_j}(\theta)$. Resta agora definir como
@@ -405,8 +415,8 @@ nossa implementação
 Logo após a entrega do relatório parcial, identificamos que as amostras
 de potência de posteriori geradas pelo SigNetMS eram muito parecidas.
 Isso indicava que existia uma correlação grande entre as cadeias
-amostradas. Consultando o trabalho de Xu et al.~\cite{Xu2010} e Friel
-et al.~\cite{Friel2008} identificamos que as duas primeiras etapas de
+amostradas. Revisitando os trabalhos de Xu et al.~\cite{Xu2010} e de Friel
+et al.~\cite{Friel2008}, identificamos que as duas primeiras etapas de
 amostragem, burn-in e burn-in informativo também deveriam ser feitas
 para cada potência de posteriori escolhida, e não apenas para a
 distribuição a posteriori. Além disso, identificamos que a distribuição
@@ -452,12 +462,14 @@ Para solucionar este problema, Toni et al. proporam o algoritmo ABC
 Sequential Monte Carlo (ABC-SMC)~\cite{Toni2008}. Este algoritmo cria
 uma sequência de amostras que podem ser vistas como amostras de
 distribuições intermediárias entre a priori e a posteriori. Dado uma
-sequência $\epsilon_1 > \epsilon_2 > \ldots > \epsilon_T$ este algoritmo
-gera amostras das distribuições 
-$p (\theta, M | d(\phi(\theta, M), \mathbf{D}) \leq \epsilon_1),$
-$p (\theta, M | d(\phi(\theta, M), \mathbf{D}) \leq \epsilon_2), \ldots$
-, $p (\theta, M | d(\phi(\theta, M), \mathbf{D}) \leq \epsilon_T).$ A
-primeira amostra, que tem limiar $\epsilon_1$, é gerada usando a 
+sequência $\epsilon_1 > \epsilon_2 > \ldots > \epsilon_T$, este algoritmo
+gera amostras das distribuições:
+\begin{equation}
+p (\theta, M | d(\phi(\theta, M), \mathbf{D}) \leq \epsilon_1), \
+p (\theta, M | d(\phi(\theta, M), \mathbf{D}) \leq \epsilon_2), \ \ldots, \
+p (\theta, M | d(\phi(\theta, M), \mathbf{D}) \leq \epsilon_T). \nonumber
+\end{equation}
+A primeira amostra, que tem limiar $\epsilon_1$, é gerada usando a 
 distribuição a priori, enquanto as próximas amostras, de limiares
 $\epsilon_2, \ldots, \epsilon_T$, são geradas com perturbações 
 aleatórias as amostras de limiares anteriores. O 
@@ -478,7 +490,12 @@ pareça com a posteriori. Portanto, a sequência de limiares deve ter
 grande extensão, com valor de $T$ pequeno, e com $\epsilon_T$ também 
 pequeno.
 
-\begin{algorithm}[h]
+\bigskip
+
+\let\Algorithm\algorithm
+\renewcommand\algorithm[1][]{\Algorithm[#1]\setstretch{1.5}}
+
+\begin{algorithm}[h!]
 \textsc{ABC SMC} $(\mathcal{M}, D)$
 \begin{algorithmic}[1]
     \State Defina a sequência $\epsilon_1, \ldots, \epsilon_T$.
@@ -514,9 +531,10 @@ $                w^{(t, i)} = \frac{p (\theta^{(t, i)} | M^{(t, i)})}
                             (\theta^{(t-1, j)}, \theta^{(t, i)})}$
             %\end{equation*}
     \EndFor
-    \Return
+
+    \State \Return
 \end{algorithmic}
-\caption{Pseudo-code of ABC SMC.}
+\caption{Pseudocódigo do procedimento ABC SMC.}
 \label{code:abc_smc}
 \end{algorithm}
 
@@ -527,13 +545,12 @@ modelos. Para testar a função ABC-SMC, usamos o programa ABC-SysBio, que
 implementa em Python o ABC-SMC para seleção de modelos.
 
 Para testar as duas abordagens, realizamos dois experimentos similares,
-em que quatro modelos são avaliados de acordo com dados gerados por um
-destes modelos, chamado de modelo correto.
+em que quatro modelos são calibrados e avaliados de acordo com dados gerados por um
+destes modelos, chamado de modelo correto. Explicaremos a seguir esses experimentos.
 
 \subsubsection{Primeiro experimento}
-O primeiro experimento que realizamos analisou quatro modelos 
-candidatos, de maneira similar a Vyshemirsky et 
-al.~\cite{Vyshemirsky2008}. A figura~\ref{fig:experiment_1} mostra os
+No primeiro experimento que realizamos analisamos quatro modelos 
+candidatos, de maneira similar a Vyshemirsky et al.~\cite{Vyshemirsky2008}. Na figura~\ref{fig:experiment_1} são mostrados os
 quatro modelos candidatos: um modelo correto; um modelo que é uma
 simplificação do correto; um modelo que é incompleto; e, por fim, um
 modelo que é uma generalização do modelo correto.
@@ -547,88 +564,72 @@ constantes de velocidade foram: $k_1 = 0,07$, $k_2 = 0,6$, $k_3 = 0,05$,
 $k_4 = 0,3$, $V = 0,017$, e $K_m = 0,3$. As concentrações iniciais
 usadas foram: S $= 1$, R $= 1$, dS $= 0$, RS $= 0$, R$_{pp} = 0$. Por
 motivos de simplificação, não indicamos as unidades de medida destas
-constantes.
+constantes. Por fim, descartamos os valores dos parâmetros dos quatro modelos e buscamos inferí-los utilizando os dados experimentais produzidos e o ABC-SysBio ou o SigNetMS.
 
-\begin{figure}
+
+
+\begin{figure}[th!]
   \begin{tabular}{c c}
-    \subfigure[Modelo correto]{
+    \subfigure[Modelo correto.]{
     \includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model1.pdf}}
     &
-    \subfigure[Modelo simplificado]{
+    \subfigure[Modelo simplificado.]{
     \includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model2.pdf}}
     \\
-    \subfigure[Modelo incompleto] {
+    \phantom{a}\\
+    \subfigure[Modelo incompleto.] {
     \includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model3.pdf}}
     &
-    \subfigure[Modelo generalizado] {
+    \subfigure[Modelo generalizado.] {
     \includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model4.pdf}}
     \end{tabular}
-    \caption{Os quatro modelos candidatos do primeiro experimento. A
-    medida de interesse na dinâmica destes modelos é a concentração de
+\bigskip
+    \caption{{\bf Os quatro modelos candidatos do primeiro experimento.} A
+    medida de interesse na dinâmica destes modelos é a concentração da espécie química
     R$_{pp}$.}
     \label{fig:experiment_1}
 \end{figure}
 
-No SigNetMS utilizamos 15000 iterações de burn-in e 5000 iterações para
-burn-in informado e para amostragem final. Como resultado, os modelos
-foram ordenados da seguinte maneira: modelo correto, modelo 
-simplificado, modelo generalizado e modelo incompleto. Este resultado é
-similar ao resultado original de Vyshemirsky e Girolami (2007), que tem
-apenas os modelos simplificado e generalizado invertidos. Já no 
-ABC-SysBio, utilizamos a sequência de limiares gerada automaticamente 
-para o problema e tivemos como resultado a ordenação: modelo incompleto,
-modelo simplificado, modelo generalizado e modelo correto. 
-
-Para entender estes resultados, criamos gráficos que mostram as
-simulações geradas pelos parâmetros amostrados pelo SigNetMS e
-ABC-SysBio. 
-
-Na figura~\ref{fig:exp:abc-sysbio} mostramos simulações geradas por 
-amostras de parâmetros de diferentes iterações no programa ABC-SysBio, 
-considerando o modelo correto. É possível ver que ao longo das iterações
-os parâmetros fazem a dinâmica simulada se aproximar dos dados
-experimentais. Entretanto, a dinâmica gerada pelas amostras não reproduz
-a dinâmica do experimento. Isto significa que a amostra gerada pelo
-programa ABC-SysBio não se aproxima da amostra da distribuição a
-posteriori dos parâmetros, comprometendo a qualidade da função de
-avaliação de modelos.
+No ABC-SysBio, utilizamos a sequência de limiares gerada automaticamente para o problema e tivemos como resultado a ordenação: modelo incompleto, modelo simplificado, modelo generalizado e modelo correto. Na figura~\ref{fig:exp:abc-sysbio} mostramos simulações geradas por amostras de parâmetros de diferentes iterações no programa ABC-SysBio, considerando o modelo correto. É possível ver que ao longo das iterações
+os parâmetros fazem a dinâmica simulada se aproximar dos dados experimentais, porém apenas parcialmente. Isto significa que a amostra gerada pelo programa ABC-SysBio com uma sequência de limiares gerada automaticamente não se aproxima da amostra da distribuição a posteriori dos parâmetros, comprometendo a qualidade da função de avaliação de modelos. 
 
 \begin{figure}[h]
   \centering 
   \begin{tabular}{c c}
-    \subfigure[iteração 1]{
+    \subfigure[Iteração 1.]{
     \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_1.pdf}
     \label{fig:abc_bio_avgsim1_it1}}
     &
-    \subfigure[iteração 10]{
+    \subfigure[Iteração 10.]{
     \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_10.pdf}
     \label{fig:abc_bio_avgsim1_it2}} 
     \\
-      \subfigure[iteração 20]{
+      \subfigure[Iteração 20.]{
     \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_20.pdf}
     \label{fig:abc_bio_avgsim1_it3}} 
     &
-      \subfigure[iteração 26]{
+      \subfigure[Iteração 26.]{
     \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_26.pdf}
       \label{fig:abc_bio_avgsim1_it4}}
     \end{tabular}
-    \caption{Simulação média gerada pelos parâmetros amostrados na
-      iterações 1, 10, 20 e 26 pelo programa ABC-SysBio, para o modelo
-      correto.}
+    \caption{{\bf Estimação de parâmetros do modelo correto com o ABC-SysBio.} Simulação média gerada pelos parâmetros amostrados na iterações 1, 10, 20 e 26 do método ABC SMC.}
     \label{fig:exp:abc-sysbio}
 \end{figure}
 
-Na figura~\ref{fig:exp:snm1} podemos ver simulações geradas por
+
+Já nos experimentos com o SigNetMS, utilizamos 15 mil iterações de burn-in e 5 mil iterações para
+burn-in informado e para amostragem final. Como resultado, os modelos
+foram ordenados da seguinte maneira: modelo correto, modelo 
+simplificado, modelo generalizado e modelo incompleto. Este resultado é
+similar ao resultado original de Vyshemirsky e Girolami (2007); quando comparada a ordenação que obtemos com a que é reportada nesse paper, vemos que  apenas os modelos simplificado e generalizado trocaram de lugar entre eles. Na figura~\ref{fig:exp:snm1} podemos ver simulações geradas por
 parâmetros amostrados em diferentes potências de posteriori no programa
-SigNetMS, considerando o modelo correto. Podemos ver que com o aumento
+SigNetMS, considerando o modelo correto. Vemos que com o aumento
 do valor de $\beta$, as amostras geradas se aproximam da distribuição a
 posteriori, pois a curva simulada se aproxima da curva gerada no
-experimento. A figura~\ref{fig:exp:snm2} mostra as simulações geradas
-pelos parâmetros amostrados no SigNetMS da distribuição a posteriori, e
-podemos observar que apenas o modelo incompleto, classificado como o
-pior, não se aproximou da dinâmica medida no experimento. 
+experimento. Já na figura~\ref{fig:exp:snm2}, mostramos as simulações geradas
+pelos parâmetros amostrados no SigNetMS da distribuição a posteriori; podemos observar que apenas o modelo incompleto, classificado como o pior, não se aproximou da dinâmica medida no experimento. 
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \begin{tabular}{c c}
     \subfigure[$\beta = 0$]{
@@ -647,14 +648,12 @@ pior, não se aproximou da dinâmica medida no experimento.
     \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_39.png}
     \label{fig:abc_bio_avgsim3_it4}} 
     \end{tabular}
-    \caption{Simulação média gerada pelos parâmetros amostrados no
-    programa SigNetMS, para potências de posteriori com $\beta$ 
-    valendo $0, 0,5, 0,3$ e $1$, para o modelo correto.}
+    \caption{{\bf Estimação de parâmetros do modelo correto com o SigNetMS.} Simulação média gerada pelos parâmetros amostrados para potências de posteriori com $\beta$ valendo $0$, $0,5$, $0,3$ e $1$.}
     \label{fig:exp:snm1}
 \end{figure}
 
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \begin{tabular}{c c}
         \subfigure[Modelo correto]{
@@ -669,8 +668,7 @@ pior, não se aproximou da dinâmica medida no experimento.
         \subfigure[Modelo generalizado]{
     \includegraphics[clip=true,width=.46\linewidth]{experiments/results/girolami/gamma/snm/simulations_model4_39.png}} 
     \end{tabular}
-    \caption{Simulação média gerada pela amostra da posteriori criada
-    para os quatro modelos candidatos, no programa SigNetMS.}
+    \caption{{\bf Estimação de parâmetros dos quatro modelos com o SigNetMS.} Simulação média gerada pela amostra da posteriori criada para cada um dos quatro modelos candidatos.}
     \label{fig:exp:snm2}
 \end{figure}
 
@@ -700,7 +698,7 @@ experimento. Por fim, para o modelo generalizado, apenas o programa
 SigNetMS encontrou parâmetros que faziam a simulação aproximar os dados
 do experimento.
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \begin{tabular}{c c}
     \subfigure[Modelo correto]{
@@ -709,29 +707,25 @@ do experimento.
     \subfigure[Modelo simplificado]{
     \includegraphics[clip=true,width=.4\linewidth]{experiments/diagrams/smallest_model2.pdf}} 
     \\
+    \phantom{a}\\
     \subfigure[Modelo generalizado] {
     \includegraphics[clip=true,width=.4\linewidth]{experiments/diagrams/smallest_model3.pdf}}
     &
     \subfigure[Modelo incorreto] {
     \includegraphics[clip=true,width=.4\linewidth]{experiments/diagrams/smallest_model4.pdf}} 
     \end{tabular}
-    \caption{Os quatro modelos candidatos no segundo experimento. A
-    medida de interesse nestas vias é a concentração de C.}
+\bigskip
+    \caption{{\bf Os quatro modelos candidatos no segundo experimento.} A
+    medida de interesse nestas vias é a concentração da espécie química C.}
     \label{fig:experiment_2}
 \end{figure}
 
 \subsubsection{Escolha de método de avaliação de modelos}
-Com os resultados obtidos nos dois experimentos anteriores, concluímos
-que a ferramenta SigNetMS é mais adequada para nossas aplicações do que
-a ferramenta ABC-SysBio. É importante também ressaltar que a ferramenta
-ABC-SysBio pode ser mais adequada em aplicações em que uma função de
-verossimilhança não pode ser escrita, e também em situações em que é
-difícil determinar uma distribuição a priori para constantes de
-velocidade. 
+Por conta dos resultados obtidos nos dois experimentos anteriores, decidimos focar, no restante deste projeto, no uso do método implementado no SigNeMS. É importante também ressaltar que a ferramenta ABC-SysBio pode ser mais adequada em aplicações em que uma função de verossimilhança não pode ser escrita; por outro lado, também seria interessante investigar, em trabalhos futuros, o desempenho desse método com o uso de outras sequências de limiares que não a automática, uma vez que o ABC-SysBio é altamente escalável, dispondo de suporte a GPUs para paralelização. Por outro lado, a paralelização do método implementado no SigNetMS é mais complicada e será abordada a seguir.
 
 \subsection{Paralelização do SigNetMS}
-Apesar de se mostrar mais adequada para nossas aplicações, a ferramenta
-SigNetMS possuia como grande desvantagem o seu tempo de execução. Por
+Apesar de se mostrar adequada para nossas aplicações, a versão original da ferramenta
+SigNetMS possuía como grande desvantagem o seu tempo de execução. Por
 conta disto, analisamos a ferramenta com objetivo de identificar porções 
 de código que poderiam ser executadas em paralelo. Identificamos então
 que o procedimento de geração de amostras de potências de posteriori era 
@@ -760,10 +754,10 @@ do programa SigNetMS ainda era muito grande, mesmo para exemplos
 pequenos. Decidimos então investigar o processo de integração de sistema
 de equações diferenciais.
 
-Até este momento, estávamos usando uma representação literal do sistema
+Até este momento, estávamos utilizando uma representação literal do sistema
 de equações diferenciais. Portanto, para fazer sua integração, usávamos
 uma função que interpretava as derivadas em formato texto e calculava 
-seus respectivos valores. Propomos então, utilizar uma notação simbólica 
+seus respectivos valores. Propomos então utilizar uma notação simbólica 
 do sistema de equações diferenciais, utilizando a biblioteca 
 \toolname{SymPy}. 
 
@@ -775,7 +769,7 @@ também nos permite facilmente calcular a matriz Jacobiana do sistema de
 equações diferenciais, o que melhora o desempenho do integrador
 numérico. A tabela~\ref{tab:integrador} mostra o tempo de execução do
 integrador numérico quando usamos as duas diferentes abordagens de
-representação do sistema, e é possível ver que com a notação simbólica,
+representação do sistema; é possível ver nela que, com a notação simbólica,
 o tempo de execução diminuiu consideravelmente.
 
 \begin{table}[]
@@ -793,20 +787,18 @@ o tempo de execução diminuiu consideravelmente.
 400 & 125,6 & 20,3 \\ 
 \hline
 \end{tabular}
-\caption{Tempo de execução do integrador numérico usando as duas
-    abordagens de representação do sistema de equações diferenciais.
-    Para gerar esta tabela, o modelo correto da
-    figura~\ref{fig:experiment_1} foi integrado numericamente repetidas 
-    vezes.}
+\caption{{\bf Tempo de execução do integrador numérico para duas
+    abordagens de representação do sistema de equações diferenciais.}
+    Para gerar estes números, o modelo correto do primeiro experimento (figura~\ref{fig:experiment_1}) foi integrado numericamente repetidas vezes (100, 200 e 400 repetições).}
 \label{tab:integrador}
 \end{table}
 
-\subsection{Testes da metodologia em uma cadeia do espaço de busca} 
+\subsection{Testes da metodologia em uma cadeia do espaço de busca}  \label{sec:ERK}
 Com a melhora de desempenho do pacote SigNetMS, seguimos o trabalho com
 um experimento maior de seleção de via de sinalização celular. Este
 experimento consistiu em adicionar, uma a uma e de maneira aleatória, 
 reações candidatas a um modelo inicial e analisar o comportamento da 
-função de custo sobre sequência de modelos criada. Do ponto de vista de
+função de custo sobre sequência de modelos criada. O modelo em questão descreve a dinâmica da via de sinalização ERK, que foi ajustado com experimentos de células tumorais murinas Y1 e reportados anteriormente~\cite{Reis2017interdisciplinary}. Do ponto de vista de
 seleção de características (em que reações candidatas são
 características), este experimento é equivalente a um passeio aleatório
 no espaço de busca (todos os subconjuntos de características) que sempre
@@ -815,42 +807,40 @@ modelo base, e terminando no conjunto completo, correspondente ao modelo
 base mais todas as reações candidatas.
 
 Os dados experimentais para avaliação dos modelos foram gerados por um
-modelo intermediário, entre o modelo base e o modelo com conjunto
-completo de reações. A figura~\ref{fig:random_walk} mostra o resultado 
-deste experimento, e nela podemos ver que a função de custo de fato 
-penaliza modelos mais complexos, e que a função de custo não é 
-monotônica em uma cadeia do espaço de busca e também não tem um formato
-de U, o que vai influenciar na nossa escolha por um algoritmo de busca.
+modelo intermediário entre o modelo base (i.e., um modelo com o mínimo de reações possíveis para descrever a cinética da via) e o modelo com o conjunto
+completo de reações. Na figura~\ref{fig:random_walk} mostramos o resultado 
+deste experimento; nela podemos ver que a função de custo de fato 
+penaliza modelos mais complexos, e que a função de custo não é monotônica em uma cadeia do espaço de busca, apresentando dois mínimos locais.
 
-\begin{figure}
+\begin{figure}[h!]
     \includegraphics[clip=true]{experiments/surface_curve.png}
-    \caption{Curva com comportamento da função de custo ao adicionar
-    iterativamente reações a um modelo base. Para facilitar a
+    \caption{{\bf Comportamento da função de custo como uma função da inclusão de reações a um modelo base.} Para facilitar a
     visualização, mostramos no gráfico a verossimilhança marginal vezes 
-    a constante $-1$, ou seja, quanto menor o valor na curva, melhor a
+    a constante $-1$ - ou seja, quanto menor o valor na curva, melhor a
     qualidade do modelo. 
     }
     \label{fig:random_walk}
 \end{figure}
 
-\section{Atividades futuras}
-Nos mês de fevereiro, projetamos finalizar experimentos de percorrimento
-do espaço de busca. Em seguida, nos meses de março, abril e maio
-projetamos construir um pequeno banco de dados de reações químicas,
-e aplicar a metodologia proposta em linhagens de células Y1 e HEK293.
+\section{Atividades remanescentes}
 
-\section{Outras atividades acadêmicas}
-No mês de janeiro de 2019, entre os dias 7 e 11, o beneficiário 
-participou da XIV Escuela de Verano en Matemáticas Discretas, em 
-Valparaíso, Chile. Nesta escola três cursos foram oferecidos, envolvendo
-otimização combinatória, análise de algoritmos parametrizados e
-problemas computacionais no estudo do cérebro.
+Apesar de todos os avanços que tivemos neste projeto após a entrega do relatório parcial e que foram aqui descritos, existem algumas atividades que precisam ser concluídas para o depósito da dissertação de mestrado e posterior defesa; tais atividades são listadas abaixo, com um prazo estimado para a conclusão de cada uma delas.
 
-Além disso, o beneficiário teve um resumo aceito para participação na
-conferência Rocky 2019. O beneficiário participou da conferência entre
-os dias 5 e 7 de dezembro, na cidade Snowmass Village, Colorado, Estados
-Unidos. Esta conferência possuiu uma seção de posters na qual o
-beneficiário apresentou o trabalho desenvolvido neste projeto.
+\begin{itemize}
+
+\item[]{\bf Fevereiro de 2020.} Conclusão do experimento de verificação das cadeias do espaço de busca. No experimento completo, pretendemos repetir várias vezes o percorrimento aleatório de cadeias, tal qual mostrado na figura~\ref{fig:random_walk}. Além disso, faremos a comparação do comportamento dessas cadeias aleatórias com o de percorrimentos que passam pela cadeia que contém o modelo correto (i.e., o mínimo global do procedimento de busca). Se as cadeias deste último caso descreverem curvas em U, então poderíamos aplicar métodos desenvolvidos por nosso grupo para resolver o problema~\cite{Reis2017featsel,Reis:2019}.
+
+\item[]{\bf Março de 2020.} Construção de um pequeno banco de dados (essencialmente lista de reações e de constantes de velocidade) para definir o espaço de busca da seleção de modelos. Por questões práticas, vamos nos restringir a reações que envolvam ao menos uma das espécies químicas presentes no modelo da via de sinalização ERK apresentado na seção~\ref{sec:ERK}.
+
+\item[]{\bf Abril de 2020.} Experimento de seleção de modelos utilizando o banco de dados mencionado anteriormente. Finalização da dissertação de mestrado.
+
+\item[]{\bf Maio de 2020.} Depósito da dissertação de mestrado.
+
+\item[]{\bf Junho de 2020.} Defesa do mestrado.
+
+\end{itemize}
+
+Após a defesa do mestrado, projetamos realizar, ao longo do segundo semestre deste ano, experimentos adicionais. Além disso, pretendemos também escrever um manuscrito para ser enviado a uma conferência internacional ainda a ser definida.
 
 \addcontentsline{toc}{section}{Referências}
 \bibliographystyle{unsrt} 
