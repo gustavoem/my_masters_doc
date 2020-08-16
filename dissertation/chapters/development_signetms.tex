@@ -19,3 +19,76 @@ experimental data, $p(M | {\bm D})$.
 %   -> parallel sampling
 %   -> running the algorithm on a cluster
 
+\section{The SigNetMS Software}
+% General Aspects of the software
+
+% The Bayesian methodology
+% - SigNeMS creates an estimative of the marginal likelihood of a model
+% given a set of experimental data.
+% - To create this estimative, SigNetMS uses ideas of Thermodynamic
+%   Integration.
+% - There is a software that can carry similar simulations, called
+%   BioBayes, however we found its use cumbersome, mainly because:
+%   it is a GUI software, which does not fit our type of applications,
+%   that should be ran in a server for several hours. Moreover, we
+%   intended to link the marginal likelihood output to other programs,
+%   for model selection.
+
+% Details on how the program creates the system of ODEs
+% Details on how the proram estimates the likelihood
+
+SigNetMS is a Python program that can be used as a tool for model
+selection. The source code is available on 
+Github\footnote{https://github.com/gustavoem/SigNetMS} and it is open
+source, under the GNU General Public License.
+
+This program expects as the input: a signaling pathway model,
+represented by a Systems Biology Markup Language
+(SBML)~\cite{hucka2003systems} file, with the definition of reactions,
+kinetic laws and initial concentrations of chemical species; an
+Extensible Markup Language (XML) file with experimental data, including 
+time series measurements of the  biological phenomena of interest;
+another XML file with definitions of prior distributions of reaction
+rate constants; and, finally, a set of parameter values that determine
+the sampling process of model parameters. There are also optional
+parameters on SigNetMS, used to control random number generator seeds,
+number of execution threads, and verbose runs.
+
+The output of the program is composed by an estimative of the marginal
+likelihood of the model, given experimental data, $p(M | {\bm D})$ and a
+list of parameter values $({\bm \theta}^1, {\bm \theta}^2, \ldots {\bm
+\theta}^l)$ that represent a sample of the distribution $p({\bm \theta}
+| M, {\bm D})$. If one simulates the model $M$ with parameter values
+from the sample, we expect that, the higher the marginal likelihood, the
+closer the simulation is to the experimental data.
+
+To calculate this estimative, we use the ideas of Thermodynamic
+Integration we presented on section~\ref{sec:thermodynamic_integration}.
+Before implementing SigNetMS we also considering using another software,
+called BioBayes~\cite{Vyshemirsky2008}, that has a very similar approach
+to produce an estimative of the marignal likelihood. However, we did not
+proceed to use this software because there was only a graphical user
+interface version of the software, which made the process of running
+instances and collecting results cumbersome. We have also tried
+contacting the authors to obtain the source code, however they could not
+provide us that.
+
+\subsection{Creating an estimative of the marginal likelihood}
+% Since we are using a Thermodynamic Integration  approach, we need to 
+% define a likelihood function, create samples of power posterior 
+% distributions and, finally define an approximation to the marginal
+% likelihood.
+
+% The likelihood function...
+% The samples of power posteriors are...
+% The approximation of the marginal likelihood are...
+% The whole process, has the following order:
+% -> all inputs are read;
+%   -> The sbml model is read and transformed into a System of ODE
+%       -> this model can determine a simulation, given a list of
+%       parameter values and a measurement unit;
+%   -> Parameter priors, experimental data are read and saved
+% -> sampling of posterior starts with naive sampling
+% -> then we proceed to covariance shaped burn-in
+% -> then we go to populational monte carlo markov chain
+% -> then we use the approximation to generate the margginal likelihood
