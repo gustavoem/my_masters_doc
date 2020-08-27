@@ -3,7 +3,7 @@ In this chapter we present the development process and implementation
 details of the SigNetMS software, which stands for {\bf Sig}naling 
 {\bf Net}work {\bf M}odel {\bf S}election. This software is capable of
 producing an estimative of the marginal likelihood of a model given
-experimental data, $p(M | {\bm D})$.
+experimental data, $p({\bm D} | M)$.
 
 % What are we going to talk about in this chapter?
 % - first, we have to talk about which methodology this software uses
@@ -55,7 +55,7 @@ parameters on SigNetMS, used to control random number generator seeds,
 number of execution threads, and verbose runs.
 
 The output of the program is composed by an estimative of the marginal
-likelihood of the model, given experimental data, $p(M | {\bm D})$ and a
+likelihood of the model, given experimental data, $p({\bm D} | M)$ and a
 list of parameter values $({\bm \theta}^1, {\bm \theta}^2, \ldots {\bm
 \theta}^l)$ that represent a sample of the distribution $p({\bm \theta}
 | M, {\bm D})$. If one simulates the model $M$ with parameter values
@@ -64,7 +64,7 @@ closer the simulation is to the experimental data.
 
 To calculate this estimative, we use the ideas of Thermodynamic
 Integration we presented on section~\ref{sec:thermodynamic_integration}.
-Before implementing SigNetMS we also considering using another software,
+Before implementing SigNetMS we also considered using another software,
 called BioBayes~\cite{Vyshemirsky2008}, that has a very similar approach
 to produce an estimative of the marignal likelihood. However, we did not
 proceed to use this software because there was only a graphical user
@@ -92,3 +92,39 @@ provide us that.
 % -> then we proceed to covariance shaped burn-in
 % -> then we go to populational monte carlo markov chain
 % -> then we use the approximation to generate the margginal likelihood
+
+To create estimates of the marginal likelihood using the Thermodynamic
+Integration approach, we need to define a likelihood function $p({\bm
+D}| M, {\bm \theta})$ and also samples power posterior distributions
+$p_\beta({\bm \theta})$ for a sequence of values of $\beta$.
+
+%-> The likelihood function is...
+%-> To implement this, we must simulate the model with parameter values
+%of theta.
+%-> these simulations involves the numerical integration of a system of 
+% ordinary differential equaitons
+%-> current methods of numerical integrations are iterative and can be
+% very consty depending on the size of the numerical system and also on
+% the type of the system, stiff or not
+The likelihood function we used is the same as we defined in
+equation~\ref{eq:likelihood_multivariate}:
+\begin{equation*}
+    p ({\bm D} | M,{\bm \theta}) = 
+        p_{\mathcal{N}_{\left(\vec{0}, \Sigma\right)}}
+        (\phi (M, {\bm\theta}) - {\bm D}),
+\end{equation*}
+where ${\bm D}$ is the experimental measurement, $M$ is the model,
+${\bm \theta}$ is a set of parameter values, $\Sigma$ is the variance of
+the error of experimental observations, and $\phi$ is a function that
+calculates the simulation of model $M$ with parameter values ${\bm
+\theta}$.  To implement this function, we must implement the $\phi$
+function, which gives the experimental measurement applied to a 
+simulation of the model. The simulation of the model is created by 
+deriving a system of ordinary differential equations, and then
+numerically integrating this system, over the time steps defined by the 
+experimental measurements. 
+
+% Numerical integration of systems are solved using iterative methods
+% stiff non stiff
+% we used  third-party software to solve this problem
+
