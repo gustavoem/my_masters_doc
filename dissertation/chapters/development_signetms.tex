@@ -73,7 +73,7 @@ instances and collecting results cumbersome. We have also tried
 contacting the authors to obtain the source code, however they could not
 provide us that.
 
-\subsection{Creating an estimative of the marginal likelihood}
+\section{Creating an estimative of the marginal likelihood}
 % Since we are using a Thermodynamic Integration  approach, we need to 
 % define a likelihood function, create samples of power posterior 
 % distributions and, finally define an approximation to the marginal
@@ -98,6 +98,11 @@ Integration approach, we need to define a likelihood function $p({\bm
 D}| M, {\bm \theta})$ and also samples power posterior distributions
 $p_\beta({\bm \theta})$ for a sequence of values of $\beta$.
 
+% TODO: say here that we used pipipi popopo beta values and that with
+% samples of those power posteriors, we estimated the marginal
+% likelihood as...
+
+\subsection{Implementing the likelilhood function}
 %-> The likelihood function is...
 %-> To implement this, we must simulate the model with parameter values
 %of theta.
@@ -115,16 +120,63 @@ equation~\ref{eq:likelihood_multivariate}:
 \end{equation*}
 where ${\bm D}$ is the experimental measurement, $M$ is the model,
 ${\bm \theta}$ is a set of parameter values, $\Sigma$ is the variance of
-the error of experimental observations, and $\phi$ is a function that
-calculates the simulation of model $M$ with parameter values ${\bm
-\theta}$.  To implement this function, we must implement the $\phi$
-function, which gives the experimental measurement applied to a 
-simulation of the model. The simulation of the model is created by 
-deriving a system of ordinary differential equations, and then
-numerically integrating this system, over the time steps defined by the 
-experimental measurements. 
+the error of experimental observations, and, finally, $\phi$ is a 
+function that calculates an approximation of the results of the
+experiment that produced ${\bm D}$, applied to the simulated environment
+of model $M$ with parameter values ${\bm \theta}$. This simulation of
+the model is created by deriving a system of ordinary differential
+equations, and then numerically integrating this system, over the time
+steps defined by the experimental measurements. To reproduce the same
+experiment that generated ${\bm D}$, SigNetMS expects that the XML file 
+containing experimental data also contains a mathematical representation
+of which quantity was measured, in terms of concentrations of chemical
+species of the system.
 
 % Numerical integration of systems are solved using iterative methods
 % stiff non stiff
 % we used  third-party software to solve this problem
+The numerical integration of the system is alone a hard problem, and
+therefore, we used third-party software to produce such integrations.
+The most popular software available for this problem conduce
+iterative algorithms that, step by step, aproximate the state of the
+system for a time interval. It is important to know that some instances
+of the problem can be stiff, meaning that they may make the integration
+algorithm be unstable, since it may need consecutive iterations in 
+really small steps. Since we did not have time to go in details of when 
+such cases occur, we chose third-party softwares that can adapt the used
+algorithm according to the stiffnes of the instance.
 
+After the implementation of the function $\phi$, most of the work to
+implement the likelihood function is done. The reamining work is to
+calculate the value of the probability density function
+$p_{\mathcal{N}_{\left(\vec{0}, \Sigma\right)}}$ and that can easily be
+accomplished using statistical packages such as
+SciPy~\cite{2020SciPy-NMeth}.
+
+\subsection{Sampling parameters from power-posteriors}
+% after implementing the likelihood function, we can create the samples
+% of the power posteriors;
+% -> we used the same methodology we presented before, this methodology
+%  is based on using variations of the metropolis-hastings algorithm,
+
+After implementing the likelihood function, we can move to the creation
+of samples of power posteriors. The methodology we used to generate such
+samples is identical to the one we presented on
+section~\ref{sec:estimation_of_marginal_likelihood}. And for this
+reason, we divided the sampling process in three phases: naive burn-in,
+adaptive burn-in and Populational MCMC. The number of iterations of each
+phase is determined by SigNetMS's arguments.
+
+We start the sample of every chain (for each value of $\beta$) with a
+random draw from the prior distribution of parameters. Before the first
+iteration, we also create an estimative of the variance of the logarithm
+of each model parameter, independently. These estimatives are used to
+build the first covariance matrix of the jumping distribution, which is
+a diagonal matrix where the diagonal elements are set as the estimated
+variance of the logarithm scaled sample of the prior distribution. This
+matrix is rescaled according to the acceptance rate, as described in
+section~\ref{sec:estimation_of_marginal_likelihood} after a number of
+iterations that is defined in one of arguments of SigNetMS. For each
+iteration, we determine that the jumping distribution is then, a 
+multivariate lognormal $(\mu, \Sigma)$ distribution, with covariance 
+matrix as explained before, and with $\mu = \log_e({\bm \theta}^t)$
