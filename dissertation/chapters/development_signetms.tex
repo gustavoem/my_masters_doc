@@ -96,7 +96,14 @@ provide us that.
 To create estimates of the marginal likelihood using the Thermodynamic
 Integration approach, we need to define a likelihood function $p({\bm
 D}| M, {\bm \theta})$ and also samples power posterior distributions
-$p_\beta({\bm \theta})$ for a sequence of values of $\beta$.
+$p_\beta({\bm \theta})$ for a sequence of values of $\beta$. On
+SigNetMS, we use the trapezoidal rule to approximate the marginal
+likelihood, given by the
+equation~\ref{eq:marginal_likelihood_trapezoidal_approximation}. 
+Inspired by the work of Friel et al., we discretize the
+interval $[0, 1]$ of power posteriors using the $\beta_i =
+\left(\frac{i - 1}{T - 1}\right)^c$, where $T = 20$, $c = 4$ and $i \in
+\{1, 2, \ldots, T\}$.
 
 % TODO: say here that we used pipipi popopo beta values and that with
 % samples of those power posteriors, we estimated the marginal
@@ -164,19 +171,45 @@ of samples of power posteriors. The methodology we used to generate such
 samples is identical to the one we presented on
 section~\ref{sec:estimation_of_marginal_likelihood}. And for this
 reason, we divided the sampling process in three phases: naive burn-in,
-adaptive burn-in and Populational MCMC. The number of iterations of each
-phase is determined by SigNetMS's arguments.
+adaptive burn-in and Populational MCMC. All of these process are types
+of a Metropolis-Hastings procedure. The number of iterations of each
+phase is determined by SigNetMS's arguments, and each phase has a
+different scheme to determine the proposal distribution.
 
-We start the sample of every chain (for each value of $\beta$) with a
-random draw from the prior distribution of parameters. Before the first
-iteration, we also create an estimative of the variance of the logarithm
-of each model parameter, independently. These estimatives are used to
-build the first covariance matrix of the jumping distribution, which is
-a diagonal matrix where the diagonal elements are set as the estimated
-variance of the logarithm scaled sample of the prior distribution. This
-matrix is rescaled according to the acceptance rate, as described in
+On the first phase, we start the sample of every chain (for each value
+of $\beta$) with a random draw from the prior distribution of
+parameters. Before the first iteration, we also create an estimative of
+the variance of the logarithm of each model parameter, independently.
+These estimates are used to build the first covariance matrix of the
+jumping distribution; we use a diagonal matrix where the diagonal
+elements are set as the estimated variance of the logarithm scaled
+sample of the associated parameter. This matrix is rescaled according to 
+the acceptance rate, as described in
 section~\ref{sec:estimation_of_marginal_likelihood} after a number of
 iterations that is defined in one of arguments of SigNetMS. For each
-iteration, we determine that the jumping distribution is then, a 
-multivariate lognormal $(\mu, \Sigma)$ distribution, with covariance 
-matrix as explained before, and with $\mu = \log_e({\bm \theta}^t)$
+iteration, we determine that the jumping distribution is a multivariate
+lognormal $({\bm \mu}, \Sigma)$ distribution, with covariance matrix as
+explained before, and with ${\bm \mu} = \log_e({\bm \theta}^t)$, where
+${\bm \theta}^t$ is the current sample point. That means we take a
+sample ${\bm X}$ of the multivariate normal $\mathcal{N}({\bm \mu},
+\Sigma)$ and then we set our sampled value  as ${\bm Y} = \exp({\bm
+X})$, which is a standard procedure to produce samples of lognormal
+distributions.
+
+On the second phase, the posterior shaped burn-in phase, we also use a 
+lognormal as the proposal distribution, however the covariance matrix is 
+not diagonal. Half of the sample produced in the first phase is
+discarded, and for each step, we calculate the covariance of the
+log-scaled current sample, producing the matrix used as the covariance
+matrix for the proposal distribution. Similarly to the first phase, the
+proposal distribution also uses ${\bm \mu} = \log_e({\bm \theta}^t)$. It
+is important to remember that up to the end of this sampling phase, each
+power posterior sample is produced independently.
+
+The third and last phase, we perform a Populational Monte Carlo Markov
+Chain. In this procedure, we iterate each chain of power posterior
+samples using the same algorithm of the second phase (except we do not
+update the covariance matrix anymore), followed by an exchange the last
+sampled points on two random selected power posteriors. At the end of
+this phase, we discard parameters sampled on previous phases and we set
+the actual sample as all the parameters sampled in this phase.
