@@ -171,26 +171,26 @@ of samples of power posteriors. The methodology we used to generate such
 samples is identical to the one we presented on
 section~\ref{sec:estimation_of_marginal_likelihood}. And for this
 reason, we divided the sampling process in three phases: naive burn-in,
-adaptive burn-in and Populational MCMC. All of these process are types
-of a Metropolis-Hastings procedure. The number of iterations of each
-phase is determined by SigNetMS's arguments, and each phase has a
-different scheme to determine the proposal distribution.
+adaptive burn-in and Populational MCMC; all of them are types of a 
+Metropolis-Hastings procedure. The number of iterations of each phase is
+determined by SigNetMS's arguments, and each phase has a different 
+scheme to determine the proposal distribution.
 
 On the first phase, we start the sample of every chain (for each value
 of $\beta$) with a random draw from the prior distribution of
 parameters. Before the first iteration, we also create an estimative of
 the variance of the logarithm of each model parameter, independently.
-These estimates are used to build the first covariance matrix of the
-jumping distribution; we use a diagonal matrix where the diagonal
-elements are set as the estimated variance of the logarithm scaled
-sample of the associated parameter. This matrix is rescaled according to 
-the acceptance rate, as described in
-section~\ref{sec:estimation_of_marginal_likelihood} after a number of
-iterations that is defined in one of arguments of SigNetMS. For each
+These estimates compose the first covariance matrix of the jumping 
+distribution; we use a diagonal matrix where the diagonal elements are
+set as the estimated variance of the logarithm scaled sample of the
+associated parameter. This matrix is rescaled according to the
+acceptance rate, as described in
+section~\ref{sec:estimation_of_marginal_likelihood}, after a number of
+iterations that is defined in one of the arguments of SigNetMS. For each
 iteration, we determine that the jumping distribution is a multivariate
 lognormal $({\bm \mu}, \Sigma)$ distribution, with covariance matrix as
 explained before, and with ${\bm \mu} = \log_e({\bm \theta}^t)$, where
-${\bm \theta}^t$ is the current sample point. That means we take a
+${\bm \theta}^t$ is the current sample point, i.e., we take a
 sample ${\bm X}$ of the multivariate normal $\mathcal{N}({\bm \mu},
 \Sigma)$ and then we set our sampled value  as ${\bm Y} = \exp({\bm
 X})$, which is a standard procedure to produce samples of lognormal
@@ -204,7 +204,7 @@ log-scaled current sample, producing the matrix used as the covariance
 matrix for the proposal distribution. Similarly to the first phase, the
 proposal distribution also uses ${\bm \mu} = \log_e({\bm \theta}^t)$. It
 is important to remember that up to the end of this sampling phase, each
-power posterior sample is produced independently.
+power posterior sample is created independently.
 
 The third and last phase, we perform a Populational Monte Carlo Markov
 Chain. In this procedure, we iterate each chain of power posterior
@@ -213,3 +213,54 @@ update the covariance matrix anymore), followed by an exchange the last
 sampled points on two random selected power posteriors. At the end of
 this phase, we discard parameters sampled on previous phases and we set
 the actual sample as all the parameters sampled in this phase.
+
+%   -> fast integration of system of differential equations
+\section{Fast integration of system of differential equations}
+% The numerical integration of a system of ODEs is one of the most
+% computationally expensive methods performed during the estimation of
+% the marginal likelihood. Moreover, we need to perform such task for
+% every iteration of each power posterior chain. In basic experiments,
+% we may perform over one hundred thousand numerical integrations, over
+% a time interval defined by the experiments. This is the reason why our
+% first implementation of SigNetMS did not cope even with toy models.
+% Therefore, we needed to add optimizations to our software before
+% experimenting with more complex instances.
+%   
+% Since the most of the time spent by SigNetMS is concentrated in the
+% generation of samples of power posteriors, we decided to focus on
+% optimizing two different aspects of the sampling. The first aspect is
+% to reduce the required time to integrate a system of ordinary 
+% differential equations; the second aspect, is to take advantage of the
+% intrinsic independence of the sampling of two different power
+% posteriors in the first two phases of the sampling (naive and
+% posterior shaped burn-in).
+
+\subsection{Optimizing the integration of a system of ordinary
+differential equations}
+% - we considered using other integration algorithms, however LSODA was
+%   the best because it changes the algorithm according to instance
+%   stiffness;
+% - we considered using GPU algorithms for integration, however they are
+%   only useful for very large systems
+%   - our problem is not on the size of the instance
+% - we then realized our representation of the system was not efficient;
+%   - when we started using the Jacobian, the time spent on integration
+%   increased. why?
+%   - to achieve better representation of the systems we condiered using
+%   Sympy, which allows us to represent mathematical functions
+%   symbolically;
+%   - to actually use sympy we need to produce a python function that
+%   represents the system of differential equations; therefore we moved
+%   to using Sympy as a code generator.
+%   - the first approach is the most straight forward, in which we use
+%   a sympy built in method that transforms an equation into a python
+%   lambda function;
+%   - the second approach, is to use sympy to generate a C code, which
+%   then needs to be compiled and wrapped as a python function, using
+%   Cython; 
+%   - fortunatelly, altough this last option sounds cumbersome to
+%   implement, sympy provides... it hahha
+
+
+%   -> parallel sampling
+%   -> running the algorithm on a cluster
