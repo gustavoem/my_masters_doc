@@ -234,6 +234,26 @@ the actual sample as all the parameters sampled in this phase.
 % intrinsic independence of the sampling of two different power
 % posteriors in the first two phases of the sampling (naive and
 % posterior shaped burn-in).
+The numerical integration of a system of ordinary differential equations
+is one of the most computationally expensive processes for the
+estimation of the marginal likelihood. Besides being computationally
+expensive, the integration is also performed numerous times; for each
+calculation of the likelihood function, one integration is necessary.
+Note that the likelihood function is evaluated for all proposed jumps in
+the sampling, for each of the power posterior distributions. Even in
+basic experiments, we may evaluate this function hundreds of thousands
+times. This is the main reason why our first implementation of SigNetMS
+did not cope even with toy models. Therefore, we needed to add
+optimizations to our software before experimenting with more complex
+instances.
+
+Since most of the computational time spent by SigNetMS is concentrated
+in the generation of samples of power posteriors, we decided to focus
+optimizations in two different aspects of the sampling. The first
+aspect, is to reduce the required time to integrate a model, exploring
+different approaches to represent the model; the second aspect, is to
+take advantage of the independence of the sampling of two different
+power posteriors, in the first two phases of sampling.
 
 \subsection{Optimizing the integration of a system of ordinary
 differential equations}
@@ -260,6 +280,26 @@ differential equations}
 %   Cython; 
 %   - fortunatelly, altough this last option sounds cumbersome to
 %   implement, sympy provides... it hahha
+The first consideration that was taken into account when optimizing the
+integration of the model was to use different algorithms, because, in 
+general, algorithms prepared for non-stiff instances have better 
+performance. However, because of the different nature of instances of 
+the problem, we could not choose between algorithms prepared for stiff 
+or non-stiff instances, and then we chose to continue using the {\tt
+odeint} integrator, offered by SciPy, which can adapt according to the
+stiffness of the instance. The integrator {\tt odeint} is actually a 
+wrapper to the {\tt LSODA} integrator, which part of the Fortran package
+called {\tt ODEPACK}~\cite{Hindmarsh1982} language.
+
+% We also tried using GPU algorithms for integrations, however, they are
+% more likely to be worth using when the system has thousands of
+% equations or variables.
+
+% One common approach to reduce the computational time of integrators is
+% to provide the Jacobian of the system of differential equations. In
+% fact, considering that we have this and that type of equations, we
+% used sympy to derive the jacobian.
+%
 
 
 %   -> parallel sampling
