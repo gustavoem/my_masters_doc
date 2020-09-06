@@ -288,8 +288,8 @@ the problem, we could not choose between algorithms prepared for stiff
 or non-stiff instances, and then we chose to continue using the {\tt
 odeint} integrator, offered by SciPy, which can adapt according to the
 stiffness of the instance. The integrator {\tt odeint} is actually a 
-wrapper to the {\tt LSODA} integrator, which part of the Fortran package
-called {\tt ODEPACK}~\cite{Hindmarsh1982} language.
+wrapper to the {\tt LSODA} integrator, which is part of the Fortran
+package called {\tt ODEPACK}~\cite{Hindmarsh1982} language.
 
 % We also tried using GPU algorithms for integrations, however, they are
 % more likely to be worth using when the system has thousands of
@@ -299,8 +299,44 @@ called {\tt ODEPACK}~\cite{Hindmarsh1982} language.
 % to provide the Jacobian of the system of differential equations. In
 % fact, considering that we have this and that type of equations, we
 % used sympy to derive the jacobian.
-%
 
+One common approach to reduce the computational time needed on the
+integration (and improve accuracy) is to provide the Jacobian matrix of
+the system. This matrix is essential to many integration methods to
+determine the next value of the unknown function (with a certain
+accuracy), and if this matrix is not provided, algorithms like 
+{\tt LSODA} will approximate this function, decreasing the computational 
+efficiency. Considering the types of chemical reactions we consider on
+this work, we could implement a function that produces the Jacobian
+function of a system of ordinary differential equations that represents
+the model of interest.
+
+However, after implementing such matrix derivation, and providing it to
+the integrator, the computational time required to produce integrations
+increased. That led us to believe that our function representation of
+functions, the one that represents the system and the Jacobian of the
+function, were not efficient. At this point, our representation of both
+functions were an array of strings, each one representing one function;
+then, the evaluation of these functions was equivalent to interpreting
+the strings of all the functions and then evaluating them.
+
+To improve the computational time needed to evaluate these functions, we
+considering using SymPy, a Python package that allows symbolic
+mathematics. The idea was to provide the same strings of the functions
+to SymPy and create objects that represent such functions with
+symbolically. After that, we could also remove our differentiation
+method, since SymPy offers one. However, the `odeint` package is not
+prepared to receive a SymPy object to perform integrations, instead, it
+expects to receive a Python function. Fortunately, SymPy offers methods
+to symbolic functions that allows code generation.
+
+Then, we experimented two ways of using SymPy function objects to 
+produce functions to represent the system and its Jacobian. The first
+one is to use {\tt lambdify}, which creates a Python function that wraps the
+SymPy object. The second one, is to generate C language code, and then 
+use Cython to compile, import and wrap it as a Python function.
+Fortunately, again, SymPy provides an utility function called {\tt 
+autowrap} that does all of this work.
 
 %   -> parallel sampling
 %   -> running the algorithm on a cluster
