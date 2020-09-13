@@ -66,7 +66,7 @@ To calculate this estimative, we use the ideas of Thermodynamic
 Integration we presented on section~\ref{sec:thermodynamic_integration}.
 Before implementing SigNetMS we also considered using another software,
 called BioBayes~\cite{Vyshemirsky2008}, that has a very similar approach
-to produce an estimative of the marignal likelihood. However, we did not
+to produce an estimative of the marginal likelihood. However, we did not
 proceed to use this software because there was only a graphical user
 interface version of the software, which made the process of running
 instances and collecting results cumbersome. We have also tried
@@ -145,16 +145,16 @@ species of the system.
 The numerical integration of the system is alone a hard problem, and
 therefore, we used third-party software to produce such integrations.
 The most popular software available for this problem conduce
-iterative algorithms that, step by step, aproximate the state of the
+iterative algorithms that, step by step, approximate the state of the
 system for a time interval. It is important to know that some instances
 of the problem can be stiff, meaning that they may make the integration
 algorithm be unstable, since it may need consecutive iterations in 
 really small steps. Since we did not have time to go in details of when 
-such cases occur, we chose third-party softwares that can adapt the used
+such cases occur, we chose third-party software that can adapt the used
 algorithm according to the stiffnes of the instance.
 
 After the implementation of the function $\phi$, most of the work to
-implement the likelihood function is done. The reamining work is to
+implement the likelihood function is done. The remaining work is to
 calculate the value of the probability density function
 $p_{\mathcal{N}_{\left(\vec{0}, \Sigma\right)}}$ and that can easily be
 accomplished using statistical packages such as
@@ -215,7 +215,7 @@ this phase, we discard parameters sampled on previous phases and we set
 the actual sample as all the parameters sampled in this phase.
 
 %   -> fast integration of system of differential equations
-\section{Fast integration of system of differential equations}
+\section{Fast system integration and parameter sampling}
 % The numerical integration of a system of ODEs is one of the most
 % computationally expensive methods performed during the estimation of
 % the marginal likelihood. Moreover, we need to perform such task for
@@ -332,11 +332,116 @@ to symbolic functions that allows code generation.
 
 Then, we experimented two ways of using SymPy function objects to 
 produce functions to represent the system and its Jacobian. The first
-one is to use {\tt lambdify}, which creates a Python function that wraps the
-SymPy object. The second one, is to generate C language code, and then 
-use Cython to compile, import and wrap it as a Python function.
-Fortunately, again, SymPy provides an utility function called {\tt 
-autowrap} that does all of this work.
+one is to use {\tt lambdify}, which creates a Python function that wraps 
+the SymPy object. The second one, is to generate C language code, and 
+then use Cython to compile, import and wrap it as a Python function.
+Fortunately, again, SymPy provides an utility function that does all the
+work, called {\tt autowrap}. We proceeded comparing all of these 
+approaches on representing the model with the repeated integration of a 
+simple model, composed by five reactions and five chemical species. On
+this experiment, we performed multiple integrations of the model; it is
+important to note that our goal is to reduce the overall time of many
+integrations, therefore, comparing the time of one integration only is
+not enough to determine the best choice. This is important because the
+last two approaches have a pre-processing stage where the system
+function is created, wrapped or even compiled, and this stage is only
+necessary to be ran one, before the first integration.
 
-%   -> parallel sampling
-%   -> running the algorithm on a cluster
+\begin{table}[]
+\centering
+\begin{tabular}{c c ccc}
+\hline
+\multicolumn{1}{l}{} 
+&& \multicolumn{3}{c}{Average time (seconds) to perform a sequence of 
+    integrations} \\
+\multicolumn{1}{l}{Number of Integrations}               
+&& \multicolumn{1}{l}{String Evaluation} 
+& \multicolumn{1}{l}{{\tt sympy.lambdify}} 
+& \multicolumn{1}{l}{{\tt sympy.autowrap}} \\ \hline 
+    10  &&   2.98    & 0.8   & 0.9 \\
+    100 && 35.3      & 5.9   & 6.6 \\ 
+    200 && 72.1      & 15.8  & 13.1 \\
+    400 && 139.1     & 33.1  & 26.9 \\
+\hline \hline
+\end{tabular}
+\caption{The average time spent by different approaches on a sequence of
+integrations of a signaling pathway model containing five reactions and
+five chemical species. Each entry is an average taken after 50 runs of 
+this experiment. It is important to state that the integrations using 
+{\tt autowrap} produce the C code and its Python wrapper only once (in a
+single experiment repetition), on the first integration. }
+\label{tab:system_representation_experiment}
+\end{table}
+
+As we can see on table~\ref{tab:system_representation_experiment}, the
+approach where a C code is generated  is the best option for our 
+application, where multiple integrations are needed. If the number of 
+integrations needed are very small, the simpler {\tt sympy.lambdify} 
+should be the best fit, since it does not have the C code compilation 
+overhead as {\tt sympy.autowrap} has. Finally, this table also shows how
+bad string evaluation is, compared to generating a Python function to
+represent the system. 
+
+\subsection{Parallel sampling of power posteriors}
+% parallel sampling
+% Parallel processing is many times used to speed up algorithms. They
+% usually pay-off when there are multiple process that can be ran
+% with few communication or synchronization. In our case, during the
+% first two phases of sampling, naive burn-in and posterior shaped
+% burn-in, the sampling process occurs independently between different
+% power posteriors. The last phase, however, depends on synchronized
+% iterations for every power-posterior, because of the mixing procedure
+% that uses the last sampled parameter of each chain.
+Parallel processing is a common approach to promote a better use of
+computational resources and, consequently, to reduce an algorithms
+execution time. Parallelization is usually successful when there are
+multiple tasks to be done, with few communication and synchronization.
+In the case of SigNetMS, during the first two phases of sampling, naive
+burn-in and posterior shaped burn-in, the sampling process occurs
+independently between different power posteriors. In the last phase,
+however, different power posteriors need to be synchronized every
+iteration, because of the mixing procedure that takes the last sampled
+parameter of two different chains. 
+
+% Therefore, we decided to add parallelization to the first and second
+% phases of sampling only. 
+% -> We used parallel map with a pool of workers. The number of workers
+%  is defined by a SigNetMS argument, and .
+%  each power posterior is an
+%  element of a list of tasks. The function passed to the parallel map
+%  is a function that produces the sample of a power posterior, and
+%  after each worker is finished applying the function to a power
+%  posterior, it either halts or is assigned another power posterior to
+%  apply the sampling.
+% -> we achieved parallelization by creating a 'task' to each function
+%  application, and a pool of workers, each of one in a different
+%  process.
+% -> When all workers halt, we end the parallel block of the sampling
+%  and then the last phase is ran serially.
+%
+% -> we did an experiment on how there is a speed up and the results
+%  are:
+% maybe it would be nice to compare what happens after 20 workers
+
+% -> running the algorithm on a cluster
+% Even after optimizing the sampling process of SigNetMS, we considered
+% optimizing its use. Usually, we are not interested in running this
+% software for one model only; the general use is to compare different
+% models, and for this reason, we usually needed to run SigNetMS for
+% multiple instances. 
+
+Therefore, we proceeded to create a parallelization of both first and
+second phases of sampling. We achieved parallelization using the map
+pattern, where a function, passed to a map framework, is applied to a
+list of elements. In our application, the list of elements is a list of
+power posteriors values to be sampled, and the function is the sampling
+procedure. The parallelization arises when we consider that there is a
+pool of workers, each one in a different process, that can be assigned
+to apply the sampling function to a power posterior. The size of this
+pool is defined by the user as one of the SigNetMS parameters; if the
+user does not define a value, the algorithm sets the number of workers
+as the number of CPU cores available on the machine. 
+
+% talk about re-entrant integration algorithms
+
+% The parallelization is achieved by 
