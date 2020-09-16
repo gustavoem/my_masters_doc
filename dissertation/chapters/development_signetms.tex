@@ -373,7 +373,7 @@ single experiment repetition), on the first integration. }
 \label{tab:system_representation_experiment}
 \end{table}
 
-As we can see on table~\ref{tab:system_representation_experiment}, the
+As we can see on Table~\ref{tab:system_representation_experiment}, the
 approach where a C code is generated  is the best option for our 
 application, where multiple integrations are needed. If the number of 
 integrations needed are very small, the simpler {\tt sympy.lambdify} 
@@ -434,14 +434,38 @@ Therefore, we proceeded to create a parallelization of both first and
 second phases of sampling. We achieved parallelization using the map
 pattern, where a function, passed to a map framework, is applied to a
 list of elements. In our application, the list of elements is a list of
-power posteriors values to be sampled, and the function is the sampling
-procedure. The parallelization arises when we consider that there is a
-pool of workers, each one in a different process, that can be assigned
-to apply the sampling function to a power posterior. The size of this
-pool is defined by the user as one of the SigNetMS parameters; if the
-user does not define a value, the algorithm sets the number of workers
-as the number of CPU cores available on the machine. 
+power posteriors values to be sampled, and the function is the first two
+phases of the sampling procedure. The parallelization arises when we 
+consider that there is a pool of workers, each one in a different 
+process, that can be assigned to apply the sampling function to a power 
+posterior. The size of this pool is defined by the user as one of the 
+SigNetMS parameters; if the user does not define a value, the algorithm 
+sets the number of workers as the number of CPU cores available on the 
+machine.
 
-% talk about re-entrant integration algorithms
+To understand how this parallelization affects the execution time of
+SigNetMS, we designed an experiment where a sequence of $500$ sampling
+steps (of the first phase) are performed, for $40$ power posteriors, for
+a model with $5$ chemical reactions and $5$ chemical species. The
+results are shown on Figure~\ref{fig:parallel_map_sampling},
+and as we can see, we could reduce the execution time as we increased
+the number of workers. There is however, some saturation in time
+execution improvement after a number of workers. That is explained by 
+the number of jobs that the pool receives to be done, which is the 
+number of power posterior values to be sampled, $40$ in our experiment 
+(and also on SigNetMS). Even though we have this limitation, we believe 
+that this simple parallelization is enough, and more up to standard 
+solutions can be proposed in future works. 
 
-% The parallelization is achieved by 
+\begin{figure}[t!]
+    \begin{center}
+    \includegraphics[width=.75\textwidth]{optimizations/workers_experiment.pdf}
+    \caption{Average execution time of $500$ steps of the burn-in
+        sampling, with varying number of workers. The average values are
+        taken over 50 repetitions of the experiment. The model being
+        sampled on this experiment contains 5 chemical reactions and 5
+        chemical species.}
+    \label{fig:parallel_map_sampling}
+    \end{center}
+\end{figure}
+
