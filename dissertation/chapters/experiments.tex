@@ -85,15 +85,51 @@ a Gaussian error with mean $0$ and standard deviation $0.01$. A
 representation of the three experiment repetitions are showed on 
 figure~\ref{fig:experiments:girolami_simulations}.
 
+% insert simulated data here
+
 \begin{figure}
 \begin{center}
     \includegraphics[width=.75\textwidth]{experiments/simulations/girolami_experimental_data.pdf}
-    \caption{}
+    \caption{The dynamics produced by the correct model, with
+pre-defined reaction rate constants plus a small Gaussian error, for
+each time point. The measurement taken from the model is the
+concentration of the Rpp species, which we denote as [Rpp]. We
+linearly interpolate the experimental measure points to produce a
+continuous dynamics from 2s to 100s.}
     \label{fig:experiments:girolami_simulations}
     \end{center}
 \end{figure}
 
+To assess the ranking produced by each of the model selection software,
+we compare the first model with three other models (based on the correct
+model): a simplified model; an overly simplified model, which should not 
+be able to generate the observed dynamics; and, finally, a 
+generalization (more complex) model.
+Figure~\ref{fig:experiments:girolami_other_models} shows diagrams that
+represent the three alternative models.
 
-% insert simulated data here
+\begin{figure}[p]
+    \centering
+    \begin{tabular}{c c}
+    \subfigure[simplified model]{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/diagrams/bioinformatics_model2.pdf}
+    \label{fig:girolami_model2}}
+    &
+    \subfigure[overly simplified model]{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/diagrams/bioinformatics_model3.pdf}
+    \label{fig:girolami_model3}} 
+    \\
+\multicolumn{2}{c}{    
+    \subfigure[generalization model]{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/diagrams/bioinformatics_model4.pdf}
+    \label{fig:girolami_model4}}
+} 
+    \end{tabular}
+    \caption{Average simulation of iteration 50 for all candidate 
+    models.}
+    \label{fig:experiments:girolami_other_models}
+\end{figure}
+
+
 
 \section{Model Selection as a Feature Selection Problem}
