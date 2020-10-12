@@ -125,8 +125,24 @@ represent the three alternative models.
     \label{fig:girolami_model4}}
 } 
     \end{tabular}
-    \caption{Average simulation of iteration 50 for all candidate 
-    models.}
+    \caption{The diagrams of three other candidate models, based on the 
+correct model that was presented before on 
+Figure~\ref{fig:experiments:girolami_model1}. The 
+model~\ref{fig:girolami_model2} is a simplification where we neglect the
+chemical species RS, and we use the Michaelis-Menten to represent the
+reaction $\ce{R -> Rpp}$ with S working as a catalyst.
+Model~\ref{fig:girolami_model3} is the over simplified model, as it
+neglects the decay of S; we do not expect this model to reproduce
+experimental data, since the constant concentration level of S tend to
+continuously produce Rpp, a species that, after 20 seconds, has a
+monotonic decreasing concentration. Finally,
+Model~\ref{fig:girolami_model4} is a generalization of the correct
+model, as it generalizes the reaction $\ce{Rpp -> R}$, as instead of 
+using the Michaelis-Menten kinetics, we use the enzymatic reaction 
+$\ce{Rpp + PhA <=> RppPhA -> R + PhA}$; even though we expect this model
+to be able to reproduce observed dynamics, we also expect that the
+complexity of this model gets penalized.
+}
     \label{fig:experiments:girolami_other_models}
 \end{figure}
 
