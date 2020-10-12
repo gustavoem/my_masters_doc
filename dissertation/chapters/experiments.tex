@@ -46,15 +46,7 @@ models, with the estimated sample of the posterior distribution of
 parameters, approximates experimental data.
 
 \subsection{A simple instance of the model selection problem}
-We start our model selection problem with the correct model, which is 
-a signalling pathway composed by five reactions and five chemical 
-species. Figure~\ref{fig:experiments:girolami1} shows a diagram with
-this model. This model represents a common motif, and it has as the 
-input signal the chemical species "S", and as the output the chemical 
-species "Rpp"; the experimental measurement used is the concentration of 
-the output chemical species, which we donote as [Rpp].
-
-\begin{figure}
+\begin{figure}[h]
 \begin{center}
     \includegraphics[width=.75\textwidth]{experiments/diagrams/bioinformatics_model1.pdf}
     \caption{A diagram that represents the correct model our simple
@@ -66,8 +58,16 @@ first order reaction $\ce{RS ->[$k_4$] Rpp}$; and the Michaelis-Menten
 reaction $\ce{A ->[$V, K_m$] B}$.}
     \label{fig:experiments:girolami_model1}
     \end{center}
-
 \end{figure}
+
+We start our model selection problem with the correct model, which is 
+a signalling pathway composed by five reactions and five chemical 
+species. Figure~\ref{fig:experiments:girolami_model1} shows a diagram
+with this model. This model represents a common motif, and it has as the 
+input signal the chemical species "S", and as the output the chemical 
+species "Rpp"; the experimental measurement used is the concentration of 
+the output chemical species, which we donote as [Rpp].
+
 
 In this experiment, for the sake of simplicity, we neglect the units of 
 reaction rates constants and initial concentrations. The initial 
@@ -108,7 +108,7 @@ generalization (more complex) model.
 Figure~\ref{fig:experiments:girolami_other_models} shows diagrams that
 represent the three alternative models.
 
-\begin{figure}[p]
+\begin{figure}[h]
     \centering
     \begin{tabular}{c c}
     \subfigure[simplified model]{
@@ -125,11 +125,46 @@ represent the three alternative models.
     \label{fig:girolami_model4}}
 } 
     \end{tabular}
-    \caption{Average simulation of iteration 50 for all candidate 
-    models.}
+    \caption{The diagrams of three other candidate models, based on the 
+correct model that was presented before on 
+Figure~\ref{fig:experiments:girolami_model1}. The 
+model~\ref{fig:girolami_model2} is a simplification where we neglect the
+chemical species RS, and we use the Michaelis-Menten to represent the
+reaction $\ce{R -> Rpp}$ with S working as a catalyst.
+Model~\ref{fig:girolami_model3} is the over simplified model, as it
+neglects the decay of S; we do not expect this model to reproduce
+experimental data, since the constant concentration level of S tend to
+continuously produce Rpp, a species that, after 20 seconds, has a
+monotonic decreasing concentration. Finally,
+Model~\ref{fig:girolami_model4} is a generalization of the correct
+model, as it generalizes the reaction $\ce{Rpp -> R}$, as instead of 
+using the Michaelis-Menten kinetics, we use the enzymatic reaction 
+$\ce{Rpp + PhA <=> RppPhA -> R + PhA}$; even though we expect this model
+to be able to reproduce observed dynamics, we also expect that the
+complexity of this model gets penalized.
+}
     \label{fig:experiments:girolami_other_models}
 \end{figure}
 
+% -> the expected result for this experiment is that the correct model
+%  has a higher (possibly be the first), and that the incorrect model
+%  should be considered the worst. It is also important to see how the
+%  software compares models with similar dynamics and with different
+%  levels of complexity.
 
+Before talking about results produced by different software, we should
+note that this choice of candidate models are made so we can analyze
+more than the ability of the software to correctly rank the correct
+model as the best model. First, consider that we introduced a spurious
+model, represented on figure~\ref{fig:girolami_model3} which neglects a
+crucial reaction, making it impossible to reproduce the experimental
+data; we expect this model to be ranked last between all models. Then,
+there are two options to the correct model, one a simplification, and
+the other a generalization. For these models, we expect that the
+experimental dynamics are possible, however, we should be observant of
+how they are ranked according to their complexity. We should remember
+that, one of the goals of using a Bayesian approach for model selection
+is that these approaches tend to automatically penalize overly complex
+models.
 
 \section{Model Selection as a Feature Selection Problem}
