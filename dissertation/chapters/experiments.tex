@@ -85,8 +85,9 @@ a Gaussian error with mean $0$ and standard deviation $0.01$. A
 representation of the three experiment repetitions are showed on 
 figure~\ref{fig:experiments:girolami_simulations}.
 
-% insert simulated data here
+% TODO: determine the prior distribution used
 
+% insert simulated data here
 \begin{figure}
 \begin{center}
     \includegraphics[width=.75\textwidth]{experiments/simulations/girolami_experimental_data.pdf}
@@ -166,5 +167,64 @@ how they are ranked according to their complexity. We should remember
 that, one of the goals of using a Bayesian approach for model selection
 is that these approaches tend to automatically penalize overly complex
 models.
+
+% Comparing results of ABC-SMC and SigNetMS
+\subsection{Solving a simple model selection instance using ABC-SysBio
+and SigNetMS}
+% What is the experiment
+% What data the experiment produces;
+% What are algorithm parameters we used;
+% 1 - marginal likelihood of each model
+% 2 - a sample of the posterior
+
+% the input and output
+After definig the candidate models and producing the artificial
+experimental data, we proceeded to perform the experiment of model
+selection. The instance related information provided to SigNetMS and 
+ABC-SysBio is the same: a model, with predefined initial concentrations
+of chemical species; a set of experiments, with the same time steps, 
+with measurements of the concentration of Rpp; and a file containing
+prior distributions for each one of the model parameters. It is
+important to remember that the output produced by each software is
+different. SigNetMS produces an estimative of $p({\bm D} | M)$ and also
+a sample of the posterior distribution of parameters $p({\bm \theta} |
+M, {\bm D})$ which is, in fact, composed by samples of all power
+posterior distributions $p_{\beta}({\bm \theta})$ with values as we
+described
+on~\ref{sec:creating_an_estimative_of_the_marginal_likelihood}.
+ABC-SysBio, on the other hand, produces an estimatives of $p({\bm
+\theta}, M | {\bm D})$ that might be closer to this target distribution
+on each iteration. Note that in this experiment, we need to run SigNetMS
+for every model, while on ABC-SysBio we only need to run the software
+once for all four candidate models.
+% what are algorithm parameter values used
+
+For ABC-SysBio we decided to use its feature of automatically choosing
+the schedule of threshold values, which is based on the acceptance of
+produced individuals on each iteration. For SigNetMS, we used the
+following parameters values: 15000 iterations of the naive burn-in, and
+5000 iterations of the posterior shaped burn-in, with 1000 iterations
+between covariation matrix rescales, and 3000 iterations of the
+Populational MCMC. We used an empiric approach to determine these
+parameter values, observing similar results when the number of
+iterations are greater then these.
+
+\subsubsection{The ranking produced by ABC-SysBio and SigNetMS}
+The ABC-SysBio run created 26 populations of parameter values, each of 
+them with 100 individual parameters values. At the last iteration, the 
+algorithm stopped with $\epsilon = 1$ and the following estimates: 
+\begin{itemize}
+    \item{$\hat{p} (M = 1 | D, \epsilon = 1) = 0.005$;}
+    \item{$\hat{p} (M = 2 | D, \epsilon = 1) = 0.014$;} 
+    \item{$\hat{p} (M = 3 | D, \epsilon = 1) = 0.976$;}
+    \item{$\hat{p} (M = 4 | D, \epsilon = 1) = 0.003$.}
+\end{itemize}
+These estimates induces the ranking 3, 2, 1, 4.
+
+SigNetMS software, on the other hand, produced 
+
+
+% subsubsection Comparing the produced ranking
+% subsubsection Analyzing the distribution of posteriors
 
 \section{Model Selection as a Feature Selection Problem}
