@@ -214,17 +214,55 @@ The ABC-SysBio run created 26 populations of parameter values, each of
 them with 100 individual parameters values. At the last iteration, the 
 algorithm stopped with $\epsilon = 1$ and the following estimates: 
 \begin{itemize}
-    \item{$\hat{p} (M = 1 | D, \epsilon = 1) = 0.005$;}
-    \item{$\hat{p} (M = 2 | D, \epsilon = 1) = 0.014$;} 
-    \item{$\hat{p} (M = 3 | D, \epsilon = 1) = 0.976$;}
-    \item{$\hat{p} (M = 4 | D, \epsilon = 1) = 0.003$.}
+    \item{$\hat{p} (M = \text{Correct Model} | {\bm D}, \epsilon = 1) =
+        0.005$;}
+    \item{$\hat{p} (M = \text{Simplified Model} | {\bm D}, \epsilon = 1)
+        = 0.014$;} 
+    \item{$\hat{p} (M = \text{Incorrect Model} | {\bm D}, \epsilon = 1)
+        = 0.976$;}
+    \item{$\hat{p} (M = \text{Generalization Model} | {\bm D}, \epsilon
+        = 1) = 0.003$.}
 \end{itemize}
 These estimates induces the ranking 3, 2, 1, 4.
 
-SigNetMS software, on the other hand, produced 
-
+After running the SigNetMS software four times, one for each model, we
+were able to get the following estimates:
+\begin{itemize}
+    \item{$\log \hat{p}({\bm D} | M = \text{Correct Model}) = 26$}
+    \item{$\log \hat{p}({\bm D} | M = \text{Simplified Model}) = 21$}
+    \item{$\log \hat{p}({\bm D} | M = \text{Incorrect Model}) = -1$}
+    \item{$\log \hat{p}({\bm D} | M = \text{Generalization Model}) =
+        19$}
+\end{itemize}
 
 % subsubsection Comparing the produced ranking
+\subsubsection{Comparing the ranking produced by ABC-SysBio and SigNetMS}
+Before comparing the model ranking produced by ABC-SysBio and SigNetMS,
+we should state that the ranking achieved by Vyshemirsky and 
+Girolami~\cite{Vyshemirsky2007}, on the original work that introduced
+this instance, is: Correct Model $\prec$ Generalization Model $\prec$
+Simplified Model $\prec$ Incorrect Model. On this work, a methodology
+similar to SigNetMS was used.
+
+On ABC-SysBio results, we see that the Correct Model was not ranked
+first, and, surprisingly, the Incorrect Model was ranked first. More
+than that, when the algorithm stopped, other candidate models were
+considered with low probability of being the ``true'' model, and
+therefore we cannot strongly state a ranking between the other three
+candidates.
+
+On SigNetMS results, we see that the Correct Model was ranked first and 
+the Incorrect Model is ranked last as expected. For these two models,
+SigNetMS results are equal to the results of Girolami and Vyshemirsky,
+and for the other two models, the ranking is the opposite. On SigNetMS,
+we ranked the Simplified Model as better than the Generalization Model.
+
 % subsubsection Analyzing the distribution of posteriors
+\subsubsection{}
+% For now, we can say that SigNetMS is a good software and that it might
+% match our needs. To get a better understanding of the results and to
+% check if the produced ranking is consistent, we analyzed the...
+% For ABC-SysBio too...
+
 
 \section{Model Selection as a Feature Selection Problem}
