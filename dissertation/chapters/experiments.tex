@@ -258,11 +258,26 @@ and for the other two models, the ranking is the opposite. On SigNetMS,
 we ranked the Simplified Model as better than the Generalization Model.
 
 % subsubsection Analyzing the distribution of posteriors
-\subsubsection{}
-% For now, we can say that SigNetMS is a good software and that it might
-% match our needs. To get a better understanding of the results and to
-% check if the produced ranking is consistent, we analyzed the...
-% For ABC-SysBio too...
+\subsubsection{Analyzing the posterior distributions produced by
+ABC-SysBio and SignetMS}
+If we consider only the ranking produced, it is clear that SigNetMS is a
+better choice for our application. However, we should also take into
+account other output information produced by both software, relative to
+the distribution of model parameters. ABC-SysBio algorithm produces, in
+every iteration, a population of parameters that, when applied to an
+specific model, creates a simulation that is at most epsilon distant to
+the experimental measurements, with decreasing epsilon as the iteration
+number grows. SigNetMS, on the other hand, produces samples of forty
+power posterior distributions $p_\beta({\bm \theta})$, and although 
+there is no threshold on SigNetMS like there is on ABC-SysBio, we expect
+that the closer the value of $\beta$ is to $1$, the closer should be the
+produced simulation to the experimental measurements; this is explained
+by the fact that the power posterior distributions $p_0({\bm \theta})$
+and $p_1({\bm \theta})$ are, respectively, the prior and posterior
+distribution of parameters.
 
+% One way we could analyze data is looking at the produced simulations
+
+% We can also estimate the posterior curve...
 
 \section{Model Selection as a Feature Selection Problem}
