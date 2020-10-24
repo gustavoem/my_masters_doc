@@ -263,20 +263,155 @@ ABC-SysBio and SignetMS}
 If we consider only the ranking produced, it is clear that SigNetMS is a
 better choice for our application. However, we should also take into
 account other output information produced by both software, relative to
-the distribution of model parameters. ABC-SysBio algorithm produces, in
-every iteration, a population of parameters that, when applied to an
+the distribution of model parameters. ABC-SysBio algorithm produces in
+every iteration a population of parameters that, when applied to an
 specific model, creates a simulation that is at most epsilon distant to
 the experimental measurements, with decreasing epsilon as the iteration
 number grows. SigNetMS, on the other hand, produces samples of forty
 power posterior distributions $p_\beta({\bm \theta})$, and although 
-there is no threshold on SigNetMS like there is on ABC-SysBio, we expect
-that the closer the value of $\beta$ is to $1$, the closer should be the
-produced simulation to the experimental measurements; this is explained
-by the fact that the power posterior distributions $p_0({\bm \theta})$
-and $p_1({\bm \theta})$ are, respectively, the prior and posterior
+there is no threshold like there is on ABC-SysBio, we expect that the 
+closer the value of $\beta$ is to $1$, the closer should be the produced 
+simulation to the experimental measurements; this is explained by the 
+fact that the power posterior distributions $p_0({\bm \theta})$ and 
+$p_1({\bm \theta})$ are, respectively, the prior and posterior 
 distribution of parameters.
 
 % One way we could analyze data is looking at the produced simulations
+A possible approach to analyze the produced parameters is to simulate
+model with those parameter and produce simulations to be compared with
+the experimental measurements. For ABC-SysBio, in a population of 100
+parameters, including the model indicator as one of the parameters, we
+are able to simulate and visualize the generated experimental 
+measurements for all individuals; on SigNetMS, on the other hand, the 
+number of parameter values produced is much greater, than a randomly 
+chosen subset of parameters is enough. With such experiment, we are able 
+to identify what dynamics were created on the candidate models according 
+to the estimated posterior distribution of parameters. 
+
+On  figure~\ref{fig:girolami_allmodel_abc} we present the dynamics of 
+sampled parameters of the last iterations of the ABC-SysBio run. We can
+see on this figure that ABC-SysBio could not produce a set of parameter
+values that allows the model to represent the dynamics observed on the
+experiment. More than that, we can see that the incorrect model had the
+best fit, and the dynamics produced by the sampled parameters induces a
+nearly stationary dynamics of $[Rpp]$, with intermediary values of
+concentration. With these results, we can understand that the ranking
+produced by ABC-SysBio is incorrect because the software could not find
+suitable parameter values that allow models to approximate the dynamics
+observed on experiments.
+
+\begin{figure}[ht]
+    \centering
+    \begin{tabular}{c c}
+    \subfigure[correct model]{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/all_model/abc/msimulations_model1_25.pdf}
+    \label{fig:girolami_model1_abc}}
+    &
+    \subfigure[simplified model]{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/all_model/abc/msimulations_model2_25.pdf}
+    \label{fig:girolami_model2_abc}} 
+    \\
+    \subfigure[incorrect model]{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/all_model/abc/msimulations_model3_25.pdf}
+    \label{fig:girolami_model3_abc}}
+&
+    \subfigure[generalization model]{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/all_model/abc/msimulations_model4_25.pdf}
+    \label{fig:girolami_model4_abc}}
+    \end{tabular}
+    \caption{The simulated dynamics of the four candidate models, using
+    parameters generated on the ABC-SysBio software. There are 100
+    individuals generated on each iteration of the algorithm, and each
+    individual consists of a list of parameter values and a model
+    indicator. Because of this, the number of produced simulations is 
+    not equal between models, in fact, the better the fit of a model,
+    the higher the number of individuals representing such model, and
+    therefore, the higher the number of simulations shown. Each red line
+    represent an individual simulation, and stronger red lines represent
+    overlapping simulations. Lines with blue, yellow and green color
+    represent experimental observations.}
+    \label{fig:girolami_allmodel_abc}
+\end{figure}
+
+On figure~\ref{fig:girolami_allmodel_snm} we present the dynamics of a 
+subset of parameters of the posterior distribution (or power posterior 
+of $\beta = 1$), for all four candidate models. We can see on this
+figure that SigNetMS could not find parameter values that allow the
+incorrect model to reproduce experimental observations, which is
+expected, and that the three other models candidate models could
+closely reproduce the experimental observations. It is also interesting
+to observe the dynamics produced by sampled parameters for other values
+of $\beta$, which is shown on figure~\ref{fig:girolami_snm_model1only},
+for the correct model only. Remember that from $\beta = 0$ to 
+$\beta = 1$, a sequence of power posterior distributions is constructed 
+by SigNetMS, bridging the prior and posterior distributions.
+
+\begin{figure}[ht]
+    \centering
+    \begin{tabular}{c c}
+    \subfigure[correct model]{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/all_model/snm/msimulations_model1_39.pdf}
+    \label{fig:girolami_model1_snm}}
+    &
+    \subfigure[simplified model]{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/all_model/snm/msimulations_model2_39.pdf}
+    \label{fig:girolami_model2_snm}} 
+    \\
+    \subfigure[incorrect model]{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/all_model/snm/msimulations_model3_39.pdf}
+    \label{fig:girolami_model3_snm}}
+&
+    \subfigure[generalization model]{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/all_model/snm/msimulations_model4_39.pdf}
+    \label{fig:girolami_model4_snm}}
+    \end{tabular}
+    \caption{The simulated dynamics of the four candidate models, using
+    randomly chosen subsets of parameters from the sample produced by
+    SigNetMS of the power posterior distribution of $\beta = 1$, which
+    is the posterior distribution of parameters, $p({\bm \theta} | M,
+    {\bm D})$. Red translucent lines represent the simulated dynamics, 
+    using the sampled parameters, and stronger lines represent
+    overlapping simulations. Lines with blue, yellow, and green color
+    represent experimental observations.}
+    \label{fig:girolami_allmodel_snm}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \begin{tabular}{c c}
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/all_model/snm/msimulations_model1_0.pdf}
+    \label{fig:girolami_model1_0_snm}}
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/all_model/snm/msimulations_model1_21.pdf}
+    \label{fig:girolami_model1_1_snm}} 
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/all_model/snm/msimulations_model1_25.pdf}
+    \label{fig:girolami_model1_2_snm}}
+&
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/all_model/snm/msimulations_model1_28.pdf}
+    \label{fig:girolami_model1_3_snm}}
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/all_model/snm/msimulations_model1_31.pdf}
+    \label{fig:girolami_model1_2_snm}}
+&
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/all_model/snm/msimulations_model1_39.pdf}
+    \label{fig:girolami_model1_3_snm}}
+    \end{tabular}
+    \caption{The dynamics induced by samples of different power
+    posterior distributions of parameters of the correct model. The
+    value of $\beta$ increases from left to right and from top to
+    bottom. We can observe how the curve of simulations progressively
+    fits the curve of experimental observations.}
+    \label{fig:girolami_model1_progression_snm}
+\end{figure}
+
+
 
 % We can also estimate the posterior curve...
 
