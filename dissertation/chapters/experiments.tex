@@ -278,7 +278,7 @@ distribution of parameters.
 
 % One way we could analyze data is looking at the produced simulations
 A possible approach to analyze the produced parameters is to simulate
-model with those parameter and produce simulations to be compared with
+models with those parameter and produce simulations to be compared with
 the experimental measurements. For ABC-SysBio, in a population of 100
 parameters, including the model indicator as one of the parameters, we
 are able to simulate and visualize the generated experimental 
@@ -341,7 +341,7 @@ incorrect model to reproduce experimental observations, which is
 expected, and that the three other models candidate models could
 closely reproduce the experimental observations. It is also interesting
 to observe the dynamics produced by sampled parameters for other values
-of $\beta$, which is shown on figure~\ref{fig:girolami_snm_model1only},
+of $\beta$, which is shown on figure~\ref{fig:girolami_model1_progression_snm},
 for the correct model only. Remember that from $\beta = 0$ to 
 $\beta = 1$, a sequence of power posterior distributions is constructed 
 by SigNetMS, bridging the prior and posterior distributions.
@@ -411,8 +411,63 @@ by SigNetMS, bridging the prior and posterior distributions.
     \label{fig:girolami_model1_progression_snm}
 \end{figure}
 
+The ranking and the simulations indicate that SigNetMS is more
+appropriate for our applications. To further investigate the results
+produced by this software, we also created plots of approximations of
+the produced power posterior samples, presented on 
+figure~\ref{fig:girolami_model1_progression_snm}. These density function
+estimates were created using the {\tt distplot} function of the Seaborn
+Python package, which uses Gaussian Kernel Densinty Estimate (KDE) to
+provide an estimation of the density function given a sample of such
+distribution. The presented figure shows estimated power posterior
+distributions, with different values of $\beta$, for the $k_1$ parameter
+of the correct model, which had value $0.07$ when artificial
+experimental data was created. We can see that as we increase the value 
+of $\beta$, the posterior distribution concentrates on values around the
+``true'' value of the parameter. It is also interesting to see that
+although the estimated posterior is not necessarily centered on the 
+``true'' value, the created simulations do approximate the experimental
+observations.
+
+\begin{figure}[ht]
+    \centering
+    \begin{tabular}{c c}
+    \subfigure{
+        \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/parameters_snm/model1_0_p0_k_1.pdf}
+    \label{fig:girolami_model1_0_parameters}}
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/parameters_snm/model1_21_p0_k_1.pdf}
+    \label{fig:girolami_model1_1_parameters}} 
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/parameters_snm/model1_25_p0_k_1.pdf}
+    \label{fig:girolami_model1_2_parameters}}
+&
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/parameters_snm/model1_28_p0_k_1.pdf}
+    \label{fig:girolami_model1_3_parameters}}
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/parameters_snm/model1_31_p0_k_1.pdf}
+    \label{fig:girolami_model1_2_parameters}}
+&
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/parameters_snm/model1_39_p0_k_1.pdf}
+    \label{fig:girolami_model1_parameters}}
+    \end{tabular}
+    \caption{Approximation of the power posterior distribution of the 
+    samples created by SigNetMS of parameter $k_1$ of the correct model.
+    We show on this graph the estimated distribution of six different
+    power posteriors, with increasing value of $\beta$ from left to
+    right, from top to bottom. The approximation of this graph is
+    created using {\tt distplot} function of Seaborn package. The value
+    used for this parameter on the creation of the experimental data is
+    $0.07$, and it is represented on the axis of the plots.}
+    \label{fig:girolami_model1_progression_snm}
+\end{figure}
 
 
 % We can also estimate the posterior curve...
-
+\clearpage
 \section{Model Selection as a Feature Selection Problem}
