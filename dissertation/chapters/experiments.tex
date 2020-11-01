@@ -64,8 +64,8 @@ We start our model selection problem with the correct model, which is
 a signalling pathway composed by five reactions and five chemical 
 species. Figure~\ref{fig:experiments:girolami_model1} shows a diagram
 with this model. This model represents a common motif, and it has as the 
-input signal the chemical species "S", and as the output the chemical 
-species "Rpp"; the experimental measurement used is the concentration of 
+input signal the chemical species S, and as the output the chemical 
+species Rpp; the experimental measurement used is the concentration of 
 the output chemical species, which we donote as [Rpp].
 
 
@@ -163,10 +163,10 @@ data; we expect this model to be ranked last between all models. Then,
 there are two options to the correct model, one a simplification, and
 the other a generalization. For these models, we expect that the
 experimental dynamics are possible, however, we should be observant of
-how they are ranked according to their complexity. We should remember
-that, one of the goals of using a Bayesian approach for model selection
-is that these approaches tend to automatically penalize overly complex
-models.
+how they are ranked according to their complexity. That is important
+because, one of the goals on using a Bayesian approach for model 
+selection is that these approaches tend to automatically penalize overly
+complex models.
 
 % Comparing results of ABC-SMC and SigNetMS
 \subsection{Solving a simple model selection instance using ABC-SysBio
@@ -178,7 +178,7 @@ and SigNetMS}
 % 2 - a sample of the posterior
 
 % the input and output
-After definig the candidate models and producing the artificial
+After defining the candidate models and producing the artificial
 experimental data, we proceeded to perform the experiment of model
 selection. The instance related information provided to SigNetMS and 
 ABC-SysBio is the same: a model, with predefined initial concentrations
@@ -197,6 +197,12 @@ ABC-SysBio, on the other hand, produces an estimatives of $p({\bm
 on each iteration. Note that in this experiment, we need to run SigNetMS
 for every model, while on ABC-SysBio we only need to run the software
 once for all four candidate models.
+
+The prior distribution of parameters are the same as used by Vyshemirsky
+and Girolami~\cite{Vyshemirsky2007}. All model parameters priors are
+Gamma(1, 3), where the first and second arguments are shape and scale. 
+Gamma and Lognormal distributions are often used as prior for parameters 
+because they have a zero probability density for negative values.
 % what are algorithm parameter values used
 
 For ABC-SysBio we decided to use its feature of automatically choosing
@@ -207,7 +213,7 @@ following parameters values: 15000 iterations of the naive burn-in, and
 between covariation matrix rescales, and 3000 iterations of the
 Populational MCMC. We used an empiric approach to determine these
 parameter values, observing similar results when the number of
-iterations are greater then these.
+iterations are greater than these.
 
 \subsubsection{The ranking produced by ABC-SysBio and SigNetMS}
 The ABC-SysBio run created 26 populations of parameter values, each of 
@@ -256,37 +262,41 @@ the Incorrect Model is ranked last as expected. For these two models,
 SigNetMS results are equal to the results of Girolami and Vyshemirsky,
 and for the other two models, the ranking is the opposite. On SigNetMS,
 we ranked the Simplified Model as better than the Generalization Model.
+It is important to note here that, in fact, the Generalization Model,
+which is more complex, was actually ranked worse than the Correct Model;
+that is an evidence that this approach does penalize the complexity of
+models.
 
 % subsubsection Analyzing the distribution of posteriors
 \subsubsection{Analyzing the posterior distributions produced by
 ABC-SysBio and SignetMS}
-If we consider only the ranking produced, it is clear that SigNetMS is a
-better choice for our application. However, we should also take into
-account other output information produced by both software, relative to
-the distribution of model parameters. ABC-SysBio algorithm produces in
-every iteration a population of parameters that, when applied to an
-specific model, creates a simulation that is at most epsilon distant to
-the experimental measurements, with decreasing epsilon as the iteration
-number grows. SigNetMS, on the other hand, produces samples of forty
-power posterior distributions $p_\beta({\bm \theta})$, and although 
-there is no threshold like there is on ABC-SysBio, we expect that the 
-closer the value of $\beta$ is to $1$, the closer should be the produced 
-simulation to the experimental measurements; this is explained by the 
-fact that the power posterior distributions $p_0({\bm \theta})$ and 
-$p_1({\bm \theta})$ are, respectively, the prior and posterior 
-distribution of parameters.
+If we consider only the ranking produced, there are indications that 
+SigNetMS is a better choice for our application. However, we should also
+take into account other output information produced by both software, 
+relative to the distribution of model parameters. ABC-SysBio algorithm 
+produces in every iteration a population of parameters that, when 
+applied to an specific model, creates a simulation that is at most 
+epsilon distant to the experimental measurements, with decreasing 
+epsilon as the iteration number grows. SigNetMS, on the other hand, 
+produces samples of forty power posterior distributions 
+$p_\beta({\bm \theta})$, and although there is no threshold like there 
+is on ABC-SysBio, we expect that the closer the value of $\beta$ is to 
+$1$, the closer should be the produced simulation to the experimental 
+measurements; this is explained by the fact that the power posterior 
+distributions $p_0({\bm \theta})$ and $p_1({\bm \theta})$ are, 
+respectively, the prior and posterior distribution of parameters.
 
 % One way we could analyze data is looking at the produced simulations
 A possible approach to analyze the produced parameters is to simulate
-models with those parameter and produce simulations to be compared with
+models with those parameter and create simulations to be compared with
 the experimental measurements. For ABC-SysBio, in a population of 100
 parameters, including the model indicator as one of the parameters, we
 are able to simulate and visualize the generated experimental 
 measurements for all individuals; on SigNetMS, on the other hand, the 
 number of parameter values produced is much greater, than a randomly 
-chosen subset of parameters is enough. With such experiment, we are able 
-to identify what dynamics were created on the candidate models according 
-to the estimated posterior distribution of parameters. 
+chosen subset of parameters should be enough. With such experiment, we 
+are then able to identify what dynamics were created on the candidate 
+models according to the estimated posterior distribution of parameters. 
 
 On  figure~\ref{fig:girolami_allmodel_abc} we present the dynamics of 
 sampled parameters of the last iterations of the ABC-SysBio run. We can
@@ -467,7 +477,31 @@ observations.
     \label{fig:girolami_model1_progression_snm}
 \end{figure}
 
-
-% We can also estimate the posterior curve...
 \clearpage
 \section{Model Selection as a Feature Selection Problem}
+% After defining that SigNetMS is our software choice for model
+% selection, we will construct another model selection problem instance.
+% This time, we intend to use such instance to evaluate the approach
+% of solving a model selection problem as a feature selection problem,
+% with a Bayesian cost function. Although the instance we use is still 
+% small, we will be able to access the surface of possible solutions and 
+% get hints of how this surface is induced by the cost function we
+% chose.
+
+% The feature selection problem is...
+% the features are blah,
+% the cost function is bleh,
+% Image blih, shows an example of feature selection instance, with a set
+% of three features.
+
+% The instance we chose to show is a Ras switch pathway. This pathway...
+% This time we also define the correct model, which is shown on Figure.
+% We define the space of features as the set of reactions shown on
+% Figure.
+% We define as a "base model", a simple pathway which has no reactions,
+% and for each node of the search space, we consider that such node
+% represents the empty model with the reactions present on that node.
+
+% Walk through optimal experiment
+% SFS experiment
+% done!
