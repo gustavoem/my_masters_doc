@@ -487,6 +487,31 @@ observations.
 % small, we will be able to access the surface of possible solutions and 
 % get hints of how this surface is induced by the cost function we
 % chose.
+After defining that SigNetMS is our software choice for model selection,
+we are now able to experiment and analyze the approach of solving a 
+model selection problem as a feature selection problem, using a Bayesian
+approach to build a cost function. To accomplish this, we created
+another simple instance of model selection. Although this instance is
+still a toy model, we will be able to access the space of possible
+solutions and get a glance of the cost surface induced by SigNetMS over
+this space.
+
+A feature selection instance can be defined by a pair $(S, c)$ where $S$
+is a set of features and $c$ is a cost function that evaluates subsets
+of $S$. The space of solution is usually the power set of $S$,
+$\mathcal{P}(S)$, and the cost function usually takes values from this 
+space to positive real values, $c: \mathcal{P}(S) \to \fieldR^+$. It is
+often useful to represent the search space with a boolean lattice, which
+is defined by the power set $\mathcal{P}(S)$ and the partial order 
+relation $\subseteq$. More than an aid to represent the search space,
+the boolean lattice provides a structure that is useful for search
+algorithms to define paths on the search and also to take advantage of
+surface of the search space, as it is done on algorithms for the U-Curve
+problem, a special case of the feature selection problem where the cost
+function describes a u-shaped curve on every chain of the boolean
+lattice.
+
+%% talk about search algorithms
 
 % The feature selection problem is...
 % the features are blah,
