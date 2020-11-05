@@ -16,13 +16,13 @@
 \tiny{
 \begin{tikzpicture}[auto, outer sep=0pt, node distance=0cm,>=latex']
 
-\node at (0, 0) (RAS_GDP) {$\bf RasGDP$};
+\node at (0, 0) (RAS_GTP) {$\bf RasGTP$};
 \node at (0, -2) (SOS) {$\bf SOS$};
-\node at (4, -1) (ALLO) {$\bf SOS\_allo\_RasGDP$};
+\node at (4, -1) (ALLO) {$\bf SOS\_allo\_RasGTP$};
 \node at (1.5, -1) (MIDPOINT) {};
-    \draw [->, thick] ($(MIDPOINT)$) to node {$k1$}
+    \draw [->, thick] ($(MIDPOINT)$) to node {$k2$}
     ($(ALLO)+(-1.1,0)$);
-    \path [-, thick] ($(RAS_GDP.east)+(0,-0.05)$) edge[in=180, out=0]
+    \path [-, thick] ($(RAS_GTP.east)+(0,-0.05)$) edge[in=180, out=0]
     ($(MIDPOINT)$);
     \path [-, thick] ($(SOS.east)+(0, -0.05)$) edge[in=180, out=0]
     ($(MIDPOINT)$);
