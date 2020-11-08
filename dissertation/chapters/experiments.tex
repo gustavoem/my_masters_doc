@@ -490,7 +490,7 @@ observations.
 After defining that SigNetMS is our software choice for model selection,
 we are now able to experiment and analyze the approach of solving a 
 model selection problem as a feature selection problem, using a Bayesian
-approach to build a cost function. To accomplish this, we created
+approach to define a cost function. To accomplish this, we created
 another simple instance of model selection. Although this instance is
 still a toy model, we will be able to access the space of possible
 solutions and get a glance of the cost surface induced by SigNetMS over
@@ -500,25 +500,90 @@ A feature selection instance can be defined by a pair $(S, c)$ where $S$
 is a set of features and $c$ is a cost function that evaluates subsets
 of $S$. The space of solution is usually the power set of $S$,
 $\mathcal{P}(S)$, and the cost function usually takes values from this 
-space to positive real values, $c: \mathcal{P}(S) \to \fieldR^+$. It is
-often useful to represent the search space with a boolean lattice, which
-is defined by the power set $\mathcal{P}(S)$ and the partial order 
+space to positive real values, $c: \mathcal{P}(S) \to \fieldR$. An
+optimal solution is a subset $X \in \mathcal{P}(S)$ such that $c(X) \leq
+c(Y), \forall Y \in \powerset (S)$, however, it is important to notice
+that the size of the search space grows exponentially with the number of
+features and, in practice, with time consuming cost functions, it is
+computationally unfeasible use optimal search algorithms. That is
+exactly our case, since the cost function we propose to use, based on
+SigNetMS, depends on the estimation of multiple power posteriors of
+parameters and includes numerous numerical integrations of a system of
+ordinary differential equations.
+
+It is often useful to represent the search space with a boolean lattice, 
+which is defined by the power set $\mathcal{P}(S)$ and the partial order 
 relation $\subseteq$. More than an aid to represent the search space,
 the boolean lattice provides a structure that is useful for search
-algorithms to define paths on the search and also to take advantage of
-surface of the search space, as it is done on algorithms for the U-Curve
-problem, a special case of the feature selection problem where the cost
-function describes a u-shaped curve on every chain of the boolean
-lattice.
+algorithms to define paths and to take advantage of surface of the 
+search space, as it is done on algorithms for the U-Curve problem, a 
+special case of the feature selection problem where the cost function 
+describes a u-shaped curve on every chain of the boolean lattice. The
+U-Curve problem is still an NP-hard problem as the feature selection
+problem is~\cite{Rei12}, however there are heuristics and optimal
+algorithms that can be used on the U-Curve problem to produce a quality
+answer (optimal or close to be optimal) with a feasible computational
+time. Moreover, one can produce good results using U-Curve algorithms to 
+solve a feature selection instance that is not necessarily U-Curve, but
+does reproduce u-shaped curves with a few oscillations on chains of the
+search space.
 
-%% talk about search algorithms
+In our application, we are going to convert a model selection problem
+into a feature selection problem. To do so, we define a set of candidate
+reactions $S$ and a base model. Then, we consider that a set of feature
+$X \in \powerset (S)$ represents a candidate model composed by the base
+model plus the reactions from $X$. The cost function we use is the
+marginal likelihood produced by SigNetMS.
+Figure~\ref{fig:feature_selection_model_selection} shows an example of
+feature selection instance that represents a model selection instance.
+
+After defining the feature selection instance, we will traverse the
+search space in two ways. First, we will traverse chains from the empty
+set to the complete set, to understand the shape of the cost function as
+we increase the number of reactions. Then, we will run the Sequential 
+Forward Search algorithm, a heuristic for the feature selection problem,
+to try to find a good solution for our model selection problem.
+
+\begin{figure}[h]
+\begin{center}
+    \includegraphics[width=.75\textwidth]{experiments/Boolean_lattice_model_selection.pdf}
+    \caption{A diagram with the search space and costs of a feature 
+    selection problem that represents a model selection problem. Each 
+    rectangle represents a subset of the power set of features, were
+    reactions from such subset are drawn with dots. Links between 
+    rectangles represent the $\subseteq$ relation; that is, two 
+    rectangles linked represent two subsets of reactions $X$ and $Y$ 
+    such that $X \subseteq Y$ (or $Y \subseteq X$). The set of features 
+    is composed by three reactions, $\{a, b, c\}$, inducing the search 
+    space with eight elements. The base model is composed by two 
+    chemical species, $1$ and $2$ and a reaction between those species, 
+    we can see this model at the base of the diagram, on the rectangle 
+    that represents the empty set (no reaction are drawn with dots). 
+    Each rectangle also represents a candidate model, which is composed 
+    by the base model plus the reactions drawn with dots. The number
+    below each rectangle represents the score (minus one times the cost)
+    of each model. The optimal subset is drawn in yellow and it the
+    subset of reactions $\{b, c\}$. Note that this instance is a U-Curve 
+    instance, if we consider the cost as minus one times the score: for 
+    every chain of rectangles, the cost of the model describes a u 
+    shaped curve. As an instance, consider the chain $\emptyset, \{c\} 
+    , \{a, c\}, \{a, b, c\}$, which has respectively the costs of
+    $-0.10$, $-0.15$, $-0.30$, and $-0.03$.}
+    \label{fig:feature_selection_model_selection}
+    \end{center}
+\end{figure}
+
+
+% talk about search algorithms
+% talk about the U-Curve problem  
+
+% introduce an example of the boolean lattice
 
 % The feature selection problem is...
 % the features are blah,
 % the cost function is bleh,
-% Image blih, shows an example of feature selection instance, with a set
-% of three features.
 
+\subsection{Defining the Feature Selection Instance}
 % The instance we chose to show is a Ras switch pathway. This pathway...
 % This time we also define the correct model, which is shown on Figure.
 % We define the space of features as the set of reactions shown on
@@ -526,6 +591,9 @@ lattice.
 % We define as a "base model", a simple pathway which has no reactions,
 % and for each node of the search space, we consider that such node
 % represents the empty model with the reactions present on that node.
+The instance we prepared is based on a Ras switch pathway. 
+
+
 
 % Walk through optimal experiment
 % SFS experiment
