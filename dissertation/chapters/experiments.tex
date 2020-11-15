@@ -588,12 +588,58 @@ to try to find a good solution for our model selection problem.
 % This time we also define the correct model, which is shown on Figure.
 % We define the space of features as the set of reactions shown on
 % Figure.
+
 % We define as a "base model", a simple pathway which has no reactions,
 % and for each node of the search space, we consider that such node
 % represents the empty model with the reactions present on that node.
-The instance we prepared is based on a Ras switch pathway. 
+
+% The list of candidate reactions is shown on figure blah
+
+% 
+
+The instance we prepared is based on a Ras switch pathway. Ras
+represents a family of proteins that are common on signaling pathways
+that participate on cell growth and differentiation. Because of this
+participation, Ras proteins that are constantly switched on can play 
+part on cancer. The model we consider for generating experiments, which 
+we also call the ``correct'' model is shown on 
+Figure~\ref{fig:ras_switch:correct_model}. This model shows a pathway
+that decides the state of the Ras protein as switched on, represented by
+RasGTP, and as switched off, represented by RasGDP.
+
+%200 for SOS; 0 for
+    %SOS\_allo\_RasGDP and SOS\_allo\_RasGTP; 900 for RasGDP; 100 for
+    %RasGTP; 200 for GEF; and 125 for GAP. Once again, we omit
+    %concentration and reaction rate units for the sake of simplificty.
+    %These chemical species interact in eight differente chemical
+    %reactions 
+    %$\ce{SOS + RasGDP ->[k2] SOS\_allo\_RasGDP}$;
+    %$\ce{SOS\_allo\_RasGDP ->[d2] SOS + RasGDP}$;
+    %$\ce{SOS + RasGTP ->[k1] SOS\_allo\_RasGTP}$;
+    %$\ce{SOS\_allo\_RasGTP ->[d1] SOS + RasGTP}$;
+    %$\ce{RasGTP -> RasGDP}$, with $SOS\_allo\_RasGTP$ as a catalyst;
+    %$\ce{RasGTP -> RasGDP}$, with $SOS\_allo\_RasGDP$ as a catalyst;
+    %$\ce{RasGTP -> RasGDP}$, with $GEF$ as a catalyst; and
+    %$\ce{RasGDP -> RasGTP}$, with $GAP$ as a catalyst.
 
 
+\begin{figure}
+\begin{center}
+\includegraphics[width=1\textwidth]{experiments/ras_switch/correct.pdf}
+\caption{A representation of a Ras switch pathway that we consider as
+    the correct model for our model selection experiment. This model
+    contains seven chemical species, and eight different chemical
+    reactions. Reversible reactions are represented with arrows poiting
+    both directions, with reaction rate parameters over the reaction,
+    with the forward reaction parameter first and then the parameter of
+    the reverse reaction. Michaelis-Menten reactions are represented
+    with parameters to the left of the arrow from starting at the
+    enzyme, with the catalystic parameter first, and then the Michaelis
+    constant.
+}
+\label{fig:ras_switch:correct_model}
+\end{center}
+\end{figure}
 
 % Walk through optimal experiment
 % SFS experiment

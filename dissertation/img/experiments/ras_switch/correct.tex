@@ -40,13 +40,13 @@
 
 \node  at (-2.1, 5) (MIDR) {};
 \draw [->, thick] (MIDR) to node[above] {$k1, d1$} (SOSGTP);
-\draw [-, thick] (RASGTP) edge[out=0, in=0] ($(MIDR)-(.2, 0)$);
-\draw [-, thick] (SOS) edge[out=0, in=0] ($(MIDR)-(.2, 0)$);
+\draw [<-, thick] (RASGTP) edge[out=0, in=0] ($(MIDR)-(.2, 0)$);
+\draw [<-, thick] (SOS) edge[out=0, in=0] ($(MIDR)-(.2, 0)$);
 
 \node  at (-10.1, 5) (MIDL) {};
 \draw [->, thick] (MIDL) to node[above] {$k2, d2$} (SOSGDP);
-\draw [-, thick] (RASGDP) edge[out=180, in=180] ($(MIDL)+(.2, 0)$);
-\draw [-, thick] (SOS) edge[out=180, in=180] ($(MIDL)+(.2, 0)$);
+\draw [<-, thick] (RASGDP) edge[out=180, in=180] ($(MIDL)+(.2, 0)$);
+\draw [<-, thick] (SOS) edge[out=180, in=180] ($(MIDL)+(.2, 0)$);
 
 \draw [->, thick] (SOSGDP) to node {$k4cat, K4m$} ($(-8.1, 5.9)$);
 \draw [->, thick] (SOSGTP) to node {$k3cat, K3m$} ($(-4.1, 5.9)$);
