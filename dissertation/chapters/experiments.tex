@@ -537,16 +537,9 @@ marginal likelihood produced by SigNetMS.
 Figure~\ref{fig:feature_selection_model_selection} shows an example of
 feature selection instance that represents a model selection instance.
 
-After defining the feature selection instance, we will traverse the
-search space in two ways. First, we will traverse chains from the empty
-set to the complete set, to understand the shape of the cost function as
-we increase the number of reactions. Then, we will run the Sequential 
-Forward Search algorithm, a heuristic for the feature selection problem,
-to try to find a good solution for our model selection problem.
-
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{center}
-    \includegraphics[width=.75\textwidth]{experiments/Boolean_lattice_model_selection.pdf}
+    \includegraphics[width=1\textwidth]{experiments/Boolean_lattice_model_selection.pdf}
     \caption{A diagram with the search space and costs of a feature 
     selection problem that represents a model selection problem. Each 
     rectangle represents a subset of the power set of features, were
@@ -573,6 +566,13 @@ to try to find a good solution for our model selection problem.
     \end{center}
 \end{figure}
 
+After defining the feature selection instance, we will traverse the
+search space in two ways. First, we will traverse chains from the empty
+set to the complete set, to understand the shape of the cost function as
+we increase the number of reactions. Then, we will run the Sequential 
+Forward Search algorithm, a heuristic for the feature selection problem,
+to try to find a good solution for our model selection problem.
+
 
 % talk about search algorithms
 % talk about the U-Curve problem  
@@ -594,36 +594,43 @@ to try to find a good solution for our model selection problem.
 % represents the empty model with the reactions present on that node.
 
 % The list of candidate reactions is shown on figure blah
-
 % 
 
 The instance we prepared is based on a Ras switch pathway. Ras
 represents a family of proteins that are common on signaling pathways
 that participate on cell growth and differentiation. Because of this
-participation, Ras proteins that are constantly switched on can play 
-part on cancer. The model we consider for generating experiments, which 
-we also call the ``correct'' model is shown on 
+participation, Ras proteins that are constantly switched on can play a 
+part on some types of cancer. The model we consider for generating 
+experiments, which we also call the ``correct'' model is shown on 
 Figure~\ref{fig:ras_switch:correct_model}. This model shows a pathway
-that decides the state of the Ras protein as switched on, represented by
-RasGTP, and as switched off, represented by RasGDP.
+that decides the state of a Ras protein as switched on, represented by
+RasGTP, and as switched off, represented by RasGDP. Five other chemical
+species are present on this model, and they have the following initial
+concentration: 200 for SOS; 0 for SOS\_allo\_RasGDP and
+SOS\_allo\_RasGTP; 900 for RasGDP; 100 for RasGTP; 200 for GEF; and 125
+for GAP. Once again, we omit concentration and reaction rate units for
+the sake of simplificty. These chemical species interact in eight
+different chemical reactions:
+\begin{itemize}
+    \item{$\ce{SOS + RasGDP ->[k2] SOS\_allo\_RasGDP}$};
+    \item{$\ce{SOS\_allo\_RasGDP ->[d2] SOS + RasGDP}$};
+    \item{$\ce{SOS + RasGTP ->[k1] SOS\_allo\_RasGTP}$};
+    \item{$\ce{SOS\_allo\_RasGTP ->[d1] SOS + RasGTP}$};
+    \item{$\ce{RasGTP -> RasGDP}$}, with SOS\_allo\_RasGTP as a
+        catalyst, and $k3cat$ and $K3m$ as catalytic constant and
+        Michaelis constant, respectively;
+    \item{$\ce{RasGTP -> RasGDP}$}, with SOS\_allo\_RasGDP as a 
+        catalyst, and $k4cat$ and $K4m$ as catalytic constant and
+        Michaelis constant, respectively;
+    \item{$\ce{RasGTP -> RasGDP}$}, with GEF as a catalyst, and
+        $k6cat$ and $K6m$ as catalytic constant and Michaelis constant,
+        respectively;
+    \item{$\ce{RasGDP -> RasGTP}$}, with GAP as a catalyst, and
+        $k5cat$ and $K5m$ as catalytic constant and Michaelis constant,
+        respectively.
+\end{itemize}
 
-%200 for SOS; 0 for
-    %SOS\_allo\_RasGDP and SOS\_allo\_RasGTP; 900 for RasGDP; 100 for
-    %RasGTP; 200 for GEF; and 125 for GAP. Once again, we omit
-    %concentration and reaction rate units for the sake of simplificty.
-    %These chemical species interact in eight differente chemical
-    %reactions 
-    %$\ce{SOS + RasGDP ->[k2] SOS\_allo\_RasGDP}$;
-    %$\ce{SOS\_allo\_RasGDP ->[d2] SOS + RasGDP}$;
-    %$\ce{SOS + RasGTP ->[k1] SOS\_allo\_RasGTP}$;
-    %$\ce{SOS\_allo\_RasGTP ->[d1] SOS + RasGTP}$;
-    %$\ce{RasGTP -> RasGDP}$, with $SOS\_allo\_RasGTP$ as a catalyst;
-    %$\ce{RasGTP -> RasGDP}$, with $SOS\_allo\_RasGDP$ as a catalyst;
-    %$\ce{RasGTP -> RasGDP}$, with $GEF$ as a catalyst; and
-    %$\ce{RasGDP -> RasGTP}$, with $GAP$ as a catalyst.
-
-
-\begin{figure}
+\begin{figure}[ht]
 \begin{center}
 \includegraphics[width=1\textwidth]{experiments/ras_switch/correct.pdf}
 \caption{A representation of a Ras switch pathway that we consider as
@@ -640,6 +647,97 @@ RasGTP, and as switched off, represented by RasGDP.
 \label{fig:ras_switch:correct_model}
 \end{center}
 \end{figure}
+
+We used this model to generate an artificial experiment where the
+concentration of activated Ras was measured at the time steps of 30,
+60, 90, 120, 150, 180, 210, and 240 seconds.
+Figure~\ref{fig:ras_switch:experimental_observations} shows a graph of
+such experimental measurements. Similarly to the experiment of the 
+previous section, those observations were created by simulating the 
+correct model and then adding a Gaussian error of mean zero and standard
+deviation of 0.01. The reaction rate parameters used to create these
+simulations are: k1 $= 1.8e-4$, d1 $= 3$, k2 $= 1.7e-4$, d2 $=0.04$,
+k3cat $= 3.8$, K3m $=1.64e3$, k4cat $= 0.003$, K4m $= 9.12e3$, k5cat
+$= 0.1$, K5m $= 1.07e2$, k6cat $= 0.01$, and K6m $=1836$ (once again,
+remember that we are omitting units for the sake of simplicity).
+%<parameter id="k1"    value="1.8e-4"/>
+%<parameter id="d1"    value="3.0"/>
+%<parameter id="k2"    value="1.7e-4"/>
+%<parameter id="d2"    value="0.04"/>
+%<parameter id="k3cat" value="3.8"/>
+%<parameter id="K3m"   value="1.64e3"/>
+%<parameter id="k4cat" value="0.003"/>
+%<parameter id="K4m"   value="9.12e3"/>
+%<parameter id="k5cat" value="0.1"/>
+%<parameter id="K5m"   value="1.07e2"/>
+%<parameter id="k6cat" value="0.01"/>
+%<parameter id="K6m"   value="1836"/>
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=.75\textwidth]{experiments/ras_switch/experiment_plot.pdf}
+\caption{Experimental data generated with our correct model for the Ras
+    switch pathway. There is a set of three observations being
+    represented, however, the time points observations of [RasGTP] are
+    close enough that the lines of each experiment overlap. The time
+    points considered are 30, 60, 90, 120, 150, 180, 210, and 240
+    seconds; the lines are produced with a linear interpolation of
+    measurements on these points.}
+\label{fig:ras_switch:experimental_observations}
+\end{center}
+\end{figure}
+
+To construct our search space, we considered as the base of our search
+space a trivial model, containing no reactions. For the set of features,
+we considered all reactions from the correct model (i.e. the correct
+model is present on the search space), plus two other reactions. A
+complete list of candidate reactions is shown of
+Figure~\ref{fig:ras_switch:features}.
+
+
+\begin{figure}[ht]
+    \centering
+    \begin{tabular}{cc}
+    \subfigure{
+        \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/sos_allo_rasgdp_complexation.pdf}
+    }
+    &
+    \subfigure{
+        \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/sos_allo_rasgdp_decomplexation.pdf}
+    }
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/sos_allo_rasgtp_complexation.pdf}
+    }
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/sos_allo_rasgtp_decomplexation.pdf}
+    }
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/ras_activation_by_sos_allo_RasGDP.pdf}
+    }
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/ras_activation_by_sos_allo_RasGTP.pdf}
+    }
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/ras_activation_by_GEF.pdf}
+    }
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/ras_activation_by_SOS.pdf}
+    }
+    % TODO: finish this figure
+    \end{tabular}
+    \caption{Approximation of the power posterior distribution of the 
+    $0.07$, and it is represented on the axis of the plots.}
+    \label{fig:girolami_model1_progression_snm}
+\end{figure}
+
+
+
 
 % Walk through optimal experiment
 % SFS experiment
