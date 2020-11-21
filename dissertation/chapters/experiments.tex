@@ -692,53 +692,117 @@ space a trivial model, containing no reactions. For the set of features,
 we considered all reactions from the correct model (i.e. the correct
 model is present on the search space), plus two other reactions. A
 complete list of candidate reactions is shown of
-Figure~\ref{fig:ras_switch:features}.
+Figure~\ref{fig:ras_switch:features}. The complete list of candidate
+reactions is saved in a JSON file, which also stores information about
+rate parameters for each reaction, including its name and prior. In this
+experiment we defined Uniform prior distributions, using our prior
+knowledge about reactions. As a matter of fact, in our first approach we
+used Gamma distributions, however, due to numerical instabilities we
+decided Uniform distributions for its simplicity and restrictiveness.
+({\color{blue}TODO: should I include prior distributions on the text?}) 
+
+After defining our set of features, a base model, the rule for 
+defining the model associated to a subset of features, and the cost
+function, we are now able to experiment solving the model selection
+problem as a feature selection problem. It is important to remember that
+our cost function, the output of SigNetMS, is computationally expensive
+and, since we have 10 features, the search space has the size $2^{10}$.
+That makes it unfeasible to optimally search on the space, and therefore
+we choose a heuristic to search for a good solution.
 
 
 \begin{figure}[ht]
     \centering
     \begin{tabular}{cc}
-    \subfigure{
+    \subfigure[SOS\_allo\_RasGDP complexation]{
         \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/sos_allo_rasgdp_complexation.pdf}
     }
     &
-    \subfigure{
+    \subfigure[SOS\_allo\_RasGDP decomplexation]{
         \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/sos_allo_rasgdp_decomplexation.pdf}
     }
     \\
-    \subfigure{
+    \subfigure[SOS\_allo\_RasGTP complexation]{
     \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/sos_allo_rasgtp_complexation.pdf}
     }
     &
-    \subfigure{
+    \subfigure[SOS\_allo\_RasGTP decomplexation]{
     \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/sos_allo_rasgtp_decomplexation.pdf}
     }
     \\
-    \subfigure{
+    \subfigure[Ras activation by SOS\_allo\_RasGDP]{
     \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/ras_activation_by_sos_allo_RasGDP.pdf}
     }
     &
-    \subfigure{
+        \subfigure[Ras activation by SOS\_allo\_RasGTP]{
     \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/ras_activation_by_sos_allo_RasGTP.pdf}
     }
     \\
-    \subfigure{
+    \subfigure[Ras activation by GEF]{
     \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/ras_activation_by_GEF.pdf}
     }
     &
-    \subfigure{
+    \subfigure[Ras inactivation by GAP]{
+    \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/ras_inactivation_by_gap.pdf}
+    }
+    \\
+    \subfigure[GAP activation by RasGTP]{
+    \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/gap_activation_by_RasGTP.pdf}
+    }
+    &
+    \subfigure[Ras activation by SOS]{
     \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/ras_activation_by_SOS.pdf}
     }
-    % TODO: finish this figure
     \end{tabular}
-    \caption{Approximation of the power posterior distribution of the 
-    $0.07$, and it is represented on the axis of the plots.}
+    \caption{All candidate reactions, or the set of features for our
+    feature selection problem. Reactions (a) to (h) are all the
+    reactions of the considered ``correct'' model.}
     \label{fig:girolami_model1_progression_snm}
 \end{figure}
 
-
-
-
-% Walk through optimal experiment
 % SFS experiment
+\subsection{Using Sequential Forward Selection to Select a Model}
+As discussed in the previous section, the feature selection instance we
+have in hands has a search space and cost function that makes it
+unfeasible to use an optimal algorithm of feature selection. Therefore,
+we use the Sequential Forward Selection (SFS)~\cite{Whitney1971} 
+heuristics to solve the problem.
+% also want to talk about what we want to check in this experiment.
+% With this experiment we will be able to analyze the solution given in
+% our approach. We expect that we are able to at least find a model that
+% correctly describes the dynamics observed on the experiments
+
+The Sequential Forward Selection heuristics is a greedy algorithm that
+starts with the empty set of features and then, for each iteration,
+decides to add the ``best'' remaining feature to the current solution.
+Although it is very easy to find instances in which this algorithm is
+not optimal (even for U-Curve instances), it can generally find fairly
+good solutions in many cases, making it a good choice to explore spaces
+with unknown surfaces, such as in our case.
+
+\begin{algorithm}[H]
+\textsc{SFS} $(S, c)$
+\begin{algorithmic}[1]
+    \State $X \gets \emptyset$
+    \State {\tt did\_impove} $\gets$ {\tt True}
+    \While{{\tt did\_improve}}
+        \State $s^* \gets NIL$
+        \For{$s \in S$ and $s \notin X$}
+            \If{$c(X \cup \{s\}) < c(X \cup \{s^*\})$}
+                \State $s^* \gets s$
+            \EndIf
+        \EndFor
+        \If{$s^*$ is $NIL$}
+            \State {\tt did\_improve} $\gets$ {\tt False}
+        \EndIf
+    \EndWhile
+    \Return $X$
+\end{algorithmic}
+\end{algorithm}
+
+% pseudo código
+
+% resultados e análise dos resultados
+
+% Section: analyzing a chain of the feature space
 % done!
