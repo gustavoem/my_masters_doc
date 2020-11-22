@@ -701,7 +701,20 @@ used Gamma distributions, however, due to numerical instabilities we
 decided Uniform distributions for its simplicity and restrictiveness.
 ({\color{blue}TODO: should I include prior distributions on the text?}) 
 
-% talk about characteristic vector
+Figure~\ref{fig:ras_switch:features} also presents an arbitrary order we
+choose for these reactions. This order, from (a) to (j) is useful to
+enumerate points of the search space, something that search algorithms
+can rely on when traversing the search space. With this order, we can
+introduce the concept of characteristic vector, which is a vector
+composed by boolean flags that represents a point of the search space,
+and, that is, a subset of features. If the i-th element of the
+characteristic vector is a 0, then the i-th feature is not present on 
+the subset represented, if the i-th elemnt is 1, then this feature is
+present on the subset. Considering the order we choose for this Ras
+switch instance, we could say that the subset represented by the
+characteristic vector 0101010001 has the reactions: SOS\_allo\_RasGDP
+decomplexation, SOS\_allo\_RasGTP decomplexation, Ras activation by
+SOS\_allo\_RasGTP, and GAP activation by RasGTP.
 
 After defining our set of features, a base model, the rule for 
 defining the model associated to a subset of features, and the cost
@@ -732,34 +745,34 @@ we choose a heuristic to search for a good solution.
     \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/sos_allo_rasgtp_decomplexation.pdf}
     }
     \\
+    \subfigure[Ras inactivation by GAP]{
+    \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/ras_inactivation_by_gap.pdf}
+    }
+    &
+    \subfigure[Ras activation by SOS\_allo\_RasGTP]{
+    \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/ras_activation_by_sos_allo_RasGTP.pdf}
+    }
+    \\
     \subfigure[Ras activation by SOS\_allo\_RasGDP]{
     \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/ras_activation_by_sos_allo_RasGDP.pdf}
     }
     &
-        \subfigure[Ras activation by SOS\_allo\_RasGTP]{
-    \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/ras_activation_by_sos_allo_RasGTP.pdf}
-    }
-    \\
     \subfigure[Ras activation by GEF]{
     \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/ras_activation_by_GEF.pdf}
     }
-    &
-    \subfigure[Ras inactivation by GAP]{
-    \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/ras_inactivation_by_gap.pdf}
-    }
     \\
-    \subfigure[GAP activation by RasGTP]{
-    \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/gap_activation_by_RasGTP.pdf}
-    }
-    &
     \subfigure[Ras activation by SOS]{
     \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/ras_activation_by_SOS.pdf}
+    }
+    &
+    \subfigure[GAP activation by RasGTP]{
+    \includegraphics[clip=true,width=.35\linewidth]{experiments/ras_switch/reactions/gap_activation_by_RasGTP.pdf}
     }
     \end{tabular}
     \caption{All candidate reactions, or the set of features for our
     feature selection problem. Reactions (a) to (h) are all the
     reactions of the considered ``correct'' model.}
-    \label{fig:girolami_model1_progression_snm}
+    \label{fig:ras_switch:features}
 \end{figure}
 
 % SFS experiment
