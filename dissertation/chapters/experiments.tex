@@ -537,7 +537,7 @@ marginal likelihood produced by SigNetMS.
 Figure~\ref{fig:feature_selection_model_selection} shows an example of
 feature selection instance that represents a model selection instance.
 
-\begin{figure}[ht]
+\begin{figure}[h!]
 \begin{center}
     \includegraphics[width=1\textwidth]{experiments/Boolean_lattice_model_selection.pdf}
     \caption{A diagram with the search space and costs of a feature 
@@ -630,7 +630,7 @@ different chemical reactions:
         respectively.
 \end{itemize}
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=1\textwidth]{experiments/ras_switch/correct.pdf}
 \caption{A representation of a Ras switch pathway that we consider as
@@ -673,7 +673,7 @@ remember that we are omitting units for the sake of simplicity).
 %<parameter id="k6cat" value="0.01"/>
 %<parameter id="K6m"   value="1836"/>
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=.75\textwidth]{experiments/ras_switch/experiment_plot.pdf}
 \caption{Experimental data generated with our correct model for the Ras
@@ -701,6 +701,8 @@ used Gamma distributions, however, due to numerical instabilities we
 decided Uniform distributions for its simplicity and restrictiveness.
 ({\color{blue}TODO: should I include prior distributions on the text?}) 
 
+% talk about characteristic vector
+
 After defining our set of features, a base model, the rule for 
 defining the model associated to a subset of features, and the cost
 function, we are now able to experiment solving the model selection
@@ -711,7 +713,7 @@ That makes it unfeasible to optimally search on the space, and therefore
 we choose a heuristic to search for a good solution.
 
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \begin{tabular}{cc}
     \subfigure[SOS\_allo\_RasGDP complexation]{
@@ -766,7 +768,7 @@ As discussed in the previous section, the feature selection instance we
 have in hands has a search space and cost function that makes it
 unfeasible to use an optimal algorithm of feature selection. Therefore,
 we use the Sequential Forward Selection (SFS)~\cite{Whitney1971} 
-heuristics to solve the problem.
+heuristics to search for a solution.
 % also want to talk about what we want to check in this experiment.
 % With this experiment we will be able to analyze the solution given in
 % our approach. We expect that we are able to at least find a model that
@@ -776,10 +778,12 @@ The Sequential Forward Selection heuristics is a greedy algorithm that
 starts with the empty set of features and then, for each iteration,
 decides to add the ``best'' remaining feature to the current solution.
 Although it is very easy to find instances in which this algorithm is
-not optimal (even for U-Curve instances), it can generally find fairly
+not optimal (including U-Curve instances), it can generally find  fairly
 good solutions in many cases, making it a good choice to explore spaces
-with unknown surfaces, such as in our case.
+with unknown surfaces, such as in our case. Pseudocode~\ref{code:sfs}
+presents the dynamics of the SFS heuristics.
 
+% pseudo código
 \begin{algorithm}[H]
 \textsc{SFS} $(S, c)$
 \begin{algorithmic}[1]
@@ -798,11 +802,51 @@ with unknown surfaces, such as in our case.
     \EndWhile
     \Return $X$
 \end{algorithmic}
+\caption{A pseudocode representing the SFS algorithm.}
+\label{code:sfs}
 \end{algorithm}
 
-% pseudo código
 
 % resultados e análise dos resultados
+\subsubsection{Results of the search}
+The SFS search was conduced in a server running with an Intel 
+Xeon E5-2690 CPU, and 252GB of RAM memory. The total time to conduce the
+experiment was about 26 hours, with 42 calls to the cost function, that
+is, 42 points of the search space were visited. The best model found has
+the characteristic vector $0011010100$ and had the marginal likelihood
+of $10.8$. The chain of subsets the algorithm traversed, from the base
+to the found solution, is shown on Table~\ref{tab:sfs_trace}.
+% how long did it take do finish?
+% want to talk about the chain produced
+
+\begin{table}[H]
+\centering
+\begin{tabular}{c|cll}
+\hline
+Characteristic Vector && \multicolumn{1}{l}{Score} &
+\multicolumn{1}{l}{Cost function time (seconds)} \\
+\hline
+    0000000000 && 330721.05	& 669.79	\\
+    0010000000 && 245681.93	& 889.42	\\
+    0010010000 && 211.98	& 3408.28	\\
+    0011010000 && 5.30,	& 2974.71	\\
+    0011010100 && -10.89	& 3756.48	\\  
+\hline
+\hline
+\end{tabular}
+\caption{The trace of the SFS run on the Ras switch instance. The
+    characteristic vector determines the set of reactions present on the
+    model; the Score is minus one times the marginal likelihood of
+    the model; and, the Cost function time is the total time used by 
+    SigNetMS to calculate the marginal likelihood.}
+\label{tab:sfs_trace}
+\end{table}
+
+% and that the optimal is not the best subset found
+% however, we can see on figure blah that the found best subset does
+% reproduce the experiments behaviour.
+
+% maybe show how the optimal model scores?
 
 % Section: analyzing a chain of the feature space
 % done!
