@@ -1,14 +1,17 @@
 %begin-include
 
-%In this chapter we present experiments of model selection of cell
-% signaling pathways. We divide this chapter in two sections; the first
-% section presents experiments to compare two model selection software: 
-% ABC-SMC and SigNetMS, both of them presented on
-% chapter~\ref{chap:model_selection_methods}. We end the first section
-% presenting which software had best fit for our experiments. The
-% following section presents experiments of model selection as a feature
-% selection problem. We will analyze algorithm trace and what is the
-% surface induced by the cost function over the search space.
+In this chapter we present experiments of model selection of cell
+signaling pathways, and we divide the contents of this chapter in two 
+sections. The first section presents experiments to compare two model 
+selection software: ABC-SMC and SigNetMS, both of them presented on 
+Chapter~\ref{chap:model_selection}. To make this comparison, we
+use an instance of model selection with only four candidate models,
+evaluating the score of each one of them. The following section presents
+experiments of another instance of model selection, however, this time
+formulated as a feature selection problem. We will then analyze the
+search produced by the feature selection algorithm and how it relates to
+a ``correct'' model, which was used to create the experimental
+measurements.
 
 \section{Choosing a Software for Model Selection}
 % To choose a software for model selection we did the same experiment as
@@ -32,17 +35,17 @@
 % -> show how the curve fits on both software
 % -> show that there is some parameter value convergence on SigNetMS
 
-To choose between SigNetMS and ABC-SysBio, we performed a model
-selection experiment. This experiment, originally performed on the work
-of Vyshemirsky and Girolami~\cite{Vyshemirsky2007}, consists in creating
-artificial experimental data from a model of cell signaling pathway, and 
-then selecting between four different models, including the correct one.
-Using SigNetMS and ABC-SysBio we should be able to create a ranking of
-the four models, in which we expect to see as the best, the model we
-used to create the experimental data. More than that, we should analyze
-the produced results to check if simpler models are preferred over
-complex models; we should also check if the simulations produced by the
-models, with the estimated sample of the posterior distribution of
+To compare results of SigNetMS and ABC-SysBio, we performed a simple 
+model selection experiment. This experiment, originally performed on the 
+work of Vyshemirsky and Girolami~\cite{Vyshemirsky2007}, consists in 
+creating artificial experimental data from a model of cell signaling 
+pathway, and then selecting between four different models, including the
+correct one. Using SigNetMS and ABC-SysBio we should be able to create a
+ranking of the four models, in which we expect to see as the best, the
+model we used to create the experimental data. More than that, we should
+analyze the produced results to check if simpler models are preferred 
+over complex models; we should also check if the simulations produced by
+the models, with the estimated sample of the posterior distribution of
 parameters, approximates experimental data.
 
 \subsection{A simple instance of the model selection problem}
@@ -60,17 +63,16 @@ reaction $\ce{A ->[$V, K_m$] B}$.}
     \end{center}
 \end{figure}
 
-We start our model selection problem with the correct model, which is 
-a signalling pathway composed by five reactions and five chemical 
-species. Figure~\ref{fig:experiments:girolami_model1} shows a diagram
-with this model. This model represents a common motif, and it has as the 
-input signal the chemical species S, and as the output the chemical 
-species Rpp; the experimental measurement used is the concentration of 
-the output chemical species, which we donote as [Rpp].
-
+We start describing our model selection problem with the correct model,
+which is a signalling pathway composed by five reactions and five 
+chemical species. Figure~\ref{fig:experiments:girolami_model1} shows a 
+diagram of this model. This model represents a common motif, and has
+as the input signal the chemical species S, and as the output the
+chemical species Rpp. The experimental measurement is the concentration
+of the output chemical species, which we donote as [Rpp].
 
 In this experiment, for the sake of simplicity, we neglect the units of 
-reaction rates constants and initial concentrations. The initial 
+both reaction rates constants and initial concentrations. The initial 
 concentrations used are:  S $= 1$, R $= 1$, dS $= 0$, RS $= 0$, 
 R$_{pp} = 0$. To create the experimental data, the reaction rate 
 constants we used have the values: 
@@ -79,13 +81,11 @@ $K_m = 0.3$. It is important to remember that we discard reaction rate
 constant values during model selection; initial concentrations, however,
 are still provided during this phase. To generate experimental data, we
 simulate the dynamics of this model, using these parameter values, on
-the time steps of: 2s, 10s, 20s, 40s, 60s and 100s. Three simulations
+the time steps of: 2, 10, 20, 40, 60 and 100 seconds. Three simulations
 are created, and to each one of them we add, for each time measurement,
 a Gaussian error with mean $0$ and standard deviation $0.01$. A
 representation of the three experiment repetitions are showed on 
 figure~\ref{fig:experiments:girolami_simulations}.
-
-% TODO: determine the prior distribution used
 
 % insert simulated data here
 \begin{figure}
@@ -102,10 +102,10 @@ continuous dynamics from 2s to 100s.}
 \end{figure}
 
 To assess the ranking produced by each of the model selection software,
-we compare the first model with three other models (based on the correct
-model): a simplified model; an overly simplified model, which should not 
-be able to generate the observed dynamics; and, finally, a 
-generalization (more complex) model.
+we compare the first model with three other models, all of them built as
+modifications of the ``correct'' model: a simplified model; an overly 
+simplified model, which should not be able to generate the observed 
+dynamics; and, finally, a generalization (more complex) model.
 Figure~\ref{fig:experiments:girolami_other_models} shows diagrams that
 represent the three alternative models.
 
@@ -904,16 +904,16 @@ the dynamics observed on experimental observations.
     \label{fig:ras_switch_solution}
 \end{figure}
 
-
+Since the found model is not the correct model, we decided to also
+evaluate the cost function for the correct model and compare its
+cost against the found model. As the result, we got that the logarithm
+of the marginal likelihood of the correct model was $-34751$, compared
+to $10.8$ for the found model. To understand these numbers, we also
+plotted the simulations found for the correct model. % TODO: yeah...
 
 % show the cost of the correct model, and explain why it is not the
 % optimal.
 
-% Section: analyzing a chain of the feature space
-% and that the optimal is not the best subset found
-% however, we can see on figure blah that the found best subset does
-% reproduce the experiments behaviour.
-
-% maybe show how the optimal model scores?
+% Watch bias vs std of professor mustafa
 
 % done!
