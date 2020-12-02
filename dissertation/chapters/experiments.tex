@@ -180,32 +180,32 @@ and SigNetMS}
 % the input and output
 After defining the candidate models and producing the artificial
 experimental data, we proceeded to perform the experiment of model
-selection. The instance related information provided to SigNetMS and 
-ABC-SysBio is the same: a model, with predefined initial concentrations
-of chemical species; a set of experiments, with the same time steps, 
-with measurements of the concentration of Rpp; and a file containing
-prior distributions for each one of the model parameters. It is
-important to remember that the output produced by each software is
-different. SigNetMS produces an estimative of $p({\bm D} | M)$ and also
-a sample of the posterior distribution of parameters $p({\bm \theta} |
-M, {\bm D})$ which is, in fact, composed by samples of all power
-posterior distributions $p_{\beta}({\bm \theta})$ with values as we
-described
+selection. The instance information provided to SigNetMS and ABC-SysBio 
+is the same: a model, with predefined initial concentrations of chemical 
+species; a set of experiments, with the same time steps, and with
+measurements of the concentration of Rpp; and a file containing prior
+distributions for each one of the model parameters. It is important to
+remember that the output produced by each software is different.
+SigNetMS produces an estimative of $p({\bm D} | M)$ and also a sample of
+the posterior distribution of parameters $p({\bm \theta} | M, {\bm D})$
+which is, in fact, composed by samples of all power posterior
+distributions $p_{\beta}({\bm \theta})$, as we described
 on~\ref{sec:creating_an_estimative_of_the_marginal_likelihood}.
-ABC-SysBio, on the other hand, produces an estimatives of $p({\bm
-\theta}, M | {\bm D})$ that might be closer to this target distribution
-on each iteration. Note that in this experiment, we need to run SigNetMS
-for every model, while on ABC-SysBio we only need to run the software
-once for all four candidate models.
+ABC-SysBio, on the other hand, produces estimatives of $p({\bm
+\theta}, M | {\bm D})$ that tend to be closer to this target 
+distribution on each iteration. Note that in this experiment, we need to
+run SigNetMS for every model, while on ABC-SysBio we only need to run 
+the software once for all four candidate models.
 
 The prior distribution of parameters are the same as used by Vyshemirsky
 and Girolami~\cite{Vyshemirsky2007}. All model parameters priors are
-Gamma(1, 3), where the first and second arguments are shape and scale. 
-Gamma and Lognormal distributions are often used as prior for parameters 
-because they have a zero probability density for negative values.
+Gamma(1, 3), where the first and second arguments are shape and scale,
+respectively. Gamma and Lognormal distributions are often used as prior 
+for parameters because they have a zero probability density for negative
+values.
 % what are algorithm parameter values used
 
-For ABC-SysBio we decided to use its feature of automatically choosing
+For ABC-SysBio, we decided to use its feature of automatically choosing
 the schedule of threshold values, which is based on the acceptance of
 produced individuals on each iteration. For SigNetMS, we used the
 following parameters values: 15000 iterations of the naive burn-in, and
@@ -229,7 +229,8 @@ algorithm stopped with $\epsilon = 1$ and the following estimates:
     \item{$\hat{p} (M = \text{Generalization Model} | {\bm D}, \epsilon
         = 1) = 0.003$.}
 \end{itemize}
-These estimates induces the ranking 3, 2, 1, 4.
+These estimates induce the ranking: Incorrect Model $\prec$ Simplified 
+Model $\prec$ Correct Model $\prec$ Generalization Model.
 
 After running the SigNetMS software four times, one for each model, we
 were able to get the following estimates:
@@ -240,6 +241,8 @@ were able to get the following estimates:
     \item{$\log \hat{p}({\bm D} | M = \text{Generalization Model}) =
         19$}
 \end{itemize}
+These estimates induce the ranking: Correct Model $\prec$ Simplified
+Model $\prec$ Generalization Model $\prec$ Incorrect Model.
 
 % subsubsection Comparing the produced ranking
 \subsubsection{Comparing the ranking produced by ABC-SysBio and SigNetMS}
