@@ -18,9 +18,27 @@ method for model selection using feature selection, where the cost
 function uses a Bayesian approach to calculate the cost (or score) of a
 model.
 
+We decided to use a Bayesian approach to construct the cost function
+because of its ability to auto penalize overly complex models, avoiding
+some sort of ``overfit'', characterized by complex models that have good
+ability to fit an example of experimental data, but have poor
+generalization performance. Moreover, Bayesian approaches consider model
+constants as random variables, which allow the user to input their prior
+knowledge of constants, and also to produce a posterior distribution
+for model constants. Specially in our application, where model constants
+are related to the speed of reactions, using a non deterministic 
+approach to model constants is closer to what is seen in the real world.
+
 % Why did we go for that goal?
 % hability to input prior knowledge
 % auto-penalize complex models
+
+Before introducing concepts and methods of current works on model 
+selection, we reviewed the fundamental concepts, necessary to advance in
+this project. On Chapter 2 we conduced this review, presenting concepts
+of cell signaling pathways, measurements of those systems, and also how
+can we create computational models for them, using system of ordinary
+differential equations. % Then, we...
 
 % Ok, then on chapter 2 we revised some content
 
