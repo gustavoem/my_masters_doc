@@ -11,41 +11,72 @@ dissertation.
 On the Introduction of this text, we presented the main aspects of cell
 signaling pathways and how computational models can approximate their
 dynamics. After that, we showed how Wu~\cite{Wu15} defined an approach
-for model selection, of cell signaling pathwyas, as a feature selection
+for model selection of cell signaling pathwyas as a feature selection
 problem, and also the main caveats of their approach. With that, we
 could state the goal of this project, which is to study and develop a
-method for model selection using feature selection, where the cost 
-function uses a Bayesian approach to calculate the cost (or score) of a
-model.
-
-We decided to use a Bayesian approach to construct the cost function
-because of its ability to auto penalize overly complex models, avoiding
-some sort of ``overfit'', characterized by complex models that have good
-ability to fit an example of experimental data, but have poor
-generalization performance. Moreover, Bayesian approaches consider model
-constants as random variables, which allow the user to input their prior
-knowledge of constants, and also to produce a posterior distribution
-for model constants. Specially in our application, where model constants
-are related to the speed of reactions, using a non deterministic 
-approach to model constants is closer to what is seen in the real world.
+similar method for model selection using feature selection, where the 
+cost function is created with a Bayesian approach, capable of
+determining the likelihood of a model producing experimental data.
 
 % Why did we go for that goal?
 % hability to input prior knowledge
 % auto-penalize complex models
 
-Before introducing concepts and methods of current works on model 
-selection, we reviewed the fundamental concepts, necessary to advance in
-this project. On Chapter 2 we conduced this review, presenting concepts
-of cell signaling pathways, measurements of those systems, and also how
-can we create computational models for them, using system of ordinary
-differential equations. % Then, we...
+We decided to use a Bayesian approach to construct the cost function
+because of its ability to auto penalize overly complex models, avoiding
+some sort of ``overfit'' that can occur, characterized by complex models
+that have good ability to fit an example of experimental data, but have 
+poor generalization performance. Another reason to use a Bayesian
+approach is that this approach consider model parameters as random 
+variables, which allow the user to input their prior knowledge, and also
+to produce a posterior distribution for model parameters. Specially in 
+our application, where model parameters are related to the rate 
+constants of reactions, using a non deterministic approach to model 
+constants is closer to what is seen in the real world; since those 
+reactions can occur in a variety of conditions, reaction rate constants
+are not fixed constants.
 
 % Ok, then on chapter 2 we revised some content
+Before introducing concepts and methodologies we developed in this work,
+we reviewed the fundamental concepts necessary to advance in this 
+project. On Chapter 2 we conduced this review, presenting concepts
+of cell signaling pathways, experimental measurements of those systems, 
+and also how to create computational models for them, using system of 
+ordinary differential equations. We also introduced the state of the art
+methodologies for model selection in the context of cell signaling
+pathways and the algorithm of Metropolis-Hastings, to generate samples
+of unknown distributions.
 
 % Then we reviewed state of the art model selection
+On Chapter 3 we presented a short review of two different methodologies
+for evaluating the quality of models. The first methodology, uses an
+estimative of the marginal likelihood of a model being the ``correct''
+given the experimental data. This estimative is created by sampling from
+different power posterior distributions, bridging the prior and
+posterior distribution of model parameters; to conduce those
+calculations, it is necessary to define a likelihood function. The 
+second methodology, uses the concept of Approximate Bayesian 
+Computation, and it also produces a sequence samples that for each
+iteration approximates better the posterior distribution of parameters.
+This last approach however, does not depend on the definition of a
+likelihood function. There are available software that apply both
+methodology, BioBayes and ABC-SysBio, for the first and second
+approaches, respectively.
 
 % Then we produced an almost efficient way to calculate marginal
 % likelihoods
+After testing both software, BioBayes and ABC-SysBio, we found that
+BioBayes would be cumbersome to use as part of a feature selection cost
+function. We then decided to produce a new software to estimate marginal
+likelihood of models, and we called it SigNetMS. On Chapter~4 we
+presented the main procedures we needed to build for this software. We
+highlighted the sampling procedure as a computationally expensive
+procedure, mainly because of the multiple numerical integrations
+necessary to build the sample. We discussed how we decided for a
+numerical integration software, since producing one ourselves was not
+possible in the scope of this project. We also discussed how we could
+optimize our process in order to make more efficient calls of the
+integrator, using symbolic mathematics to represent our system.
 
 % We then compared ABC-SysBio to SigNetMS
 
