@@ -74,16 +74,52 @@ highlighted the sampling procedure as a computationally expensive
 procedure, mainly because of the multiple numerical integrations
 necessary to build the sample. We discussed how we decided for a
 numerical integration software, since producing one ourselves was not
-possible in the scope of this project. We also discussed how we could
+possible in the scope of this project. We discussed how we could
 optimize our process in order to make more efficient calls of the
-integrator, using symbolic mathematics to represent our system.
+integrator, using symbolic mathematics to represent our system. Finally,
+we presented how we managed to sample from multiple power posterior
+distributions, using parallelization.
 
 % We then compared ABC-SysBio to SigNetMS
+With the implementation of SigNetMS, we could then compare both
+methodologies to evaluate models: based on the marginal likelihood
+estimation, using SigNetMS, and based on Approximate Bayesian
+Computation, using ABC-SysBio. To compare them, we used a simple model
+selection instance, with four models including a ``correct'' model, used
+to generate artificial experimental measurements. As the result we
+could see that SigNetMS produced a better ranking of models compared to
+ABC-SysBio. We could also see that SigNetMS evaluated a simpler model as
+better than a model with similar ability to reproduce experimental data,
+but with higher complexity; which is an evidence that, in fact, the
+Bayesian approach does penalize the complexity of models.
 
 % And finally, we experimented on a small instance
+Since SigNetMS produced better results on the simple model selection
+instance, we used this software in our next experiment: a model
+selection problem solved as a feature selection problem. To build this
+instance, we defined a ``correct'' model of a Ras switch to generate
+artificial experimental data, and a set of candidate reactions
+(including all reactions of the correct model). Then, we created a
+feature selection instance where the set of features is the set of
+candidate reactions, and the cost of a subset is minus one times the
+marginal likelihood of a model with such subset. To conduce the search,
+we used the Sequential Forward Selection heuristics, and as a result, we
+got a subset with five features, different from the ``correct'' subset,
+with eight features. We produced plots that indicate that for both
+``correct'' and found subset, the produced sample does make the model
+reproduce the experimental data; however, the cost of the ``correct''
+model was higher, which indicates that its complexity was penalized,
+since a simpler model could reproduce its measured dynamics.
 
 % And what did we learn after all?
-
+Finally, with this last experiment, we could actually confirm that the
+Bayesian approach does penalize complex models. More than that, we could
+confirm that the sample produced by SigNetMS, when possible, does
+approximate the model dynamics to the experimental measurements
+dynamics. However this results indicates that SigNetMS could be used for
+other examples of model selection, we should also highlight that our
+experiment was small, and further experimentation is needed to improve
+the SigNetMS software, preparing it for larger and harder instances.
 
 \section{Contributions of this Dissertation}
 % Contributions of this work
@@ -92,5 +128,61 @@ integrator, using symbolic mathematics to represent our system.
 %   -> Rocky 2019
 %   -> São Paulo School of Data Science
 % -> advanced school of mathematics
+The main contributions during this work are the following:
 
+\begin{itemize}
+\item{The implementation of SigNetMS, a free software that allows
+    evaluating the quality of models, generating an estimative of the
+    marginal likelihood of a model, and also a posterior sample of model
+    parameters.}
+\item{The comparison of two Bayesian approaches for model selection:
+    using marginal likelihood and approximate Bayesian computation.
+    Conduced on Chapter~\ref{chap:experiments}.}
+\item{The experimentation of a feature selection approach for model
+    selection, using a Bayesian cost function, conduced on
+    Chapter~\ref{chap:experiments}.}
+\item{The participation at the São Paulo School of Advanced Science on 
+    Learning from Data, as a volunteer, including a five minute
+    lightning talk about this work.}
+\item{The participation at the 2019 Rocky Mountain Bioinformatics 
+    Conference, including a poster session where this work was
+    presented.}
+\end{itemize}
+
+\section{Suggestions for Future Work}
 % Future work
+For future work related to this project, we would like to recommend the
+following topics for further research:
+\begin{itemize}
+    \item{An efficiency improvement for SigNetMS.} The sampling of model
+        parameters is still a very time consuming procedure, and to
+        improve its performance, we would like to suggest a few options:
+        further research on numerical integration software, possibly
+        aiming for software that are optimized for parallelization and
+        memoization, since many integrations are performed.
+    \item{Treatment for numerical instability on the integration of
+        models. For many of our instances, we noticed that some regions
+        of the space of parameters can lead to numerical instabilities
+        in the integration methods. It would be necessary to investigate
+        on how to avoid such areas and what is the influence of such
+        avoidance in the produced sample.}
+    %solving the problem as it was u-curve
+    \item{Solving the feature selection problem as a U-Curve problem. In
+        this work we produced evidences that complex models are
+        penalized, and therefore, it would be interesting to analyze if
+        the U-Curve simplification is applicable for model selection
+        instances.}
+    %heterogeneous conditions of measurements
+    \item{Experimentation on heterogeneous conditions of measurement. In
+        all the instances we used in this project, repetitions of 
+        experimental measurements had very similar values over time; it
+        might be interesting to assess the robustness of our methodology
+        when experimental measurements are taken in more heterogeneous
+        conditions, with variations in the observed dynamics.}
+    %application of the methodology on real examples
+    \item{Applications of the methodology on real instances of model
+        selection. In this project, although inspired in real signaling
+        network pathways, we used only artificial examples. It is
+        therefore important to use this methodology in real instances,
+        where the ``correct'' model is unknown.}
+\end{itemize}
