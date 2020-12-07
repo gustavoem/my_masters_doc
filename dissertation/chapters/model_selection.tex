@@ -1,5 +1,7 @@
 %begin-include
 
+% TODO: write pseudo-codes for metropolis hastings algorithms
+
 In this chapter we will define the model selection problem in the 
 context of this work and we will also present two state of the art 
 methodologies that can be used to rank models, both of them are Bayesian
@@ -197,6 +199,7 @@ distributions~\cite{Friel2008}.
 % -> explain how to derive it
 %   -> name what is the power posterior
 % -> include here: how to estimate it?
+\label{sec:thermodynamic_integration}
 \subsection{Thermodynamic Integration for Marginal Likelihood}
 The Thermodynamic Integration is a method that proposes to rewrite
 the Integral~\ref{eq:marginal_likelihood} using ideas of thermodynamics,
@@ -308,6 +311,7 @@ be explained in the next section.
 % TODO: talk about how sampling from intermediate distributions is
 % better than sampling directly from the posterior distribution
 \subsection{Estimation of the Marginal Likelihood}
+\label{sec:estimation_of_marginal_likelihood}
 There are multiple approaches on estimating the 
 Integral~\ref{eq:thermodynamic_integral} and, usually it is necessary to 
 find samples of $p_{\beta_t} ({\bm \theta} | M, {\bm D})$ for a sequence 
@@ -549,6 +553,7 @@ parameter points, then we can rewrite this equation as:
     \frac{1}{L_t}
     \sum_{i = 1}^{L_t}  \log p({\bm D} | M, {\bm \theta}^{(t, i)})}
 {2}
+    \label{eq:marginal_likelihood_trapezoidal_approximation}
 \end{equation}
 According to the work of Friel et al. (2008), a good temperature 
 schedule for $\beta_1, \ldots, \beta_T$ that can be used in this 
