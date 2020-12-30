@@ -245,16 +245,20 @@ estimated model; among them are the incompleteness of the information
 extracted from KEGG, the absence of rate constants, the usage of 
 sub-optimal search algorithms and an unsatisfactory overfitting 
 penalization. In this project, we propose a new methodology for 
-identification of cell signaling pathways, which will make use of a 
-myriad of public interactome and biochemical reaction kinetics 
-repositories to deal with the incompleteness of a priori information. 
-Moreover, we will use optimal algorithms for model selection, as well as 
-more effective cost functions for overfitting penalization. The new 
-methodology will be tested on artificial instances and also on cell 
-signaling pathways identification in our case study, the Y1 mouse 
-adrenocortical tumor cell line. (AU)
+identification of cell signaling pathways, based on the mentioned
+method, with modifications on the cost function that aims to solve the
+unsatisfactory overfitting penalization. We will define a cost function
+based on the marginal likelihood of a model producing the observed
+experimental data. We expect this new cost function to automatically
+penalize complex models, since marginal likelihood approaches tend to 
+select models with intermediate complexity. The new methodology will be 
+tested artificial instances of model selection. For one of the
+experiments, we will solve the model selection problem as a feature
+selection problem, walking on the space of solutions to get a glance of
+the surface induced by the cost function we define.
 
 \chapter*{Resumo}
+{\textcolor{blue}{TODO: traduzir o novo resumo em inglês}}
 Vias de sinalização celular são compostas por um conjunto de reações
 bioquímicas que estão associadas à transmissão de informação no interior
 de uma célula e suas imediações. Tradicionalmente, essas vias são
@@ -291,19 +295,19 @@ adrenocortical Y1. (AU)
 \label{chap:intro}
 \input{chapters/introduction}
 
-\chapter{Fundamental Concepts}
+\chapter{Fundamental concepts}
 \label{chap:fundamental_concepts}
 \input{chapters/fundamental_concepts}
 
-\chapter{Model Selection Methods}
+\chapter{Model selection methods}
 \label{chap:model_selection}
 \input{chapters/model_selection}
 
-\chapter{Development of SigNetMS, a Software for Model Ranking}
+\chapter{Development of SigNetMS, a software for model selection}
 \label{chap:development_signetms}
 \input{chapters/development_signetms}
 
-\chapter{Experiments and Results}
+\chapter{Experiments and results}
 \label{chap:experiments}
 \input{chapters/experiments}
 

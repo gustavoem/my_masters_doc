@@ -1,6 +1,7 @@
 %begin-include
 
 % TODO: write pseudo-codes for metropolis hastings algorithms
+% TODO: remove the concept of "Temperature" in this chapter
 
 In this chapter we will define the model selection problem in the 
 context of this work and we will also present two state of the art 
@@ -79,7 +80,7 @@ Section~\ref{sec:fund_concepts:measurements}, these measurements are
 often created with Western Blot experiments, and the values of ${\bm D}$
 usually represent the ratio of concentrations of proteins.
 
-\section{Model ranking using Marginal Likelihood}
+\section{Model ranking using marginal likelihood}
 \label{sec:marginal_likelihood_method}
 % Simple explanation of this model ranking
 % Describe the likelihood function 
@@ -200,7 +201,7 @@ distributions~\cite{Friel2008}.
 %   -> name what is the power posterior
 % -> include here: how to estimate it?
 \label{sec:thermodynamic_integration}
-\subsection{Thermodynamic Integration for Marginal Likelihood}
+\subsection{Thermodynamic integration for marginal likelihood}
 The Thermodynamic Integration is a method that proposes to rewrite
 the Integral~\ref{eq:marginal_likelihood} using ideas of thermodynamics,
 providing new estimators for the marginal likelihood. This method is
@@ -310,7 +311,7 @@ be explained in the next section.
 % distribution; 
 % TODO: talk about how sampling from intermediate distributions is
 % better than sampling directly from the posterior distribution
-\subsection{Estimation of the Marginal Likelihood}
+\subsection{Estimation of the marginal likelihood}
 \label{sec:estimation_of_marginal_likelihood}
 There are multiple approaches on estimating the 
 Integral~\ref{eq:thermodynamic_integral} and, usually it is necessary to 
@@ -508,7 +509,7 @@ After finishing the third step of sampling, the samples obtained on the
 first two phases are discarded and only the samples from the last phase
 are used to estimate the marginal likelihood.
 
-\subsubsection{Estimators of the Marginal Likelihood}
+\subsubsection{Estimators of the marginal likelihood}
 The sampling procedure explained on the 
 Section~\ref{sec:power_posteriors_sampling} produces samples of the 
 power posteriors $p_{\beta_1} ({\bm \theta}), \ldots, p_{\beta_T} ({\bm
