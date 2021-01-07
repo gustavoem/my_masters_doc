@@ -13,7 +13,7 @@ search produced by the feature selection algorithm and how it relates to
 a ``correct'' model, which was used to create the experimental
 measurements.
 
-\section{Choosing a Software for Model Selection}
+\section{Choosing a software for model selection}
 % To choose a software for model selection we did the same experiment as
 % girolami
 %
@@ -481,7 +481,7 @@ observations.
 \end{figure}
 
 \clearpage
-\section{Model Selection as a Feature Selection Problem}
+\section{Model selection as a feature selection problem}
 % After defining that SigNetMS is our software choice for model
 % selection, we will construct another model selection problem instance.
 % This time, we intend to use such instance to evaluate the approach
@@ -586,7 +586,7 @@ to try to find a good solution for our model selection problem.
 % the features are blah,
 % the cost function is bleh,
 
-\subsection{Defining the Feature Selection Instance}
+\subsection{Defining the feature selection instance}
 % The instance we chose to show is a Ras switch pathway. This pathway...
 % This time we also define the correct model, which is shown on Figure.
 % We define the space of features as the set of reactions shown on
@@ -702,7 +702,6 @@ experiment we defined Uniform prior distributions, using our prior
 knowledge about reactions. As a matter of fact, in our first approach we
 used Gamma distributions, however, due to numerical instabilities we
 decided Uniform distributions for its simplicity and restrictiveness.
-%({\color{blue}TODO: should I include prior distributions on the text?}) 
 
 Figure~\ref{fig:ras_switch:features} also presents an arbitrary order we
 choose for these reactions. This order, from (a) to (j) is useful to
@@ -779,7 +778,7 @@ we choose a heuristic to search for a good solution.
 \end{figure}
 
 % SFS experiment
-\subsection{Using Sequential Forward Selection to Select a Model}
+\subsection{Using Sequential Forward Selection to select a model}
 As discussed in the previous section, the feature selection instance we
 have in hands has a search space and cost function that makes it
 unfeasible to use an optimal algorithm of feature selection. Therefore,
@@ -834,8 +833,8 @@ Table~\ref{tab:sfs_trace}.
 % how long did it take do finish?
 % want to talk about the chain produced
 
-The best model found has the characteristic vector $0011011010$ and had 
-the logarithm of the marginal likelihood of $5.8$. This model has the 
+The best model found has the characteristic vector $0111011000$ and had 
+the logarithm of the marginal likelihood of $7.9$. This model has the 
 following reactions: SOS\_allo\_RasGTP complexation, SOS\_allo\_RasGTP
 decomplexation, Ras activation by SOS\_allo\_RasGTP, Ras activation
 by SOS, and Ras activation by SOS\_allo\_RasGDP.
@@ -848,12 +847,12 @@ by SOS, and Ras activation by SOS\_allo\_RasGDP.
 Characteristic Vector && \multicolumn{1}{l}{Score} &
 \multicolumn{1}{l}{Cost function time (seconds)} \\
 \hline
-    0000000000 && 330721.05	& 2455.3	\\
-    0010000000 && 245681.93	& 2796.4	\\
-    0010010000 && 207.62	& 6100.4	\\
-    0011010000 && 0.74	    & 7173.71	\\
-    0011010010 && -4.48	    & 13787.7	\\  
-    0011011010 && -5.72	    & 8775.7	\\  
+    0000000000 && 330721.05	& 851.3	    \\
+    0010000000 && 245681.93	& 1083.4	\\
+    0010010000 && 211.62	& 4257.4	\\
+    0011010000 && -1.32	    & 5007.71	\\
+    0011011000 && -4.27	    & 4458.7	\\  
+    0111011000 && -7.90	    & 5035.7	\\  
 \hline
 \hline
 \end{tabular}
@@ -874,27 +873,27 @@ Figure~\ref{fig:ras_switch_solution} shows simulations created using
 different power posterior samples. We can see that as $\beta$ increases,
 the simulation approximates better the experimental results, to the
 point where the simulation curves overlap with the experimental curves.
-That indicates that, in fact, model $0011010100$ is able to reproduce
+That indicates that, in fact, model $0111011000$ is able to reproduce
 the dynamics observed on experimental observations.
 
 \begin{figure}[ht]
     \centering
     \begin{tabular}{c c}
     \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/ras_switch/simulations/msimulations_model_0011010100_0.pdf}}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/ras_switch/simulations/msimulations_model_0111011000_0.pdf}}
     &
     \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/ras_switch/simulations/msimulations_model_0011010100_10.pdf}}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/ras_switch/simulations/msimulations_model_0111011000_10.pdf}}
     \\
     \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/ras_switch/simulations/msimulations_model_0011010100_20.pdf}}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/ras_switch/simulations/msimulations_model_0111011000_20.pdf}}
     &
     \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/ras_switch/simulations/msimulations_model_0011010100_39.pdf}}
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/ras_switch/simulations/msimulations_model_0111011000_39.pdf}}
     \\
     \end{tabular}
     \caption{Simulations created with power posterior samples of Ras
-    switch model with characteristic vector $0011010100$, which is the
+    switch model with characteristic vector $0111011000$, which is the
     model found by the SFS search. The model parameters used to create
     these simulations were sampled when the SFS algorithm evaluated the
     cost function for the model; when the cost function was called,
@@ -922,7 +921,7 @@ smaller than the marginal likelihood of the found model.
 
 As explained by Bishop~\cite{bishop2006pattern}, marginal likelihood
 methods tend to select intermediate complexity models, penalizing more
-complex models. This is the reason why the model $0011010100$ was
+complex models. This is the reason why the model $0111011000$ was
 preferred over the ``correct'' model. A simplified explanation to why 
 this happens on marginal likelihood methods is that more complex models
 are able to generate a wider range of output data, and therefore, the
@@ -954,7 +953,7 @@ $p({\mathcal {D} = \bm{D}} | M_{simple})$.
     \\
     \end{tabular}
     \caption{Simulations created with power posterior samples of Ras
-    switch model with characteristic vector $0011010100$, which is the
+    switch model with characteristic vector $1111111100$, which is the
     ``correct'' model, that is, the model we used to create artificial
     experimental data. It is possible to see that for greater values of
     $\beta$, the simulations are close to experimental data.}

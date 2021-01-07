@@ -4,12 +4,13 @@ details of the SigNetMS software, which stands for {\bf Sig}naling
 {\bf Net}work {\bf M}odel {\bf S}election. This software is capable of
 producing an estimative of the marginal likelihood of a model given
 experimental data, using the ideas of Thermodynamic Integration. Besides
-implementation details, in this chapter, we also present the main 
+implementation details, in this chapter we also present the main 
 difficulties of creating a computationally efficient implementation of
-such program, and also how we tackled these difficulties. 
+this software, and also how we tackled these difficulties. 
 
-A few experiments are shown in this chapter, in order to support some of
-our implementation choices. All the experiments of this chapter were
+In order to support some of our implementation choices and also to
+explore limitations of our software, a few experiments were performed
+and are shown in this chapter. All the experiments of this chapter were
 conduced in a server with an Intel Xeon E5-2690 CPU, and 252GB of RAM
 memory.
 
@@ -27,7 +28,7 @@ memory.
 %   -> parallel sampling
 %   -> running the algorithm on a cluster
 
-\section{The SigNetMS Software}
+\section{The SigNetMS software}
 % General Aspects of the software
 
 % The Bayesian methodology
@@ -69,7 +70,7 @@ list of parameter values $({\bm \theta}^1, {\bm \theta}^2, \ldots {\bm
 \theta}^l)$ that represent a sample of the distribution $p({\bm \theta}
 | M, {\bm D})$. If one simulates the model $M$ with parameter values
 from the sample, we expect that, the higher the marginal likelihood, the
-closer the created simulation is to the experimental data.
+closer the created simulation are to the experimental data.
 
 To calculate the marginal likelihood estimative, we use the ideas of 
 Thermodynamic Integration we presented on 
@@ -113,14 +114,11 @@ SigNetMS, we use the trapezoidal rule to approximate the marginal
 likelihood, given by the 
 equation~\ref{eq:marginal_likelihood_trapezoidal_approximation}. 
 Inspired by the work of Friel et al., we discretize the interval 
-$[0, 1]$ of power posteriors using the $\beta_i = \left(\frac{i - 1}{T -
-1}\right)^c$, where $T = 20$, $c = 4$ and $i \in \{1, 2, \ldots, T\}$.
-In the following sections, we explain how we implemented the likelihood
-function, and how samples of power posteriors are produced.
-
-% TODO: say here that we used pipipi popopo beta values and that with
-% samples of those power posteriors, we estimated the marginal
-% likelihood as...
+$[0, 1]$ of power posteriors using the schedule: 
+$\beta_i = \left(\frac{i - 1}{T - 1}\right)^c$, where $T = 20$, $c = 4$
+and $i \in \{1, 2, \ldots, T\}$. In the following sections, we explain
+how we implemented the likelihood function, and how samples of power
+posteriors are produced.
 
 \subsection{Implementing the likelilhood function}
 %-> The likelihood function is...

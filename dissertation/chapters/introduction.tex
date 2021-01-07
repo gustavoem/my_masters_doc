@@ -281,20 +281,42 @@ accomplish the following tasks
         identification of cell signaling pathways.}
 \end{enumerate}
 
-%\section{Organization}
-%{\color{blue}\bf TODO}
-%\begin{itemize}
-    %\item{\em Chapter 2 (Fundamental Concepts):} we will give more details
-        %about the identification of signaling pathway problem. We will
-        %show how to obtain experimental data for signaling pathways and
-        %how can chain of chemical reactions can be modeled as a system 
-        %of differential equations. We close the chapter presenting 
-        %briefly state of the art methods of model ranking and also the 
-        %Metropolis-Hastings algorithm, which is a useful tool for 
-        %methods of model ranking.
-    %\item{\em Chapter 3 (Model Selection Methods):} we will present two
-        %methodologies that are the state of the art in model selection.
-        %Both methods are Bayesian approaches, where the first is based
-        %on the estimation of marginal likelihoods and the second is
-        %based on Approximate Bayesian Computation.
-%\end{itemize}
+\section{Organization}
+\begin{itemize}
+    \item{\em Chapter 2 (Fundamental Concepts):} we will give more 
+        details about the identification of signaling pathway problem. 
+        We will show how to obtain experimental data for signaling 
+        pathways and how can chain of chemical reactions can be modeled 
+        as a system  of differential equations. We close the chapter 
+        presenting briefly state of the art methods of model ranking and
+        also the  Metropolis-Hastings algorithm, which is a useful tool
+        for methods of model ranking.
+    \item{\em Chapter 3 (Model Selection Methods):} we will present two
+        methodologies that are the state of the art in model selection.
+        Both methods are Bayesian approaches, where the first is based
+        on Approximate Bayesian Computation, and the second is based on
+        the usage of Thermodynamic Integration to create an estimative
+        of the marginal likelihood of a model.
+    \item{\em Chapter 4 (Development of SigNetMS, a Software for Model
+        Ranking):} we present the development of SigNetMS, a software
+        that allows model selection by creating an estimative of the
+        marginal likelihood of a model. We show the main difficulties
+        in implementing this software and how we were able to improve
+        its performance.
+    \item{\em Chapter 5 (Experiments and Results):} we show two 
+        different experiments. The first experiment compares two 
+        software for model selection: the first, ABC-SysBio, uses ideas 
+        of Approximate Bayesian Computation to rank models; the second,
+        SigNetMS, is implemented by us and uses ideas of Thermodynamic
+        Integration to create estimates of Marginal Likelihood. After
+        comparing both, we create an instance of Model Selection problem
+        in terms of a Feature Selection problem, and then we proceed to
+        use the chosen software as a score function. With the results of
+        such experiment, we are able to get a glance of the surface
+        induced by the score function over the search space.
+    \item{\em Chapter 6 (Conclusion):} we review all the content
+        presented in the previous chapters. We also include a list of 
+        contributions related to this work. Finally, we include a list
+        of possible suggestions of future work related to this
+        dissertation.
+\end{itemize}

@@ -1,7 +1,5 @@
 %begin-include
 
-% TODO: write pseudo-codes for metropolis hastings algorithms
-
 In this chapter we will define the model selection problem in the 
 context of this work and we will also present two state of the art 
 methodologies that can be used to rank models, both of them are Bayesian
@@ -79,7 +77,7 @@ Section~\ref{sec:fund_concepts:measurements}, these measurements are
 often created with Western Blot experiments, and the values of ${\bm D}$
 usually represent the ratio of concentrations of proteins.
 
-\section{Model ranking using Marginal Likelihood}
+\section{Model ranking using marginal likelihood}
 \label{sec:marginal_likelihood_method}
 % Simple explanation of this model ranking
 % Describe the likelihood function 
@@ -200,7 +198,7 @@ distributions~\cite{Friel2008}.
 %   -> name what is the power posterior
 % -> include here: how to estimate it?
 \label{sec:thermodynamic_integration}
-\subsection{Thermodynamic Integration for Marginal Likelihood}
+\subsection{Thermodynamic integration for marginal likelihood}
 The Thermodynamic Integration is a method that proposes to rewrite
 the Integral~\ref{eq:marginal_likelihood} using ideas of thermodynamics,
 providing new estimators for the marginal likelihood. This method is
@@ -212,7 +210,7 @@ or power posteriors~\cite{Friel2008}.
 
 Given a parameter prior distribution $p ({\bm \theta} | M)$ and a 
 posterior distribution $p ({\bm \theta} | {\bm D}, M)$, then we define a
-power posterior distribution with ``temperature'' $\beta$ as:
+power posterior distribution for some $\beta$ as:
 \begin{equation*}
     p_{\beta} ({\bm \theta}) = 
         \frac{p ({\bm D} | {\bm \theta}, M)^\beta p({\bm \theta} | M)}
@@ -310,7 +308,7 @@ be explained in the next section.
 % distribution; 
 % TODO: talk about how sampling from intermediate distributions is
 % better than sampling directly from the posterior distribution
-\subsection{Estimation of the Marginal Likelihood}
+\subsection{Estimation of the marginal likelihood}
 \label{sec:estimation_of_marginal_likelihood}
 There are multiple approaches on estimating the 
 Integral~\ref{eq:thermodynamic_integral} and, usually it is necessary to 
@@ -349,8 +347,8 @@ MCMC)~\cite{Friel2008}.
 % posterior shaped burn-in
 % populational mcmc
 
-The first step of sampling is run independently for each temperature and
-we call it {\bf naive burn-in}. The Metropolis-Hastings performed on 
+The first step of sampling is run independently for each power posterior 
+and we call it {\bf naive burn-in}. The Metropolis-Hastings performed on
 this step is started by taking a sample from the parameter priors. For 
 each step, the proposal distribution has to generate positive values and 
 the covariance matrix should be a diagonal covariance matrix, i.e. 
@@ -360,9 +358,6 @@ distribution according to the current sample. This type of MCMC
 algorithm, that updates its rules according to its trace is also called
 adaptive MCMC algorithm. This update is performed as proposed in Gelman 
 et al. (2013): 
-%TODO: https://arxiv.org/pdf/1504.01896.pdf look for "that the
-%acceptance rate should be close to"
-% TODO: continuar aqui
 \begin{itemize}
 \item{if the acceptance rate of parameter points in the last 
     iterations is greater than $0.44$, then increase the variance of the
@@ -377,8 +372,8 @@ steps to cover the space, while chains generated with larger variance
 tend to reject more proposed parameters, staying at the same point of
 the chain for many iterations.
 
-Given that we are taking a sample from a power posterior with 
-temperature $\beta_t$, the target function is  $p_{\beta_t} ({\bm
+Given that we are taking a sample from a power posterior of parameter
+$\beta_t$, the target function is  $p_{\beta_t} ({\bm
 \theta})$. Hence, if the current point is ${\bm \theta}^{(t, i)}$, the 
 probability of accepting a proposed parameter 
 ${\bm \theta}^* \sim J_{(t, i)} ({\bm \theta}^* | {\bm \theta}^{(t,
@@ -458,21 +453,21 @@ At the begin of the Populational MCMC phase, we will have $T$ chains of
 sampled parameters, containing the selected parameters of the first and 
 second steps. For each of these chains there is a covariance matrix that 
 was being used to determine the covariance of the proposal distribution 
-of the respective temperature. On the third phase, we fix all of these
-matrices and, for each iteration, two steps are performed. The first
-step is to iterate all chains, using the respective fixed covariance 
-matrix, identically to how it was done in the posterior shaped burn-in.
-The second step consists in choosing two different chains $\beta_i$ and
-$\beta_j$, with $i \neq j$ and $i, j \in \{1, \ldots, T\}$, and exchange
-the last sampled parameters of these chains with a certain probability.
-The value of $i$ is chosen randomly and uniformly over $\{1, \ldots,
-T\}$. Once $i$ is chosen, the second chain, of temperature $\beta_j$, is
-chosen following a Discrete Laplacian distribution given $i$, with 
-probability function $p (j | i) \propto e^{|i - j| / 2}$. This
-algorithm, as we described, was proposed by Friel et al. (2008) and can 
-be summarized in the following steps:
+of the respective power posterior. On the third phase, we fix all of 
+these matrices and, for each iteration, two steps are performed. The 
+first step is to iterate all chains, using the respective fixed 
+covariance matrix, identically to how it was done in the posterior
+shaped burn-in. The second step consists in choosing two different
+chains $\beta_i$ and $\beta_j$, with $i \neq j$ and $i, j \in \{1,
+\ldots, T\}$, and exchange the last sampled parameters of these chains
+with a certain probability. The value of $i$ is chosen randomly and
+uniformly over $\{1, \ldots, T\}$. Once $i$ is chosen, the second chain,
+of power posterior $\beta_j$, is chosen following a Discrete Laplacian
+distribution given $i$, with probability function $p (j | i) \propto
+e^{|i - j| / 2}$. This algorithm, as we described, was proposed by Friel
+et al. (2008) and can  be summarized in the following steps:
 \begin{enumerate}
-    \item{For each temperature $\beta_t$, $t \in \{1, \ldots, T\}$, 
+    \item{For each power posterior $\beta_t$, $t \in \{1, \ldots, T\}$, 
         update the $t$-th chain using MCMC with a proposal distribution
         that has the same covariance matrix used on the last iteration
         of the same chain, on the last sampling phase.}
@@ -508,7 +503,7 @@ After finishing the third step of sampling, the samples obtained on the
 first two phases are discarded and only the samples from the last phase
 are used to estimate the marginal likelihood.
 
-\subsubsection{Estimators of the Marginal Likelihood}
+\subsubsection{Estimators of the marginal likelihood}
 The sampling procedure explained on the 
 Section~\ref{sec:power_posteriors_sampling} produces samples of the 
 power posteriors $p_{\beta_1} ({\bm \theta}), \ldots, p_{\beta_T} ({\bm
@@ -521,8 +516,8 @@ marginal likelihood:
 \end{equation}
 This can be achieved using both numerical integration or creating an
 unbiased estimator. The choice of either approach of estimation will
-imply in a method for choosing the sequence of temperatures $\beta_1, 
-\ldots, \beta_T$. 
+imply in a method for choosing the sequence of power posteriors 
+$\beta_1, \ldots, \beta_T$. 
 
 The method proposed by Friel et al. (2008), uses a numerical integration 
 method to estimate the Integral~\ref{eq:marginal_likelihood_again}. 
@@ -541,8 +536,8 @@ values allows us to estimate the integral as:
     {\bm \theta})]}
 {2}
 \end{equation*}
-and if the sample of power posterior of temperature $\beta_t$ has $L_t$
-parameter points, then we can rewrite this equation as:
+and if the sample of power posterior of $\beta_t$ has $L_t$ parameter 
+points, then we can rewrite this equation as:
 \begin{equation}
 \log{p(D| M)} \approx \sum_{t = 0}^{T - 1} (\beta_{t + 1} - \beta_t)
 \frac{
@@ -555,7 +550,7 @@ parameter points, then we can rewrite this equation as:
 {2}
     \label{eq:marginal_likelihood_trapezoidal_approximation}
 \end{equation}
-According to the work of Friel et al. (2008), a good temperature 
+According to the work of Friel et al. (2008), a good power posterior 
 schedule for $\beta_1, \ldots, \beta_T$ that can be used in this 
 approach is:
 \begin{equation*}
@@ -579,7 +574,7 @@ The author uses this ideas to derive the following estimator. First,
 the interval $[0, 1]$ is discretized into $S - 1$ disjoint intervals 
 $\Delta\beta_i = [t_{i + 1}, t_i]$ such that  $\sum_{i = 1}^{S - 1} 
 (t_{i + 1} - t_{i}) = 1$. Then, for each interval $\Delta\beta_i$, $T_i$ 
-temperatures are taken randomly from the uniform distribution on the 
+value of $\beta$ are taken randomly from the uniform distribution on the 
 interval $[t_{i + 1}, t_i]$. Finally, the estimator of the logarithm of
 the marginal likelihood is given by:
 \begin{equation}
@@ -588,7 +583,7 @@ the marginal likelihood is given by:
         \sum_{i = 1}^{M_k} \log p ({\bm D} | M, {\bm \theta}^{(\beta_{k,
         i})})
 \end{equation}
-where $\beta_{k, i}$ is the $i$-th sampled temperature from the interval
+where $\beta_{k, i}$ is the $i$-th sampled element from the interval
 $\Delta\beta_k$; ${\bm \theta}^{(\beta_{k, i})}$ is a parameter sampled 
 from the power posterior $p_{\beta_{k, i}} ({\bm \theta})$; and 
 $|\Delta\beta_k| = t_{k + 1} - t_k$. However, Xu et al. do not provide
@@ -678,35 +673,37 @@ presents the ABC SMC algorithm.
 \begin{algorithmic}[1]
     \State Define the sequence $\epsilon_1, \ldots, \epsilon_T$.
     \State Define $N$, the sample size for each generation. 
-    \State Sample $\{(\theta^{(1, 1)}, M^{(1, 1)}), 
-                     (\theta^{(1, 2)}, M^{(1, 2)}), \ldots, 
-                     (\theta^{(1, N)}, M^{(1, N)})\}$ from 
-                     $p (\theta, M| D)$.
+    \State Sample $\{({\bm \theta}^{(1, 1)}, M^{(1, 1)}), 
+                     ({\bm \theta}^{(1, 2)}, M^{(1, 2)}), \ldots, 
+                     ({\bm \theta}^{(1, N)}, M^{(1, N)})\}$ from 
+                     $p ({\bm \theta}, M| D)$.
     \State Set $w^{(1, i)} = 1, \forall i \in {1, \ldots, N}$.  
     \For{$t \in \{1, \ldots, T\}$}
         \State $i \gets 1$
         \While{$i \leq N$}
             \State Sample $M^*$ from $p (M | D)$, the model prior.
-            \State Sample $(\theta^{(t - 1, k)}, M^*)$ from the 
+            \State Sample $({\bm \theta}^{(t - 1, k)}, M^*)$ from the 
                 last generation with weight $w^{(t - 1, k)}$.
-            \State Create $(\theta^*, M^*)$ by perturbing 
-                $\theta^{(t - 1, k)}$; 
-                $\theta^* \propto K^t(\theta | \theta^{(t - 1, k)})$.
-            \If{$p (\theta^* | M^*) = 0$}
+            \State Create $({\bm \theta}^*, M^*)$ by perturbing 
+                ${\bm \theta}^{(t - 1, k)}$; 
+                ${\bm \theta}^* \propto K^t({\bm \theta} | 
+                {\bm \theta}^{(t - 1, k)})$.
+            \If{$p ({\bm \theta}^* | M^*) = 0$}
                 \State Continue to next iteration.
             \EndIf
-            \State $D* \gets \phi (M^*, \theta^*)$
+            \State $D* \gets \phi (M^*, {\bm \theta}^*)$
             \If{$d (D^*, D) \leq \epsilon$}
                 \State $i \gets i + 1$
-                \State $(\theta^{(t, i)}, M^{(t, i)}) \gets 
-                    (\theta^*, M^*)$
+                \State $({\bm \theta}^{(t, i)}, M^{(t, i)}) \gets 
+                    ({\bm \theta}^*, M^*)$
             \EndIf
         \EndWhile
         \State Calculate the weights of the population:
             %\begin{equation*}
-$                w^{(t, i)} = \frac{p (\theta^{(t, i)} | M^{(t, i)})}
+            $w^{(t, i)} = \frac{p ({\bm \theta}^{(t, i)} | M^{(t, i)})}
                          {\sum_{j = 1}^N w^{(t-1, j)}p_{K^t}
-                            (\theta^{(t-1, j)}, \theta^{(t, i)})}$
+                            ({\bm \theta}^{(t-1, j)}, {\bm \theta}^{(t,
+                            i)})}$
             %\end{equation*}
     \EndFor
     \Return
