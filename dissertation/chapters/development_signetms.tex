@@ -267,7 +267,7 @@ in the generation of samples of power posteriors, we decided to focus
 optimizations in two different aspects of the sampling. The first
 aspect, is to reduce the required time to integrate a model, exploring
 different approaches to represent the model; the second aspect, is to
-take advantage of the independence of the sampling of two different
+take advantage of the independence of the sampling of different
 power posteriors, in the first two phases of sampling.
 
 \subsection{Optimizing the integration of a system of ordinary
@@ -296,15 +296,15 @@ differential equations}
 %   - fortunatelly, altough this last option sounds cumbersome to
 %   implement, sympy provides... it hahha
 The first consideration that was taken into account when optimizing the
-integration of the model was to use different algorithms, because, in 
+integration of the model was to use different algorithms because, in 
 general, algorithms prepared for non-stiff instances are less time
 consuming. However, because of the different nature of instances of 
 the problem, we could not choose between algorithms prepared for stiff 
-or non-stiff instances, and then we chose to continue using the {\tt
+or non-stiff instances, and then we chose to use the {\tt
 odeint} integrator, offered by SciPy, which can adapt according to the
 stiffness of the instance. The integrator {\tt odeint} is actually a 
 wrapper to the {\tt LSODA} integrator, which is part of the Fortran
-package called {\tt ODEPACK}~\cite{Hindmarsh1982} language.
+package called {\tt ODEPACK}~\cite{Hindmarsh1982}.
 
 % We also tried using GPU algorithms for integrations, however, they are
 % more likely to be worth using when the system has thousands of
@@ -322,32 +322,34 @@ determine the next value of the unknown function (with a certain
 accuracy), and if this matrix is not provided, algorithms like 
 {\tt LSODA} will approximate this function, decreasing the computational 
 efficiency. Considering the types of chemical reactions we consider on
-this work, we could implement a function that produces the Jacobian
-function of a system of ordinary differential equations that represents
-the model of interest.
+this work (first order reaction, second order reaction, and
+Michaelis-Menten modeled reaction), we could implement a function that 
+produces the Jacobian function of a system of ordinary differential 
+equations that represents the model of interest.
 
 However, after implementing such matrix derivation, and providing it to
-the integrator, the computational time required to produce integrations
+the integrator, the computational time used to produce integrations
 increased. That led us to believe that our computational representation 
-of functions, the one that represents the system and the Jacobian, were 
-not efficient. At this point, our representation of both system and
-Jacobian were an array of strings (since there is one function for each
-chemical species, to determine concentration change); then, the 
-evaluation of these functions was equivalent to interpreting the strings
-of all the functions and then evaluating them. Even though that was the
-simplest implementation to evaluate functions, it was clear for us that
-some pre-processing was necessary to create a better representation.
+of functions, the one that represents the system and the Jacobian, was
+not efficient. At this point of the development of the software, the
+representation of both system and Jacobian were an array of strings
+(since there is one function for each chemical species, to determine
+concentration change); then, the evaluation of these functions was
+equivalent to interpreting the strings of all the functions and then
+evaluating them. Even though that was the simplest implementation to
+evaluate functions, it was clear for us that some pre-processing was
+necessary to create a better representation.
 
 To improve the computational time needed to evaluate these functions, we
-considering using SymPy, a Python package that allows symbolic
+considered using SymPy, a Python package that allows symbolic
 mathematics. The idea was to provide the same strings of the functions
 to SymPy and create objects that represent such functions symbolically. 
 After that, we could also remove our differentiation method, since SymPy
-offers one. However, the `odeint` package is not prepared to receive a 
-SymPy object to perform integrations, instead, it expects to receive a 
-Python function. Fortunately, SymPy offers methods to symbolic functions 
-that allows code generation, and more specifically, Python code
-generation.
+offers one (which should be more generic and efficient than ours). 
+However, the `odeint` package is not prepared to receive a SymPy object 
+to perform integrations, instead, it expects to receive a Python 
+function. Fortunately, SymPy offers methods to symbolic functions that 
+allows code generation, and more specifically, Python code generation.
 
 Then, we experimented two ways of using SymPy function objects to 
 produce Python functions to represent the system and its Jacobian. The 
@@ -360,7 +362,7 @@ these approaches on representing the model with the repeated integration
 of a simple model, composed by five reactions and five chemical species. 
 On this experiment, we performed multiple integrations of the model; it 
 is important to note that our goal is to reduce the overall time of many
-integrations, therefore, comparing the time of one integration only is
+integrations, therefore, comparing the time of only one integration is
 not enough to determine the best choice. This is important because the
 last two approaches have a pre-processing stage where the system
 function is created, wrapped or even compiled, and this stage is only
@@ -458,11 +460,11 @@ list of elements. In our application, the list of elements is a list of
 power posteriors values to be sampled, and the function is the first two
 phases of the sampling procedure. The parallelization arises when we 
 consider that there is a pool of workers, each one in a different 
-process, that can be assigned to apply the sampling function to a power 
-posterior. The size of this pool is defined by the user as one of the 
-SigNetMS parameters; if the user does not define a value, the algorithm 
-sets the number of workers as the number of CPU cores available on the 
-machine.
+process (that can be ran by different CPU threads), that can be assigned
+to apply the sampling function to a power posterior. The size of this 
+pool is defined by the user as one of the SigNetMS parameters; if the 
+user does not define a value, the algorithm sets the number of workers 
+as the number of CPU cores available on the machine.
 
 To understand how this parallelization affects the execution time of
 SigNetMS, we designed an experiment where a sequence of $500$ sampling

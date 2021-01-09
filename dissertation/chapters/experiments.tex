@@ -837,7 +837,9 @@ The best model found has the characteristic vector $0111011000$ and had
 the logarithm of the marginal likelihood of $7.9$. This model has the 
 following reactions: SOS\_allo\_RasGTP complexation, SOS\_allo\_RasGTP
 decomplexation, Ras activation by SOS\_allo\_RasGTP, Ras activation
-by SOS, and Ras activation by SOS\_allo\_RasGDP.
+by SOS, and Ras activation by SOS\_allo\_RasGDP;
+Figure~\ref{fig:ras_switch:found_model} has a diagram of reactions of
+this model.
 
 
 \begin{table}[H]
@@ -863,6 +865,21 @@ Characteristic Vector && \multicolumn{1}{l}{Score} &
     SigNetMS to calculate the marginal likelihood.}
 \label{tab:sfs_trace}
 \end{table}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\textwidth]{experiments/ras_switch/solution.pdf}
+\caption{A representation of the found model after running the feature
+    selection process. This model is contained in the ``correct'' model,
+    and it differs from it on the reactions: SOS\_allo\_RasGP
+    complexation, Ras inactivation by GAP, and Ras activation by GEF.
+    These reactions are represented with dashed gray arrows. Reactions
+    from the found model are represented with solid black arrows.
+}
+\label{fig:ras_switch:found_model}
+\end{center}
+\end{figure}
+
 
 Even though the resulting subset is not the correct model, the marginal
 likelihood indicates that the model reasonably approximates the
