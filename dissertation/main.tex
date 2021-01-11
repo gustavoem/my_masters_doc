@@ -236,7 +236,7 @@ statistical analyses on results from biological assays, in which
 involved chemical species are quantified. However, once generally it is 
 measured only a few time points for a fraction of the chemical species, 
 to effectively tackle this problem it is required to design and simulate 
-functional dynamic models. Recently, it was introduced a method to 
+functional dynamic models. Recently, a method was introduced to 
 design functional models, which is based on systematic modifications of 
 an initial model through the inclusion of biochemical reactions, which 
 in turn were obtained from the interactome repository KEGG. 
@@ -244,21 +244,23 @@ Nevertheless, this method presents some shortcomings that impair the
 estimated model; among them are the incompleteness of the information 
 extracted from KEGG, the absence of rate constants, the usage of 
 sub-optimal search algorithms and an unsatisfactory overfitting 
-penalization. In this project, we propose a new methodology for 
+penalization. In this work, we propose a new methodology for 
 identification of cell signaling pathways, based on the mentioned
 method, with modifications on the cost function that aims to solve the
-unsatisfactory overfitting penalization. We will define a cost function
+unsatisfactory overfitting penalization. We defined a cost function
 based on the marginal likelihood of a model producing the observed
-experimental data. We expect this new cost function to automatically
-penalize complex models, since marginal likelihood approaches tend to 
-select models with intermediate complexity. The new methodology will be 
-tested artificial instances of model selection. For one of the
-experiments, we will solve the model selection problem as a feature
-selection problem, walking on the space of solutions to get a glance of
-the surface induced by the cost function we define.
+experimental data. We experiment and show how this new cost function 
+automatically penalize complex models, since marginal likelihood 
+approaches tend to select models with intermediate complexity. The new 
+methodology was tested on artificial instances of model selection. For 
+one of the experiments, we solved the model selection problem as a 
+feature selection problem, walking on the space of solutions to get a 
+glance of the surface induced by the cost function we define. With this
+work, we expect to contribute on problem of identification of cell 
+signaling pathway problem, providing a well founded cost function that
+can be used in a feature selection approach.
 
 \chapter*{Resumo}
-{\textcolor{blue}{TODO: traduzir o novo resumo em inglês}}
 Vias de sinalização celular são compostas por um conjunto de reações
 bioquímicas que estão associadas à transmissão de informação no interior
 de uma célula e suas imediações. Tradicionalmente, essas vias são
@@ -274,17 +276,24 @@ interatomas KEGG. Entretanto, este método apresenta limitações que
 comprometem o modelo estimado; entre elas, a incompletude das
 informações extraídas do KEGG, a ausência de constantes de velocidade, o
 uso de algoritmos de busca subótimos e uma penalização insatisfatória
-para sobre-ajuste. Neste projeto, propomos uma nova metodologia para
-identificação de vias de sinalização celular, que fará uso de uma
-miríade de repositórios públicos de interatomas e de cinética de reações
-bioquímicas para lidar com o problema de incompletude de informações a
-priori. Além disso, utilizaremos algoritmos ótimos para realizar a
-seleção de modelos, assim como funções custo mais efetivas para
-penalização de sobre-ajuste. A nova metodologia deverá ser testada em
-instâncias artificiais e também na identificação de vias de sinalização
-celular em nosso estudo de caso, a linhagem murina de tumor
-adrenocortical Y1. (AU)
- 
+para sobre-ajuste. Neste trabalho, propomos uma nova metodologia para
+identificação de vias de sinalização celular, baseada no método citado,
+com modificações na função de custo que tem como objetivo penalizar
+complexidade de modelos satisfatoriamente. Neste trabalho, definimos uma
+função de custo baseada na verossimilhança marginal de um modelo 
+reproduzir dados experimentais. Produzimos experimentos e mostramos como
+a nova função de custo automaticamente penaliza modelos mais complexos,
+o que é esperado pois abordagens baseadas em verossimilhança marginal
+tendem a selecionar modelos de complexidade intermediária. Nossa
+metodologia foi testada em instancias artificiais de seleção de modelos.
+Em um dos experimentos, realizamos a seleção de modelos como um problema
+de seleção de características, caminhando pelo espaço de soluções para
+se obter indícios sobre a superfície induzida pela função de custo sobre
+o espaço de busca. Com este trabalho, esperamos contribuir para o
+problema de seleção de vias de sinalização celular, fornecendo uma
+função de custo bem fundada que possa ser utilizada em uma abordagem
+baseada em seleção de características.
+
 \tableofcontents
 
 \clearpage
