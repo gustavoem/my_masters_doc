@@ -8,11 +8,11 @@ dissertation.
 
 \section{Review of contents of this dissertation}
 % Review of the contents of this work
-On the Introduction of this text, we presented the main aspects of cell
+In the Introduction (Chapter~\ref{chap:intro}) of this text, we presented the main aspects of cell
 signaling pathways and how computational models can approximate their
-dynamics. After that, we showed how Wu~\cite{Wu15} defined an approach
+dynamics. After that, we showed how Wu defined an approach
 for model selection of cell signaling pathwyas as a feature selection
-problem, and also the main caveats of their approach. With that, we
+problem~\cite{Wu15}, and also the main caveats of their approach. With that, we
 could state the goal of this project, which is to study and develop a
 similar method for model selection using feature selection, where the 
 cost function is created with a Bayesian approach, capable of
@@ -23,7 +23,7 @@ determining the likelihood of a model producing experimental data.
 % auto-penalize complex models
 
 We decided to use a Bayesian approach to construct the cost function
-because of its ability to auto penalize overly complex models, avoiding
+because of its ability to auto penalize overly-complex models, avoiding
 some sort of ``overfit'' that can occur, characterized by complex models
 that have good ability to fit an example of experimental data, but have 
 poor generalization performance. Another reason to use a Bayesian
@@ -32,35 +32,38 @@ variables, which allow the user to input their prior knowledge, and also
 to produce a posterior distribution for model parameters. Specially in 
 our application, where model parameters are related to the rate 
 constants of reactions, using a non deterministic approach to model 
-constants is closer to what is seen in the real world; since those 
-reactions can occur in a variety of conditions, reaction rate constants
-are not fixed constants.
+constants is a better way to deal with the uncertainty in their measurements.
+
+% Condições termodinâmicas (pressão, temperatura) são relativamente constantes,
+% em experimentos com células,
+% então a maior fonte de incerteza nas constantes de velocidade está na medida.
+%
 
 % Ok, then on chapter 2 we revised some content
 Before introducing concepts and methodologies we developed in this work,
 we reviewed the fundamental concepts necessary to advance in this 
-project. On Chapter 2 we conduced this review, presenting concepts
+research. In Chapter~\ref{chap:fundamental_concepts}, we conduced that review, presenting concepts
 of cell signaling pathways, experimental measurements of those systems, 
 and also how to create computational models for them, using system of 
-ordinary differential equations. We also introduced the state of the art
+ordinary differential equations. We also introduced the state-of-the-art
 methodologies for model selection in the context of cell signaling
-pathways and the algorithm of Metropolis-Hastings, to generate samples
+pathways and the algorithm of Metropolis--Hastings, to generate samples
 of unknown distributions.
 
 % Then we reviewed state of the art model selection
-On Chapter 3 we presented a short review of two different methodologies
-for evaluating the quality of models. The first methodology, uses an
-estimative of the marginal likelihood of a model being the ``correct''
-given the experimental data. This estimative is created by sampling from
+In Chapter~\ref{chap:model_selection}, we presented a short review of two different methodologies
+for evaluating the quality of models. The first methodology uses an
+estimate of the marginal likelihood of a model being the ``correct''
+given the experimental data. This estimate is created by sampling from
 different power posterior distributions, bridging the prior and
-posterior distribution of model parameters; to conduce those
+posterior distributions of model parameters; to execute those
 calculations, it is necessary to define a likelihood function. The 
-second methodology, uses the concept of Approximate Bayesian 
-Computation, and it also produces a sequence samples that for each
+second methodology uses the concept of Approximate Bayesian 
+Computation (ABC), and it also produces a sequence samples that for each
 iteration approximates better the posterior distribution of parameters.
-This last approach however, does not depend on the definition of a
+This last approach, however, does not depend on the definition of a
 likelihood function. There are available software that apply both
-methodology, BioBayes and ABC-SysBio, for the first and second
+methodologies, BioBayes and ABC-SysBio, for the first and second
 approaches, respectively.
 
 % Then we produced an almost efficient way to calculate marginal
@@ -68,7 +71,7 @@ approaches, respectively.
 After testing both software, BioBayes and ABC-SysBio, we found that
 BioBayes would be cumbersome to use as part of a feature selection cost
 function. We then decided to produce a new software to estimate marginal
-likelihood of models, and we called it SigNetMS. On Chapter~4 we
+likelihood of models, and we called it SigNetMS. In Chapter~\ref{chap:development_signetms}, we
 presented the main procedures we needed to build for this software. We
 highlighted the sampling procedure as a computationally expensive
 procedure, mainly because of the multiple numerical integrations
@@ -81,6 +84,7 @@ we presented how we managed to sample from multiple power posterior
 distributions, using parallelization.
 
 % We then compared ABC-SysBio to SigNetMS
+In Chapter~\ref{chap:experiments}, we provided experimental results with both Bayesian methods.
 With the implementation of SigNetMS, we could then compare both
 methodologies to evaluate models: based on the marginal likelihood
 estimation, using SigNetMS, and based on Approximate Bayesian
@@ -94,7 +98,7 @@ but with higher complexity; which is an evidence that, in fact, the
 Bayesian approach does penalize the complexity of models.
 
 % And finally, we experimented on a small instance
-Since SigNetMS produced better results on the simple model selection
+Once SigNetMS produced better results on the simple model selection
 instance, we used this software in our next experiment: a model
 selection problem solved as a feature selection problem. To build this
 instance, we defined a ``correct'' model of a Ras switch to generate
@@ -106,7 +110,7 @@ marginal likelihood of a model with such subset. To conduce the search,
 we used the Sequential Forward Selection heuristics, and as a result, we
 got a subset with five features, different from the ``correct'' subset,
 with eight features. We produced plots that indicate that for both
-``correct'' and found subset, the produced sample does make the model
+``correct'' and found subsets, the produced sample does make the model
 reproduce the experimental data; however, the cost of the ``correct''
 model was higher, which indicates that its complexity was penalized,
 since a simpler model could reproduce its measured dynamics.
@@ -116,10 +120,10 @@ Finally, with this last experiment, we could actually confirm that the
 Bayesian approach does penalize complex models. More than that, we could
 confirm that the sample produced by SigNetMS, when possible, does
 approximate the model dynamics to the experimental measurements
-dynamics. However this results indicates that SigNetMS could be used for
+dynamics. However, although those results indicate that SigNetMS could be used for
 other examples of model selection, we should also highlight that our
 experiment was small, and further experimentation is needed to improve
-the SigNetMS software, preparing it for larger and harder instances.
+the SigNetMS software, preparing it for the application into larger instances.
 
 \section{Contributions of this dissertation}
 % Contributions of this work
@@ -130,7 +134,7 @@ the SigNetMS software, preparing it for larger and harder instances.
 % -> advanced school of mathematics
 In this section, we highlight scientific contributions derived from this
 work and also other participations of the author on conferences and
-other events during this project.
+other events during his master's program.
 
 \subsection{Technical contributions}
 \begin{itemize}
@@ -140,9 +144,9 @@ other events during this project.
     parameters.}
 \item{The comparison of two Bayesian approaches for model selection:
     using marginal likelihood and approximate Bayesian computation.
-    Conduced on Chapter~\ref{chap:experiments}.}
+    Conduced in Chapter~\ref{chap:experiments}.}
 \item{The experimentation of a feature selection approach for model
-    selection, using a Bayesian cost function, conduced on
+    selection, using a Bayesian cost function, conduced in
     Chapter~\ref{chap:experiments}.}
 \end{itemize}
 
@@ -154,10 +158,10 @@ other events during this project.
 \item{The participation at the São Paulo School of Advanced Science on 
     Learning from Data, São Paulo - Brazil, from July 29$^{th}$ to
     August 9$^{th}$ of 2019, as a volunteer, including a 
-    five minute lightning talk about partial results of this work.}
+    five-minute flash talk about partial results of this work.}
 \item{The participation at the 2019 Rocky Mountain Bioinformatics 
     Conference, in Aspen, Colorado - USA, from December 5$^{th}$ to
-    Decemter 7$^{th}$ including a poster session where partial results 
+    December 7$^{th}$, including a poster session where partial results 
     of this work were presented.}
 \end{itemize}
 
@@ -166,35 +170,35 @@ other events during this project.
 For future work related to this project, we would like to recommend the
 following topics for further research:
 \begin{itemize}
-    \item{An efficiency improvement for SigNetMS.} The sampling of model
+    \item{\bf An efficiency improvement for SigNetMS.} The sampling of model
         parameters is still a very time consuming procedure, and to
         improve its performance, we would like to suggest a few options:
         further research on numerical integration software, possibly
         aiming for software that are optimized for parallelization and
         memoization, since many integrations are performed.
-    \item{Treatment for numerical instability on the integration of
-        models. For many of our instances, we noticed that some regions
+    \item{\bf Treatment for numerical instability on the integration of
+        models.} For many of our instances, we noticed that some regions
         of the space of parameters can lead to numerical instabilities
         in the integration methods. It would be necessary to investigate
         on how to avoid such areas and what is the influence of such
-        avoidance in the produced sample.}
+        avoidance in the produced sample.
     %solving the problem as it was u-curve
-    \item{Solving the feature selection problem as a U-Curve problem. In
-        this work we produced evidences that complex models are
+    \item{\bf Solving the feature selection problem as a U-Curve problem.} In
+        this work, we produced evidences that complex models are
         penalized, and therefore, it would be interesting to analyze if
         the U-Curve simplification is applicable for model selection
-        instances.}
+        instances.
     %heterogeneous conditions of measurements
-    \item{Experimentation on heterogeneous conditions of measurement. In
+    \item{\bf Experimentation on heterogeneous conditions of measurement.} In
         all the instances we used in this project, repetitions of 
         experimental measurements had very similar values over time; it
         might be interesting to assess the robustness of our methodology
         when experimental measurements are taken in more heterogeneous
-        conditions, with variations in the observed dynamics.}
+        conditions, with variations in the observed dynamics.
     %application of the methodology on real examples
-    \item{Applications of the methodology on real instances of model
-        selection. In this project, although inspired in real signaling
+    \item{\bf Applications of the methodology on real instances of model
+        selection.} In this project, although inspired in real signaling
         network pathways, we used only artificial examples. It is
         therefore important to use this methodology in real instances,
-        where the ``correct'' model is unknown.}
+        where the ``correct'' model is unknown.
 \end{itemize}

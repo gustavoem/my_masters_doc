@@ -1,14 +1,14 @@
 %begin-include
 
-In this chapter we present experiments of model selection of cell
-signaling pathways, and we divide the contents of this chapter in two 
+In this chapter, we present experiments of model selection of cell
+signaling pathways; to this end, we divide the contents of this chapter in two 
 sections. The first section presents experiments to compare two model 
-selection software: ABC-SMC and SigNetMS, both of them presented on 
+selection software: ABC-SMC and SigNetMS, both of them described in 
 Chapter~\ref{chap:model_selection}. To make this comparison, we
 use an instance of model selection with only four candidate models,
 evaluating the score of each one of them. The following section presents
-experiments of another instance of model selection, however, this time
-formulated as a feature selection problem. We will then analyze the
+experiments of another instance of model selection; however, this time
+model selection is formulated as a feature selection problem. We will then analyze the
 search produced by the feature selection algorithm and how it relates to
 a ``correct'' model, which was used to create the experimental
 measurements.
@@ -57,42 +57,42 @@ model selection experiment. This model represents a common motif, and
 has S and Rpp as input and output, respectively. This model contains
 five reactions: the decay of S to dS with $k_1$ as reaction rate
 constant; the reversible reaction $\ce{S + R <=>[$k_1$][$k_2$] RS}$; the
-first order reaction $\ce{RS ->[$k_4$] Rpp}$; and the Michaelis-Menten
+first order reaction $\ce{RS ->[$k_4$] Rpp}$; and the Michaelis--Menten
 reaction $\ce{A ->[$V, K_m$] B}$.}
     \label{fig:experiments:girolami_model1}
     \end{center}
 \end{figure}
 
 We start describing our model selection problem with the correct model,
-which is a signalling pathway composed by five reactions and five 
+which is a signaling pathway composed by five reactions and five 
 chemical species. Figure~\ref{fig:experiments:girolami_model1} shows a 
 diagram of this model. This model represents a common motif, and has
 as the input signal the chemical species S, and as the output the
 chemical species Rpp. The experimental measurement is the concentration
-of the output chemical species, which we donote as [Rpp].
+of the output chemical species, which we denote as [Rpp].
 
-In this experiment, for the sake of simplicity, we neglect the units of 
-both reaction rates constants and initial concentrations. The initial 
-concentrations used are:  S $= 1$, R $= 1$, dS $= 0$, RS $= 0$, 
-R$_{pp} = 0$. To create the experimental data, the reaction rate 
-constants we used have the values: 
+In this experiment, for the sake of simplicity, we neglected the units of 
+both reaction rates constants and initial concentrations. The used initial 
+concentrations were:  S $= 1$, R $= 1$, dS $= 0$, RS $= 0$, 
+R$_{pp} = 0$. To create the experimental data, the used reaction rate 
+constants had the values: 
 $k_1 = 0.07$, $k_2 = 0.6$, $k_3 = 0.05$, $k_4 = 0.3$, $V = 0.017$, and
-$K_m = 0.3$. It is important to remember that we discard reaction rate
+$K_m = 0.3$. It is important to remember that we discarded reaction rate
 constant values during model selection; initial concentrations, however,
 are still provided during this phase. To generate experimental data, we
-simulate the dynamics of this model, using these parameter values, on
+simulated the dynamics of this model, using these parameter values, on
 the time steps of: 2, 10, 20, 40, 60 and 100 seconds. Three simulations
-are created, and to each one of them we add, for each time measurement,
+were created, and for each one of them we added, for each time measurement,
 a Gaussian error with mean $0$ and standard deviation $0.01$. A
-representation of the three experiment repetitions are showed on 
-figure~\ref{fig:experiments:girolami_simulations}.
+representation of the three experimental replicates are showed in 
+Figure~\ref{fig:experiments:girolami_simulations}.
 
 % insert simulated data here
 \begin{figure}
 \begin{center}
     \includegraphics[width=.75\textwidth]{experiments/simulations/girolami_experimental_data.pdf}
     \caption{The dynamics produced by the correct model, with
-pre-defined reaction rate constants plus a small Gaussian error, for
+predefined reaction rate constants plus a small Gaussian error, for
 each time point. The measurement taken from the model is the
 concentration of the Rpp species, which we denote as [Rpp]. We
 linearly interpolate the experimental measure points to produce a
@@ -102,7 +102,7 @@ continuous dynamics from 2s to 100s.}
 \end{figure}
 
 To assess the ranking produced by each of the model selection software,
-we compare the first model with three other models, all of them built as
+we compared the first model with three other models, all of them built as
 modifications of the ``correct'' model: a simplified model; an overly 
 simplified model, which should not be able to generate the observed 
 dynamics; and, finally, a generalization (more complex) model.
@@ -130,7 +130,7 @@ represent the three alternative models.
 correct model that was presented before on 
 Figure~\ref{fig:experiments:girolami_model1}. The 
 model~\ref{fig:girolami_model2} is a simplification where we neglect the
-chemical species RS, and we use the Michaelis-Menten to represent the
+chemical species RS and use the Michaelis--Menten to represent the
 reaction $\ce{R -> Rpp}$ with S working as a catalyst.
 Model~\ref{fig:girolami_model3} is the over simplified model, as it
 neglects the decay of S; we do not expect this model to reproduce
@@ -139,7 +139,7 @@ continuously produce Rpp, a species that, after 20 seconds, has a
 monotonic decreasing concentration. Finally,
 Model~\ref{fig:girolami_model4} is a generalization of the correct
 model, as it generalizes the reaction $\ce{Rpp -> R}$, as instead of 
-using the Michaelis-Menten kinetics, we use the enzymatic reaction 
+using the Michaelis--Menten kinetics, we use the enzymatic reaction 
 $\ce{Rpp + PhA <=> RppPhA -> R + PhA}$; even though we expect this model
 to be able to reproduce observed dynamics, we also expect that the
 complexity of this model gets penalized.
@@ -153,18 +153,16 @@ complexity of this model gets penalized.
 %  software compares models with similar dynamics and with different
 %  levels of complexity.
 
-Before talking about results produced by different software, we should
+Before talking about results produced by different Bayesian methods, we should
 note that this choice of candidate models are made so we can analyze
-more than the ability of the software to correctly rank the correct
+more than the ability of a given method to correctly rank the correct
 model as the best model. First, consider that we introduced a spurious
-model, represented on figure~\ref{fig:girolami_model3} which neglects a
+model, represented in Figure~\ref{fig:girolami_model3}, which neglects a
 crucial reaction, making it impossible to reproduce the experimental
 data; we expect this model to be ranked last between all models. Then,
-there are two options to the correct model, one a simplification, and
-the other a generalization. For these models, we expect that the
-experimental dynamics are possible, however, we should be observant of
-how they are ranked according to their complexity. That is important
-because, one of the goals on using a Bayesian approach for model 
+there are two options to the correct model, one being a simplification, and
+the other one a generalization. For these models, we expect that the experimentally observed dynamics is feasible; however, we should be observant of how they are ranked according to their complexity. That is important
+because one of the goals on using a Bayesian approach for model 
 selection is that these approaches tend to automatically penalize overly
 complex models.
 
@@ -182,25 +180,24 @@ After defining the candidate models and producing the artificial
 experimental data, we proceeded to perform the experiment of model
 selection. The instance information provided to SigNetMS and ABC-SysBio 
 is the same: a model, with predefined initial concentrations of chemical 
-species; a set of experiments, with the same time steps, and with
-measurements of the concentration of Rpp; and a file containing prior
+species; a set of experiments, with the same time steps and measurements of Rpp concentration; and a file containing prior
 distributions for each one of the model parameters. It is important to
 remember that the output produced by each software is different.
-SigNetMS produces an estimative of $p({\bm D} | M)$ and also a sample of
+SigNetMS produces an estimate of $p({\bm D} | M)$ and also a sample of
 the posterior distribution of parameters $p({\bm \theta} | M, {\bm D})$
-which is, in fact, composed by samples of all power posterior
+which is, in fact, composed of samples of all power posterior
 distributions $p_{\beta}({\bm \theta})$, as we described
-on~\ref{sec:creating_an_estimative_of_the_marginal_likelihood}.
-ABC-SysBio, on the other hand, produces estimatives of $p({\bm
+in Section~\ref{sec:creating_an_estimate_of_the_marginal_likelihood}.
+ABC-SysBio, on the other hand, produces estimates of $p({\bm
 \theta}, M | {\bm D})$ that tend to be closer to this target 
-distribution on each iteration. Note that in this experiment, we need to
-run SigNetMS for every model, while on ABC-SysBio we only need to run 
+distribution on each iteration. Note that in this experiment we need to
+run SigNetMS for every model, whereas using ABC-SysBio we only need to run 
 the software once for all four candidate models.
 
 The prior distribution of parameters are the same as used by Vyshemirsky
 and Girolami~\cite{Vyshemirsky2007}. All model parameters priors are
-Gamma(1, 3), where the first and second arguments are shape and scale,
-respectively. Gamma and Lognormal distributions are often used as prior 
+gamma(1, 3), where the first and second arguments are shape and scale,
+respectively. Gamma and log-normal distributions are often used as prior 
 for parameters because they have a zero probability density for negative
 values.
 % what are algorithm parameter values used
@@ -208,10 +205,10 @@ values.
 For ABC-SysBio, we decided to use its feature of automatically choosing
 the schedule of threshold values, which is based on the acceptance of
 produced individuals on each iteration. For SigNetMS, we used the
-following parameters values: 15000 iterations of the naive burn-in, and
-5000 iterations of the posterior shaped burn-in, with 1000 iterations
-between covariation matrix rescales, and 3000 iterations of the
-Populational MCMC. We used an empiric approach to determine these
+following parameters values: 15,000 iterations of the naive burn-in, and
+5,000 iterations of the posterior shaped burn-in, with 1,000 iterations
+between covariance matrices re-scales, and 3,000 iterations of the
+Populational MCMC. We used an empirical approach to determine these
 parameter values, observing similar results when the number of
 iterations are greater than these.
 
@@ -262,8 +259,8 @@ candidates.
 
 On SigNetMS results, we see that the Correct Model was ranked first and 
 the Incorrect Model is ranked last as expected. For these two models,
-SigNetMS results are equal to the results of Girolami and Vyshemirsky,
-and for the other two models, the ranking is the opposite. On SigNetMS,
+SigNetMS results are equal to the results of Vyshemirsky and Girolami,
+and for the other two models, the ranking is the opposite~\cite{Vyshemirsky2007}. On SigNetMS,
 we ranked the Simplified Model as better than the Generalization Model.
 It is important to note here that, in fact, the Generalization Model,
 which is more complex, was actually ranked worse than the Correct Model;
@@ -273,9 +270,9 @@ models.
 % subsubsection Analyzing the distribution of posteriors
 \subsubsection{Analyzing the posterior distributions produced by
 ABC-SysBio and SignetMS}
-If we consider only the ranking produced, there are indications that 
+If we consider only the produced ranking, there are indications that 
 SigNetMS is a better choice for our application. However, we should also
-take into account other output information produced by both software, 
+take into account other output information produced by both methods, 
 relative to the distribution of model parameters. ABC-SysBio algorithm 
 produces in every iteration a population of parameters that, when 
 applied to an specific model, creates a simulation that is at most 
@@ -290,20 +287,20 @@ distributions $p_0({\bm \theta})$ and $p_1({\bm \theta})$ are,
 respectively, the prior and posterior distribution of parameters.
 
 % One way we could analyze data is looking at the produced simulations
-A possible approach to analyze the produced parameters is to simulate
-models with those parameter and create simulations to be compared with
+A possible approach to analyze the produced parameter values is to simulate
+models with those values and create simulations to be compared with
 the experimental measurements. For ABC-SysBio, in a population of 100
-parameters, including the model indicator as one of the parameters, we
+parameter values (``particles''), including the model indicator as one of them, we
 are able to simulate and visualize the generated experimental 
 measurements for all individuals; on SigNetMS, on the other hand, the 
-number of parameter values produced is much greater, than a randomly 
+number of produced parameter values is much larger, so a randomly 
 chosen subset of parameters should be enough. With such experiment, we 
-are then able to identify what dynamics were created on the candidate 
+are then able to identify what types of dynamics were created on the candidate 
 models according to the estimated posterior distribution of parameters. 
 
-On  figure~\ref{fig:girolami_allmodel_abc} we present the dynamics of 
+In Figure~\ref{fig:girolami_allmodel_abc}, we present the dynamics of 
 sampled parameters of the last iterations of the ABC-SysBio run. We can
-see on this figure that ABC-SysBio could not produce a set of parameter
+see in this figure that ABC-SysBio could not produce a set of parameter
 values that allows the model to represent the dynamics observed on the
 experiment. More than that, we can see that the incorrect model had the
 best fit, and the dynamics produced by the sampled parameters induces a
@@ -333,28 +330,28 @@ observed on experiments.
     \label{fig:girolami_model4_abc}}
     \end{tabular}
     \caption{The simulated dynamics of the four candidate models, using
-    parameters generated on the ABC-SysBio software. There are 100
-    individuals generated on each iteration of the algorithm, and each
-    individual consists of a list of parameter values and a model
+    parameters generated with the ABC-SysBio software. There are 100
+    particles generated on each iteration of the algorithm, and each
+    particle consists in a list of parameter values and a model
     indicator. Because of this, the number of produced simulations is 
     not equal between models, in fact, the better the fit of a model,
-    the higher the number of individuals representing such model, and
+    the higher the number of particles representing such model, and
     therefore, the higher the number of simulations shown. Each red line
-    represent an individual simulation, and stronger red lines represent
+    represents a particle simulation, and stronger red lines represent
     overlapping simulations. Lines with blue, yellow and green color
     represent experimental observations.}
     \label{fig:girolami_allmodel_abc}
 \end{figure}
 
-On figure~\ref{fig:girolami_allmodel_snm} we present the dynamics of a 
+In Figure~\ref{fig:girolami_allmodel_snm}, we present the dynamics of a 
 subset of parameters of the posterior distribution (or power posterior 
-of $\beta = 1$), for all four candidate models. We can see on this
+of $\beta = 1$), for all four candidate models. We can see in this
 figure that SigNetMS could not find parameter values that allow the
 incorrect model to reproduce experimental observations, which is
 expected, and that the three other models candidate models could
 closely reproduce the experimental observations. It is also interesting
 to observe the dynamics produced by sampled parameters for other values
-of $\beta$, which is shown on figure~\ref{fig:girolami_model1_progression_snm},
+of $\beta$, which is shown in Figure~\ref{fig:girolami_model1_progression_snm},
 for the correct model only. Remember that from $\beta = 0$ to 
 $\beta = 1$, a sequence of power posterior distributions is constructed 
 by SigNetMS, bridging the prior and posterior distributions.
@@ -410,11 +407,11 @@ by SigNetMS, bridging the prior and posterior distributions.
     \\
     \subfigure{
     \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/all_model/snm/msimulations_model1_31.pdf}
-    \label{fig:girolami_model1_2_snm}}
+    \label{fig:girolami_model1_4_snm}}
 &
     \subfigure{
     \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/all_model/snm/msimulations_model1_39.pdf}
-    \label{fig:girolami_model1_3_snm}}
+    \label{fig:girolami_model1_5_snm}}
     \end{tabular}
     \caption{The dynamics induced by samples of different power
     posterior distributions of parameters of the correct model. The
@@ -424,18 +421,17 @@ by SigNetMS, bridging the prior and posterior distributions.
     \label{fig:girolami_model1_progression_snm}
 \end{figure}
 
-The ranking and the simulations indicate that SigNetMS is more
-appropriate for our applications. To further investigate the results
-produced by this software, we also created plots of approximations of
-the produced power posterior samples, presented on 
-figure~\ref{fig:girolami_model1_progression_snm}. These density function
+The ranking and the simulations indicate that SigNetMS is a more
+appropriate choice for further investigation. Therefore, we also created plots of approximations of
+the produced power posterior samples, presented in 
+Figure~\ref{fig:girolami_model1_progression_snm_2}. Those density function
 estimates were created using the {\tt distplot} function of the Seaborn
 Python package, which uses Gaussian Kernel Densinty Estimate (KDE) to
 provide an estimation of the density function given a sample of such
 distribution. The presented figure shows estimated power posterior
 distributions, with different values of $\beta$, for the $k_1$ parameter
 of the correct model, which had value $0.07$ when artificial
-experimental data was created. We can see that as we increase the value 
+experimental data were created. We can see that as we increase the value 
 of $\beta$, the posterior distribution concentrates on values around the
 ``true'' value of the parameter. It is also interesting to see that
 although the estimated posterior is not necessarily centered on the 
@@ -463,7 +459,7 @@ observations.
     \\
     \subfigure{
     \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/parameters_snm/model1_31_p0_k_1.pdf}
-    \label{fig:girolami_model1_2_parameters}}
+    \label{fig:girolami_model1_4_parameters}}
 &
     \subfigure{
     \includegraphics[clip=true,width=.45\linewidth]{experiments/abc_vs_snm/parameters_snm/model1_39_p0_k_1.pdf}
@@ -477,7 +473,7 @@ observations.
     created using {\tt distplot} function of Seaborn package. The value
     used for this parameter on the creation of the experimental data is
     $0.07$, and it is represented on the axis of the plots.}
-    \label{fig:girolami_model1_progression_snm}
+    \label{fig:girolami_model1_progression_snm_2}
 \end{figure}
 
 \clearpage
@@ -495,15 +491,20 @@ we are now able to experiment and analyze the approach of solving a
 model selection problem as a feature selection problem, using a Bayesian
 approach to define a cost function. To accomplish this, we created
 another simple instance of model selection. Although this instance is
-still a toy model, we will be able to access the space of possible
+still a toy model, we will be able to assess the space of possible
 solutions and get a glance of the cost surface induced by SigNetMS over
 this space.
 
+%
+% Eu mudei a imagem da função custo c de reais positivos para somente reais, 
+% porque mais para frente, em seu procedimento de seleção de características
+% há valores negativos
+%
 A feature selection instance can be defined by a pair $(S, c)$ where $S$
 is a set of features and $c$ is a cost function that evaluates subsets
 of $S$. The space of solution is usually the power set of $S$,
 $\mathcal{P}(S)$, and the cost function usually takes values from this 
-space to positive real values, $c: \mathcal{P}(S) \to \fieldR$. An
+space to real values, $c: \mathcal{P}(S) \to \fieldR$. An
 optimal solution is a subset $X \in \mathcal{P}(S)$ such that $c(X) \leq
 c(Y), \forall Y \in \powerset (S)$, however, it is important to notice
 that the size of the search space grows exponentially with the number of
@@ -514,16 +515,16 @@ SigNetMS, depends on the estimation of multiple power posteriors of
 parameters and includes numerous numerical integrations of a system of
 ordinary differential equations.
 
-It is often useful to represent the search space with a boolean lattice, 
+It is often useful to represent the search space with a Boolean lattice, 
 which is defined by the power set $\mathcal{P}(S)$ and the partial order 
 relation $\subseteq$. More than an aid to represent the search space,
-the boolean lattice provides a structure that is useful for search
+the Boolean lattice provides a structure that is useful for search
 algorithms to define paths and to take advantage of surface of the 
 search space, as it is done on algorithms for the U-Curve problem, a 
 special case of the feature selection problem where the cost function 
-describes a u-shaped curve on every chain of the boolean lattice. The
+describes a U-shaped curve on every chain of the Boolean lattice. The
 U-Curve problem is still an NP-hard problem as the feature selection
-problem is~\cite{Rei12}, however there are heuristics and optimal
+problem is~\cite{Rei12}; however, there are heuristics and optimal
 algorithms that can be used on the U-Curve problem to produce a quality
 answer (optimal or close to be optimal) with a feasible computational
 time. Moreover, one can produce good results using U-Curve algorithms to 
@@ -556,7 +557,7 @@ feature selection instance that represents a model selection instance.
     we can see this model at the base of the diagram, on the rectangle 
     that represents the empty set (no reaction are drawn with dots). 
     Each rectangle also represents a candidate model, which is composed 
-    by the base model plus the reactions drawn with dots. The number
+    of the base model plus the reactions drawn with dots. The number
     below each rectangle represents the score (minus one times the cost)
     of each model. The optimal subset is drawn in yellow and it the
     subset of reactions $\{b, c\}$. Note that this instance is a U-Curve 
@@ -607,18 +608,20 @@ part on some types of cancer. The model we consider for generating
 experiments, which we also call the ``correct'' model is shown on 
 Figure~\ref{fig:ras_switch:correct_model}. This model shows a pathway
 that decides the state of a Ras protein as switched on, represented by
-RasGTP, and as switched off, represented by RasGDP. Five other chemical
-species are present on this model, and they have the following initial
+RasGTP, and as switched off, represented by RasGDP. SOS and GEF are enzymes that catalyze the transition RasGDP $\rightarrow$ RasGTP. The enzymatic activity of SOS can be increased through allosteric regulation by either RasGTP or RasGDP; we denote such molecular interactions as SOS\_allo\_RasGTP and SOS\_allo\_RasGDP, respectively. Finally, GAP is an enzyme that catalyzes the transition RasGTP $\rightarrow$ RasGDP.
+
+
+Therefore, seven chemical species are present in the Ras switch model, and they have the following initial
 concentration: 200 for SOS; 0 for SOS\_allo\_RasGDP and
 SOS\_allo\_RasGTP; 900 for RasGDP; 100 for RasGTP; 200 for GEF; and 125
 for GAP. Once again, we omit concentration and reaction rate units for
 the sake of simplificty. These chemical species interact in eight
 different chemical reactions:
 \begin{itemize}
-    \item{$\ce{SOS + RasGDP ->[k2] SOS\_allo\_RasGDP}$};
-    \item{$\ce{SOS\_allo\_RasGDP ->[d2] SOS + RasGDP}$};
-    \item{$\ce{SOS + RasGTP ->[k1] SOS\_allo\_RasGTP}$};
-    \item{$\ce{SOS\_allo\_RasGTP ->[d1] SOS + RasGTP}$};
+    \item{$\ce{SOS + RasGDP ->[k2] SOS\_allo\_RasGDP}$}, SOS\_allo\_RasGDP complexation;
+    \item{$\ce{SOS\_allo\_RasGDP ->[d2] SOS + RasGDP}$}, SOS\_allo\_RasGDP decomplexation;
+    \item{$\ce{SOS + RasGTP ->[k1] SOS\_allo\_RasGTP}$}, SOS\_allo\_RasGTP complexation;
+    \item{$\ce{SOS\_allo\_RasGTP ->[d1] SOS + RasGTP}$}, SOS\_allo\_RasGTP decomplexation;
     \item{$\ce{RasGTP -> RasGDP}$}, with SOS\_allo\_RasGTP as a
         catalyst, and $k3cat$ and $K3m$ as catalytic constant and
         Michaelis constant, respectively;
@@ -639,12 +642,12 @@ different chemical reactions:
 \caption{A representation of a Ras switch pathway that we consider as
     the correct model for our model selection experiment. This model
     contains seven chemical species, and eight different chemical
-    reactions. Reversible reactions are represented with arrows poiting
+    reactions. Reversible reactions are represented with arrows pointing
     both directions, with reaction rate parameters over the reaction,
     with the forward reaction parameter first and then the parameter of
-    the reverse reaction. Michaelis-Menten reactions are represented
+    the reverse reaction. Michaelis--Menten reactions are represented
     with parameters to the left of the arrow from starting at the
-    enzyme, with the catalystic parameter first, and then the Michaelis
+    enzyme, with the catalytic parameter first, and then the Michaelis
     constant.
 }
 \label{fig:ras_switch:correct_model}
@@ -681,7 +684,7 @@ remember that we are omitting units for the sake of simplicity).
 \includegraphics[width=.75\textwidth]{experiments/ras_switch/experiment_plot.pdf}
 \caption{Experimental data generated with our correct model for the Ras
     switch pathway. There is a set of three observations being
-    represented, however, the time points observations of [RasGTP] are
+    represented; however, the time points observations of [RasGTP] are
     close enough that the lines of each experiment overlap. The time
     points considered are 30, 60, 90, 120, 150, 180, 210, and 240
     seconds; the lines are produced with a linear interpolation of
@@ -698,17 +701,17 @@ complete list of candidate reactions is shown of
 Figure~\ref{fig:ras_switch:features}. The complete list of candidate
 reactions is saved in a JSON file, which also stores information about
 rate parameters for each reaction, including its name and prior. In this
-experiment we defined Uniform prior distributions, using our prior
+experiment we defined uniform prior distributions, using our prior
 knowledge about reactions. As a matter of fact, in our first approach we
-used Gamma distributions, however, due to numerical instabilities we
-decided Uniform distributions for its simplicity and restrictiveness.
+used gamma distributions; however, due to numerical instabilities we
+decided uniform distributions for its simplicity and restrictiveness.
 
 Figure~\ref{fig:ras_switch:features} also presents an arbitrary order we
-choose for these reactions. This order, from (a) to (j) is useful to
+choose for these reactions. This order, from Figure~\ref{fig:ras_switch:features}(a) to (j) is useful to
 enumerate points of the search space, something that search algorithms
 can rely on when traversing the search space. With this order, we can
 introduce the concept of characteristic vector, which is a vector
-composed by boolean flags that represents a point of the search space,
+composed by Boolean flags that represents a point of the search space,
 and, that is, a subset of features. If the i-th element of the
 characteristic vector is a 0, then the i-th feature is not present on 
 the subset represented, if the i-th elemnt is 1, then this feature is
@@ -726,7 +729,6 @@ our cost function, the output of SigNetMS, is computationally expensive
 and, since we have 10 features, the search space has the size $2^{10}$.
 That makes it unfeasible to optimally search on the space, and therefore
 we choose a heuristic to search for a good solution.
-
 
 \begin{figure}[H]
     \centering
@@ -793,9 +795,9 @@ The Sequential Forward Selection heuristics is a greedy algorithm that
 starts with the empty set of features and then, for each iteration,
 decides to add the ``best'' remaining feature to the current solution.
 Although it is very easy to find instances in which this algorithm is
-not optimal (including U-Curve instances), it can generally find  fairly
+not optimal (including U-Curve instances), it can generally find fairly
 good solutions in many cases, making it a good choice to explore spaces
-with unknown surfaces, such as in our case. Pseudocode~\ref{code:sfs}
+with unknown surfaces, such as in our case. Algorithm~\ref{code:sfs}
 presents the dynamics of the SFS heuristics.
 
 % pseudo código
@@ -828,7 +830,7 @@ The SFS search was conduced in a server running with an Intel
 Xeon E5-2690 CPU, and 252GB of RAM memory. The total time to conduce the
 experiment was about 26 hours, with 42 calls to the cost function, that
 is, 42 points of the search space were visited. The chain of subsets the
-algorithm traversed, from the base to the found solution, is shown on 
+algorithm traversed, from the base to the found solution, is shown in 
 Table~\ref{tab:sfs_trace}.
 % how long did it take do finish?
 % want to talk about the chain produced
@@ -860,7 +862,7 @@ Characteristic Vector && \multicolumn{1}{l}{Score} &
 \end{tabular}
 \caption{The trace of the SFS run on the Ras switch instance. The
     characteristic vector determines the set of reactions present on the
-    model; the Score is minus one times the marginal likelihood of
+    model; the score is minus one times the marginal likelihood of
     the model; and, the Cost function time is the total time used by 
     SigNetMS to calculate the marginal likelihood.}
 \label{tab:sfs_trace}
@@ -879,7 +881,6 @@ Characteristic Vector && \multicolumn{1}{l}{Score} &
 \label{fig:ras_switch:found_model}
 \end{center}
 \end{figure}
-
 
 Even though the resulting subset is not the correct model, the marginal
 likelihood indicates that the model reasonably approximates the
@@ -917,7 +918,7 @@ the dynamics observed on experimental observations.
     SigNetMS produced both the estimation of the log of the marginal
     likelihood and samples of different power posteriors of model
     parameters. There were 40 different power posteriors sampled, and we
-    show only four of them on this figure. Since the range of the plot
+    show only four of them in this figure. Since the range of the plot
     area is fixed, it may seem that the first figure has less lines than
     the other ones; that only indicate that some simulations did not
     appear on the plot area.}
@@ -944,7 +945,7 @@ this happens on marginal likelihood methods is that more complex models
 are able to generate a wider range of output data, and therefore, the
 likelihood function $p({\mathcal {D}} | M_{complex})$ is spread over 
 a wider space, while the mass of a simpler model is concentrated in a 
-less spread area. We can argue that, because of such spreadness 
+less spread area. We can argue that, because of such sparseness 
 phenomena, we expect a tendency to observe 
 $p({\mathcal {D} = \bm{D}} | M_{complex}) >$
 $p({\mathcal {D} = \bm{D}} | M_{simple})$.

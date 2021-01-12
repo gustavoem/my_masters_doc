@@ -1,19 +1,18 @@
 %begin-include
 
-In this section we provide the concepts that are fundamental to 
+In this section, we provide concepts that are fundamental to 
 understand the biological and computational problems, methodologies and
-results that we will present in this work. We start this chapter 
-presenting what is a cell signaling pathway and how can one take 
-measures to identify its activity on the cell. Later we present how 
+results that we will present throughout this work. We start this chapter 
+by presenting what is a cell signaling pathway and how one can take 
+measures to identify its activity on the cell. Later, we present how 
 it is possible to represent chemical iteractions as differential 
-equations, and how that allows one to model a cell signaling pathway
+equations, and how that allows to model a cell signaling pathway
 with a system of ordinary differential equations. Then, we present 
-more formally the problem we are trying to solve on this project, the
+more formally the problem we are trying to solve in this work, the
 identification of cell signaling pathways, as well as the state of the
 art methods of model ranking. Finally, we present the basics of 
-posterior distribution sampling, which is a useful tool when working 
-with Bayesian approaches, such as the ones used on this project to rank 
-models.
+posterior distribution sampling, which is a useful tool when dealing 
+with Bayesian approaches, such as the ones used here to rank models.
 
 % What I want to talk about in this section?
 % - Cells signaling pathways are part of the cell communication system,
@@ -34,25 +33,24 @@ models.
 % treatments for diseases.
 \section{Cell signaling pathways}
 Cell signaling pathways are part of the complex cell communication 
-system, and it allows the cell to perceive the conditions of the 
-environment in which it is placed and change its behaviour accordingly.
+system, and allow the cell to perceive the conditions of the 
+environment in which it is placed and to change its behaviour accordingly.
 Signaling pathways participate in the regulation of many cell functions,
 including development, division and cell death~\cite{Hancock2017}. The
 dynamic of a signaling pathway can also be releated to diseases, as in
 many cases of cancer.
 
-The signal perceived by a cell can come from cells that are close 
-(including the same cell that produced the signal), as in synapses, or 
-it can travel long distances in the organism, as in hormones. When a 
-signal reaches a cell, it binds to a specific receptor in the membrane,
-and once that happens, the receptor can trigger a sequence of chemical 
-interactions that can include change of conformation of proteins, 
-activation or inactivation of proteins, and change of concentration of
+A signal perceived by a cell is often due to signaling molecules that can either come from cells that are close 
+(including the same cell that produced the signal), as in synapses, or originate far away and travel long distances in the organism, as in hormones. When a 
+signaling molecule reaches a cell, it binds to a specific receptor in the membrane,
+and once that happens, the receptor triggers a sequence of chemical 
+interactions that can include conformation changes of proteins, 
+activation or inactivation of proteins, and concentration changes of
 chemical species in the cell. Ultimately, this chain of chemical 
-reactions caused by the signal can alter the behaviour of the cell, what 
+reactions caused by the signal can alter the behavior of the cell, what 
 is called signal transduction.
 
-Since signaling pathways participate in many of the cell functions, and 
+Once signaling pathways participate in many of the cell functions, and 
 are also related to diseases, it is important to study those structures
 in order to get a better understanding of the cell mechanisms and 
 diseases. One approach on the study of the cell signaling pathways is to 
@@ -72,8 +70,8 @@ produce those changes.
 % good candidate as a measure of the system.
 \section{Measurements of proteins in cell signaling pathways}
 \label{sec:fund_concepts:measurements}
-Western blot~\cite{Towbin1979} is a laboratory technique that can 
-indicate the amount of a specific protein that is present in a mixture. 
+Western blot is a laboratory technique that can 
+indicate the amount of a specific protein that is present in a mixture~\cite{Towbin1979}. 
 This technique shows the presence of a protein in a mixture by 
 ``blotting'' a membrane where the molecules of interest are located. We 
 can summarize the procedure in the following steps: first a mixture 
@@ -95,8 +93,7 @@ of such chemical species during the experiment. For instance, in a
 signaling network experiment in which it is desired to understand how
 the change of concentrations of a species at the beginning of the 
 pathway changes the concentration of some species at the end of the 
-cascade, then measurements of both are relevant to understand the 
-biological experiment. Figure~\ref{fig:western_blot_example} presents an 
+cascade, measurements of both are relevant to understand the underlying dynamics. Figure~\ref{fig:western_blot_example} presents an 
 example of time-course Western blot for an experiment where it is 
 desirable to understand how extracellular signal-regulated kinase (ERK)
 is activated (phosphorylated) as a function of levels of Rat sarcoma
@@ -108,16 +105,15 @@ bound to guanosine triphosphate (Ras-GTP).
     \caption{Figure {\bf a} shows time-course measurements of ERK, 
     phosphorylated ERK (p-ERK) and hypoxanthine-guanine 
     phosphoribosyltransferase (HPRT). HPRT is a ``loading'' protein, 
-    that means that its concentration is fairly the same through the 
+    that means that its concentration is fairly the same throughout the 
     experiment, and therefore it is used as a normalizing factor to 
     total ERK concentration. Figure  {\bf b} shows values of 
     phosphorylated ERK that are obtained after processing Figure 
-    {\bf a}. Original image of Marcelo S. Reis et al. 
-    (2017)~\cite{Reis2017}.}
+    {\bf a}. Original image of Reis et al. (2017)~\cite{Reis2017}.}
     \label{fig:western_blot_example}
 \end{figure}
 
-These measurements alone do not always provide means for researchers to 
+Those measurements alone do not always provide means for researchers to 
 understand a cell signaling pathway experiment. However, if we create a 
 computational model for this signaling networks that is able to 
 reproduce experimental data, then we might use this model as a 
@@ -145,18 +141,18 @@ evidences of the biological phenomena.
 % 2.1 Mass conservation simplification
 % 2.2
 \section{Dynamic modeling of cell signaling pathways}
-One approach onto modeling cell signaling pathways is to model the 
-dynamics of the concentrations of chemical species involved. This can be
+One approach for modeling cell signaling pathways is to model the 
+dynamics of the concentrations of the involved chemical species. This can be
 accomplished when using the law of mass action~\cite{Voet2010}. This law 
 states that, in an elementary reaction, the speed (or rate) of a 
 chemical reaction is proportional to the product of the concentration of 
 all reactants. An elementary reaction is a reaction in which there is no 
 participation or need of an intermediate reaction to describe the first 
 in a molecular level. In practice, it is more common to see two types of 
-elementary reactions, they are first or second order reactions. 
+elementary reactions: the first or the second-order reactions. 
 
 \subsection{Modeling elementary reaction rates}
-A first order reaction is composed of one reactant only. Suppose A is 
+A first-order reaction is composed of one reactant only. Suppose A is 
 the only reactant and B is the only product of a reaction, then we can
 write this reaction as:
 \begin{equation*}
@@ -173,7 +169,7 @@ where $k_1$ is some constant and [A] is the concentration of A. It is
 import to note that the constant $k_1$ is a rate coefficient of the 
 reaction and, therefore, it can only assume positive values.
 
-A second order reaction is composed of two reactants. Suppose C and D 
+A second-order reaction is composed of two reactants. Suppose C and D 
 are both and the only reactants and F is the product of a reaction, then
 we can write this reaction as:
 \begin{equation*}
@@ -233,7 +229,7 @@ and they have, respectively, reaction rates of:
 
 Now, to determine a model of the concentration dynamics for
 Reaction~\ref{eq:simple_enzymatic}, we will write a system of ordinary
-differential equations. To do so, we should take every chemical species 
+differential equations. To do so, we should take each chemical species 
 and calculate its concentration change rate based on the rate of each 
 reaction that it participates. For instance, the enzyme E is a 
 reactant on Reaction~\ref{eq:es_complex_fwd} and is also a product on 
@@ -243,7 +239,7 @@ differential equation:
 \begin{equation}
     \frac{d[\text{E}]}{dt} = -k_f\text{[E][S]} + (k_r + k_{cat}) \text{[ES]}
 \end{equation} 
-Note that we are adding reation rates in which the species is a product
+Note that we are adding reaction rates in which the species is a product
 and we are subtracting reaction rates in which the species is a
 reactant. Repeating this procedure for every other species of the 
 enzymatic reaction leads to the following system of ordinary 
@@ -274,16 +270,16 @@ differential equations:
 % - Mention that we can suppress a lot of parameters with this 
 %   simplification
 \subsection{Simplification of dynamic models}
-The System~\ref{eq:full_system} can be simplified if we
+System~\ref{eq:full_system} can be simplified if we
 apply properties of enzymatic reactions together with algebraic 
-simplifications. We will show then how to derive the quasi-steady-state 
-Michaelis-Menten model for enzymatic reactions. With the correct 
-assumptions, this model is able to reproduce the behaviour of an 
+simplifications. We will show then how to derive the quasi-steady state 
+Michaelis--Menten model for enzymatic reactions. With the correct 
+assumptions, this model is able to reproduce the behavior of an 
 enzymatic reaction without considering the intermediate enzyme-substrate 
 complex, leading to simpler models.
 
 A basic principle we need to apply to our system in order to derive
-the Michaelis-Menten model is the principle of mass conservation. This 
+the Michaelis--Menten model is the principle of mass conservation. This 
 principle is valid if we assume that the 
 reactions~\ref{eq:simple_enzymatic} are isolated, meaning that the 
 chemicals on these reactions are not involved in other reactions at the
@@ -337,11 +333,11 @@ quasi-steady-state assumption ($\frac{d\text{[ES]}}{dt} = 0$) to obtain:
 
 Now, with equations~\ref{eq:dPdt_2}~and~\ref{eq:dSdt_2} we are able to
 reproduce the dynamics of the substrate and product of the enzymatic 
-reaction. Therefore, using the Michaelis-Menten model, we could simplify 
+reaction. Therefore, using the Michaelis--Menten model, we could simplify 
 the System\ref{eq:full_system} that had four equations and three 
 parameters to a new model that has only two equations and two parameters 
 ($k_{cat}$ and $K_m$). Figure~\ref{fig:michaelis_menten} shows a 
-comparison between the dynamics of the complete and Michaelis-Menten 
+comparison between the dynamics of the complete and Michaelis--Menten 
 models of enzymatic reactions.
 
 \begin{figure}[H]
@@ -359,7 +355,7 @@ models of enzymatic reactions.
         enzymatic reactions. The Figure~\ref{fig:enzymatic_full} 
         presents the dynamics of the model~\ref{eq:full_system} and 
         Figure~\ref{fig:enzymatic_mm} presents the dynamics of the 
-        Michaelis-Menten simplification to the same model. For this 
+        Michaelis--Menten simplification to the same model. For this 
         simulations, it is necessary to define initial concentrations of
         the chemical species involved, and it is used: 
         10 molecules$/(\mu m)^3$ for the enzyme (E); 
@@ -410,14 +406,14 @@ models of enzymatic reactions.
 \section{Identification of cell signaling pathways}
 Identification of signaling pathways is the problem of finding the 
 components of a signaling pathway and how they interact in order to
-reproduce a cell behaviour that has been previously measured 
+reproduce a cell behavior that has been previously measured 
 experimentally. The input of this problem is usually a description of 
 the biological experiment, containing previous information about the 
 signaling pathway, such as known reactions and parameters, and a set of 
 measurements, commonly Western blot data, which is the only type of
 measurement we consider in this work. The output to this problem is then
 composed of a set of interactions that are actively controlling the
-behaviour of interest of the cell, and also the set of parameter values 
+behavior of interest of the cell, and also the set of parameter values 
 that should be used on these interactions to create a model that
 approximates the experimental observations; it is possible to output a
 single value for each parameter, as it was presented in~\cite{Wu15}, or
@@ -441,7 +437,7 @@ simulate the pathway, approximating the experimental measurements.
 % probability.
 
 The second task is also known as the model selection problem and even
-though it is a broad area, there are works on the literature that treat 
+though it is a broad area, there are works in the literature that treat 
 specifically the problem in a biochemical context. Solutions to this 
 problem should be able to choose model candidates according to their 
 ability to reproduce observed data, penalizing overly complex models 
@@ -467,11 +463,11 @@ measurement (each measurement is a time-course observation of the
 biological phenomena of interest), $\phi$ is a function that determines
 the simulated measurement on the model, and $R$ is a regularization
 function that penalizes model complexity. This approach was implemented
-on the work of Lulu Wu~\cite{Wu15}, using a Simulated Annealing
+on the work of Lulu Wu~\cite{Wu15}, using a simulated annealing
 procedure to search for parameter values that minimize the distance
 between simulation and experiment. The Simulated Annealing procedure
 used is available on the software SigNetSim (Signaling Network
-Simulator), which is based on the of the work of Chu on~\cite{Chu1999}.
+Simulator), which is based on the of the work of Chu et al.~\cite{Chu1999}.
 However, Wu's methodology showed limitations when testing the ability to
 reconstruct models from experiments, and this could be related to the
 used penalization term. In fact, choosing a good regularization function
@@ -635,12 +631,12 @@ to extract model distribution from the accepted parameters.
 % useful for example when the target function is a posterior
 % -> How do we do this
 %   -> 
-\section{Metropolis-Hastings to generate samples}
+\section{Metropolis--Hastings to generate samples}
 Both methods for model selection, based on ABC or using thermodynamics
 integration, need to generate samples of probability distributions. 
 Generating samples of distributions is simple for many well known 
 distributions, however, for some other distributions this task may not 
-be as simple. Metropolis-Hastings algorithms are capable of generating a 
+be as simple. Metropolis--Hastings algorithms are capable of generating a 
 sample that has some probability distribution $p$, which is called the 
 target distribution. In fact, the method can be used even when it is not
 possible to access the target function directly; for those cases, a 
@@ -663,10 +659,10 @@ the prior $p ({\bm \theta} | M)$, then we can calculate the product of
 these two, which is proportional to the posterior distribution (since 
 $p ({\bm D}|M)$ is only a constant because it does not depend on 
 ${\bm \theta}$). Therefore, using the likelihood and the prior 
-distributions together with a Metropolis-Hastings algorithm provides a 
+distributions together with a Metropolis--Hastings algorithm provides a 
 mean to generate a sample of the posterior.
 
-A generic Metropolis-Hastings algorithm that creates a sample of a 
+A generic Metropolis--Hastings algorithm that creates a sample of a 
 target distribution $p (\lambda)$ proceeds as follows:
 \begin{enumerate}
 \item{Choose some starting point $\lambda_0$ for which $p (\lambda_0)$ 
@@ -702,7 +698,7 @@ $\lambda_a$, $\lambda_b$ and $t$), the produced algorithm is called
 Metropolis algorithm and has the ratio 
 $r = {p (\lambda^*)}/{p (\lambda^{t - 1})}$. 
 
-Different implementations of the Metropolis-Hastings algorithm are 
+Different implementations of the Metropolis--Hastings algorithm are 
 possible. The possible changes include the choice of starting point,
 the choice of proposal distributions and number of iterations. As an
 example, some algorithms are adaptive in the sense that they can change 

@@ -30,7 +30,6 @@
 \usepackage{cleveref} % multireference (eq 1.2-1.5)
 \usepackage{pgfgantt} % nice Gantt diagrams
 \usepackage{bm}
-
 % teste
 
 \pagestyle{fancy}
@@ -121,7 +120,7 @@ Special Laboratory of Cell Cycle, Butantan Institute\\
 \bigskip
 \bigskip
 {\normalsize During the development of this work the author received 
-    financial support from FAPESP, of process 17/20575-9.}\\
+    financial support from scholarship \#~17/20575-9, São Paulo Research Foundation (FAPESP).}\\
 \bigskip
 \bigskip
 \bigskip
@@ -175,11 +174,11 @@ Special Laboratory of Cell Cycle, Butantan Institute\\
 \bigskip
 \bigskip
 {\normalsize Durante o desenvolvimento deste projeto, o autor recebeu
-    suporte financeiro da agência FAPESP, do processo 17/20575-9.}\\
+    suporte financeiro através da agência FAPESP (processo 17/20575-9).}\\
 \bigskip
 \bigskip
 \bigskip
-São Paulo, \today
+São Paulo, 11 de janeiro de 2021
 }
 \end{center}
 \newpage
@@ -227,11 +226,10 @@ tal como submetida à Comissão Julgadora.}
 \end{center}
 \newpage
 
-
 \chapter*{Abstract}
 Cell signaling pathways are composed of a set of biochemical reactions 
 that are associated with signal transmission within the cell and its 
-surroundings. Traditionally, these pathways are identified through 
+surroundings. Traditionally, those pathways are identified through 
 statistical analyses on results from biological assays, in which 
 involved chemical species are quantified. However, once generally it is 
 measured only a few time points for a fraction of the chemical species, 
@@ -245,19 +243,19 @@ estimated model; among them are the incompleteness of the information
 extracted from KEGG, the absence of rate constants, the usage of 
 sub-optimal search algorithms and an unsatisfactory overfitting 
 penalization. In this work, we propose a new methodology for 
-identification of cell signaling pathways, based on the mentioned
+identification of cell signaling pathways, based on the aforementioned
 method, with modifications on the cost function that aims to solve the
-unsatisfactory overfitting penalization. We defined a cost function
+unsatisfactory overfitting penalization. To this end, we defined a cost function
 based on the marginal likelihood of a model producing the observed
-experimental data. We experiment and show how this new cost function 
+experimental data. We show how this new cost function 
 automatically penalize complex models, since marginal likelihood 
 approaches tend to select models with intermediate complexity. The new 
-methodology was tested on artificial instances of model selection. For 
+methodology was tested on artificial instances of model selection; for 
 one of the experiments, we solved the model selection problem as a 
 feature selection problem, walking on the space of solutions to get a 
-glance of the surface induced by the cost function we define. With this
-work, we expect to contribute on problem of identification of cell 
-signaling pathway problem, providing a well founded cost function that
+glance of the surface induced by the defined cost function. With this
+work, we expect to contribute towards the solution of the cell 
+signaling pathway identification problem, by providing the implementation of a cost function that
 can be used in a feature selection approach.
 
 \chapter*{Resumo}
@@ -279,19 +277,19 @@ uso de algoritmos de busca subótimos e uma penalização insatisfatória
 para sobre-ajuste. Neste trabalho, propomos uma nova metodologia para
 identificação de vias de sinalização celular, baseada no método citado,
 com modificações na função de custo que tem como objetivo penalizar
-complexidade de modelos satisfatoriamente. Neste trabalho, definimos uma
+complexidade de modelos satisfatoriamente. Para isso, definimos uma
 função de custo baseada na verossimilhança marginal de um modelo 
 reproduzir dados experimentais. Produzimos experimentos e mostramos como
 a nova função de custo automaticamente penaliza modelos mais complexos,
 o que é esperado pois abordagens baseadas em verossimilhança marginal
 tendem a selecionar modelos de complexidade intermediária. Nossa
-metodologia foi testada em instancias artificiais de seleção de modelos.
-Em um dos experimentos, realizamos a seleção de modelos como um problema
+metodologia foi testada em instancias artificiais de seleção de modelos;
+em um dos experimentos, realizamos a seleção de modelos como um problema
 de seleção de características, caminhando pelo espaço de soluções para
 se obter indícios sobre a superfície induzida pela função de custo sobre
-o espaço de busca. Com este trabalho, esperamos contribuir para o
-problema de seleção de vias de sinalização celular, fornecendo uma
-função de custo bem fundada que possa ser utilizada em uma abordagem
+o espaço de busca. Com este trabalho, esperamos contribuir para a 
+elucidação do problema de seleção modelos de vias de sinalização celular,
+fornecendo uma função de custo que possa ser utilizada em uma abordagem
 baseada em seleção de características.
 
 \tableofcontents

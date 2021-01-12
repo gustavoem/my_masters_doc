@@ -2,7 +2,7 @@
 In this chapter we present the development process and implementation
 details of the SigNetMS software, which stands for {\bf Sig}naling 
 {\bf Net}work {\bf M}odel {\bf S}election. This software is capable of
-producing an estimative of the marginal likelihood of a model given
+producing an estimate of the marginal likelihood of a model given
 experimental data, using the ideas of Thermodynamic Integration. Besides
 implementation details, in this chapter we also present the main 
 difficulties of creating a computationally efficient implementation of
@@ -47,14 +47,14 @@ memory.
 % Details on how the proram estimates the likelihood
 
 SigNetMS is a Python program that can be used as a tool for model
-selection, producing an estimative of the marginal likelihood of a model
+selection, producing an estimate of the marginal likelihood of a model
 given experimental observations. The source code is available on 
 Github\footnote{https://github.com/gustavoem/SigNetMS} and it is open
 source, under the GNU General Public License.
 
 This program expects as the input: a signaling pathway model,
 represented by a Systems Biology Markup Language
-(SBML)~\cite{hucka2003systems} file, with the definition of reactions,
+(SBML) file~\cite{hucka2003systems}, with the definition of reactions,
 kinetic laws and initial concentrations of chemical species; an
 Extensible Markup Language (XML) file with experimental data, including 
 time series measurements of the  biological phenomena of interest;
@@ -64,28 +64,27 @@ the sampling process of model parameters. There are also optional
 parameters on SigNetMS, used to control random number generator seeds,
 number of execution threads, and verbose runs.
 
-The output of the program is composed by an estimative of the marginal
-likelihood of the model, given experimental data, $p({\bm D} | M)$ and a
+The output of the program is composed by an estimate of the marginal
+likelihood of the model given experimental data, $p({\bm D} | M)$, and a
 list of parameter values $({\bm \theta}^1, {\bm \theta}^2, \ldots {\bm
 \theta}^l)$ that represent a sample of the distribution $p({\bm \theta}
 | M, {\bm D})$. If one simulates the model $M$ with parameter values
 from the sample, we expect that, the higher the marginal likelihood, the
 closer the created simulation are to the experimental data.
 
-To calculate the marginal likelihood estimative, we use the ideas of 
-Thermodynamic Integration we presented on 
-section~\ref{sec:thermodynamic_integration}. Before implementing
-SigNetMS we also considered using another software, called
+To calculate the marginal likelihood estimate, we use the ideas of 
+Thermodynamic Integration we presented in Section~\ref{sec:thermodynamic_integration}. Before implementing
+SigNetMS, we also considered using another software, called
 BioBayes~\cite{Vyshemirsky2008}, that has a very similar approach to
-produce an estimative of the marginal likelihood. However, we did not
+produce an estimate of the marginal likelihood. However, we did not
 proceed to use this software because there was only a graphical user
 interface version of the software, which made the process of running
 instances and collecting results cumbersome. We have also tried
 contacting the authors to obtain the source code, however they could not
 provide us that.
 
-\section{Creating an estimative of the marginal likelihood}
-\label{sec:creating_an_estimative_of_the_marginal_likelihood}
+\section{Creating an estimate of the marginal likelihood}
+\label{sec:creating_an_estimate_of_the_marginal_likelihood}
 % Since we are using a Thermodynamic Integration  approach, we need to 
 % define a likelihood function, create samples of power posterior 
 % distributions and, finally define an approximation to the marginal
@@ -102,25 +101,25 @@ provide us that.
 %   -> Parameter priors, experimental data are read and saved
 % -> sampling of posterior starts with naive sampling
 % -> then we proceed to covariance shaped burn-in
-% -> then we go to populational monte carlo markov chain
-% -> then we use the approximation to generate the margginal likelihood
+% -> then we go to populational markov chain monte carlo
+% -> then we use the approximation to generate the marginal likelihood
 
 To create estimates of the marginal likelihood using the Thermodynamic
 Integration approach, we need to define a likelihood function $p({\bm
 D}| M, {\bm \theta})$ and also samples power posterior distributions
 $p_\beta({\bm \theta})$ for a sequence of values of $\beta$. After
-samples are produced, we use them to produce the estimative, and on
+samples are produced, we use them to produce the estimate, and on
 SigNetMS, we use the trapezoidal rule to approximate the marginal 
 likelihood, given by the 
 equation~\ref{eq:marginal_likelihood_trapezoidal_approximation}. 
-Inspired by the work of Friel et al., we discretize the interval 
+Inspired by the work of Friel et al.~\cite{Friel2008}, we discretize the interval 
 $[0, 1]$ of power posteriors using the schedule: 
 $\beta_i = \left(\frac{i - 1}{T - 1}\right)^c$, where $T = 20$, $c = 4$
 and $i \in \{1, 2, \ldots, T\}$. In the following sections, we explain
 how we implemented the likelihood function, and how samples of power
 posteriors are produced.
 
-\subsection{Implementing the likelilhood function}
+\subsection{Implementing the likelihood function}
 %-> The likelihood function is...
 %-> To implement this, we must simulate the model with parameter values
 %of theta.
@@ -143,7 +142,7 @@ function that calculates an approximation of the results of the
 experiment that produced ${\bm D}$, applied to the simulated environment
 of model $M$ with parameter values ${\bm \theta}$. This simulation of
 the model is created by deriving a system of ordinary differential
-equations, and then numerically integrating this system, over the time
+equations, and then numerically integrating this system over the time
 steps defined by the experimental measurements. To reproduce the same
 experiment that generated ${\bm D}$, SigNetMS expects that the XML file 
 containing experimental data also contains a mathematical representation
@@ -162,7 +161,7 @@ of the problem can be stiff, meaning that they may make the integration
 algorithm be unstable, since it may need consecutive iterations with
 really small steps. Since we did not have time to go in details of when 
 such cases occur, we chose third-party software that can adapt the used
-algorithm according to the stiffnes of the instance.
+algorithm according to the stiffness of the instance.
 
 After the implementation of the function $\phi$, most of the work to
 implement the likelihood function is done. The remaining work is to
@@ -189,14 +188,14 @@ scheme to determine the proposal distribution.
 
 On the first phase, we start the sample of every chain (for each value
 of $\beta$) with a random draw from the prior distribution of
-parameters. Before the first iteration, we also create an estimative of
+parameters. Before the first iteration, we also create an estimate of
 the variance of the logarithm of each model parameter, independently.
 These estimates compose the first covariance matrix of the jumping 
 distribution; we use a diagonal matrix where the diagonal elements are
 set as the estimated variance of the logarithm scaled sample of the
-associated parameter. This matrix is rescaled according to the
+associated parameter. This matrix is re-scaled according to the
 acceptance rate, as described in
-section~\ref{sec:estimation_of_marginal_likelihood}, after a number of
+Section~\ref{sec:estimation_of_marginal_likelihood}, after a number of
 iterations that is defined in one of the arguments of SigNetMS. For each
 iteration, we determine that the jumping distribution is a multivariate
 lognormal $({\bm \mu}, \Sigma)$ distribution, with covariance matrix as
@@ -204,11 +203,11 @@ explained before, and with ${\bm \mu} = \log_e({\bm \theta}^t)$, where
 ${\bm \theta}^t$ is the current sample point, i.e., we take a
 sample ${\bm X}$ of the multivariate normal $\mathcal{N}({\bm \mu},
 \Sigma)$ and then we set our sampled value  as ${\bm Y} = \exp({\bm
-X})$, which is a standard procedure to produce samples of lognormal
+X})$, which is a standard procedure to produce samples of log-normal
 distributions.
 
 On the second phase, the posterior shaped burn-in phase, we also use a 
-lognormal as the proposal distribution, however the covariance matrix is 
+log-normal as the proposal distribution, however the covariance matrix is 
 not diagonal. Half of the sample produced in the first phase is
 discarded, and for each step of the second phase, we calculate the 
 covariance of the log-scaled current sample (the latter half of samples
@@ -218,7 +217,7 @@ proposal distribution also uses ${\bm \mu} = \log_e({\bm \theta}^t)$. It
 is important to remember that up to the end of this sampling phase, each
 power posterior sample is created independently.
 
-At the third and last phase, a Populational Monte Carlo Markov Chain
+At the third and last phase, a Populational Markov chain Monte Carlo 
 procedure is performed. In this procedure, we iterate each chain of 
 power posterior samples using the same algorithm of the second phase
 (except we do not update the covariance matrix anymore), followed by an 
@@ -262,11 +261,10 @@ SigNetMS did not cope even with toy models. Therefore, we needed to add
 optimizations to our software before experimenting with more complex
 instances.
 
-Since most of the computational time spent by SigNetMS is concentrated
+Once most of the computational time spent by SigNetMS is concentrated
 in the generation of samples of power posteriors, we decided to focus
-optimizations in two different aspects of the sampling. The first
-aspect, is to reduce the required time to integrate a model, exploring
-different approaches to represent the model; the second aspect, is to
+optimizations on two different aspects of the sampling. The first aspect is to reduce the required time to integrate a model, exploring
+different approaches to represent the model; the second one is to
 take advantage of the independence of the sampling of different
 power posteriors, in the first two phases of sampling.
 
@@ -303,7 +301,7 @@ the problem, we could not choose between algorithms prepared for stiff
 or non-stiff instances, and then we chose to use the {\tt
 odeint} integrator, offered by SciPy, which can adapt according to the
 stiffness of the instance. The integrator {\tt odeint} is actually a 
-wrapper to the {\tt LSODA} integrator, which is part of the Fortran
+wrapper to the {\tt LSODA} integrator, which is part of the FORTRAN
 package called {\tt ODEPACK}~\cite{Hindmarsh1982}.
 
 % We also tried using GPU algorithms for integrations, however, they are
@@ -322,8 +320,8 @@ determine the next value of the unknown function (with a certain
 accuracy), and if this matrix is not provided, algorithms like 
 {\tt LSODA} will approximate this function, decreasing the computational 
 efficiency. Considering the types of chemical reactions we consider on
-this work (first order reaction, second order reaction, and
-Michaelis-Menten modeled reaction), we could implement a function that 
+this work (first-order reaction, second-order reaction, and
+Michaelis--Menten-modeled reaction), we could implement a function that 
 produces the Jacobian function of a system of ordinary differential 
 equations that represents the model of interest.
 
