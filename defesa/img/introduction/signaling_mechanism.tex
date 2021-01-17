@@ -1,11 +1,10 @@
-\documentclass[convert={density=900,size=1080x8002,outext=.png}]{standalone}
-%\documentclass[convert]{standalone}
+\documentclass[a5paper]{article}
 
 
 \usepackage{tikz}
 \usepackage{verbatim}
 \usepackage{my_colors}
-\usepackage[paperheight=2.9in,paperwidth=4.3in,margin=1em]{geometry}
+\usepackage[paperheight=2.8in,paperwidth=4.3in,margin=1em]{geometry}
 
 \usetikzlibrary{shapes.misc} % rounded rectangle
 \usetikzlibrary{shapes} % ellipse
@@ -39,11 +38,6 @@
     \node[receptor, draw=orange!40, line width=.5pt] (receptor) at 
         (2.5, 0) {Receptor};
 
-    \node[chemical, fill=red!10, draw=red!30, line width=1pt] 
-        (inputB) at (0, -2) {Signal B};
-    \node (fake receptor) at (3, -2) {};
-
-
     \node[nucleus, draw=my_red!130, line width=1.2pt] (nucleus) at 
         (6, 0.5) {Nucleus};
     \node[organelles, draw=my_purple, line width=1pt]  (organelles) at 
@@ -51,11 +45,6 @@
     \node[align=center] (other) at (5.7, -1.5) {Other cell\\components};
 
     \path (inputA) edge (receptor);
-    \path (inputB) edge[-] node[above, xshift=-4pt] {\tiny by diffusion} 
-        ($(fake receptor)+(0.1, 0)$);
-    \path ($(fake receptor)$) edge[out=0, in=200] (nucleus);
-    \path ($(fake receptor)$) edge[out=0, in=190] (other);
-    \path ($(fake receptor)$) edge[out=0, in=160] (organelles);
     
     \path (receptor) edge[out=0, in=180] (nucleus);
     \path (receptor) edge[out=0, in=180] (other);
