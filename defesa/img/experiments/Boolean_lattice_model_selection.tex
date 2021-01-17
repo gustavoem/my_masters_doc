@@ -1,0 +1,203 @@
+\documentclass[]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[paperheight=3in,paperwidth=3.5in,margin=0in]{geometry}
+\usepackage[usenames,dvipsnames]{xcolor}
+
+%\usepackage[upright]{fourier}
+
+\usepackage{tkz-graph}
+\usetikzlibrary{arrows}
+
+\begin{document}
+
+\centering
+
+\vfill
+
+\begin{tikzpicture}
+  \SetVertexNormal[Shape      = rectangle,
+                   FillColor  = white,
+                  LineWidth  = 1pt]
+  \SetUpEdge[lw         = 1pt,
+             color      = black,
+             labelcolor = white,
+             labeltext  = red,
+             labelstyle = {sloped,draw,text=blue}]
+
+\Vertex[x=0, y=0, LabelOut=true, Ldist=5pt]{$5$}
+\Vertex[x=0, y=0]{$ $}
+
+%\Vertex[x=-2.4, y=2, LabelOut=true, Ldist=5pt]{$2$}
+\Vertex[x=-2.4, y=2]{$a$} 
+
+\Vertex[x=0, y=2, LabelOut=true, Ldist=5pt]{$4$}
+\Vertex[x=0, y=2]{$b$}
+
+\Vertex[x=2.4, y=2, LabelOut=true, Ldist=5pt]{$2$}
+\Vertex[x=2.4, y=2]{$c$}
+
+%\Vertex[x=-2.4, y=4, LabelOut=true, Ldist=5pt]{$3$}
+\Vertex[x=-2.4, y=4]{$ab$}
+\Vertex[x=0, y=4, LabelOut=true, Ldist=5pt]{$3$}
+\Vertex[x=0, y=4]{$ac$} 
+
+\SetVertexNormal[Shape = rectangle, FillColor  = green]
+\Vertex[x=2.4, y=4, LabelOut=true, Ldist=5pt]{$7$}
+\Vertex[x=2.4, y=4]{$bc$}
+
+\SetVertexNormal[Shape = rectangle, FillColor  = white]
+\Vertex[x=0, y=6, LabelOut=true, Ldist=5pt]{$4$}
+\Vertex[x=0, y=6]{$abc$}
+
+\SetUpEdge[lw = 1pt]
+%\SetUpEdge[lw = 2pt]
+     \Edges($ $, $c$) 
+     \Edges($c$, $bc$) 
+     \Edges($bc$, $abc$) 
+
+\SetUpEdge[lw = 1pt]
+\tikzset{EdgeStyle/.style={-}}
+     \Edges($ $, $a$) 
+     \Edges($ $, $b$) 
+     \Edges($ $, $c$) 
+
+     \Edges($a$, $ab$) 
+     \Edges($a$, $ac$) 
+
+     \Edges($b$, $ab$) 
+     \Edges($b$, $bc$) 
+
+     \Edges($c$, $ac$) 
+     \Edges($c$, $bc$) 
+
+     \Edges($abc$, $ac$) 
+     \Edges($abc$, $bc$) 
+     \Edges($abc$, $ab$) 
+
+
+
+\draw[color=black, fill=white, line width=1pt] (-1, -0.5) rectangle (1, 0.5);
+\SetVertexNormal[Shape = circle, FillColor  = gray, MinSize =  0pt]
+\draw [->,thick] (-0.7, 0.2 + 0.1) arc (90:60:35pt) ;
+% Node names
+{\tiny \Vertex[x=-0.7, y=0.2]{$1$}}
+{\tiny \Vertex[x=0.0, y=0.0]{$2$}}
+% Model likelihood
+\node  at (0.4, -0.75) (XGDP) {$0.10$};
+
+
+\draw[color=black, fill=white, line width=1pt] (-1 + 3, -0.5 + 2) rectangle (1 + 3, 0.5 + 2);
+\SetVertexNormal[Shape = circle, FillColor  = gray, MinSize =  0pt]
+\draw [->,thick] (-0.7 + 3, 0.2 + 0.1 + 2) arc (90:60:35pt) ;
+\draw [->,thick, dotted] (0.7 + 3, -0.2 - 0.1 + 2) arc (270:240:35pt) ;
+% Node names
+{\tiny \Vertex[x=-0.7 + 3, y=0.2 + 2]{$1$}}
+{\tiny \Vertex[x=0.0 + 3, y=0.0 + 2]{$2$}}
+{\tiny \Vertex[x=0.7 + 3, y=-0.2 + 2]{$3$}}
+% Arc names
+\node  at (0.3 + 3, 0.0 - 0.375 + 2) (XGDP) {$c$};
+% Model likelihood
+\node  at (0.3 + 3, -0.75 + 2) (XGDP) {$0.15$};
+
+
+\draw[color=black, fill=white, line width=1pt] (-1, -0.5 + 2) rectangle (1, 0.5 + 2);
+\SetVertexNormal[Shape = circle, FillColor  = gray, MinSize =  0pt]
+\draw [->,thick] (-0.7, 0.2 + 0.1 + 2) arc (90:60:35pt) ;
+\draw [->,thick, dotted] ( 0.0, 0.0 + 0.1 + 2) arc (90:60:35pt) ;
+% Node names
+{\tiny \Vertex[x=-0.7, y=0.2 + 2]{$1$}}
+{\tiny \Vertex[x=0.0, y=0.0 + 2]{$2$}}
+{\tiny \Vertex[x=0.7, y=-0.2 + 2]{$3$}}
+% Arc names
+\node  at (0.35, 0.0 + 0.25 + 2) (XGDP) {$b$};
+% Model likelihood
+\node  at (0.4, -0.75 + 2) (XGDP) {$0.15$};
+
+
+\draw[color=black, fill=white, line width=1pt] (-1 - 3, -0.5 + 2) rectangle (1 - 3, 0.5 + 2);
+\SetVertexNormal[Shape = circle, FillColor  = gray, MinSize =  0pt]
+\draw [->,thick] (-0.7 - 3, 0.2 + 0.1 + 2) arc (90:60:35pt) ;
+\draw [->,thick, dotted] (0.0 -3, 0.0 - 0.1 + 2) arc (270:240:35pt) ;
+% Node names
+{\tiny \Vertex[x=-0.7 - 3, y=0.2 + 2]{$1$}}
+{\tiny \Vertex[x=0.0 - 3, y=0.0 + 2]{$2$}}
+% Arc names
+\node  at (-0.35 - 3, 0.0 - 0.2 + 2) (XGDP) {$a$};
+% Model likelihood
+\node  at (0.2 - 3, -0.75 + 2) (XGDP) {$0.17$};
+
+
+\draw[color=black, fill=white, line width=1pt] (-1 - 3, -0.5 + 4) rectangle (1 - 3, 0.5 + 4);
+\SetVertexNormal[Shape = circle, FillColor  = gray, MinSize =  0pt]
+\draw [->,thick] (-0.7 - 3, 0.2 + 0.1 + 4) arc (90:60:35pt) ;
+\draw [->,thick, dotted] (0.0 -3, 0.0 - 0.1 + 4) arc (270:240:35pt) ;
+\draw [->,thick, dotted] ( 0.0 -3, 0.0 + 0.1 + 4) arc (90:60:35pt) ;
+% Node names
+{\tiny \Vertex[x=-0.7 - 3, y=0.2 + 4]{$1$}}
+{\tiny \Vertex[x=0.0 - 3, y=0.0 + 4]{$2$}}
+{\tiny \Vertex[x=0.7 - 3, y=-0.2 + 4]{$3$}}
+% Arc names
+\node  at (-0.35 - 3, 0.0 - 0.2 + 4) (XGDP) {$a$};
+\node  at (0.35 - 3, 0.0 + 0.25 + 4) (XGDP) {$b$};
+% Model likelihood
+\node  at (0.2 - 3, -0.75 + 4) (XGDP) {$0.05$};
+
+
+\draw[color=black, fill=white, line width=1pt] (-1, -0.5 + 4) rectangle (1, 0.5 + 4);
+\SetVertexNormal[Shape = circle, FillColor  = gray, MinSize =  0pt]
+\draw [->,thick] (-0.7, 0.2 + 0.1 + 4) arc (90:60:35pt) ;
+\draw [->,thick, dotted] (0.0, 0.0 - 0.1 + 4) arc (270:240:35pt) ;
+\draw [->,thick, dotted] (0.7, -0.2 - 0.1 + 4) arc (270:240:35pt) ;
+% Node names
+{\tiny \Vertex[x=-0.7, y=0.2 + 4]{$1$}}
+{\tiny \Vertex[x=0.0, y=0.0 + 4]{$2$}}
+{\tiny \Vertex[x=0.7, y=-0.2 + 4]{$3$}}
+% Arc names
+\node  at (-0.35, 0.0 - 0.2 + 4) (XGDP) {$a$};
+\node  at (0.3, 0.0 - 0.375 + 4) (XGDP) {$c$};
+% Model likelihood
+\node  at (0.4, -0.75 + 4) (XGDP) {$0.05$};
+
+
+\definecolor{lightyellow}{rgb}{1.0, 1.0, 0.88}
+\definecolor{naplesyellow}{rgb}{0.98, 0.85, 0.37}
+
+\draw[color=black, fill=naplesyellow, line width=1pt] (-1 + 3, -0.5 + 4) rectangle (1 + 3, 0.5 + 4);
+\SetVertexNormal[Shape = circle, FillColor  = gray, MinSize =  0pt]
+\draw [->,thick] (-0.7 + 3, 0.2 + 0.1 + 4) arc (90:60:35pt) ;
+\draw [->,thick, dotted] (0.7 + 3, -0.2 - 0.1 + 4) arc (270:240:35pt) ;
+\draw [->,thick, dotted] ( 0.0 +3, 0.0 + 0.1 + 4) arc (90:60:35pt) ;
+% Node names
+{\tiny \Vertex[x=-0.7 + 3, y=0.2 + 4]{$1$}}
+{\tiny \Vertex[x=0.0 + 3, y=0.0 + 4]{$2$}}
+{\tiny \Vertex[x=0.7 + 3, y=-0.2 + 4]{$3$}}
+% Arc names
+\node  at (0.35 + 3, 0.0 + 0.25 + 4) (XGDP) {$b$};
+\node  at (0.3 + 3, 0.0 - 0.375 + 4) (XGDP) {$c$};
+% Model likelihood
+\node  at (0.3 + 3, -0.75 + 4) (XGDP) {$0.30$};
+
+
+
+\draw[color=black, fill=white, line width=1pt] (-1, -0.5 + 6) rectangle (1, 0.5 + 6);
+\SetVertexNormal[Shape = circle, FillColor  = gray, MinSize =  0pt]
+\draw [->,thick] (-0.7, 0.2 + 0.1 + 6) arc (90:60:35pt) ;
+\draw [->,thick, dotted] ( 0.0, 0.0 + 0.1 + 6) arc (90:60:35pt) ;
+\draw [->,thick, dotted] (0.0, 0.0 - 0.1 + 6) arc (270:240:35pt) ;
+\draw [->,thick, dotted] (0.7, -0.2 - 0.1 + 6) arc (270:240:35pt) ;
+% Node names
+{\tiny \Vertex[x=-0.7, y=0.2 + 6]{$1$}}
+{\tiny \Vertex[x=0.0, y=0.0 + 6]{$2$}}
+{\tiny \Vertex[x=0.7, y=-0.2 + 6]{$3$}}
+% Arc names
+\node  at (0.3, 0.0 - 0.375 + 6) (XGDP) {$c$};
+\node  at (0.35, 0.0 + 0.25 + 6) (XGDP) {$b$};
+\node  at (-0.35, 0.0 - 0.2 + 6) (XGDP) {$a$};
+% Model likelihood
+\node  at (0.4, -0.75 + 6) (XGDP) {$0.03$};
+
+
+\end{tikzpicture}
+
+\vfill
+\end{document}

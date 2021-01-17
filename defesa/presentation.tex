@@ -1,0 +1,1176 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[portuguese]{babel}
+\usepackage{amsmath}
+\usepackage{subfigure}
+\usepackage{booktabs}
+\usepackage{mhchem}             % chemical reactions
+\usetheme{metropolis}           % Use metropolis theme
+
+\newtheorem{mydefinition}{Definição}
+
+\newcommand{\foreignword}[1]{\textit{#1}}
+\newcommand{\toolname}[1]{\textit{#1}}
+\newcommand{\fieldR}{\mathbb{R}}
+\newcommand{\powerset}{\mathcal{P}}
+\newcommand{\probability}{\mathbb{P}}
+\newcommand{\expectation}{\mathbb{E}}
+\newcommand{\algname}[1]{\texttt{#1}}
+\newcommand{\langname}[1]{\texttt{#1}}
+\newcommand{\varname}[1]{\texttt{#1}}
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+\newcommand{\ceil}[1]{\lceil #1 \rceil}
+\newcommand{\mathsc}[1]{{\normalfont\textsc{#1}}}
+\newcommand{\species}[1]{\textit{#1}}
+\newcommand{\gender}[1]{\textit{#1}}
+
+\graphicspath{ {img/} }
+\renewcommand*{\thesubfigure}{}
+
+\title{Identification of cell signaling pathways based on biochemical 
+reaction kinetics repositories}
+\date{May 2019}
+\author{Student: Gustavo Estrela\\
+Advisor: Marcelo da Silva Reis (Butantan Institute)}
+\institute{Instituto de Matemática e Estatística \\ 
+           Centro de Toxinas, Resposta-imune e Sinalização Celular (CeTICS) \\
+           Laboratório Especial de Ciclo Celular, Instituto Butantan\\
+           \tiny{This project receives funding from FAPESP}}
+\begin{document}
+
+\maketitle
+    
+%Introduction
+%- Cell Signaling Pathways;
+%- Modeling it mathematically;
+%- With a computational working computational model, we can enlight the
+%  structure of a change of behaviour of a cell;
+%- Creating a model;
+    %- find a set of reactions;
+    %- estimate the parameters of this model;
+%- Lulu Wu created a method that systematically searches for a model, 
+  %modifying it incrementally
+    %- we can see the problem as a feature selection problem;
+    %- it didn't work out so well...
+    %- she was only able to reconstruct models if the starting model was
+      %already similar to the correct model
+    %- this may have happened because: the database could be more nearly
+      %complete; the search algorithm could be more general; her cost 
+      %function could not penalize well overcomplex functions.
+%- We propose then to create a new methodology that overcomes theses 
+  %difficulties using a new cost function, defining a broader search 
+  %space and using new search algorithms.
+%- Objectives of this work.
+
+
+
+\section{Introduction}
+\begin{frame}{Cell Signaling}
+Cell signaling allows cells to respond to signals that come from its 
+environment changing its behaviour accordingly.
+\pause
+
+This mechanism is essential for many cell functions, including 
+reproduction, growth and death.
+\pause
+
+Understanding the functioning of cell signaling is important in many 
+biological areas.
+\end{frame}
+
+
+\begin{frame}{Cell Signaling}
+\begin{figure}
+    \includegraphics[clip=True, scale=.85]{introduction/signaling_mechanism.pdf}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Cell Signaling}
+A signal propagates in an organism though chemical reactions that are
+caused by the change of concentration of chemical species.
+
+\pause
+We call the path of a signal a cell signaling pathway.
+\end{frame}
+
+
+\begin{frame}{Cell Signaling Pathways}
+A cell signaling network can be characterized by a sequence of chemical 
+reactions 
+\begin{figure}
+    \includegraphics[scale=1.2, trim={.5cm 0 0 0}, clip]{introduction/csp_example.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Mathematical Models of Signaling Networks}
+We can summarize the state of the cell with measurements based on the 
+concentration of some chemical species.
+\pause
+
+Using biochemical and enzymatic kinetics, we can model the concentration
+change of chemical species over time of a pathway.
+\end{frame}
+
+
+%\begin{frame}{Mathematical Models of Signaling Networks}
+%As an example, for the chemical reaction
+%\begin{equation*}
+%\ce{
+    %A -> B
+%},
+%\end{equation*}
+
+%\pause
+%we can write the following equation:
+%\begin{equation*}
+        %\frac{d[\text{A}]}{dt} = k_1[\text{A}]; 
+%\end{equation*}
+%where $k_1$ is a reaction rate constant.
+
+%\pause
+%Repeating this procedure for all reactions of a pathway allows us to 
+%derive a system of ordinary differential equations that can model the 
+%signaling pathway.
+%\end{frame}
+
+
+\begin{frame}{Identification of Cell Signaling Pathways}
+The problem of identification of cell signaling pathways is the problem
+of finding the components of a signaling pathway and how they interact
+given a set of experimental measurement.
+
+\pause
+As the input, a description of a biological experiment and a set of 
+experimental measurements are given. \pause A possible output to the 
+problem is composed by:
+\begin{itemize}
+    \pause
+    \item{a model composed by a set of chemical reactions that are 
+        relevant for the biological experiment;}
+    \pause
+    \item{information about the reaction rate constants of the model.}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Identification of Cell Signaling Pathways}
+One can search for the set of chemical reactions relevant for a 
+biological experiment in repositories like the Kyoto Encyclopedia of 
+Genes and Genomes (KEGG). \pause However, the pathway maps from KEGG may
+be incomplete or have impertinent reactions for the biological 
+experiment of interest.
+\pause
+
+Hence, it is desirable to construct a method that can systematically 
+modify these models and choose the one that better represents the 
+experiment.
+\end{frame}
+
+
+\begin{frame}{Identification of Cell Signaling Pathways}
+Lulu Wu (2015) presented in her master dissertation a methodology that 
+proposes to systematically modify models of signaling network in order
+to better represent experiments.
+\pause
+
+On her work, the problem of identification of cell signaling pathways is
+treated as a feature selection problem.
+\end{frame}
+
+
+%\begin{frame}{Feature Selection Problem}
+%The feature selection problem is a combinatorial optimization problem:
+%\begin{center}
+%Given a set of features $S$ and a cost function $c$, find subset 
+        %$X \in \powerset (S)$, with minimum cost $c(X)$.
+%\end{center}
+
+%\pause
+%\begin{figure}
+    %\includegraphics[scale=.24]{introduction/Boolean_lattice.pdf}
+    %\caption{An example of feature selection search space with 5 
+    %features.}
+%\end{figure}
+%\end{frame}
+
+
+\begin{frame}{Feature Selection for Identification of Signaling 
+Pathways}
+The methodology proposed by Wu defines the set of features as a set of 
+chemical reactions that can be added to a starting model.\pause This set 
+of chemical reactions is fetched from KEGG and stored in a database of
+interactions.
+\end{frame}
+
+
+\begin{frame}{Wu's Search Algorithm for Feature Selection}
+The search algorithm used by Wu is the Sequential Forward Selection 
+(SFS).
+\end{frame}
+
+
+\begin{frame}{Wu's Cost Function for Feature Selection}
+Wu defines the cost function as the minimum distance between 
+experimental and simulated data. 
+\pause
+The minimum distance is found using a Simmulated Annealing 
+that traverses the parameter space.
+\end{frame}
+
+
+%\begin{frame}{Wu's Cost Function for Feature Selection}
+%If we define that:\pause
+%\begin{itemize}
+    %\item{the experimental measurement is $D$;} \pause
+    %\item{the simulated measure is $\phi (M, \theta)$;} \pause
+    %\item{all elements visited on the Simmulated Annealing process 
+        %define $\Theta'$.}
+%\end{itemize}
+%\pause
+%Then, the cost function used on Wu's work is:
+%\begin{equation*}
+    %c (M) = min_{\{\theta \in \Theta' \subset \Theta\}}  
+        %dist (\phi(M, \theta), D) + R (M),
+%\end{equation*}
+%\pause
+%where $R (M)$ is a regularization function.
+%\end{frame}
+
+
+%\begin{frame}{Wu's Cost Function for Feature Selection}
+%The $R (M)$ term is implicitly defined by imposing a time limit to the 
+%Simmulated Annealing procedure used to calculate the cost function. 
+%\pause As a result, the penalization of the cost function is random.
+%\end{frame}
+
+
+\begin{frame}{Results of Wu's Methodology}
+Lulu Wu tested her methodology by trying to recreate models given a cut
+of the original model. \pause However, the methodology worked 
+satisfactorily only when the cut was similar to the original model.
+\end{frame}
+
+
+\begin{frame}{Difficulties of Wu's Methodology}
+We can point three aspects of Wu's work that could explain its 
+limitations.
+\begin{itemize}
+\pause
+\item{the database of interactions used could be more nearly complete;} 
+\pause
+\item{the search algorithm could also consider removing interactions;}
+\pause
+\item{the cost function could implement a proper penalization of 
+models;}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{What we Propose on this Project}
+We propose to create a methodology that uses a feature selection 
+approach for identification of signaling pathways, tackling the 
+difficulties encountered by Wu.
+\end{frame}
+
+
+\begin{frame}{What we Propose on this Project}
+To get a more nearly complete database of interactions, we should fetch 
+information from KEGG and other databases, \pause such as STRING and
+SABIO-RK.
+\end{frame}
+
+
+\begin{frame}{What we Propose on this Project}
+To use new search algorithms, \pause we intend to use more general
+algorithms that can also remove interactions.
+\end{frame}
+
+
+\begin{frame}{What we Propose on this Project}
+To define new cost functions, \pause we intend to use Bayesian 
+approaches of model selection that allow us to create estimates of 
+probabilities such as $p (M | D)$ or $p (D | M)$.
+\end{frame}
+
+
+\begin{frame}{Objectives of this Project}
+\begin{itemize}
+\pause
+\item{Build a database of interactions.}
+\pause
+\item{Create a cost function for models of signaling pathways.}
+\pause
+\item{Formulate systematic modifications to a model as the search space
+    of a feature selection model.}
+\pause
+\item{Test the methodology on known signaling pathways and also on 
+    pathways of interest in our lab.}
+\end{itemize}
+\end{frame}
+
+
+%Fundamental Concepts
+%- How are the experimental measures taken
+    %- A few details about the procedure
+%- How can we model cell signaling pathways mathematically
+    %- kinetics laws
+    %- M.M. simplifcations
+%- How can we choose between models
+    %- Approximate Bayesian Computation
+    %- Annealing-Melting Integration
+\section{Fundamental Concepts}
+%\begin{frame}{Experimental Measurements of Cell Signaling Pathways}
+%Experimental measurements of signaling pathways usually represent the
+%ratio of chemical species over time. \pause It is possible to get these
+%measurements using a Western blot procedure.
+%\begin{figure}
+%\end{figure}
+%\end{frame}
+
+\begin{frame}{}
+\begin{center}
+\texttt{Kinetics Modeling of Chemical Reactions}
+\end{center}
+\end{frame}
+
+\begin{frame}{Mathematical Modeling of Reactions}
+In this project we use three possible models of kinetics of an 
+interaction:
+\begin{itemize}
+\pause
+\item{first order interaction kinetics;}
+\pause
+\item{second order interaction kinetics;}
+\pause
+\item{Michaelis-Menten enzymatic kinetics.}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Kinetic Modeling of First Order Iteration}
+A first order reaction:
+\begin{figure}
+\includegraphics[scale=1.5]{fundamental_concepts/first_order_reaction.pdf}
+\end{figure}
+\pause
+has rate of:
+\begin{equation*}
+k_1[\text{A}].
+\end{equation*}
+\end{frame}
+
+\begin{frame}{Kinetic Modeling of Second Order Iteration}
+A second order reaction:
+\begin{figure}
+\includegraphics[scale=1.5]{fundamental_concepts/second_order_reaction.pdf}
+\end{figure}
+\pause
+has rate of:
+\begin{equation*}
+    k_2[\text{A}][\text{C}].
+\end{equation*}
+\end{frame}
+
+
+%A simple enzymatic equation can be written as:
+\begin{frame}{Kinetic Modeling of Enzymatic Reactions}
+An enzymatic reaction:
+\begin{figure}
+\includegraphics[scale=1.5]{fundamental_concepts/enzymatic_reaction.pdf}
+\end{figure}
+\pause
+Can be divided in two first order reactions plus a second order 
+reaction.
+\pause
+However, with the appropriate assumptions, it is possible to use a 
+Michaelis-Menten simplification of this reaction.
+\end{frame}
+
+
+\begin{frame}{Michaelis-Menten Kinetics}
+We denote Michaelis-Menten simplification of the last enzymatic reaction
+as
+\begin{figure}
+\includegraphics[scale=1.5]{fundamental_concepts/michaelis_menten_reaction.pdf}
+\end{figure}
+\pause
+and it has rate of:
+\begin{equation*}
+    k_{cat} \frac{[\text{E}][\text{S}]}{K_M + [\text{S}]}.
+\end{equation*}
+\end{frame}
+
+
+\begin{frame}{Kinetics of a System of Reactions}
+Suppose we want to model the kinetics of A on these reactions:
+\begin{figure}
+    \includegraphics[scale=1.5]{fundamental_concepts/system_reactions.pdf}
+\end{figure}
+This system can be divided in three reactions:
+\begin{itemize}
+    \pause
+    \item{\ce{A + B -> C}, with rate $k_1[\text{A}][\text{B}]$,}
+    \pause
+    \item{\ce{C -> A + B}, with rate $k_2[\text{C}]$,}
+    \pause
+    \item{\ce{A -> D}, with rate $k_3[\text{A}]$.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Kinetics of a System of Reactions}
+In \ce{A + B -> C}, with rate 
+{\color{red!50!black}$k_1[\text{A}][\text{B}]$}, A is a reactant.
+\pause
+
+In \ce{C -> A + B}, with rate 
+{\color{green!50!black}$k_2[\text{C}]$}, A is a product.
+\pause
+
+In \ce{A -> D}, with rate 
+{\color{red!50!black}$k_3[\text{A}]$}, A is a reactant.
+\pause
+
+Then, the differential equation that models the concentration change of 
+A is:
+\pause
+\begin{equation*}
+    \frac{d[\text{A}]}{dt} = 
+        {\color{red!50!black}- k_1[\text{A}][\text{B}]}
+        {\color{green!50!black}+ k_2[\text{C}]}
+        {\color{red!50!black}- k_3[\text{D}]}.
+\end{equation*}
+\end{frame}
+
+
+\begin{frame}{}
+\begin{center}
+\texttt{Bayesian Methods for Biochemical Model Selection}
+\end{center}
+\end{frame}
+
+\begin{frame}{State of the Art Methods for Model Selection}
+There are two main Bayesian methods available for biochemical model 
+selection:
+\begin{itemize}
+\pause
+\item{Approximate Bayesian Computation;}
+
+\pause
+\item{Marginal likelihood estimation through Thermodynamic Integration.}
+\end{itemize}
+
+\pause
+For both methods, we resort to Metropolis-Hastings algorithm to generate
+samples of distributions.
+\end{frame}
+
+
+\begin{frame}{Metropolis-Hastings algorithm}
+With Metropolis-Hastings, we can generate a sample of a distribution 
+$p(\lambda)$ doing the following:
+\pause
+    \begin{enumerate}
+        \pause
+        \item{Choose some $\lambda_0$ for which $p (\lambda_0) > 0$, and
+            set $t = 1$;}
+
+        \pause
+        \item{Sample a candidate point $\lambda^*$ from a jump 
+            distribution, $J (\lambda | \lambda_{t-1})$;}
+
+        \pause
+        \item{Calculate the ratio 
+            $r = \frac{p (\lambda^*) J_t (\lambda^{t - 1} | \lambda^*)}
+            {p (\lambda^{t - 1}) J_t (\lambda^* | \lambda^{t - 1})}$;}
+
+        \pause
+        \item{Set $\lambda_t = \lambda^*$ with probability $\min (1, r)$
+            and $\lambda_t = \lambda_{t-1}$ otherwise;}
+
+        \pause
+        \item{Increase $t$ by one and repeat from Step 2 if not reached
+            iteration limit.}
+    \end{enumerate}
+\end{frame}
+
+%Model Selection
+%- Approximate Bayesian Computation
+    %- What does it do;
+    %- ABC-SMC algorithm
+%- A method using Thermodynamic Integration
+    %- What does it do;
+    %- How to derive the thermodynamic integration
+    %- How to estimate this value
+% Implementations
+
+\section{Model Selection}
+\begin{frame}{}
+\begin{center}
+    \texttt{Ranking with Marginal Likelihood Estimation}
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Likelihood of Data Given Model and Parameters}
+If we consider that a model $M$ with parameters $\theta$ correctly 
+represent the signaling pathway \pause and that there is a Gaussian 
+observation error on $D$.
+\pause
+Then, the likelihood of observing experimental data $D$ is:
+\begin{equation*}
+     p (D | M, \theta) = \pause 
+        p_{\mathcal{N}_{\left(\vec{0}, \Sigma\right)}} 
+            (\phi (M,\theta) - D).
+\end{equation*}
+Where $\phi (M, \theta)$ is the simulated observation.
+\end{frame}
+
+
+\begin{frame}{Marginal Likelihood of Data}
+We can marginalize the likelihood to obtain:
+\begin{equation*}
+    p (D | M) = \int_{\Theta} p (D | M, \theta) p (\theta | M)d\theta
+\end{equation*}
+
+\pause
+Calculating this integral is hard, therefore we resort to estimating
+another integral.
+\end{frame}
+
+
+\begin{frame}{Power-posterior distributions}
+We define a power-posterior distribution as:
+\begin{equation*}
+    p_{\beta} (\theta) = \frac{p (D | \theta, M)^\beta p(\theta | M)}
+                    {\int_\Theta p (D | \theta, M)^\beta p(\theta | M) 
+                    d\theta},
+\end{equation*}
+\pause
+Note that:
+
+\begin{equation*}
+    p_{\beta=0} (\theta) = p (\theta | M),
+\end{equation*}
+
+\pause
+and that
+\begin{equation*}
+    p_{\beta=1}(\theta) =\frac{p (D, \theta|M)}
+                              {\int_\Theta p (D, \theta | M)d\theta}
+                        =\frac{p(\theta | D, M) p(D|M)}{p (D | M)}
+                        =p (\theta | D, M).
+\end{equation*}
+\end{frame}
+
+
+\begin{frame}{The Thermodynamic Integral}
+Using power-posteriors distributions, it is possible to show that
+\pause
+\begin{equation*}
+    \ln p (D | M) = \int_0^1 \expectation_{p_\beta (\theta)} 
+        [\ln p(D|\theta, M)]d\beta.
+    \label{eq:marginal_likelihood_again}
+\end{equation*}
+\end{frame}
+
+
+\begin{frame}{Estimating the Thermodynamic Integral}
+It is possible to estimate the Thermodynamic Integral using the 
+trapezoidal rule. \pause Setting $0 = \beta_0 < \beta_1 < \ldots 
+< \beta_T = 1$, the marginal likelihood is approximately equal to:
+\pause
+\begin{equation*}
+    \footnotesize
+    \sum_{t = 0}^{T - 1} (\beta_{t + 1} - \beta_t)
+\frac{
+    \expectation_{p_{\beta_{t + 1}} (\theta)}[\log p(D | M, \theta)]
++ 
+    \expectation_{p_{\beta_{t}} (\theta)}[\log p(D | M, \theta)]}
+{2}
+\end{equation*}
+\end{frame}
+
+\begin{frame}{Estimating the Thermodynamic Integral}
+To produce the estimates of 
+\begin{equation*}
+    \expectation_{p_{\beta_{t}} (\theta)}[\log p(D | M, \theta)]
+    \text{ for }
+    t \in \{0, \ldots, T\}
+\end{equation*}    
+we need to produce samples of the 
+power-posteriors $p_{\beta_{t}} (\theta)$.
+\end{frame}
+
+% Samples are generated running metropolis-hastings for each temperature
+% The sampling is divided in three steps. 
+%
+% On all sampling steps, the proposal distribution is Truncated Normal 
+% with only positive numbers
+%
+% On the first step, the jump distribution used has diagonal covariance
+%
+% On the second and third step, the jump covariance is estimated with 
+% the current sample of the posterior.
+%
+% On the third step, we use a Populational-MCMC. This method of smapling
+% helps mixing chains of different temperature.
+\begin{frame}{Sampling from Power-posteriors}
+The sampling of the power-posteriors are generated using 
+Metropolis-Hastings algorithms in three steps. \pause In all of the 
+steps, the proposal distribution used is a truncated multivariate 
+normal.
+\end{frame}
+
+
+\begin{frame}{Sampling from Power-posteriors}
+On the first step, the jump distribution has a diagonal covariance 
+matrix. \pause This matrix is updated according to the rate of 
+acceptance of parameters.
+
+\pause
+\begin{itemize}
+\item{if the acceptance rate is high, then increase the variance of the
+    jump;}
+
+\pause
+\item{if the acceptance rate is low, then decrease the variance of the 
+    jump.}
+\end{itemize}
+
+\pause
+On the second and third step, the covariance matrix of the jump 
+distribution is estimated with the current sample of the posterior.
+\end{frame}
+
+\begin{frame}{Sampling from the Power-posteriors}
+On the third step a Populational Monte Carlo Markov Chain is performed.
+This algorithm allows us to mix samples from different temperatures.
+\end{frame}
+
+
+\begin{frame}{}
+\begin{center}
+    \texttt{Ranking with Approximate Bayesian Computation}
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Approximate Bayesian Computation}
+Approximate Bayesian Computation (ABC) is a method that allows one to
+obtain samples of a distribution close to $p (\theta, M | D)$. \pause
+A general ABC implementation works as follow:
+
+\begin{enumerate}
+    \pause
+    \item{Sample a parameter candidate $(\theta^*, M^*)$ from some 
+        proposal distribution.}
+    \pause
+    \item{Generate simulations $\phi (M^*, \theta^*) = D^*$.}
+    \pause
+    \item{Calculate $d (D^*, D).$ If $d (D^*, D) < \epsilon$ for some 
+        previously specified $\epsilon$, then add $(\theta^*, M^*)$ to 
+        the sample.}
+    \pause
+    \item{Repeat until some iteration limit.}
+\end{enumerate}
+\end{frame}
+
+
+\begin{frame}{Approximate Bayesian Computation}
+The result of the algorithm is a sample of the distribution 
+\begin{equation*}
+p (\theta, M| d (\phi (M, \theta), D) < \epsilon).
+\end{equation*}
+
+\end{frame}
+
+\begin{frame}{ABC Sequential Monte Carlo}
+ABC sequential Monte Carlo improves a simple ABC algorithm by using a 
+sequence $\epsilon_0 > \ldots > \epsilon_T$ acceptance tolerances. 
+\pause The sample for a tolerance $\epsilon_i$ is used to generate 
+candidates for sample of tolerance $\epsilon_{i + 1}$.
+
+\pause
+We can use the accepted parameters of tolerance $\epsilon$ and model $M$
+to estimate 
+\begin{equation*}
+    p (M | d (\phi (M, \theta)) < \epsilon).
+\end{equation*}
+\end{frame}
+
+\section{Experiments on Model Selection}
+
+\begin{frame}{Software used for Model Ranking Experiments}
+We tested the two methods of model ranking using the software:
+\pause
+\begin{itemize}
+\item{{\bf SigNetMS:} an implementation of the Marginal Likelihood 
+    method created in this project.}
+\pause
+\item{{\bf ABC-SysBio:} an implementation of ABC-SMC.}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Experiment description}
+We ran two experiments based on the same procedure:
+\begin{itemize}
+    \pause
+    \item{Create 4 candidate models.}
+    \pause
+    \item{For one of the models, choose a set of parameter values 
+        and time steps and simulate data.}
+    \pause
+    \item{Add Gaussian noise to the simulations. Repeat two more 
+        times to generate three observations of the system.}
+    \pause
+    \item{Neglect chosen parameter values and define prior distributions
+        for every parameter.}
+    \pause
+    \item{Rank the four models.}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{}
+\begin{center}
+    \texttt{Experiment \#1}
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Experiment \#1}
+This experiment is originally from Vyshemirsky and Girolami (2007), in 
+which they present results of Annealing Melting Integration. 
+\end{frame}
+
+
+\begin{frame}{Experiment \#1}
+\begin{figure}
+  \begin{tabular}{c c}
+    \subfigure[Model 1]{
+    \includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model1.pdf}}
+    &
+    \subfigure[Model 2]{
+    \includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model2.pdf}}
+    \\
+    \subfigure[Model 3] {
+    \includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model3.pdf}}
+    &
+    \subfigure[Model 4] {
+    \includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model4.pdf}}
+    \end{tabular}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Experiment \#1}
+The model used to create the observations was Model 1.
+\pause
+
+The priors distribution used for all parameters is $Gamma (1, 3)$.
+\end{frame}
+
+
+\begin{frame}{Results on ABC-SysBio}
+The ABC-SysBio software returned the following ranking of models:
+\begin{equation*}
+    3 > 2 > 4 > 1
+\end{equation*}
+\end{frame}
+
+
+\begin{frame}{Results on ABC-SysBio}
+    \vspace{-2em}
+\begin{figure}[h]
+  \centering 
+  \begin{tabular}{c c}
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_1.pdf}
+    \label{fig:abc_bio_avgsim1_it1}}
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_10.pdf}
+    \label{fig:abc_bio_avgsim1_it2}} 
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_20.pdf}
+    \label{fig:abc_bio_avgsim1_it3}} 
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_26.pdf}
+    \label{fig:abc_bio_avgsim1_it4}} 
+    \end{tabular}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Results on ABC-SysBio}
+    \vspace{-2em}
+\begin{figure}
+    \centering
+    \begin{tabular}{c c}
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model3_1.pdf}
+    \label{fig:abc_bio_avgsim3_it1}}
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model3_10.pdf}
+    \label{fig:abc_bio_avgsim3_it2}} 
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model3_20.pdf}
+    \label{fig:abc_bio_avgsim3_it3}} 
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model3_26.pdf}
+    \label{fig:abc_bio_avgsim3_it4}} 
+    \end{tabular}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Results on SigNetMS}
+The ranking returned by SigNetMS on the first experiment is:
+\begin{equation*}
+    1 > 2 > 4 > 3;
+\end{equation*}
+\pause
+which is very similar to the ranking presented originally by Vyshemirsky 
+and Girolami (2007):
+\begin{equation*}
+    1 > 4 > 2 > 3.
+\end{equation*}
+\end{frame}
+
+\begin{frame}{Results on SigNetMS}
+\vspace{-2em}
+\begin{figure}
+    \centering
+    \begin{tabular}{c c}
+    \subfigure{
+    \includegraphics[clip=true,width=.46\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_39.png}}
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.46\linewidth]{experiments/results/girolami/gamma/snm/simulations_model2_39.png}} 
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.46\linewidth]{experiments/results/girolami/gamma/snm/simulations_model3_39.png}} 
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.46\linewidth]{experiments/results/girolami/gamma/snm/simulations_model4_39.png}} 
+    \end{tabular}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Results on SigNetMS}
+    \vspace{-2em}
+\begin{figure}
+    \centering
+    \begin{tabular}{c c}
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_0.png}
+    \label{fig:abc_bio_avgsim3_it1}}
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_19.png}
+    \label{fig:abc_bio_avgsim3_it2}} 
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_29.png}
+    \label{fig:abc_bio_avgsim3_it3}} 
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_39.png}
+    \label{fig:abc_bio_avgsim3_it4}} 
+    \end{tabular}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Results on SigNetMS}
+    \vspace{-2em}
+\begin{figure}
+    \centering
+    \begin{tabular}{c c}
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/model1_0_p0_k_1.png}
+    \label{fig:abc_bio_avgsim3_it1}}
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/model1_19_p0_k_1.png}
+    \label{fig:abc_bio_avgsim3_it2}} 
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/model1_29_p0_k_1.png}
+    \label{fig:abc_bio_avgsim3_it3}} 
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/model1_39_p0_k_1.png}
+    \label{fig:abc_bio_avgsim3_it4}} 
+    \end{tabular}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{}
+\begin{center}
+    \texttt{Experiment \#2}
+\end{center}
+\end{frame}
+
+\begin{frame}{Experiment \#2}
+This experiment is very similar to the later and it was designed by us.
+\end{frame}
+
+
+
+\begin{frame}{Experiment \#2}
+\begin{figure}
+    \centering
+    \begin{tabular}{c c}
+    \addtocounter{subfigure}{-1}
+        \subfigure[Model 1]{
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/diagrams/smallest_model1.pdf}}
+    &
+    \subfigure[Model 2]{
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/diagrams/smallest_model2.pdf}} 
+    \\
+    \subfigure[Model 3] {
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/diagrams/smallest_model3.pdf}}
+    &
+    \subfigure[Model 4] {
+    \includegraphics[clip=true,width=.4\linewidth]{experiments/diagrams/smallest_model4.pdf}} 
+    \end{tabular}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Experiment \#2}
+We used the following prior distributions for model parameters:
+\begin{table}
+\centering
+\begin{tabular}{l l l}
+Parameter   & Models     & Prior             \\ \hline
+\hline
+$k1$        & 1, 2, 3, 4 & $Gamma (1, 0.01)$ \\
+$k2$        & 1, 2, 3, 4 & $Gamma (2, 0.5)$  \\
+$k_{3cat}$  & 1, 2, 3, 4 & $Gamma (4, 1)$    \\
+$K_{3m}$    & 1, 2, 3, 4 & $Gamma (2, 1500)$ \\
+$V_4$       & 1, 3, 4    & $Gamma (2, 1)$    \\
+$K_{4m}$    & 1, 3, 4    & $Gamma (2, 100)$  \\
+$V_5$       & 3          & $Gamma (2, 0.4)$  \\
+$K_{5m}$    & 3          & $Gamma (2, 100)$  \\ \hline
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Results on ABC-SysBio}
+The ABC-SysBio software returned the following ranking of models:
+\begin{equation*}
+    2 > 1 > 4 > 3
+\end{equation*}
+\end{frame}
+
+
+\begin{frame}{Results on ABC-SysBio}
+    \vspace{-2em}
+\begin{figure}
+    \centering
+    \begin{tabular}{c c}
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model1_20.pdf}}
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model2_20.pdf}} 
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model3_20.pdf}} 
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model4_20.pdf}} 
+    \end{tabular}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Results on ABC-SysBio}
+    \vspace{-2em}
+\begin{figure}
+    \centering
+    \begin{tabular}{c c}
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model1_50.pdf}}
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model2_50.pdf}} 
+    \\
+    \multicolumn{2}{c}{
+    \subfigure{
+        \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model4_50.pdf}} }
+    \end{tabular}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Results on ABC-SysBio}
+\begin{figure}
+    \centering
+    \begin{tabular}{c c}
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model1_64.pdf}}
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model2_64.pdf}} 
+    \end{tabular}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Results on ABC-SysBio}
+    \vspace{-2em}
+\begin{figure}
+    \centering
+    \begin{tabular}{c c}
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/model1_64_p0_k_1.pdf}
+    }
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/model1_64_p1_k_2.pdf}
+    }
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/model1_64_p2_k_3cat.pdf}
+    }
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/model1_64_p3_K_3m.pdf}
+    }
+\end{tabular}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Results on SigNetMS}
+SigNetMS returned the following ranking of models:
+\begin{equation*}
+2 > 1 > 3 > 4
+\end{equation*}
+\end{frame}
+
+
+\begin{frame}{Results on SigNetMS}
+    \vspace{-2em}
+\begin{figure}
+    \centering
+    \begin{tabular}{c c}
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model1_39.png}}
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model2_39.png}} 
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model3_39.png}} 
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model4_39.png}} 
+    \end{tabular}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Results on SigNetMS}
+    \vspace{-2em}
+\begin{figure}
+    \centering
+    \begin{tabular}{c c}
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model1_0.png}}
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model1_19.png}} 
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model1_29.png}} 
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model1_39.png}} 
+    \end{tabular}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Results on SigNetMS}
+    \vspace{-2em}
+\begin{figure}
+    \centering
+    \begin{tabular}{c c}
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/model1_0_p2.png}
+    \label{fig:abc_bio_avgsim3_it1}}
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/model1_19_p2.png}
+    \label{fig:abc_bio_avgsim3_it2}} 
+    \\
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/model1_29_p2.png}
+    \label{fig:abc_bio_avgsim3_it3}} 
+    &
+    \subfigure{
+    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/model1_39_p2.png}
+    \label{fig:abc_bio_avgsim3_it4}} 
+    \end{tabular}
+\end{figure}
+\end{frame}
+
+\section{Future Work}
+
+\begin{frame}{Future Work}
+More activities are expected to be completed in this project, mainly the
+follow:
+\begin{itemize}
+    \pause 
+    \item{} Complete program credits requirement.
+    \pause
+    \item{} Improve computationally SigNetMS, since we chose it as our
+        cost function for models.
+    \pause
+    \item{} Studies of databases of chemical kinetics 
+        such as SABIO-RK and BRENDA.
+    \pause
+    % TODO: one class to fulfill credits requirements
+    % TODO: comment on focusing the database for our applications.
+    \item{} Creation of a relational database of chemical 
+        interactions focused on our further applications.
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Future Work}
+% TODO: from the experiments we defined that we're going to use SigNetMS from now on
+% TODO: optimize computationally SigNetMS
+\begin{itemize}
+    % TODO: comment -> cost function is just a wrapper
+    % TODO: comment -> many search algorithms are ready to use on 
+    % featsel
+    \item{} Define a wrapper on featsel that allows the use of SigNetMS
+        as a cost function.
+    \pause
+    \item{} Choice of a feature selection search algorithm.
+    \pause
+    \item{} Apply the method in ERK signaling 
+        pathways of tumor cell lines Y1 and HEK293.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{}
+\begin{center}
+    \texttt{Thank you!}
+\end{center}
+\end{frame}
+
+\end{document}
