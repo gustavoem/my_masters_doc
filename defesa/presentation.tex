@@ -270,42 +270,28 @@ models;}
 \begin{frame}{What we Propose on this Project}
 We propose to create a methodology that uses a feature selection 
 approach for identification of signaling pathways, tackling the 
-difficulties encountered by Wu.
+difficulty of \alert{penalizing complex models}.
 \end{frame}
-
 
 \begin{frame}{What we Propose on this Project}
-To get a more nearly complete database of interactions, we should fetch 
-information from KEGG and other databases, \pause such as STRING and
-SABIO-RK.
+We intend to use Bayesian approaches of model selection that allow us to
+create estimates of $p (M | D)$ or $p (D | M)$.
 \end{frame}
-
-
-\begin{frame}{What we Propose on this Project}
-To use new search algorithms, \pause we intend to use more general
-algorithms that can also remove interactions.
-\end{frame}
-
-
-\begin{frame}{What we Propose on this Project}
-To define new cost functions, \pause we intend to use Bayesian 
-approaches of model selection that allow us to create estimates of 
-probabilities such as $p (M | D)$ or $p (D | M)$.
-\end{frame}
-
 
 \begin{frame}{Objectives of this Project}
 \begin{itemize}
 \pause
-\item{Build a database of interactions.}
+\item{Study state of the art Bayesian algorithms for signaling network
+    model selection.}
 \pause
-\item{Create a cost function for models of signaling pathways.}
+\item{Implementation and comparison of cost functions for model
+    selection.}
 \pause
 \item{Formulate systematic modifications to a model as the search space
     of a feature selection model.}
 \pause
-\item{Test the methodology on known signaling pathways and also on 
-    pathways of interest in our lab.}
+\item{Observe the surface induced by the cost function over the search
+    space.}
 \end{itemize}
 \end{frame}
 
@@ -420,7 +406,7 @@ This system can be divided in three reactions:
 
 \begin{frame}{Kinetics of a System of Reactions}
 In \ce{A + B -> C}, with rate 
-{\color{red!50!black}$k_1[\text{A}][\text{B}]$}, A is a reactant.
+{\color{red!80!black}$k_1[\text{A}][\text{B}]$}, A is a reactant.
 \pause
 
 In \ce{C -> A + B}, with rate 
@@ -428,7 +414,7 @@ In \ce{C -> A + B}, with rate
 \pause
 
 In \ce{A -> D}, with rate 
-{\color{red!50!black}$k_3[\text{A}]$}, A is a reactant.
+{\color{red!80!black}$k_3[\text{A}]$}, A is a reactant.
 \pause
 
 Then, the differential equation that models the concentration change of 
@@ -436,9 +422,9 @@ A is:
 \pause
 \begin{equation*}
     \frac{d[\text{A}]}{dt} = 
-        {\color{red!50!black}- k_1[\text{A}][\text{B}]}
+        {\color{red!80!black}- k_1[\text{A}][\text{B}]}
         {\color{green!50!black}+ k_2[\text{C}]}
-        {\color{red!50!black}- k_3[\text{D}]}.
+        {\color{red!80!black}- k_3[\text{D}]}.
 \end{equation*}
 \end{frame}
 
@@ -618,8 +604,7 @@ power-posteriors $p_{\beta_{t}} (\theta)$.
 \begin{frame}{Sampling from Power-posteriors}
 The sampling of the power-posteriors are generated using 
 Metropolis-Hastings algorithms in three steps. \pause In all of the 
-steps, the proposal distribution used is a truncated multivariate 
-normal.
+steps, the proposal distribution used is multivariate lognormal.
 \end{frame}
 
 
