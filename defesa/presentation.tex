@@ -609,9 +609,9 @@ steps, the proposal distribution used is multivariate lognormal.
 
 
 \begin{frame}{Sampling from Power-posteriors}
-On the first step, the jump distribution has a diagonal covariance 
-matrix. \pause This matrix is updated according to the rate of 
-acceptance of parameters.
+On the first step, called \alert{naive burn-in} the jump distribution 
+has a diagonal covariance matrix. \pause This matrix is updated 
+according to the rate of acceptance of parameters.
 
 \pause
 \begin{itemize}
@@ -624,13 +624,20 @@ acceptance of parameters.
 \end{itemize}
 
 \pause
-On the second and third step, the covariance matrix of the jump 
-distribution is estimated with the current sample of the posterior.
+%On the second and third step, the covariance matrix of the jump 
+%distribution is estimated with the current sample of the posterior.
 \end{frame}
 
 \begin{frame}{Sampling from the Power-posteriors}
-On the third step a Populational Monte Carlo Markov Chain is performed.
-This algorithm allows us to mix samples from different temperatures.
+On the second sampling step, called \alert{posterior shaped burn-in}, we
+use the covariance of the current sample times some constant as the 
+covariance of the jump distribution.
+\end{frame}
+
+\begin{frame}{Sampling from the Power-posteriors}
+On the third step, we perform the \alert{Populational Monte Carlo Markov
+Chain} sampling. This algorithm allows us to mix samples from different 
+power posteriors.
 \end{frame}
 
 
@@ -671,8 +678,9 @@ p (\theta, M| d (\phi (M, \theta), D) < \epsilon).
 \end{frame}
 
 \begin{frame}{ABC Sequential Monte Carlo}
-ABC sequential Monte Carlo improves a simple ABC algorithm by using a 
-sequence $\epsilon_0 > \ldots > \epsilon_T$ acceptance tolerances. 
+\alert{ABC Sequential Monte Carlo (\texttt{ABC-SMC})} improves a simple
+ABC algorithm by using a sequence $\epsilon_0 > \ldots > \epsilon_T$
+    acceptance tolerances. 
 \pause The sample for a tolerance $\epsilon_i$ is used to generate 
 candidates for sample of tolerance $\epsilon_{i + 1}$.
 
@@ -684,473 +692,537 @@ to estimate
 \end{equation*}
 \end{frame}
 
-\section{Experiments on Model Selection}
-
-\begin{frame}{Software used for Model Ranking Experiments}
-We tested the two methods of model ranking using the software:
-\pause
-\begin{itemize}
-\item{{\bf SigNetMS:} an implementation of the Marginal Likelihood 
-    method created in this project.}
-\pause
-\item{{\bf ABC-SysBio:} an implementation of ABC-SMC.}
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}{Experiment description}
-We ran two experiments based on the same procedure:
-\begin{itemize}
-    \pause
-    \item{Create 4 candidate models.}
-    \pause
-    \item{For one of the models, choose a set of parameter values 
-        and time steps and simulate data.}
-    \pause
-    \item{Add Gaussian noise to the simulations. Repeat two more 
-        times to generate three observations of the system.}
-    \pause
-    \item{Neglect chosen parameter values and define prior distributions
-        for every parameter.}
-    \pause
-    \item{Rank the four models.}
-\end{itemize}
-\end{frame}
-
+\section{Development of SigNetMS}
 
 \begin{frame}{}
 \begin{center}
-    \texttt{Experiment \#1}
+    \texttt{The SigNetMS Software}
 \end{center}
 \end{frame}
 
-
-\begin{frame}{Experiment \#1}
-This experiment is originally from Vyshemirsky and Girolami (2007), in 
-which they present results of Annealing Melting Integration. 
-\end{frame}
-
-
-\begin{frame}{Experiment \#1}
-\begin{figure}
-  \begin{tabular}{c c}
-    \subfigure[Model 1]{
-    \includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model1.pdf}}
-    &
-    \subfigure[Model 2]{
-    \includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model2.pdf}}
-    \\
-    \subfigure[Model 3] {
-    \includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model3.pdf}}
-    &
-    \subfigure[Model 4] {
-    \includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model4.pdf}}
-    \end{tabular}
-\end{figure}
-\end{frame}
-
-\begin{frame}{Experiment \#1}
-The model used to create the observations was Model 1.
+\begin{frame}{A software that estimates the marginal likelihood}
+To choose a cost function, we needed to compare the ABC-SMC and Marginal
+Likelihood approaches for model selection.
 \pause
-
-The priors distribution used for all parameters is $Gamma (1, 3)$.
+\begin{itemize}
+    \item{\texttt{ABC-SysBio} is a software that implements
+        \texttt{ABC-SMC}}
+    \item{\texttt{BioBayes} is a software that implements the estimation
+        of the marginal likelihood.}
+\end{itemize}
 \end{frame}
 
-
-\begin{frame}{Results on ABC-SysBio}
-The ABC-SysBio software returned the following ranking of models:
-\begin{equation*}
-    3 > 2 > 4 > 1
-\end{equation*}
-\end{frame}
-
-
-\begin{frame}{Results on ABC-SysBio}
-    \vspace{-2em}
-\begin{figure}[h]
-  \centering 
-  \begin{tabular}{c c}
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_1.pdf}
-    \label{fig:abc_bio_avgsim1_it1}}
-    &
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_10.pdf}
-    \label{fig:abc_bio_avgsim1_it2}} 
-    \\
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_20.pdf}
-    \label{fig:abc_bio_avgsim1_it3}} 
-    &
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_26.pdf}
-    \label{fig:abc_bio_avgsim1_it4}} 
-    \end{tabular}
-\end{figure}
-\end{frame}
-
-
-\begin{frame}{Results on ABC-SysBio}
-    \vspace{-2em}
-\begin{figure}
-    \centering
-    \begin{tabular}{c c}
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model3_1.pdf}
-    \label{fig:abc_bio_avgsim3_it1}}
-    &
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model3_10.pdf}
-    \label{fig:abc_bio_avgsim3_it2}} 
-    \\
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model3_20.pdf}
-    \label{fig:abc_bio_avgsim3_it3}} 
-    &
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model3_26.pdf}
-    \label{fig:abc_bio_avgsim3_it4}} 
-    \end{tabular}
-\end{figure}
-\end{frame}
-
-
-\begin{frame}{Results on SigNetMS}
-The ranking returned by SigNetMS on the first experiment is:
-\begin{equation*}
-    1 > 2 > 4 > 3;
-\end{equation*}
+\begin{frame}{A software that estimates the marginal likelihood}
+However, the usage of \texttt{BioBayes} in our context was cumbersome.
 \pause
-which is very similar to the ranking presented originally by Vyshemirsky 
-and Girolami (2007):
-\begin{equation*}
-    1 > 4 > 2 > 3.
-\end{equation*}
+Therefore, we decided to implement \alert{SigNetMS}.
 \end{frame}
 
-\begin{frame}{Results on SigNetMS}
-\vspace{-2em}
+\begin{frame}{The SigNetMS software}
+SigNetMS is a Python package and command line software that estimates 
+the marginal likelihood of a model given experimental data.
+\end{frame}
+
+\begin{frame}{The input expected by SigNetMS}
+The input to SigNetMS includes:
+\begin{itemize}
+    \item{An SBML file model;}
+    \item{An XML file with prior distributions of parameters;}
+    \item{An XML file with experimental data;}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The output produced by SigNetMS}
+SigNetMS produces an estimate of the marginal likelihood, as you may
+have suspected. \pause Moreover, the software also produces samples of
+each power posterior of parameters, which is in turn a sample of the
+posterior distribution of parameters.
+\pause
 \begin{figure}
-    \centering
-    \begin{tabular}{c c}
-    \subfigure{
-    \includegraphics[clip=true,width=.46\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_39.png}}
-    &
-    \subfigure{
-    \includegraphics[clip=true,width=.46\linewidth]{experiments/results/girolami/gamma/snm/simulations_model2_39.png}} 
-    \\
-    \subfigure{
-    \includegraphics[clip=true,width=.46\linewidth]{experiments/results/girolami/gamma/snm/simulations_model3_39.png}} 
-    &
-    \subfigure{
-    \includegraphics[clip=true,width=.46\linewidth]{experiments/results/girolami/gamma/snm/simulations_model4_39.png}} 
-    \end{tabular}
-\end{figure}
-\end{frame}
-
-
-\begin{frame}{Results on SigNetMS}
-    \vspace{-2em}
-\begin{figure}
-    \centering
-    \begin{tabular}{c c}
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_0.png}
-    \label{fig:abc_bio_avgsim3_it1}}
-    &
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_19.png}
-    \label{fig:abc_bio_avgsim3_it2}} 
-    \\
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_29.png}
-    \label{fig:abc_bio_avgsim3_it3}} 
-    &
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_39.png}
-    \label{fig:abc_bio_avgsim3_it4}} 
-    \end{tabular}
-\end{figure}
-\end{frame}
-
-
-\begin{frame}{Results on SigNetMS}
-    \vspace{-2em}
-\begin{figure}
-    \centering
-    \begin{tabular}{c c}
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/model1_0_p0_k_1.png}
-    \label{fig:abc_bio_avgsim3_it1}}
-    &
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/model1_19_p0_k_1.png}
-    \label{fig:abc_bio_avgsim3_it2}} 
-    \\
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/model1_29_p0_k_1.png}
-    \label{fig:abc_bio_avgsim3_it3}} 
-    &
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/model1_39_p0_k_1.png}
-    \label{fig:abc_bio_avgsim3_it4}} 
-    \end{tabular}
-\end{figure}
-\end{frame}
-
-
-\begin{frame}{}
-\begin{center}
-    \texttt{Experiment \#2}
-\end{center}
-\end{frame}
-
-\begin{frame}{Experiment \#2}
-This experiment is very similar to the later and it was designed by us.
-\end{frame}
-
-
-
-\begin{frame}{Experiment \#2}
-\begin{figure}
-    \centering
-    \begin{tabular}{c c}
-    \addtocounter{subfigure}{-1}
-        \subfigure[Model 1]{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/diagrams/smallest_model1.pdf}}
-    &
-    \subfigure[Model 2]{
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/diagrams/smallest_model2.pdf}} 
-    \\
-    \subfigure[Model 3] {
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/diagrams/smallest_model3.pdf}}
-    &
-    \subfigure[Model 4] {
-    \includegraphics[clip=true,width=.4\linewidth]{experiments/diagrams/smallest_model4.pdf}} 
-    \end{tabular}
-\end{figure}
-\end{frame}
-
-
-\begin{frame}{Experiment \#2}
-We used the following prior distributions for model parameters:
-\begin{table}
 \centering
-\begin{tabular}{l l l}
-Parameter   & Models     & Prior             \\ \hline
-\hline
-$k1$        & 1, 2, 3, 4 & $Gamma (1, 0.01)$ \\
-$k2$        & 1, 2, 3, 4 & $Gamma (2, 0.5)$  \\
-$k_{3cat}$  & 1, 2, 3, 4 & $Gamma (4, 1)$    \\
-$K_{3m}$    & 1, 2, 3, 4 & $Gamma (2, 1500)$ \\
-$V_4$       & 1, 3, 4    & $Gamma (2, 1)$    \\
-$K_{4m}$    & 1, 3, 4    & $Gamma (2, 100)$  \\
-$V_5$       & 3          & $Gamma (2, 0.4)$  \\
-$K_{5m}$    & 3          & $Gamma (2, 100)$  \\ \hline
-\end{tabular}
-\end{table}
-\end{frame}
-
-\begin{frame}{Results on ABC-SysBio}
-The ABC-SysBio software returned the following ranking of models:
-\begin{equation*}
-    2 > 1 > 4 > 3
-\end{equation*}
-\end{frame}
-
-
-\begin{frame}{Results on ABC-SysBio}
-    \vspace{-2em}
-\begin{figure}
-    \centering
-    \begin{tabular}{c c}
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model1_20.pdf}}
-    &
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model2_20.pdf}} 
-    \\
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model3_20.pdf}} 
-    &
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model4_20.pdf}} 
-    \end{tabular}
+\includegraphics[clip=true,width=.65\linewidth]{experiments/results/girolami/gamma/snm/model1_29_p0_k_1.png}
 \end{figure}
 \end{frame}
 
-
-\begin{frame}{Results on ABC-SysBio}
-    \vspace{-2em}
-\begin{figure}
-    \centering
-    \begin{tabular}{c c}
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model1_50.pdf}}
-    &
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model2_50.pdf}} 
-    \\
-    \multicolumn{2}{c}{
-    \subfigure{
-        \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model4_50.pdf}} }
-    \end{tabular}
-\end{figure}
+\begin{frame}{}
+\begin{center}
+    \texttt{Fast integration and parameter sampling}
+\end{center}
 \end{frame}
 
-
-\begin{frame}{Results on ABC-SysBio}
-\begin{figure}
-    \centering
-    \begin{tabular}{c c}
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model1_64.pdf}}
-    &
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model2_64.pdf}} 
-    \end{tabular}
-\end{figure}
-\end{frame}
+% We knew the integration was very expensive
+% Talk about the integrator choice
+% Talk about symbolic mathematics
+% 
 
 
-\begin{frame}{Results on ABC-SysBio}
-    \vspace{-2em}
-\begin{figure}
-    \centering
-    \begin{tabular}{c c}
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/model1_64_p0_k_1.pdf}
-    }
-    &
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/model1_64_p1_k_2.pdf}
-    }
-    \\
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/model1_64_p2_k_3cat.pdf}
-    }
-    &
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/model1_64_p3_K_3m.pdf}
-    }
-\end{tabular}
-\end{figure}
-\end{frame}
+%\section{Experiments on Model Selection}
+
+%\begin{frame}{Software used for Model Ranking Experiments}
+%We tested the two methods of model ranking using the software:
+%\pause
+%\begin{itemize}
+%\item{{\bf SigNetMS:} an implementation of the Marginal Likelihood 
+    %method created in this project.}
+%\pause
+%\item{{\bf ABC-SysBio:} an implementation of ABC-SMC.}
+%\end{itemize}
+%\end{frame}
 
 
-\begin{frame}{Results on SigNetMS}
-SigNetMS returned the following ranking of models:
-\begin{equation*}
-2 > 1 > 3 > 4
-\end{equation*}
-\end{frame}
+%\begin{frame}{Experiment description}
+%We ran two experiments based on the same procedure:
+%\begin{itemize}
+    %\pause
+    %\item{Create 4 candidate models.}
+    %\pause
+    %\item{For one of the models, choose a set of parameter values 
+        %and time steps and simulate data.}
+    %\pause
+    %\item{Add Gaussian noise to the simulations. Repeat two more 
+        %times to generate three observations of the system.}
+    %\pause
+    %\item{Neglect chosen parameter values and define prior distributions
+        %for every parameter.}
+    %\pause
+    %\item{Rank the four models.}
+%\end{itemize}
+%\end{frame}
 
 
-\begin{frame}{Results on SigNetMS}
-    \vspace{-2em}
-\begin{figure}
-    \centering
-    \begin{tabular}{c c}
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model1_39.png}}
-    &
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model2_39.png}} 
-    \\
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model3_39.png}} 
-    &
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model4_39.png}} 
-    \end{tabular}
-\end{figure}
-\end{frame}
+%\begin{frame}{}
+%\begin{center}
+    %\texttt{Experiment \#1}
+%\end{center}
+%\end{frame}
 
 
-\begin{frame}{Results on SigNetMS}
-    \vspace{-2em}
-\begin{figure}
-    \centering
-    \begin{tabular}{c c}
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model1_0.png}}
-    &
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model1_19.png}} 
-    \\
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model1_29.png}} 
-    &
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model1_39.png}} 
-    \end{tabular}
-\end{figure}
-\end{frame}
+%\begin{frame}{Experiment \#1}
+%This experiment is originally from Vyshemirsky and Girolami (2007), in 
+%which they present results of Annealing Melting Integration. 
+%\end{frame}
 
 
-\begin{frame}{Results on SigNetMS}
-    \vspace{-2em}
-\begin{figure}
-    \centering
-    \begin{tabular}{c c}
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/model1_0_p2.png}
-    \label{fig:abc_bio_avgsim3_it1}}
-    &
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/model1_19_p2.png}
-    \label{fig:abc_bio_avgsim3_it2}} 
-    \\
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/model1_29_p2.png}
-    \label{fig:abc_bio_avgsim3_it3}} 
-    &
-    \subfigure{
-    \includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/model1_39_p2.png}
-    \label{fig:abc_bio_avgsim3_it4}} 
-    \end{tabular}
-\end{figure}
-\end{frame}
+%\begin{frame}{Experiment \#1}
+%\begin{figure}
+  %\begin{tabular}{c c}
+    %\subfigure[Model 1]{
+    %\includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model1.pdf}}
+    %&
+    %\subfigure[Model 2]{
+    %\includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model2.pdf}}
+    %\\
+    %\subfigure[Model 3] {
+    %\includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model3.pdf}}
+    %&
+    %\subfigure[Model 4] {
+    %\includegraphics[clip=true,width=.42\linewidth]{experiments/diagrams/bioinformatics_model4.pdf}}
+    %\end{tabular}
+%\end{figure}
+%\end{frame}
 
-\section{Future Work}
+%\begin{frame}{Experiment \#1}
+%The model used to create the observations was Model 1.
+%\pause
 
-\begin{frame}{Future Work}
-More activities are expected to be completed in this project, mainly the
-follow:
-\begin{itemize}
-    \pause 
-    \item{} Complete program credits requirement.
-    \pause
-    \item{} Improve computationally SigNetMS, since we chose it as our
-        cost function for models.
-    \pause
-    \item{} Studies of databases of chemical kinetics 
-        such as SABIO-RK and BRENDA.
-    \pause
-    % TODO: one class to fulfill credits requirements
-    % TODO: comment on focusing the database for our applications.
-    \item{} Creation of a relational database of chemical 
-        interactions focused on our further applications.
-    \end{itemize}
-\end{frame}
+%The priors distribution used for all parameters is $Gamma (1, 3)$.
+%\end{frame}
 
 
-\begin{frame}{Future Work}
-% TODO: from the experiments we defined that we're going to use SigNetMS from now on
-% TODO: optimize computationally SigNetMS
-\begin{itemize}
-    % TODO: comment -> cost function is just a wrapper
-    % TODO: comment -> many search algorithms are ready to use on 
-    % featsel
-    \item{} Define a wrapper on featsel that allows the use of SigNetMS
-        as a cost function.
-    \pause
-    \item{} Choice of a feature selection search algorithm.
-    \pause
-    \item{} Apply the method in ERK signaling 
-        pathways of tumor cell lines Y1 and HEK293.
-\end{itemize}
-\end{frame}
+%\begin{frame}{Results on ABC-SysBio}
+%The ABC-SysBio software returned the following ranking of models:
+%\begin{equation*}
+    %3 > 2 > 4 > 1
+%\end{equation*}
+%\end{frame}
+
+
+%\begin{frame}{Results on ABC-SysBio}
+    %\vspace{-2em}
+%\begin{figure}[h]
+  %\centering 
+  %\begin{tabular}{c c}
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_1.pdf}
+    %\label{fig:abc_bio_avgsim1_it1}}
+    %&
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_10.pdf}
+    %\label{fig:abc_bio_avgsim1_it2}} 
+    %\\
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_20.pdf}
+    %\label{fig:abc_bio_avgsim1_it3}} 
+    %&
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model1_26.pdf}
+    %\label{fig:abc_bio_avgsim1_it4}} 
+    %\end{tabular}
+%\end{figure}
+%\end{frame}
+
+
+%\begin{frame}{Results on ABC-SysBio}
+    %\vspace{-2em}
+%\begin{figure}
+    %\centering
+    %\begin{tabular}{c c}
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model3_1.pdf}
+    %\label{fig:abc_bio_avgsim3_it1}}
+    %&
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model3_10.pdf}
+    %\label{fig:abc_bio_avgsim3_it2}} 
+    %\\
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model3_20.pdf}
+    %\label{fig:abc_bio_avgsim3_it3}} 
+    %&
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/abc/simulations_model3_26.pdf}
+    %\label{fig:abc_bio_avgsim3_it4}} 
+    %\end{tabular}
+%\end{figure}
+%\end{frame}
+
+
+%\begin{frame}{Results on SigNetMS}
+%The ranking returned by SigNetMS on the first experiment is:
+%\begin{equation*}
+    %1 > 2 > 4 > 3;
+%\end{equation*}
+%\pause
+%which is very similar to the ranking presented originally by Vyshemirsky 
+%and Girolami (2007):
+%\begin{equation*}
+    %1 > 4 > 2 > 3.
+%\end{equation*}
+%\end{frame}
+
+%\begin{frame}{Results on SigNetMS}
+%\vspace{-2em}
+%\begin{figure}
+    %\centering
+    %\begin{tabular}{c c}
+    %\subfigure{
+    %\includegraphics[clip=true,width=.46\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_39.png}}
+    %&
+    %\subfigure{
+    %\includegraphics[clip=true,width=.46\linewidth]{experiments/results/girolami/gamma/snm/simulations_model2_39.png}} 
+    %\\
+    %\subfigure{
+    %\includegraphics[clip=true,width=.46\linewidth]{experiments/results/girolami/gamma/snm/simulations_model3_39.png}} 
+    %&
+    %\subfigure{
+    %\includegraphics[clip=true,width=.46\linewidth]{experiments/results/girolami/gamma/snm/simulations_model4_39.png}} 
+    %\end{tabular}
+%\end{figure}
+%\end{frame}
+
+
+%\begin{frame}{Results on SigNetMS}
+    %\vspace{-2em}
+%\begin{figure}
+    %\centering
+    %\begin{tabular}{c c}
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_0.png}
+    %\label{fig:abc_bio_avgsim3_it1}}
+    %&
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_19.png}
+    %\label{fig:abc_bio_avgsim3_it2}} 
+    %\\
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_29.png}
+    %\label{fig:abc_bio_avgsim3_it3}} 
+    %&
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/simulations_model1_39.png}
+    %\label{fig:abc_bio_avgsim3_it4}} 
+    %\end{tabular}
+%\end{figure}
+%\end{frame}
+
+
+%\begin{frame}{Results on SigNetMS}
+    %\vspace{-2em}
+%\begin{figure}
+    %\centering
+    %\begin{tabular}{c c}
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/model1_0_p0_k_1.png}
+    %\label{fig:abc_bio_avgsim3_it1}}
+    %&
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/model1_19_p0_k_1.png}
+    %\label{fig:abc_bio_avgsim3_it2}} 
+    %\\
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/model1_29_p0_k_1.png}
+    %\label{fig:abc_bio_avgsim3_it3}} 
+    %&
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/girolami/gamma/snm/model1_39_p0_k_1.png}
+    %\label{fig:abc_bio_avgsim3_it4}} 
+    %\end{tabular}
+%\end{figure}
+%\end{frame}
+
+
+%\begin{frame}{}
+%\begin{center}
+    %\texttt{Experiment \#2}
+%\end{center}
+%\end{frame}
+
+%\begin{frame}{Experiment \#2}
+%This experiment is very similar to the later and it was designed by us.
+%\end{frame}
+
+
+
+%\begin{frame}{Experiment \#2}
+%\begin{figure}
+    %\centering
+    %\begin{tabular}{c c}
+    %\addtocounter{subfigure}{-1}
+        %\subfigure[Model 1]{
+    %\includegraphics[clip=true,width=.4\linewidth]{experiments/diagrams/smallest_model1.pdf}}
+    %&
+    %\subfigure[Model 2]{
+    %\includegraphics[clip=true,width=.4\linewidth]{experiments/diagrams/smallest_model2.pdf}} 
+    %\\
+    %\subfigure[Model 3] {
+    %\includegraphics[clip=true,width=.4\linewidth]{experiments/diagrams/smallest_model3.pdf}}
+    %&
+    %\subfigure[Model 4] {
+    %\includegraphics[clip=true,width=.4\linewidth]{experiments/diagrams/smallest_model4.pdf}} 
+    %\end{tabular}
+%\end{figure}
+%\end{frame}
+
+
+%\begin{frame}{Experiment \#2}
+%We used the following prior distributions for model parameters:
+%\begin{table}
+%\centering
+%\begin{tabular}{l l l}
+%Parameter   & Models     & Prior             \\ \hline
+%\hline
+%$k1$        & 1, 2, 3, 4 & $Gamma (1, 0.01)$ \\
+%$k2$        & 1, 2, 3, 4 & $Gamma (2, 0.5)$  \\
+%$k_{3cat}$  & 1, 2, 3, 4 & $Gamma (4, 1)$    \\
+%$K_{3m}$    & 1, 2, 3, 4 & $Gamma (2, 1500)$ \\
+%$V_4$       & 1, 3, 4    & $Gamma (2, 1)$    \\
+%$K_{4m}$    & 1, 3, 4    & $Gamma (2, 100)$  \\
+%$V_5$       & 3          & $Gamma (2, 0.4)$  \\
+%$K_{5m}$    & 3          & $Gamma (2, 100)$  \\ \hline
+%\end{tabular}
+%\end{table}
+%\end{frame}
+
+%\begin{frame}{Results on ABC-SysBio}
+%The ABC-SysBio software returned the following ranking of models:
+%\begin{equation*}
+    %2 > 1 > 4 > 3
+%\end{equation*}
+%\end{frame}
+
+
+%\begin{frame}{Results on ABC-SysBio}
+    %\vspace{-2em}
+%\begin{figure}
+    %\centering
+    %\begin{tabular}{c c}
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model1_20.pdf}}
+    %&
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model2_20.pdf}} 
+    %\\
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model3_20.pdf}} 
+    %&
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model4_20.pdf}} 
+    %\end{tabular}
+%\end{figure}
+%\end{frame}
+
+
+%\begin{frame}{Results on ABC-SysBio}
+    %\vspace{-2em}
+%\begin{figure}
+    %\centering
+    %\begin{tabular}{c c}
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model1_50.pdf}}
+    %&
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model2_50.pdf}} 
+    %\\
+    %\multicolumn{2}{c}{
+    %\subfigure{
+        %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model4_50.pdf}} }
+    %\end{tabular}
+%\end{figure}
+%\end{frame}
+
+
+%\begin{frame}{Results on ABC-SysBio}
+%\begin{figure}
+    %\centering
+    %\begin{tabular}{c c}
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model1_64.pdf}}
+    %&
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/simulations_model2_64.pdf}} 
+    %\end{tabular}
+%\end{figure}
+%\end{frame}
+
+
+%\begin{frame}{Results on ABC-SysBio}
+    %\vspace{-2em}
+%\begin{figure}
+    %\centering
+    %\begin{tabular}{c c}
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/model1_64_p0_k_1.pdf}
+    %}
+    %&
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/model1_64_p1_k_2.pdf}
+    %}
+    %\\
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/model1_64_p2_k_3cat.pdf}
+    %}
+    %&
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/abc/model1_64_p3_K_3m.pdf}
+    %}
+%\end{tabular}
+%\end{figure}
+%\end{frame}
+
+
+%\begin{frame}{Results on SigNetMS}
+%SigNetMS returned the following ranking of models:
+%\begin{equation*}
+%2 > 1 > 3 > 4
+%\end{equation*}
+%\end{frame}
+
+
+%\begin{frame}{Results on SigNetMS}
+    %\vspace{-2em}
+%\begin{figure}
+    %\centering
+    %\begin{tabular}{c c}
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model1_39.png}}
+    %&
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model2_39.png}} 
+    %\\
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model3_39.png}} 
+    %&
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model4_39.png}} 
+    %\end{tabular}
+%\end{figure}
+%\end{frame}
+
+
+%\begin{frame}{Results on SigNetMS}
+    %\vspace{-2em}
+%\begin{figure}
+    %\centering
+    %\begin{tabular}{c c}
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model1_0.png}}
+    %&
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model1_19.png}} 
+    %\\
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model1_29.png}} 
+    %&
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/simulations_model1_39.png}} 
+    %\end{tabular}
+%\end{figure}
+%\end{frame}
+
+
+%\begin{frame}{Results on SigNetMS}
+    %\vspace{-2em}
+%\begin{figure}
+    %\centering
+    %\begin{tabular}{c c}
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/model1_0_p2.png}
+    %\label{fig:abc_bio_avgsim3_it1}}
+    %&
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/model1_19_p2.png}
+    %\label{fig:abc_bio_avgsim3_it2}} 
+    %\\
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/model1_29_p2.png}
+    %\label{fig:abc_bio_avgsim3_it3}} 
+    %&
+    %\subfigure{
+    %\includegraphics[clip=true,width=.45\linewidth]{experiments/results/smallest/snm/model1_39_p2.png}
+    %\label{fig:abc_bio_avgsim3_it4}} 
+    %\end{tabular}
+%\end{figure}
+%\end{frame}
+
+%\section{Future Work}
+
+%\begin{frame}{Future Work}
+%More activities are expected to be completed in this project, mainly the
+%follow:
+%\begin{itemize}
+    %\pause 
+    %\item{} Complete program credits requirement.
+    %\pause
+    %\item{} Improve computationally SigNetMS, since we chose it as our
+        %cost function for models.
+    %\pause
+    %\item{} Studies of databases of chemical kinetics 
+        %such as SABIO-RK and BRENDA.
+    %\pause
+     TODO: one class to fulfill credits requirements
+     TODO: comment on focusing the database for our applications.
+    %\item{} Creation of a relational database of chemical 
+        %interactions focused on our further applications.
+    %\end{itemize}
+%\end{frame}
+
+
+%\begin{frame}{Future Work}
+ %TODO: from the experiments we defined that we're going to use SigNetMS from now on
+ %TODO: optimize computationally SigNetMS
+%\begin{itemize}
+     %TODO: comment -> cost function is just a wrapper
+     %TODO: comment -> many search algorithms are ready to use on 
+     %featsel
+    %\item{} Define a wrapper on featsel that allows the use of SigNetMS
+        %as a cost function.
+    %\pause
+    %\item{} Choice of a feature selection search algorithm.
+    %\pause
+    %\item{} Apply the method in ERK signaling 
+        %pathways of tumor cell lines Y1 and HEK293.
+%\end{itemize}
+%\end{frame}
 
 \begin{frame}{}
 \begin{center}
