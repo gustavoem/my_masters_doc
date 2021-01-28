@@ -216,7 +216,7 @@ The search algorithm used by Wu is the Sequential Forward Selection
 Wu defines the cost function as the minimum distance between 
 experimental and simulated data. 
 \pause
-The minimum distance is found using a Simmulated Annealing 
+The minimum distance is found using a Simulated Annealing 
 that traverses the parameter space.
 \end{frame}
 
@@ -226,7 +226,7 @@ that traverses the parameter space.
 %\begin{itemize}
     %\item{the experimental measurement is $D$;} \pause
     %\item{the simulated measure is $\phi (M, \theta)$;} \pause
-    %\item{all elements visited on the Simmulated Annealing process 
+    %\item{all elements visited on the Simulated Annealing process 
         %define $\Theta'$.}
 %\end{itemize}
 %\pause
@@ -242,7 +242,7 @@ that traverses the parameter space.
 
 %\begin{frame}{Wu's Cost Function for Feature Selection}
 %The $R (M)$ term is implicitly defined by imposing a time limit to the 
-%Simmulated Annealing procedure used to calculate the cost function. 
+%Simulated Annealing procedure used to calculate the cost function. 
 %\pause As a result, the penalization of the cost function is random.
 %\end{frame}
 
@@ -606,7 +606,7 @@ power-posteriors $p_{\beta_{t}} (\theta)$.
 \begin{frame}{Sampling from Power-posteriors}
 The sampling of the power-posteriors are generated using 
 Metropolis-Hastings algorithms in three steps. \pause In all of the 
-steps, the proposal distribution used is multivariate lognormal.
+steps, the proposal distribution used is multivariate log-normal.
 \end{frame}
 
 
@@ -837,7 +837,7 @@ We prepared two experiments in this work: \pause
 \end{center}
 \end{frame}
 
-\begin{frame}{Chossing a software for model selection}
+\begin{frame}{Choosing a software for model selection}
 ABC-SysBio and SigNetMS use different Bayesian approaches for model
 selection. \pause The first creates an estimate of $p(M|D)$, \pause and
 the second creates an estimate of $p(D|M)$ (the marginal likelihood).
@@ -1160,6 +1160,37 @@ preferred}.
 \end{frame}
 
 \section{Conclusions}
+
+\begin{frame}{Contributions of this work}
+The main contributions of this work are:
+\begin{itemize}
+    \pause
+    \item{the implementation of the SigNetMS software;}
+    \pause
+    \item{the comparison between SigNetMS and ABC-SysBio;}
+    \pause
+    \item{the experimentation of feature selection on model selection
+        using a marginal likelihood approach to define the cost
+        function.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Suggestions for future work}
+We also suggest a few topics for future related work:
+\begin{itemize}
+    \item{efficiency improvements on SigNetMS;}
+        \pause
+    \item{treatment of numerical instabilities on numerical integrations
+        of SigNetMS;}
+        \pause
+    \item{solving the model selection problem as a U-Curve problem;}
+        \pause
+    \item{experimentation on heterogeneous conditions of experimental
+        measurements;}
+        \pause
+    \item{application of the methodology on real instances.}
+\end{itemize}
+\end{frame}
 
 \begin{frame}{}
 \begin{center}
