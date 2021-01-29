@@ -8,6 +8,7 @@
 \usetheme{metropolis}           % Use metropolis theme
 \usepackage{animate}
 \usepackage{xmpmulti}
+\usepackage{bm} % bold mathematics
 
 \newtheorem{mydefinition}{Definição}
 
@@ -110,7 +111,7 @@ We can summarize the state of the cell with measurements based on the
 concentration of some chemical species.
 \pause
 
-Using biochemical and enzymatic kinetics, \alert{we can model the 
+Using biochemical kinetics, \alert{we can model the 
 concentration change of chemical species over time} of a pathway.
 \end{frame}
 
@@ -459,7 +460,6 @@ With Metropolis-Hastings, we can generate a sample of a distribution
 $p(\lambda)$ doing the following:
 \pause
     \begin{enumerate}
-        \pause
         \item{Choose some $\lambda_0$ for which $p (\lambda_0) > 0$, and
             set $t = 1$;}
 
@@ -495,30 +495,31 @@ $p(\lambda)$ doing the following:
 \section{Model Selection}
 \begin{frame}{}
 \begin{center}
-    \texttt{Ranking with Marginal Likelihood Estimation}
+    \texttt{Marginal Likelihood Estimation}
 \end{center}
 \end{frame}
 
 
 \begin{frame}{Likelihood of Data Given Model and Parameters}
-If we consider that a model $M$ with parameters $\theta$ correctly 
-represent the signaling pathway \pause and that there is a Gaussian 
-observation error on $D$.
+If we consider that a model $M$ with parameters ${\bm \theta}$ 
+correctly represent the signaling pathway \pause and that there is a 
+Gaussian observation error on ${\bf D}$.
 \pause
-Then, the likelihood of observing experimental data $D$ is:
+Then, the likelihood of observing experimental data ${\bf D}$ is:
 \begin{equation*}
-     p (D | M, \theta) = \pause 
+    p ({\bf D} | M, {\bm \theta}) = \pause 
         p_{\mathcal{N}_{\left(\vec{0}, \Sigma\right)}} 
-            (\phi (M,\theta) - D).
+            (\phi (M,{\bm \theta}) - {\bm D}).
 \end{equation*}
-Where $\phi (M, \theta)$ is the simulated observation.
+Where $\phi (M, {\bm \theta})$ is the simulated observation.
 \end{frame}
 
 
 \begin{frame}{Marginal Likelihood of Data}
 We can marginalize the likelihood to obtain:
 \begin{equation*}
-    p (D | M) = \int_{\Theta} p (D | M, \theta) p (\theta | M)d\theta
+    p ({\bm D} | M) = \int_{\Theta} p ({\bm D} | M, {\bm \theta}) 
+    p ({\bm \theta} | M)d{\bm \theta}
 \end{equation*}
 
 \pause
@@ -530,24 +531,27 @@ another integral.
 \begin{frame}{Power-posterior distributions}
 We define a power-posterior distribution as:
 \begin{equation*}
-    p_{\beta} (\theta) = \frac{p (D | \theta, M)^\beta p(\theta | M)}
-                    {\int_\Theta p (D | \theta, M)^\beta p(\theta | M) 
-                    d\theta},
+    p_{\beta} ({\bm \theta}) = 
+        \frac{p ({\bm D} | {\bm \theta}, M)^\beta p({\bm \theta} | M)}
+                    {\int_\Theta p ({\bm D} | {\bm \theta}, M)^\beta 
+                    p({\bm \theta} | M) 
+                    d{\bm \theta}},
 \end{equation*}
 \pause
 Note that:
 
 \begin{equation*}
-    p_{\beta=0} (\theta) = p (\theta | M),
+    p_{\beta=0} ({\bm \theta}) = p ({\bm \theta} | M),
 \end{equation*}
 
 \pause
 and that
 \begin{equation*}
-    p_{\beta=1}(\theta) =\frac{p (D, \theta|M)}
-                              {\int_\Theta p (D, \theta | M)d\theta}
-                        =\frac{p(\theta | D, M) p(D|M)}{p (D | M)}
-                        =p (\theta | D, M).
+    p_{\beta=1}({\bm \theta}) =\frac{p ({\bm D}, {\bm \theta}|M)}
+                {\int_\Theta p ({\bm D}, {\bm \theta} | M)d\theta}
+                 =\frac{p({\bm \theta} | {\bm D}, M) p({\bm D}|M)}
+                    {p ({\bm D} | M)}
+                =p ({\bm \theta} | {\bm D}, M).
 \end{equation*}
 \end{frame}
 
@@ -556,8 +560,8 @@ and that
 Using power-posteriors distributions, it is possible to show that
 \pause
 \begin{equation*}
-    \ln p (D | M) = \int_0^1 \expectation_{p_\beta (\theta)} 
-        [\ln p(D|\theta, M)]d\beta.
+    \ln p ({\bm D} | M) = \int_0^1 \expectation_{p_\beta ({\bm \theta})} 
+        [\ln p({\bm D}|{\bm \theta}, M)]d\beta.
     \label{eq:marginal_likelihood_again}
 \end{equation*}
 \end{frame}
@@ -572,9 +576,11 @@ trapezoidal rule. \pause Setting $0 = \beta_0 < \beta_1 < \ldots
     \footnotesize
     \sum_{t = 0}^{T - 1} (\beta_{t + 1} - \beta_t)
 \frac{
-    \expectation_{p_{\beta_{t + 1}} (\theta)}[\log p(D | M, \theta)]
+    \expectation_{p_{\beta_{t + 1}} ({\bm \theta})}[\log p({\bm D} | M,
+    {\bm \theta})]
 + 
-    \expectation_{p_{\beta_{t}} (\theta)}[\log p(D | M, \theta)]}
+    \expectation_{p_{\beta_{t}} ({\bm \theta})}[\log p({\bm D} | M, {\bm
+    \theta})]}
 {2}
 \end{equation*}
 \end{frame}
@@ -582,12 +588,13 @@ trapezoidal rule. \pause Setting $0 = \beta_0 < \beta_1 < \ldots
 \begin{frame}{Estimating the Thermodynamic Integral}
 To produce the estimates of 
 \begin{equation*}
-    \expectation_{p_{\beta_{t}} (\theta)}[\log p(D | M, \theta)]
+    \expectation_{p_{\beta_{t}} ({\bm \theta})}[\log p({\bm D}| M, {\bm
+    \theta})]
     \text{ for }
     t \in \{0, \ldots, T\}
 \end{equation*}    
 we need to produce samples of the 
-power-posteriors $p_{\beta_{t}} (\theta)$.
+power-posteriors $p_{\beta_{t}} ({\bm \theta})$.
 \end{frame}
 
 % Samples are generated running metropolis-hastings for each temperature
@@ -652,7 +659,8 @@ power posteriors.
 
 \begin{frame}{Approximate Bayesian Computation}
 Approximate Bayesian Computation (ABC) is a method that allows one to
-obtain samples of a distribution close to $p (\theta, M | D)$. \pause
+obtain samples of a distribution close to $p ({\bm \theta}, M | {\bm
+D})$. \pause
 A general ABC implementation works as follow:
 
 \begin{enumerate}
@@ -674,7 +682,7 @@ A general ABC implementation works as follow:
 \begin{frame}{Approximate Bayesian Computation}
 The result of the algorithm is a sample of the distribution 
 \begin{equation*}
-p (\theta, M| d (\phi (M, \theta), D) < \epsilon).
+p ({\bm \theta}, M| d (\phi (M, {\bm \theta}), {\bm D}) < \epsilon).
 \end{equation*}
 
 \end{frame}
@@ -690,7 +698,7 @@ candidates for sample of tolerance $\epsilon_{i + 1}$.
 We can use the accepted parameters of tolerance $\epsilon$ and model $M$
 to estimate 
 \begin{equation*}
-    p (M | d (\phi (M, \theta)) < \epsilon).
+    p (M | d (\phi (M, {\bm \theta})) < \epsilon).
 \end{equation*}
 \end{frame}
 
@@ -839,8 +847,9 @@ We prepared two experiments in this work: \pause
 
 \begin{frame}{Choosing a software for model selection}
 ABC-SysBio and SigNetMS use different Bayesian approaches for model
-selection. \pause The first creates an estimate of $p(M|D)$, \pause and
-the second creates an estimate of $p(D|M)$ (the marginal likelihood).
+selection. \pause The first creates an estimate of $p(M|{\bm D})$, 
+\pause and the second creates an estimate of $p({\bm D}|M)$ (the
+marginal likelihood).
 \end{frame}
 
 \begin{frame}{Experiment description}
