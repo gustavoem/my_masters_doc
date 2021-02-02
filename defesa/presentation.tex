@@ -271,14 +271,14 @@ models;}
 
 
 \begin{frame}{What we Propose on this Project}
-We propose to create a methodology that uses a feature selection 
+We proposed to create a methodology that uses a feature selection 
 approach for identification of signaling pathways, tackling the 
 difficulty of \alert{penalizing complex models}.
 \end{frame}
 
 \begin{frame}{What we Propose on this Project}
-We intend to use Bayesian approaches of model selection that allow us to
-create estimates of $p (M | D)$ or $p (D | M)$.
+We used Bayesian approaches of model selection that allow us to
+create estimates of $p (M | {\bm D})$ or $p ({\bm D} | M)$.
 \end{frame}
 
 \begin{frame}{Objectives of this Project}
@@ -665,14 +665,15 @@ A general ABC implementation works as follow:
 
 \begin{enumerate}
     \pause
-    \item{Sample a parameter candidate $(\theta^*, M^*)$ from some 
+\item{Sample a parameter candidate $({\bm \theta}^*, M^*)$ from some 
         proposal distribution.}
     \pause
-    \item{Generate simulations $\phi (M^*, \theta^*) = D^*$.}
+\item{Generate simulations $\phi (M^*, {\bm \theta}^*) = {\bm D}^*$.}
     \pause
-    \item{Calculate $d (D^*, D).$ If $d (D^*, D) < \epsilon$ for some 
-        previously specified $\epsilon$, then add $(\theta^*, M^*)$ to 
-        the sample.}
+\item{Calculate $d ({\bm D}^*, {\bm D}).$ If $d ({\bm D}^*, {\bm D}) <
+    \epsilon$ for some 
+        previously specified $\epsilon$, then add $({\bm \theta}^*,
+        M^*)$ to the sample.}
     \pause
     \item{Repeat until some iteration limit.}
 \end{enumerate}
@@ -698,7 +699,7 @@ candidates for sample of tolerance $\epsilon_{i + 1}$.
 We can use the accepted parameters of tolerance $\epsilon$ and model $M$
 to estimate 
 \begin{equation*}
-    p (M | d (\phi (M, {\bm \theta})) < \epsilon).
+    p (M | d (\phi (M, {\bm \theta}), {\bm D}) < \epsilon).
 \end{equation*}
 \end{frame}
 
@@ -730,7 +731,7 @@ Therefore, we decided to implement \alert{SigNetMS}.
 
 \begin{frame}{The SigNetMS software}
 SigNetMS is a Python package and command line software that estimates 
-the marginal likelihood of a model given experimental data.
+the marginal likelihood of data given a model, $p({\bm D}|M)$.
 \end{frame}
 
 \begin{frame}{The input expected by SigNetMS}
@@ -745,8 +746,7 @@ The input to SigNetMS includes:
 \begin{frame}{The output produced by SigNetMS}
 SigNetMS produces an estimate of the marginal likelihood, as you may
 have suspected. \pause Moreover, the software also produces samples of
-each power posterior of parameters, which is in turn a sample of the
-posterior distribution of parameters.
+each power posterior of parameters.
 \pause
 \begin{figure}
 \centering
@@ -853,7 +853,7 @@ marginal likelihood).
 \end{frame}
 
 \begin{frame}{Experiment description}
-To compare both software we ran two experiments based on the same 
+To compare both software we ran an experiment based on the following
 procedure:
 \begin{itemize}
     \pause
@@ -870,8 +870,6 @@ procedure:
     \pause
     \item{Rank the four models.}
 \end{itemize}
-\pause In this presentation we show results of the first experiment
-only.
 \end{frame}
 
 \begin{frame}{The instance}
