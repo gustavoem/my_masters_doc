@@ -32,13 +32,16 @@
 
 \title{Identification of cell signaling pathways based on biochemical 
 reaction kinetics repositories}
-\date{May 2019}
+\date{February 5th, 2021}
 \author{Student: Gustavo Estrela\\
-Advisor: Marcelo da Silva Reis (Butantan Institute)}
+Advisor: Marcelo da Silva Reis}
 \institute{Instituto de Matemática e Estatística \\ 
            Centro de Toxinas, Resposta-imune e Sinalização Celular (CeTICS) \\
-           Laboratório Especial de Ciclo Celular, Instituto Butantan\\
-           \tiny{This project receives funding from FAPESP}}
+           Laboratório de Ciclo Celular, Instituto Butantan\\
+           \\
+           \includegraphics[clip=True, scale=.55]{fapesp_logo.png}
+           \#17/20575-9
+           }
 \begin{document}
 
 \maketitle
@@ -201,25 +204,10 @@ treated as a feature selection problem.
 \begin{frame}{Feature Selection for Identification of Signaling 
 Pathways}
 The methodology proposed by Wu defines the set of features as a set of 
-chemical reactions that can be added to a starting model.\pause This set 
-of chemical reactions is fetched from KEGG and stored in a database of
-interactions.
+chemical reactions that can be added to a starting model.
 \end{frame}
 
 
-\begin{frame}{Wu's Search Algorithm for Feature Selection}
-The search algorithm used by Wu is the Sequential Forward Selection 
-(SFS).
-\end{frame}
-
-
-\begin{frame}{Wu's Cost Function for Feature Selection}
-Wu defines the cost function as the minimum distance between 
-experimental and simulated data. 
-\pause
-The minimum distance is found using a Simulated Annealing 
-that traverses the parameter space.
-\end{frame}
 
 
 %\begin{frame}{Wu's Cost Function for Feature Selection}
@@ -254,19 +242,34 @@ of the original model. \pause However, the methodology worked
 satisfactorily only when the cut was similar to the original model.
 \end{frame}
 
+%\begin{frame}{Difficulties of Wu's Methodology}
+%We can point three aspects of Wu's work that could explain its 
+%limitations.
+%\begin{itemize}
+%\pause
+%\item{the database of interactions used could be more nearly complete;} 
+%\pause
+%\item{the search algorithm could also consider removing interactions;}
+%\pause
+%\item{the cost function could implement a proper penalization of 
+%models;}
+%\end{itemize}
+%\end{frame}
 
-\begin{frame}{Difficulties of Wu's Methodology}
-We can point three aspects of Wu's work that could explain its 
-limitations.
-\begin{itemize}
+\begin{frame}{Wu's Cost Function for Feature Selection}
+One of the possible causes of the limitations of Wu's work is the chosen
+cost function.
 \pause
-\item{the database of interactions used could be more nearly complete;} 
-\pause
-\item{the search algorithm could also consider removing interactions;}
-\pause
-\item{the cost function could implement a proper penalization of 
-models;}
-\end{itemize}
+
+The cost function is defined as the minimum distance between 
+experimental and simulated data. To find this distance a Simulated 
+Annealing  procedure is used.
+\end{frame}
+
+\begin{frame}{Wu's Cost Function for Feature Selection}
+Complex models were penalized by setting a limit of iterations on the
+Simulated Annealing algorithm, \pause inducing an \alert{arbitrary
+penalization}.
 \end{frame}
 
 
@@ -795,24 +798,12 @@ create a C function to represent the system of ODEs.
 
 \begin{frame}{Comparing the representation of the system of ordinary
 differential equations}
-\begin{table}[]
-\centering
-\resizebox{\linewidth}{!}{% Resize table to fit within \linewidth horizontally
-\begin{tabular}{c c cc}
-\hline
-\multicolumn{1}{l}{} 
-&& \multicolumn{2}{c}{Average time (seconds) to perform a sequence of 
-    integrations} \\
-\multicolumn{1}{l}{Number of Integrations}               
-&& \multicolumn{1}{c}{String Evaluation} 
-& \multicolumn{1}{c}{{\tt sympy.autowrap}} \\ \hline 
-    10  &&   2.98   & 0.9 \\
-    100 && 35.3     & 6.6 \\ 
-    200 && 72.1     & 13.1 \\
-    400 && 139.1    & 26.9 \\
-\hline \hline
-\end{tabular}}
-\end{table}
+\begin{figure}[t!]
+\begin{center}
+\includegraphics[width=.85\textwidth]{optimizations/system_representation.pdf}
+\end{center}
+\end{figure}
+
 \end{frame}
 
 \begin{frame}{Parallelizing the sampling of multiple power posteriors}
