@@ -88,9 +88,9 @@ protein of interest.
 By repeating this procedure in different times it is possible to create 
 time-course observations of proteins throughout the biological 
 experiment. With this tool, a researcher can choose a set of relevant 
-proteins from a signaling network and gain knowledge about the dynamics 
+proteins from a signaling pathway and gain knowledge about the dynamics 
 of such chemical species during the experiment. For instance, in a 
-signaling network experiment in which it is desired to understand how
+signaling pathway experiment in which it is desired to understand how
 the change of concentrations of a species at the beginning of the 
 pathway changes the concentration of some species at the end of the 
 cascade, measurements of both are relevant to understand the underlying dynamics. Figure~\ref{fig:western_blot_example} presents an 
@@ -115,9 +115,9 @@ bound to guanosine triphosphate (Ras-GTP).
 
 Those measurements alone do not always provide means for researchers to 
 understand a cell signaling pathway experiment. However, if we create a 
-computational model for this signaling networks that is able to 
+computational model for this signaling pathway that is able to 
 reproduce experimental data, then we might use this model as a 
-summary of the signaling network, which can provide to researchers 
+summary of the signaling pathway, which can provide to researchers 
 evidences of the biological phenomena.
 
 
@@ -449,7 +449,7 @@ experimental data, and then define a distance between these two
 measurements; then it is possible to use this distance, plus a penalty 
 for complexity, to create a ranking of the models. Note that a penalty 
 function is needed because complex and more general models can overfit,
-producing models that cannot represent the same signaling network with
+producing models that cannot represent the same signaling pathway with
 small perturbations to biological experiment. We can write this scoring 
 function as:
 \begin{equation*}
@@ -504,7 +504,7 @@ resort on their own knowledge on the biological experiment and consult
 interactome maps available on repositories such as KEGG and BioModels to
 construct manually the hypothesis of models for a signaling pathway. 
 That enlightens the importance to create a methodology that 
-systematically creates candidate models of signaling networks, as we 
+systematically creates candidate models of signaling pathways, as we 
 propose on this project.
 
 
