@@ -1,4 +1,4 @@
-\documentclass[12pt, twoside]{report}
+\documentclass[12pt, twoside, bibliography=totoc]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[a4paper, top=30mm, left=20mm, bottom=20mm,
     right=20mm]{geometry}
@@ -30,7 +30,7 @@
 \usepackage{cleveref} % multireference (eq 1.2-1.5)
 \usepackage{pgfgantt} % nice Gantt diagrams
 \usepackage{bm}
-% teste
+\usepackage[nottoc,numbib]{tocbibind} % references on T.O.C.
 
 \pagestyle{fancy}
 
@@ -71,6 +71,7 @@
 \numberwithin{mylemma}{section}
 \newtheorem{corollary}{Corollary}
 \numberwithin{corollary}{section}
+
 
 
 \begin{document}
@@ -324,7 +325,9 @@ baseada em seleção de características.
 \input{chapters/conclusion}
 
 \newpage
-\printbibliography
+\addcontentsline{toc}{chapter}{Bibliography}
+\chapter*{References}
+\printbibliography[heading=none]
 
 \end{document}
 
