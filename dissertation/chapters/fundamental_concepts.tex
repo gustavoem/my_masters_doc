@@ -5,7 +5,7 @@ understand the biological and computational problems, methodologies and
 results that we will present throughout this work. We start this chapter 
 by presenting what is a cell signaling pathway and how one can take 
 measures to identify its activity on the cell. Later, we present how 
-it is possible to represent chemical iteractions as differential 
+it is possible to represent chemical interactions as differential 
 equations, and how that allows to model a cell signaling pathway
 with a system of ordinary differential equations. Then, we present 
 more formally the problem we are trying to solve in this work, the
@@ -38,7 +38,7 @@ environment in which it is placed and to change its behaviour
 accordingly. Signaling pathways participate in the regulation of many
 cell functions, including development, division and cell
 death~\cite{Hancock2017}. The dynamics of a signaling pathway can also
-be releated to diseases, as in many cases of cancer.
+be related to diseases, as in many cases of cancer.
 
 A signal perceived by a cell is often due to signaling molecules that can either come from cells that are close 
 (including the same cell that produced the signal), as in synapses, or originate far away and travel long distances in the organism, as in hormones. When a 
@@ -148,39 +148,40 @@ states that, in an elementary reaction, the speed (or rate) of a
 chemical reaction is proportional to the product of the concentration of 
 all reactants. An elementary reaction is a reaction in which there is no 
 participation or need of an intermediate reaction to describe the first 
-in a molecular level. In practice, it is more common to see two types of 
-elementary reactions: the first or the second-order reactions. 
+in a molecular level. We call the order of a reaction the number of
+reactants with changing concentration. Reactions are more commonly from
+zeroth to third order~\cite{steinfeld1999chemical}.
 
 \subsection{Modeling elementary reaction rates}
 A first-order reaction is composed of one reactant only. Suppose A is 
 the only reactant and B is the only product of a reaction, then we can
 write this reaction as:
-\begin{equation*}
+\begin{equation}
 \ce{
     A -> B
 }.
-\end{equation*}
+\end{equation}
 The reaction rate of this reaction, according to the law of mass 
 action, is 
-\begin{equation*}
+\begin{equation}
     k_1[\text{A}],
-\end{equation*}
+\end{equation}
 where $k_1$ is some constant and [A] is the concentration of A. It is
 important to note that the constant $k_1$ is a rate coefficient of the 
 reaction and, therefore, it can only assume positive values.
 
 A second-order reaction is composed of two reactants. Suppose C and D 
-are both and the only reactants and F is the product of a reaction, then
-we can write this reaction as:
-\begin{equation*}
+are both reactants and F is the product of a reaction, then we can write 
+this reaction as:
+\begin{equation}
 \ce{
     C + D -> F
 }.
-\end{equation*}
+\end{equation}
 The reaction rate of this reaction is
-\begin{equation*}
+\begin{equation}
     k_2\text{[C][D]},
-\end{equation*}
+\end{equation}
 where $k_2$ is a (positive) constant and [C] and [D] are the 
 concentrations of C and D, respectively.
 
@@ -219,13 +220,13 @@ equations:
 \end{align}
 \end{subequations}
 and they have, respectively, reaction rates of:
-\begin{equation*}
+\begin{equation}
 \begin{aligned}
     & k_f\text{[E][S]} \\
     & k_r\text{[ES]} \\
     & k_{cat}\text{[ES]}.
 \end{aligned}
-\end{equation*}
+\end{equation}
 
 Now, to determine a model of the concentration dynamics for
 Reaction~\ref{eq:simple_enzymatic}, we will write a system of ordinary
@@ -273,22 +274,22 @@ differential equations:
 System~\ref{eq:full_system} can be simplified if we
 apply properties of enzymatic reactions together with algebraic 
 simplifications. We will show then how to derive the quasi-steady state 
-Michaelis--Menten model for enzymatic reactions. With the correct 
-assumptions, this model is able to reproduce the behavior of an 
-enzymatic reaction without considering the intermediate enzyme-substrate 
-complex, leading to simpler models.
+Michaelis--Menten model for enzymatic reactions~\cite{Michaelis}. With 
+the correct assumptions, this model is able to reproduce the behavior of
+an enzymatic reaction without considering the intermediate 
+enzyme-substrate complex, leading to simpler models.
 
 A basic principle we need to apply to our system in order to derive
-the Michaelis--Menten model is the principle of mass conservation. This 
-principle is valid if we assume that the 
-reactions~\ref{eq:simple_enzymatic} are isolated, meaning that the 
-chemicals on these reactions are not involved in other reactions at the
-same time. Applying this principle to the enzyme chemical, produces the
-following equation:
-\begin{equation*}
+the Michaelis--Menten model is the principle of mass
+conservation~\cite{lomonosov1970mikhail}. This principle is valid if we
+assume that the reactions~\ref{eq:simple_enzymatic} are isolated,
+meaning that the  chemicals on these reactions are not involved in other
+reactions at the same time. Applying this principle to the enzyme
+chemical, produces the following equation:
+\begin{equation}
     \text{[E$_0$]} = \text{[E] + [ES]}.
     \label{eq:E_conservation}
-\end{equation*}
+\end{equation}
 If we apply this equation to the derivative of the concentration of ES,
 we will get the following equation:
 \begin{equation}
@@ -305,13 +306,13 @@ was first proposed in 1925 by Briggs and Haldane~\cite{Briggs1925}.
 Generally, this assumption is applicable whenever [S] $\gg$ [E]. 
 If we apply this assumption together with the mass conservation 
 assumption on the Equation~\ref{eq:dESdt_2}, we get:
-\begin{equation*}  
+\begin{equation}  
     \begin{aligned}
         \text{[ES]} (k_r + k_{cat}) &= 
             k_f(\text{[E$_0$]} - \text{[ES]})\text{[S]}, \\
         \text{[ES]} &= \frac{\text{[E]}_0\text{[S]}}{K_m + \text{[S]}}, 
     \end{aligned}
-\end{equation*}
+\end{equation}
 in which $K_m = \frac{k_{cat} + k_r}{k_f}$ is known as Michaelis 
 constant. Considering this, we can rewrite the rate of [P] as:
 \begin{equation}
@@ -321,9 +322,9 @@ constant. Considering this, we can rewrite the rate of [P] as:
 \end{equation}
 And finally, if we apply mass conservation to the substrate, we will get
 the following equation:
-\begin{equation*}
+\begin{equation}
     \text{[S$_0$]} = \text{[S] + [ES] + [P]},
-\end{equation*}
+\end{equation}
 then, we can differentiate this equation on $t$ and use the 
 quasi-steady-state assumption ($\frac{d\text{[ES]}}{dt} = 0$) to obtain:
 \begin{equation}
@@ -404,22 +405,21 @@ models of enzymatic reactions.
 %       cell signaling network are based on a Bayesian approach for 
 %       model ranking.
 \section{Identification of cell signaling pathways}
-Identification of signaling pathways is the problem of finding the 
-components of a signaling pathway and how they interact in order to
-reproduce a cell behavior that has been previously measured 
-experimentally. The input of this problem is usually a description of 
-the biological experiment, containing previous information about the 
-signaling pathway, such as known reactions and parameters, and a set of 
-measurements, commonly Western blot data, which is the only type of
-measurement we consider in this work. The output to this problem is then
-composed of a set of interactions that are actively controlling the
-behavior of interest of the cell, and also the set of parameter values 
-that should be used on these interactions to create a model that
-approximates the experimental observations; it is possible to output a
-single value for each parameter, as it was presented in~\cite{Wu15}, or
-output information about these values, using a posterior (to the
-experimental data) distribution, as it was presented
-in~\cite{Liepe2014}~and~\cite{Xura20}.
+To identify a signaling pathway, we need to find the components of a
+signaling pathway and how they interact in order to reproduce a cell 
+behavior that has been previously measured experimentally. The input of 
+this problem is usually a description of the biological experiment,
+containing previous information about the signaling pathway, such as
+known reactions and parameters, and a set of measurements, commonly
+Western blot data, which is the only type of measurement we consider in
+this work. The output to this problem is then composed of a set of
+interactions that are actively controlling the behavior of interest of
+the cell, and also the set of parameter values that should be used on
+these interactions to create a model that approximates the experimental
+observations; it is possible to output a single value for each
+parameter, as it was presented in~\cite{Wu15}, or output information
+about these values, using a posterior (to the experimental data)
+distribution, as it was presented in~\cite{Liepe2014}~and~\cite{Xura20}.
 
 Two main tasks must be completed to produce such output. The first task
 is to find candidate topologies for the pathway model, i.e. different
@@ -452,10 +452,10 @@ function is needed because complex and more general models can overfit,
 producing models that cannot represent the same signaling pathway with
 small perturbations to biological experiment. We can write this scoring 
 function as:
-\begin{equation*}
+\begin{equation}
     score_1 (M) = - min_{\{{\boldsymbol \theta} \in \Theta' \subset
         \Theta\}} dist (\phi(M, {\bm \theta}), {\bm D}) + R (M),
-\end{equation*}
+\end{equation}
 where $M$ is the model, $\Theta$ is the parameter space for model $M$, 
 $\Theta'$ is the subset of the parameter space where the search for the
 best parameter values was conduced, ${\bm D}$ is a list of experiment
@@ -522,8 +522,7 @@ propose on this project.
 % the modeling of the network topology.
 % -> Bayesian approaches
 \section{State of the art in selection of biochemical models}
-The state of the art in biochemical model selection is based on Bayesian
-inference. The Bayesian approaches provide the benefits of ranking 
+The Bayesian approaches provide the benefits of ranking 
 models with statistical formalism, and automatically penalizes overly 
 complex models. More than that, through the prior distribution of the
 parameters, the researcher is able to input prior knowledge about 
@@ -541,7 +540,8 @@ the model to data using a single point of the parameter space. We will
 now present the basic concept of two methods that use this idea for 
 model selection, the Annealing-Melting Integration 
 (AMI)~\cite{Vyshemirsky2007} and Approximate Bayesian Computation 
-(ABC)~\cite{Toni2009}.
+(ABC)~\cite{Toni2009}. We selected those methods after a non exhaustive
+research on the literature.
 
 % What to mention about AMI:
 % -> thermodynamic integral
@@ -569,19 +569,20 @@ p({\bm D}|M, {\bm \theta})^\beta p({\bm \theta}|M)$. The variable
 $\beta$ works in the integral as a temperature term, determining the 
 probability functions $q_{\beta}({\bm \theta})$, $\beta \in [0, 1]$; 
 note that when $\beta = 0$ then 
-\begin{equation*}
+\begin{equation}
 q_0({\bm \theta}) = p({\bm \theta}|M),
-\end{equation*}
+\end{equation}
 the prior distribution of the parameters; also, and when 
 $\beta = 1$ then 
-\begin{equation*}
+\begin{equation}
     q_1(\theta) = \frac{p({\bm D}, {\bm \theta}| M)} {\int_{\Theta}
                             p({\bm D}, {\bm \theta}| M)} 
                 = \frac{p({\bm \theta} | {\bm D}, M)p({\bm D}|M)} 
                         {p({\bm D} | M)}
                 = p({\bm \theta} | {\bm D}, M),
-\end{equation*}
-the posterior distribution of parameters. Therefore, the 
+\end{equation}
+the posterior distribution of parameters (demonstration is provided on
+Chapter~\ref{chap:model_selection}). Therefore, the 
 integral~\ref{eq:thermodynamic_integral} takes the expected value of the
 likelihood function of ${\bm D}$ over a sequence of probability 
 distributions that is a ``bridge of distributions'' connecting the prior
@@ -632,26 +633,28 @@ to extract model distribution from the accepted parameters.
 % -> How do we do this
 %   -> 
 \section{Metropolis--Hastings to generate samples}
-Both methods for model selection, based on ABC or using thermodynamics
+We will show on Chapter~\ref{chap:model_selection} that both methods for
+model selection, based on ABC or using thermodynamics
 integration, need to generate samples of probability distributions. 
 Generating samples of distributions is simple for many well known 
 distributions, however, for some other distributions this task may not 
 be as simple. Metropolis--Hastings algorithms are capable of generating a 
 sample that has some probability distribution $p$, which is called the 
-target distribution. In fact, the method can be used even when it is not
-possible to access the target function directly; for those cases, a 
-distribution that is proportional to the target is necessary.
+target distribution~\cite{Chib1995}. In fact, the method can be used
+even when it is not possible to access the target function directly; for
+those cases, a  distribution that is proportional to the target is
+necessary.
 
 Being able to generate a sample of a target distribution without 
 accessing the probability function itself is useful for our applications
 in Bayesian model ranking. Consider that we need to create a sample of
 the parameters posterior distribution $p ({\bm \theta} | M, {\bm D})$. 
 Calculating this probability function is very hard because
-\begin{equation*}
+\begin{equation}
   p({\bm \theta} | M, {\bm D}) 
     = \frac{p ({\bm D} | {\bm \theta}, M) p ({\bm \theta} | M)}
       {p ({\bm D}|M)},
-\end{equation*}
+\end{equation}
 and this equation has the term $p ({\bm D}|M)$, which is only known 
 (through some estimation) at the end of the model ranking. However, if 
 we can access the likelihood function $p ({\bm D}| {\bm \theta}, M)$ and 
@@ -684,14 +687,14 @@ target distribution $p (\lambda)$ proceeds as follows:
 Note that if the target $p (\lambda)$ is not available, and rather 
 another function $q (\lambda) = \frac{1}{c}p(\lambda)$ is available, 
 then the ratio~\ref{eq:mh_ratio} can be calculated as:
-\begin{equation*}
+\begin{equation}
     r = \frac{p (\lambda^*) J_t (\lambda^{t - 1} | \lambda^*)}
               {p (\lambda^{t - 1}) J_t (\lambda^* | \lambda^{t - 1})} 
       = \frac{(q (\lambda^*)c) J_t (\lambda^{t - 1} | \lambda^*)}
            {(q (\lambda^{t - 1})c) J_t (\lambda^* | \lambda^{t - 1})} 
       = \frac{q (\lambda^*) J_t (\lambda^{t - 1} | \lambda^*)}
               {q (\lambda^{t - 1}) J_t (\lambda^* | \lambda^{t - 1})}
-\end{equation*}
+\end{equation}
 More than that, if the proposal distribution is symmetric 
 ($J_t(\lambda_a|\lambda_b) = J_t(\lambda_b|\lambda_a)$ for all 
 $\lambda_a$, $\lambda_b$ and $t$), the produced algorithm is called 
