@@ -1,4 +1,4 @@
-%begin-include
+a%begin-include
 
 In this chapter, we will define the model selection problem in the 
 context of this work and will also present two state-of-the-art 
@@ -26,7 +26,7 @@ case, we add to ${\bm \theta}$ a model indicator parameter M, and then
 we create a sample of $p({\bm \theta}, M | {\bm D})$. If we marginalize
 this sample, we can calculate an estimative of the probability $p (M |
 {\bm D})$. ABC methods allow simpler algorithms, and they also allow
-selecting models without the neeed of a likelihood function, altough
+selecting models without the need of a likelihood function, although
 defining the prior distribution of parameters is still needed.
 
 \section{Elements of model selection}
@@ -60,9 +60,9 @@ also bound to initial concentrations of chemical species and a
 prior distribution of model parameters, which we represent as $p({\bm
 \theta} | M)$.
 
-Once we are using a Bayesian approach, we consider that model
+Once we are using a Bayesian approach, we consider that list of model
 parameters is a random vector ${\bm\theta} | M: \Omega \to \fieldR^{n}_+$,
-where $d$ equals to the number of parameters in $M$ plus one, so we can
+where $n$ equals to the number of parameters in $M$ plus one, so we can
 also represent one parameter related to experimental error. This
 parameter represents the standard deviation of errors in the observation
 of the experiment. It is important to note that all parameters are
@@ -166,16 +166,16 @@ to estimate this integral value is using Importance Sampling
 Estimators~\cite{Newton1993}. This method uses the Monte Carlo integral 
 estimation method that can estimate integrals of the form 
 $\int g(\lambda) p(\lambda)d\lambda$ using the estimator:
-\begin{equation*}
+\begin{equation}
     \hat{I} = \sum_{i = 1}^m w_i g(\lambda_i) / \sum_{i = 1}^m w_i,
 \label{eq:importance_sampling_estimator}
-\end{equation*}
+\end{equation}
 where $w_i = p (\lambda) / p^* (\lambda)$, and $p^*(\cdot)$ is known as 
 the importance sampling function. If we set $\lambda = {\bm\theta} | M$ 
 and use the prior ($p({\bm \theta} | M)$) or the posterior ($p({\bm
 \theta} | M, {\bm D})$) as importance sampling functions, then we would
 get respectively the estimators:
-\begin{equation*}
+\begin{equation}
 \begin{aligned}
     \frac{1}{m} \sum_{i = 1}^m p({\bm D}|M, {\bm \theta}^{(i)}) &&& 
         (\text{with } {\bm \theta}^{(i)} \sim p({\bm \theta}|M)), \\
@@ -184,7 +184,7 @@ get respectively the estimators:
         (\text{with } {\bm \theta}^{(i)} \sim p({\bm \theta}|M, 
             {\bm D})).
 \end{aligned}
-\end{equation*}
+\end{equation}
 However, as showed by Vyshemirsky et al.~\cite{Vyshemirsky2007}, those estimators might
 produce very large variances and may not perform well for biochemical
 model selection applications. Hence, new methods with ideas of 
@@ -211,20 +211,21 @@ or power posteriors~\cite{Friel2008}.
 Given a parameter prior distribution $p ({\bm \theta} | M)$ and a 
 posterior distribution $p ({\bm \theta} | {\bm D}, M)$, then we define a
 power posterior distribution for some $\beta$ as:
-\begin{equation*}
+\begin{equation}
     p_{\beta} ({\bm \theta}) = 
         \frac{p ({\bm D} | {\bm \theta}, M)^\beta p({\bm \theta} | M)}
                               {z (\beta)},
-\end{equation*}
+\label{eq:power_posterior}
+\end{equation}
 where
-\begin{equation*}
+\begin{equation}
     z (\beta) = 
         \int_\Theta p ({\bm D} | {\bm \theta}, M)^\beta 
         p({\bm \theta} | M) d{\bm \theta}.
-\end{equation*}
+\end{equation}
 Note that when $\beta = 0$, then $p_{\beta=0} = p ({\bm \theta} | M)$, 
 the prior distribution of the parameters; also, when $\beta = 1$, then
-\begin{equation*}
+\begin{equation}
     p_{\beta=1}({\bm \theta}) = 
         \frac{p ({\bm D} | {\bm \theta}, M) p({\bm \theta} | M)}
              {z (\beta)}
@@ -236,7 +237,7 @@ the prior distribution of the parameters; also, when $\beta = 1$, then
              {p ({\bm D} | M)}
                         =
         p ({\bm \theta} | {\bm D}, M),
-\end{equation*}
+\end{equation}
 the posterior distributions of the parameters. Therefore, if we vary the
 value of $\beta$ from $0$ to $1$ we can create a path of probability 
 distributions that connect the prior and posterior distributions. We
@@ -377,19 +378,19 @@ $\beta_t$, the target function is  $p_{\beta_t} ({\bm
 probability of accepting a proposed parameter 
 ${\bm \theta}^* \sim J_{(t, i)} ({\bm \theta}^* | {\bm \theta}^{(t,
 i)})$, is $\min (1, r)$ with
-\begin{equation*}
+\begin{equation}
     r = \frac{p_{\beta_t} ({\bm \theta}^*)}
              {p_{\beta_t} ({\bm \theta}^{(t, i)})}
         \frac{J_{(t, i)} ({\bm \theta}^{(t, i)} | {\bm \theta}^*)}
              {J_{(t, i)} ({\bm \theta}^* | {\bm \theta}^{(t, i)})},
-\end{equation*}
+\end{equation}
 with $J_{(t, i)}$ being the proposal jump distribution on iteration $i$ 
 on chain of power posterior $\beta_t$. Since we do not have direct
 access to the $p_t({\bm \theta} | M, {\bm D})$ distribution, and
-considering the definition of power posterior we presented in the 
-beginning of the chapter, that $p_{\beta_t} ({\bm \theta})~\propto~p
-({\bm D}|M, {\bm \theta})^{\beta_t} p ({\bm \theta} | M)$, we can 
-rewrite this equation as:
+considering the definition of power posterior we presented on
+Equation~\ref{eq:power_posterior}, and that $p_{\beta_t} ({\bm
+\theta})~\propto~p ({\bm D}|M, {\bm \theta})^{\beta_t} p ({\bm \theta} |
+M)$, we can rewrite this equation as:
 \begin{equation}
     r = \frac{p ({\bm D} | M, {\bm \theta}^*)^{\beta_t}}
              {p ({\bm D} | M, {\bm \theta}^{(t, i)})^{\beta_t}}
@@ -476,16 +477,16 @@ et al. (2008) and can  be summarized in the following steps:
         ${\bm \theta}^{(i, k)}$ and ${\bm \theta}^{(j, k)}$, with 
         probability $\min\{1, r\}$, where: }
 
-    \begin{equation*}
+    \begin{equation}
         r = \frac{p_{\beta_i}\left({\bm \theta}^{(j, k)}\right)}
              {p_{\beta_i}\left({\bm \theta}^{(i, k)}\right)}
         \frac{p_{\beta_j}\left({\bm \theta}^{(i, k)}\right)}
              {p_{\beta_j}\left({\bm \theta}^{(j, k)}\right)}
         \frac{p (j | i)}
              {p (i | j)}
-    \end{equation*}
+    \end{equation}
     which can be simplified to:
-    \begin{equation*}
+    \begin{equation}
         r = \left[\frac{p \left({\bm D} | {\bm \theta}^{(j, k)}\right)}
                 {p \left({\bm D} | {\bm \theta}^{(i,
                 k)}\right)}\right]^{\beta_i}
@@ -494,7 +495,7 @@ et al. (2008) and can  be summarized in the following steps:
                 k)}\right)}\right]^{\beta_j}
             \frac{p (j | i)}
                  {p (i | j)}
-    \end{equation*}
+    \end{equation}
 \end{enumerate}
 
 After finishing the third step of sampling, the samples obtained on the
@@ -523,7 +524,7 @@ Given that $T$ power posteriors, $0 = \beta_1 < \beta_2 < \ldots <
 \beta_T = 1$, were selected and samples of its respective distributions
 posteriors were generated, then using trapezoidal rule over the $\beta$
 values allows us to estimate the integral as:
-\begin{equation*}
+\begin{equation}
     \log{p({\bm D}| M)} \approx \sum_{t = 0}^{T - 1} (\beta_{t + 1} -
     \beta_t)
 \frac{
@@ -533,7 +534,7 @@ values allows us to estimate the integral as:
     \expectation_{p_{\beta_{t}} ({\bm \theta})}[\log p({\bm D} | M,
     {\bm \theta})]}
 {2}
-\end{equation*}
+\end{equation}
 and if the sample of power posterior of $\beta_t$ has $L_t$ parameter 
 points, then we can rewrite this equation as:
 \begin{equation}
@@ -551,9 +552,9 @@ points, then we can rewrite this equation as:
 According to the work of Friel et al. (2008), a good power posterior 
 schedule for $\beta_1, \ldots, \beta_T$ that can be used in this 
 approach is:
-\begin{equation*}
+\begin{equation}
     \beta_t = \left(\frac{t - 1}{T - 1}\right)^{c}, 
-\end{equation*}
+\end{equation}
 with $t \in {1, \ldots, T}$; with better results achieved when $T$ is
 between $20$ and $100$ and $c$ is between $3$ and $5$.
 
@@ -697,12 +698,12 @@ presents a pseudo-code of the ABC SMC algorithm.
             \EndIf
         \EndWhile
         \State Calculate the weights of the population:
-            %\begin{equation*}
+            %\begin{equation}
             $w^{(t, i)} = \frac{p ({\bm \theta}^{(t, i)} | M^{(t, i)})}
                          {\sum_{j = 1}^N w^{(t-1, j)}p_{K^t}
                             ({\bm \theta}^{(t-1, j)}, {\bm \theta}^{(t,
                             i)})}$
-            %\end{equation*}
+            %\end{equation}
     \EndFor
     \Return
 \end{algorithmic}

@@ -59,7 +59,8 @@ kinetic laws and initial concentrations of chemical species; an
 Extensible Markup Language (XML) file with experimental data, including 
 time series measurements of the  biological phenomena of interest;
 another XML file with definitions of prior distributions of reaction
-rate constants; and, finally, a set of parameter values that determine
+rate constants (defined by users, according to their personal prior
+knowledge); and, finally, a set of parameter values that determine
 the sampling process of model parameters. There are also optional
 parameters on SigNetMS, used to control random number generator seeds,
 number of execution threads, and verbose runs.
@@ -152,7 +153,7 @@ species of the system.
 % Numerical integration of systems are solved using iterative methods
 % stiff non stiff
 % we used  third-party software to solve this problem
-The numerical integration of the system is alone a hard problem, and
+The numerical integration of the system is itself a hard problem, and
 therefore, we used third-party software to produce such integrations.
 The most popular software available for this problem conduce
 iterative algorithms that, step by step, approximate the state of the
