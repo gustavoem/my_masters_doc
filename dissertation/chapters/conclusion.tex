@@ -26,13 +26,15 @@ We decided to use a Bayesian approach to construct the cost function
 because of its ability to auto penalize overly-complex models, avoiding
 some sort of ``overfit'' that can occur, characterized by complex models
 that have good ability to fit an example of experimental data, but have 
-poor generalization performance. Another reason to use a Bayesian
-approach is that this approach consider model parameters as random 
-variables, which allow the user to input their prior knowledge, and also
-to produce a posterior distribution for model parameters. Specially in 
-our application, where model parameters are related to the rate 
-constants of reactions, using a non deterministic approach to model 
-constants is a better way to deal with the uncertainty in their measurements.
+poor generalization performance; we, however, did not experiment on
+the generalization ability of selected models. Another reason to use a
+Bayesian approach is that this approach consider model parameters as
+random  variables, which allow the user to input their prior knowledge,
+and also to produce a posterior distribution for model parameters.
+Specially in our application, where model parameters are related to the
+rate constants of reactions, using a non deterministic approach to model
+constants is a better way to deal with the uncertainty in their
+measurements.
 
 % Condições termodinâmicas (pressão, temperatura) são relativamente constantes,
 % em experimentos com células,

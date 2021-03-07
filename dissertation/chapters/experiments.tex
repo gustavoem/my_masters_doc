@@ -92,10 +92,10 @@ Figure~\ref{fig:experiments:girolami_simulations}.
 \begin{center}
     \includegraphics[width=.75\textwidth]{experiments/simulations/girolami_experimental_data.pdf}
     \caption{The dynamics produced by the correct model, with
-predefined reaction rate constants plus a small Gaussian error, for
-each time point. The measurement taken from the model is the
-concentration of the Rpp species, which we denote as [Rpp]. We
-linearly interpolate the experimental measure points to produce a
+predefined reaction rate constants plus a small Gaussian error (standard
+deviation 0.01), for each time point. The measurement taken from the 
+model is the concentration of the Rpp species, which we denote as [Rpp]. 
+We linearly interpolate the experimental measure points to produce a
 continuous dynamics from 2s to 100s.}
     \label{fig:experiments:girolami_simulations}
     \end{center}
@@ -232,11 +232,11 @@ Model $\prec$ Correct Model $\prec$ Generalization Model.
 After running the SigNetMS software four times, one for each model, we
 were able to get the following estimates:
 \begin{itemize}
-    \item{$\log \hat{p}({\bm D} | M = \text{Correct Model}) = 26$}
-    \item{$\log \hat{p}({\bm D} | M = \text{Simplified Model}) = 21$}
-    \item{$\log \hat{p}({\bm D} | M = \text{Incorrect Model}) = -1$}
+    \item{$\log \hat{p}({\bm D} | M = \text{Correct Model}) = -26$}
+    \item{$\log \hat{p}({\bm D} | M = \text{Simplified Model}) = -21$}
+    \item{$\log \hat{p}({\bm D} | M = \text{Incorrect Model}) = 1$}
     \item{$\log \hat{p}({\bm D} | M = \text{Generalization Model}) =
-        19$}
+        -19$}
 \end{itemize}
 These estimates induce the ranking: Correct Model $\prec$ Simplified
 Model $\prec$ Generalization Model $\prec$ Incorrect Model.
@@ -421,20 +421,31 @@ by SigNetMS, bridging the prior and posterior distributions.
     \label{fig:girolami_model1_progression_snm}
 \end{figure}
 
-The ranking and the simulations indicate that SigNetMS is a more
-appropriate choice for further investigation. Therefore, we also created plots of approximations of
-the produced power posterior samples, presented in 
-Figure~\ref{fig:girolami_model1_progression_snm_2}. Those density function
-estimates were created using the {\tt distplot} function of the Seaborn
-Python package, which uses Gaussian Kernel Densinty Estimate (KDE) to
-provide an estimation of the density function given a sample of such
-distribution. The presented figure shows estimated power posterior
+The ranking and the simulations indicate that SigNetMS fits our
+experimentation process better than ABC-SysBio. Even though it is
+possible that, with changes to $\epsilon$ schedule, ABC-SysBio could get
+comparable solutions to SigNetMS, we think that the latter is easier to
+use considering the choice of algorithm parameters. While for ABC-SysBio
+one needs to define an epsilon schedule, for SigNetMS it is only
+necessary to define four sampling parameters. Moreover, comparing
+Figure~\ref{fig:girolami_allmodel_abc} and
+Figure~\ref{fig:girolami_allmodel_snm} we see that SigNetMS could find
+samples of parameters that make model simulations approximates better 
+the experimental data.
+
+We also created plots of approximations of the produced power posterior
+samples, presented in
+Figure~\ref{fig:girolami_model1_progression_snm_2}. Those density
+function estimates were created using the {\tt distplot} function of the
+Seaborn Python package, which uses Gaussian Kernel Densinty Estimate
+(KDE) to provide an estimation of the density function given a sample of
+such distribution. The presented figure shows estimated power posterior
 distributions, with different values of $\beta$, for the $k_1$ parameter
 of the correct model, which had value $0.07$ when artificial
-experimental data were created. We can see that as we increase the value 
+experimental data were created. We can see that as we increase the value
 of $\beta$, the posterior distribution concentrates on values around the
 ``true'' value of the parameter. It is also interesting to see that
-although the estimated posterior is not necessarily centered on the 
+although the estimated posterior is not necessarily centered on the
 ``true'' value, the created simulations do approximate the experimental
 observations.
 
@@ -524,7 +535,7 @@ search space, as it is done on algorithms for the U-Curve problem, a
 special case of the feature selection problem where the cost function 
 describes a U-shaped curve on every chain of the Boolean lattice. The
 U-Curve problem is still an NP-hard problem as the feature selection
-problem is~\cite{Rei12}; however, there are heuristics and optimal
+problem~\cite{Rei12}; however, there are heuristics and optimal
 algorithms that can be used on the U-Curve problem to produce a quality
 answer (optimal or close to be optimal) with a feasible computational
 time. Moreover, one can produce good results using U-Curve algorithms to 
@@ -608,15 +619,20 @@ part on some types of cancer. The model we consider for generating
 experiments, which we also call the ``correct'' model is shown on 
 Figure~\ref{fig:ras_switch:correct_model}. This model shows a pathway
 that decides the state of a Ras protein as switched on, represented by
-RasGTP, and as switched off, represented by RasGDP. SOS and GEF are enzymes that catalyze the transition RasGDP $\rightarrow$ RasGTP. The enzymatic activity of SOS can be increased through allosteric regulation by either RasGTP or RasGDP; we denote such molecular interactions as SOS\_allo\_RasGTP and SOS\_allo\_RasGDP, respectively. Finally, GAP is an enzyme that catalyzes the transition RasGTP $\rightarrow$ RasGDP.
+RasGTP, and as switched off, represented by RasGDP. SOS and GEF are
+enzymes that catalyze the transition RasGDP $\rightarrow$ RasGTP. The
+enzymatic activity of SOS can be increased through allosteric regulation
+by either RasGTP or RasGDP; we denote such molecular interactions as
+SOS\_allo\_RasGTP and SOS\_allo\_RasGDP, respectively. Finally, GAP is
+an enzyme that catalyzes the transition RasGTP $\rightarrow$ RasGDP.
 
 
-Therefore, seven chemical species are present in the Ras switch model, and they have the following initial
-concentration: 200 for SOS; 0 for SOS\_allo\_RasGDP and
-SOS\_allo\_RasGTP; 900 for RasGDP; 100 for RasGTP; 200 for GEF; and 125
-for GAP. Once again, we omit concentration and reaction rate units for
-the sake of simplificty. These chemical species interact in eight
-different chemical reactions:
+Therefore, seven chemical species are present in the Ras switch model,
+and they have the following initial concentration: 200 for SOS; 0 for
+SOS\_allo\_RasGDP and SOS\_allo\_RasGTP; 900 for RasGDP; 100 for RasGTP;
+200 for GEF; and 125 for GAP. Once again, we omit concentration and
+reaction rate units for the sake of simplificty. These chemical species
+interact in eight different chemical reactions:
 \begin{itemize}
     \item{$\ce{SOS + RasGDP ->[k2] SOS\_allo\_RasGDP}$}, SOS\_allo\_RasGDP complexation;
     \item{$\ce{SOS\_allo\_RasGDP ->[d2] SOS + RasGDP}$}, SOS\_allo\_RasGDP decomplexation;
@@ -657,7 +673,7 @@ different chemical reactions:
 We used this model to generate an artificial experiment where the
 concentration of activated Ras was measured at the time steps of 30,
 60, 90, 120, 150, 180, 210, and 240 seconds.
-Figure~\ref{fig:ras_switch:experimental_observations} shows a graph of
+Figure~\ref{fig:ras_switch:experimental_observations} illustrates
 such experimental measurements. Similarly to the experiment of the 
 previous section, those observations were created by simulating the 
 correct model and then adding a Gaussian error of mean zero and standard
@@ -785,7 +801,11 @@ As discussed in the previous section, the feature selection instance we
 have in hands has a search space and cost function that makes it
 unfeasible to use an optimal algorithm of feature selection. Therefore,
 we use the Sequential Forward Selection (SFS)~\cite{Whitney1971} 
-heuristics to search for a solution.
+heuristics to search for a solution. Although there other heuristics
+available, with the ability to find good solutions with few evaluations
+of the cost function, such as Sequential Floating Forward
+Selection~\cite{Ververidis2008}, we decided use SFS due to its
+implementation simplicity.
 % also want to talk about what we want to check in this experiment.
 % With this experiment we will be able to analyze the solution given in
 % our approach. We expect that we are able to at least find a model that
@@ -816,6 +836,7 @@ presents the dynamics of the SFS heuristics.
         \If{$s^*$ is $NIL$}
             \State {\tt did\_improve} $\gets$ {\tt False}
         \EndIf
+    \State $X \gets X \cup \{s^*\}$
     \EndWhile
     \Return $X$
 \end{algorithmic}
